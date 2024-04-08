@@ -7,25 +7,34 @@ public class BulletScript : MonoBehaviour
 {
     private Vector3 mousePos;
     private Camera mainCam;
-    public Rigidbody2D rb;
-    public float force;
+
+    [SerializeField]
+    private Rigidbody2D rb;
+
+    [SerializeField]
+    private float force;
 
     public Animator animator;
 
-    Vector3 direction;
+    private Vector3 direction;
 
-    public Collider2D bulletCollider;
-
-    public float damage = 3;
+    [SerializeField]
+    private float damage = 3;
 
     // Start is called before the first frame update
     void Start()
     {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
-        animator = GetComponent<Animator>();
+        if (animator == null) {
+            Debug.Log("BulletScript animator is null! Reassigned.");
+            animator = GetComponent<Animator>();
+        }
 
-        rb = GetComponent<Rigidbody2D>();
+        if (rb == null) {
+            Debug.Log("BulletScript rb is null! Reassigned.");
+            rb = GetComponent<Rigidbody2D>();
+        }
 
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
         direction = mousePos - transform.position;

@@ -30,11 +30,15 @@ public class EnemyHealth : MonoBehaviour
     }
 
     void Start() {
-        healthBar = this.GetComponentInChildren<HealthBar>();
+        if (healthBar == null) {
+            Debug.Log("EnemyHealth healthbar is null! Reassigned.");
+            healthBar = this.GetComponentInChildren<HealthBar>();
+        }
         currentHealth = maxHealth;
         healthBar.SetMaxHealth(maxHealth);
 
         if (animator == null) {
+            Debug.Log("EnemyHealth animator is null! Reassigned.");
             animator = this.gameObject.GetComponent<Animator>();
         }
     }

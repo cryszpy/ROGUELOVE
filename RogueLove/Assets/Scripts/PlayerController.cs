@@ -15,14 +15,19 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private ContactFilter2D movementFilter;
-    Vector2 movementInput;
-    Rigidbody2D rb;
+    
+    private Vector2 movementInput;
 
-    Animator animator;
+    [SerializeField]
+    private Rigidbody2D rb;
+
+    [SerializeField]
+    private Animator animator;
 
     [SerializeField]
     private SpriteRenderer spriteRenderer;
-    List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
+
+    readonly List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
 
     // Player max health
     public float maxHealth = 100;
@@ -36,8 +41,14 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        rb = GetComponent<Rigidbody2D>();
-        animator = GetComponentInChildren<Animator>();
+        if (rb == null) {
+            Debug.Log("PlayerController rb is null! Reassigned.");
+            rb = GetComponent<Rigidbody2D>();
+        }
+        if (animator == null) {
+            Debug.Log("PlayerController animator is null! Reassigned.");
+            animator = GetComponentInChildren<Animator>();
+        }
         //spriteRenderer = GetComponent<SpriteRenderer>();
 
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();

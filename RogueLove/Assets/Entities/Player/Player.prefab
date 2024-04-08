@@ -49,6 +49,7 @@ MonoBehaviour:
   bulletTransform: {fileID: 4777194430705029824}
   canFire: 1
   timeBetweenFiring: 0.3
+  gun: {fileID: 8252455337123977837}
 --- !u!1 &7808749482456848566
 GameObject:
   m_ObjectHideFlags: 0
@@ -521,6 +522,8 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
+  rb: {fileID: 2057914311772842495}
+  animator: {fileID: 1825931467441451771}
   spriteRenderer: {fileID: 7125730586454602621}
   maxHealth: 100
   currentHealth: 0

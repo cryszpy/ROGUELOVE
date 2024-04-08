@@ -10,7 +10,10 @@ public class PlayerAnimations : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     void Start() {
-        spriteRenderer = GetComponent<SpriteRenderer>();
+        if (spriteRenderer == null) {
+            Debug.Log("PlayerAnimations spriteRenderer is null! Reassigned.");
+            spriteRenderer = GetComponent<SpriteRenderer>();
+        }
     }
     
     public void SwordAttack() {

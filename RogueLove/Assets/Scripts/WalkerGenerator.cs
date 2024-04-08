@@ -26,7 +26,7 @@ public class WalkerGenerator : MonoBehaviour
     public List<int> tileListY = new List<int>();
 
     // List of all active Walkers
-    public List<WalkerObject> walkers;
+    private List<WalkerObject> walkers;
 
     [Header("TILEMAP OBJECTS")]
 
@@ -57,12 +57,14 @@ public class WalkerGenerator : MonoBehaviour
     // Map maximum height ^v
     public int mapHeight;
 
+    [SerializeField]
     [Range(1, 10)]
     // Maximum amount of active walkers
-    public int maxWalkers;
+    private int maxWalkers;
 
+    [SerializeField]
     // Chance for a single tile to generate an obstacle
-    public int obstacleChance;
+    private int obstacleChance;
 
     // Current tile count
     public int tileCount = default;
@@ -70,22 +72,24 @@ public class WalkerGenerator : MonoBehaviour
     // Current obstacle tile count
     public int oTileCount = default;
 
+    [SerializeField]
     [Range(0.1f, 0.9f)]
     // Compares the amount of floor tiles to the percentage of the total grid covered (in floor tiles)
     // NEVER SET THIS TO 1 OR ELSE UNITY WILL CRASH :skull:
-    public float fillPercentage;
+    private float fillPercentage;
 
+    [SerializeField]
     // Generation method, pause time between each successful movement
-    public float waitTime;
+    private float waitTime;
 
     // A* pathfinder object
     private AstarPath astarPath;
 
     // SAVE FILE PATH
-    string path;
+    private string path;
 
     // Boolean to see if save file exists
-    bool saveExists;
+    private bool saveExists;
 
     //private int tileLocX;
     //private int tileLocY;
@@ -510,5 +514,5 @@ public class WalkerGenerator : MonoBehaviour
         // Create decoration around loaded map
         StartCoroutine(CreateDecor());
     }
-    
+
 }

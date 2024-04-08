@@ -357,13 +357,13 @@ Camera:
     serializedVersion: 2
     x: 0
     y: 0
-    width: 2.6264367
-    height: 0.8902627
+    width: 1
+    height: 1
   near clip plane: 0.3
   far clip plane: 1000
   field of view: 34
   orthographic: 1
-  orthographic size: 0.96
+  orthographic size: 1.44
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -1122,7 +1122,7 @@ GameObject:
   - component: {fileID: 891264491}
   - component: {fileID: 891264493}
   - component: {fileID: 891264492}
-  m_Layer: 6
+  m_Layer: 7
   m_Name: Obstacles
   m_TagString: Collisions
   m_Icon: {fileID: 0}

@@ -13,27 +13,44 @@ public class ContactEnemy : MonoBehaviour
     [SerializeField]
     private Transform target;
 
-    public float speed = 200f;
+    [SerializeField]
+    private float speed = 200f;
 
-    public float nextWaypointDistance = 3f;
+    [SerializeField]
+    private float nextWaypointDistance = 3f;
 
     Pathfinding.Path path;
     int currentWaypoint = 0;
     bool reachedEndOfPath = false;
 
-    Seeker seeker;
+    [SerializeField]
+    private Seeker seeker;
 
-    Rigidbody2D rb;
+    [SerializeField]
+    private Rigidbody2D rb;
 
+    [SerializeField]
     // Enemy health bar
-    public HealthBar healthBar;
+    private HealthBar healthBar;
 
     void Start() {
-        healthBar = this.GetComponentInChildren<HealthBar>();
+        if (healthBar == null) {
+            Debug.Log("ContactEnemy healthbar is null! Reassigned.");
+            healthBar = this.GetComponentInChildren<HealthBar>();
+        }
 
-        seeker = GetComponent<Seeker>();
-        rb = GetComponent<Rigidbody2D>();
-        target = GameObject.FindGameObjectWithTag("Player").transform;
+        if (seeker == null) {
+            Debug.Log("ContactEnemy seeker is null! Reassigned.");
+            seeker = GetComponent<Seeker>();
+        }
+        if (rb == null) {
+            Debug.Log("ContactEnemy rb is null! Reassigned.");
+            rb = GetComponent<Rigidbody2D>();
+        }
+        //if (target == null) {
+            //Debug.Log("ContactEnemy target is null! Reassigned.");
+            target = GameObject.FindGameObjectWithTag("Player").transform;
+        //}
 
         InvokeRepeating(nameof(UpdatePath), 0f, .5f);
     }

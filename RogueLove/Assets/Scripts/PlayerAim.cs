@@ -17,6 +17,9 @@ public class PlayerAim : MonoBehaviour
 
     private GameObject instantBullet;
 
+    [SerializeField]
+    private SpriteRenderer gun;
+
     void Start() {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
@@ -30,7 +33,10 @@ public class PlayerAim : MonoBehaviour
 
         transform.rotation = Quaternion.Euler(0, 0, rotZ);
 
-        SpriteRenderer gun = GetComponentInChildren<SpriteRenderer>();
+        if (gun == null) {
+            Debug.Log("PlayerAim gun is null! Reassigned.");
+            gun = GetComponentInChildren<SpriteRenderer>();
+        }
 
         if (!canFire) {
             timer += Time.deltaTime;
