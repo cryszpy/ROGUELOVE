@@ -9,6 +9,7 @@ TagManager:
   - Ignore
   - SaveSlotMenu
   - A*
+  - PlayerHealth
   layers:
   - Default
   - TransparentFX

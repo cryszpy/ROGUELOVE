@@ -22,11 +22,15 @@ public class BulletScript : MonoBehaviour
     void Start()
     {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
         animator = GetComponent<Animator>();
+
         rb = GetComponent<Rigidbody2D>();
+
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
         direction = mousePos - transform.position;
         Vector3 rotation =  transform.position - mousePos;
+
         rb.velocity = new Vector2(direction.x, direction.y).normalized * force;
         float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
@@ -37,16 +41,16 @@ public class BulletScript : MonoBehaviour
         
         direction = mousePos - transform.position;
 
-        // Enemy
+        // Checks whether collided object is an enemy
         if (other.CompareTag("Enemy")) {
             // Deal damage to enemy
-            ContactEnemy enemy = other.GetComponent<ContactEnemy>();
-            
-            if (enemy != null) {
-                enemy.Health -= damage;
-                Animator enemyAnimator = other.GetComponent<Animator>();
-                enemyAnimator.SetBool("Hurt", true);
+            if (other != null) {
+                            
+                if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
+                    enemy.TakeDamage(damage);
+                }
             }
+            
         }
 
         if (other.gameObject.layer != 3) {

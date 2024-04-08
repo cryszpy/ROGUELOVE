@@ -6,6 +6,8 @@ using System.IO;
 
 public class ContactEnemy : MonoBehaviour
 {
+
+    // Animator component
     public Animator animator;
 
     [SerializeField]
@@ -23,27 +25,17 @@ public class ContactEnemy : MonoBehaviour
 
     Rigidbody2D rb;
 
-    public float Health {
-        set {
-            health = value;
-            if(health <= 0) {
-                Death();
-            }
-        }
-
-        get {
-            return health;
-        }
-    }
-
-    public float health = 6;
+    // Enemy health bar
+    public HealthBar healthBar;
 
     void Start() {
+        healthBar = this.GetComponentInChildren<HealthBar>();
+
         seeker = GetComponent<Seeker>();
         rb = GetComponent<Rigidbody2D>();
         target = GameObject.FindGameObjectWithTag("Player").transform;
 
-        InvokeRepeating("UpdatePath", 0f, .5f);
+        InvokeRepeating(nameof(UpdatePath), 0f, .5f);
     }
 
     void UpdatePath() {
@@ -53,6 +45,8 @@ public class ContactEnemy : MonoBehaviour
     }
 
     void FixedUpdate() {
+
+        // Pathfinding
         if (path == null)
             return;
 
@@ -63,6 +57,7 @@ public class ContactEnemy : MonoBehaviour
             reachedEndOfPath = false;
         }
 
+        // Movement
         Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
         Vector2 force = direction * speed * Time.deltaTime;
 
@@ -74,6 +69,7 @@ public class ContactEnemy : MonoBehaviour
             currentWaypoint++;
         }
 
+        // Direction facing
         if (rb.velocity.x >= 0.01f) {
 
             this.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -87,6 +83,17 @@ public class ContactEnemy : MonoBehaviour
         } else {
             animator.SetBool("IsMoving", false);
         }
+
+        // Make health bar face the same way regardless of enemy sprite
+        if (this.transform.localScale == new Vector3(1f, 1f, 1f)) {
+
+            healthBar.transform.localScale = new Vector3(1f, 1f, 1f);
+
+        } else if (this.transform.localScale == new Vector3(-1f, 1f, 1f)) {
+
+            healthBar.transform.localScale = new Vector3(-1f, 1f, 1f);
+
+        }
     }
 
     void OnPathComplete(Pathfinding.Path p) {
@@ -94,14 +101,6 @@ public class ContactEnemy : MonoBehaviour
             path = p;
             currentWaypoint = 0;
         }
-    }
-
-    public void HurtCheck() {
-        animator.SetBool("Hurt", false);
-    }
-
-    public void Death() {
-        animator.SetTrigger("Death");
     }
 
     public void RemoveEnemy() {

@@ -522,3 +522,6 @@ MonoBehaviour:
     minNormalAngle: 0
     maxNormalAngle: 0
   spriteRenderer: {fileID: 7125730586454602621}
+  maxHealth: 100
+  currentHealth: 0
+  healthBar: {fileID: 0}

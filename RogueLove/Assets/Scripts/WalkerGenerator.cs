@@ -337,49 +337,68 @@ public class WalkerGenerator : MonoBehaviour
         Debug.Log(tileListX.Count);
         Debug.Log(tileListY.Count);
         Debug.Log(gridHandler.Length);
-        SpawnRandom();
+        SpawnRandomPlayer();
+        SpawnRandomEnemies();
         PathScan();
     }
 
-    // SPAWN ENEMIES AND PLAYER
-    void SpawnRandom() {
+    // SPAWN PLAYER
+    public void SpawnRandomPlayer() {
 
         // Finds player
         GameObject player = GameObject.FindGameObjectWithTag("Player");
+
+        // Generates random number to pick Player spawnpoint
+        int randP = Random.Range(0, tileListX.Count);
+
+        // For as many floor tiles as there are in the tilemap:
+            for (int i = 0; i < tileListX.Count; i++) {
+
+                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                if ((tilemap.GetSprite(new Vector3Int(tileListX[randP], tileListY[randP], 0)) == ground)
+                && (oTilemap.GetTile(new Vector3Int(tileListX[randP], tileListY[randP], 0)) != obstacles)
+                && (gridHandler[tileListX[i], tileListY[i]] == Grid.FLOOR)) {
+
+                    // Spawns Player
+                    //player.SetActive(true);
+                    player.transform.position = new Vector2(tileListX[randP] * 0.16f, (tileListY[randP] * 0.16f) + 0.01f);
+                    
+                    break;
+
+                } else {
+                    // Generates random number to pick Player spawnpoint
+                    randP = Random.Range(0, tileListX.Count);
+                }
+            }
+    }
+
+    // SPAWN ENEMIES
+    void SpawnRandomEnemies() {
 
         // For every enemy in the level
         for (int e = 0; e < enemies.Length; e++) {
 
             // Generates random number to pick Enemy spawnpoint
             int rand = Random.Range(0, tileListX.Count);
-            // Generates random number to pick Player spawnpoint
-            int randP = Random.Range(0, tileListX.Count);
 
             // For as many floor tiles as there are in the tilemap:
             for (int i = 0; i < tileListX.Count; i++) {
 
                 // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == ground) 
-                && (tilemap.GetSprite(new Vector3Int(tileListX[randP], tileListY[randP], 0)) == ground)
-                && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != obstacles)
-                && (oTilemap.GetTile(new Vector3Int(tileListX[randP], tileListY[randP], 0)) != obstacles)) {
+                if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == ground)
+                && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != obstacles)) {
 
                     //Debug.Log("true!");
                     
                     // Spawns Enemy
                     Instantiate(enemies[e], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity);
-                    // Spawns Player
-                    //player.SetActive(true);
-                    player.transform.position = new Vector2(tileListX[randP] * 0.16f, tileListY[randP] * 0.16f);
-                    
+
                     break;
 
                 } else {
                     
                     // Generates random number to pick Enemy spawnpoint
                     rand = Random.Range(0, tileListX.Count);
-                    // Generates random number to pick Player spawnpoint
-                    randP = Random.Range(0, tileListX.Count);
 
                     //Debug.Log("false");
                     //Debug.Log("slime " + tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)));
@@ -490,8 +509,6 @@ public class WalkerGenerator : MonoBehaviour
 
         // Create decoration around loaded map
         StartCoroutine(CreateDecor());
-
-        //SpawnRandom();
-        //PathScan();
     }
+    
 }

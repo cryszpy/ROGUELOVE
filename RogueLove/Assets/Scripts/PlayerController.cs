@@ -24,15 +24,29 @@ public class PlayerController : MonoBehaviour
     private SpriteRenderer spriteRenderer;
     List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
 
+    // Player max health
+    public float maxHealth = 100;
+
+    // Player current health
+    public float currentHealth;
+
+    // Health Bar reference
+    public HealthBar healthBar;
+
     // Start is called before the first frame update
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponentInChildren<Animator>();
         //spriteRenderer = GetComponent<SpriteRenderer>();
+
+        healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
+
+        currentHealth = maxHealth;
+        healthBar.SetMaxHealth(maxHealth);
     }
     
-    private void FixedUpdate() {
+    private void Update() {
         if(movementInput != Vector2.zero){
             bool success = TryMove(movementInput);
 
@@ -54,6 +68,11 @@ public class PlayerController : MonoBehaviour
             spriteRenderer.flipX = true;
         } else if (movementInput.x > 0) {
             spriteRenderer.flipX = false;
+        }
+
+        // Test health
+        if(Input.GetKeyDown(KeyCode.Space)) {
+            TakeDamage(20);
         }
 
     }
@@ -84,5 +103,12 @@ public class PlayerController : MonoBehaviour
 
     void OnFire() {
         animator.SetTrigger("MeleeAttack");
+    }
+
+    void TakeDamage(float damage) {
+
+        currentHealth -= damage;
+        healthBar.SetHealth(currentHealth);
+
     }
 }
