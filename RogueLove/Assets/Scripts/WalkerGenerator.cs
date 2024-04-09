@@ -96,7 +96,20 @@ public class WalkerGenerator : MonoBehaviour
     [Space(10)]
     [Header("ENEMIES")]
 
-    public GameObject[] enemies;
+    // List of all common enemies in this level
+    public GameObject[] commonEnemies;
+
+    // List of all rare enemies in this level
+    public GameObject[] rareEnemies;
+
+    // List of all stationary enemies in this level
+    public GameObject[] stationEnemies;
+
+    // List of all minibosses in this level
+    public GameObject[] minibosses;
+
+    // List of all bosses in this level
+    public GameObject[] bosses;
 
     // Initializes grid to be generated (size)
     void Start() {
@@ -377,37 +390,117 @@ public class WalkerGenerator : MonoBehaviour
     // SPAWN ENEMIES
     void SpawnRandomEnemies() {
 
-        // For every enemy in the level
-        for (int e = 0; e < enemies.Length; e++) {
+        // TODO: If level number is the last level in area, then disregard everything except Boss spawning
 
-            // Generates random number to pick Enemy spawnpoint
-            int rand = Random.Range(0, tileListX.Count);
+        if (commonEnemies != null) {
+            // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
+            for (int c = 0; c < commonEnemies.Length; c++) {
 
-            // For as many floor tiles as there are in the tilemap:
-            for (int i = 0; i < tileListX.Count; i++) {
+                // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+                int commonRange = Random.Range(3, 6);
+                Debug.Log(commonRange);
 
-                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == ground)
-                && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != obstacles)) {
-
-                    //Debug.Log("true!");
-                    
-                    // Spawns Enemy
-                    Instantiate(enemies[e], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity);
-
-                    break;
-
-                } else {
+                // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
+                for (int s = 0; s < commonRange; s++) {
                     
                     // Generates random number to pick Enemy spawnpoint
-                    rand = Random.Range(0, tileListX.Count);
+                    int rand = Random.Range(0, tileListX.Count);
 
-                    //Debug.Log("false");
-                    //Debug.Log("slime " + tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)));
-                    //Debug.Log("player " + tilemap.GetSprite(new Vector3Int(tileListX[randP], tileListY[randP], 0)));
+                    // For as many floor tiles as there are in the tilemap:
+                    for (int i = 0; i < tileListX.Count; i++) {
+
+                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                        if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == ground)
+                        && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != obstacles)) {
+
+                            // Spawns Enemy
+                            Instantiate(commonEnemies[c], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity);   
+
+                            break;                         
+
+                        } else {
+                            
+                            // Generates random number to pick Enemy spawnpoint
+                            rand = Random.Range(0, tileListX.Count);
+                        }
+                    }
                 }
             }
         }
+
+        if (rareEnemies != null) {
+            // For every rare enemy in the level (e.g. Deforestation Guy, Nancy)
+            for (int r = 0; r < rareEnemies.Length; r++) {
+                
+                // Generate random amount of rare enemies in level (e.g. 3 Deforestation Guy, 2 Nancy)
+                int rareRange = Random.Range(2, 4);
+                Debug.Log(rareRange);
+                
+                // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
+                for (int s = 0; s < rareRange; s++) {
+                    
+                    // Generates random number to pick Enemy spawnpoint
+                    int rand = Random.Range(0, tileListX.Count);
+
+                    // For as many floor tiles as there are in the tilemap:
+                    for (int i = 0; i < tileListX.Count; i++) {
+
+                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                        if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == ground)
+                        && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != obstacles)) {
+
+                            // Spawns Enemy
+                            Instantiate(rareEnemies[r], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity);   
+
+                            break;                         
+
+                        } else {
+                            
+                            // Generates random number to pick Enemy spawnpoint
+                            rand = Random.Range(0, tileListX.Count);
+                        }
+                    }
+                }
+            }
+        }
+
+        if (minibosses != null) {
+
+            // For every miniboss in the level (e.g. Scout, Chris)
+            for (int m = 0; m < minibosses.Length; m++) {
+                
+                // Generate random amount of minibosses in level (e.g. 1 Scout, 1 Chris)
+                int minibossesRange = 1;
+                Debug.Log(minibossesRange);
+                
+                // For the amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
+                for (int s = 0; s < minibossesRange; s++) {
+                    
+                    // Generates random number to pick Enemy spawnpoint
+                    int rand = Random.Range(0, tileListX.Count);
+
+                    // For as many floor tiles as there are in the tilemap:
+                    for (int i = 0; i < tileListX.Count; i++) {
+
+                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                        if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == ground)
+                        && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != obstacles)) {
+
+                            // Spawns Enemy
+                            Instantiate(minibosses[m], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity);   
+
+                            break;                         
+
+                        } else {
+                            
+                            // Generates random number to pick Enemy spawnpoint
+                            rand = Random.Range(0, tileListX.Count);
+                        }
+                    }
+                }
+            }
+        }
+        
     }
 
     // GENERATE PATHFINDING MAP
