@@ -46,7 +46,6 @@ public class WalkerGenerator : MonoBehaviour
     public Tile empty;
 
     [Space(10)]
-
     [Header("MAP SETTINGS")]
 
     [Range(7, 60)]
@@ -109,7 +108,6 @@ public class WalkerGenerator : MonoBehaviour
             InitializeGrid();
             LoadMap();
             Debug.Log("Loaded Map");
-            PathScan();
         } else {
             saveExists = false;
             InitializeGrid();

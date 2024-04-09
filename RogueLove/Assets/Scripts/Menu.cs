@@ -30,7 +30,7 @@ public class MainMenu : MonoBehaviour
             pauseMenu.SetActive(false);
         } 
         // Pause
-        else {
+        else if (GameStateManager.getState() == GameStateManager.GAMESTATE.PLAYING) {
             GameStateManager.TogglePause();
             GameStateManager.setState(GameStateManager.GAMESTATE.PAUSED);
             pauseMenu.SetActive(true);

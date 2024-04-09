@@ -7,31 +7,59 @@ using System.IO;
 public class ContactEnemy : MonoBehaviour
 {
 
-    // Animator component
+    [Header("SCRIPT REFERENCES")]
+
+    // This enemy's Animator component
     public Animator animator;
 
+    // This enemy's target
     [SerializeField]
     private Transform target;
 
-    [SerializeField]
-    private float speed = 200f;
-
-    [SerializeField]
-    private float nextWaypointDistance = 3f;
-
-    Pathfinding.Path path;
-    int currentWaypoint = 0;
-    bool reachedEndOfPath = false;
-
+    // This enemy's pathfinder script
     [SerializeField]
     private Seeker seeker;
 
+    // This enemy's Rigidbody component
     [SerializeField]
     private Rigidbody2D rb;
 
     [SerializeField]
     // Enemy health bar
     private HealthBar healthBar;
+
+    // This enemy's contact collider
+    [SerializeField]
+    private Collider2D contactColl;
+
+    [Space(10)]
+    [Header("ENEMY STATS")]
+
+    // This enemy's attack damage
+    [SerializeField]
+    private float damage;
+
+    // This enemy's movement speed
+    [SerializeField]
+    private float speed;
+
+    // This enemy's attack speed
+    [SerializeField]
+    private float attackSpeed;
+
+    // Boolean to determine whether attack animation is playing
+    private bool attackAnim;
+
+    [Space(10)]
+    [Header("PATHFINDING")]
+
+    // This enemy's pathfinding waypoint distance
+    [SerializeField]
+    private float nextWaypointDistance = 3f;
+
+    Pathfinding.Path path;
+    private int currentWaypoint = 0;
+    private bool reachedEndOfPath = false;
 
     void Start() {
         if (healthBar == null) {
@@ -51,6 +79,8 @@ public class ContactEnemy : MonoBehaviour
             //Debug.Log("ContactEnemy target is null! Reassigned.");
             target = GameObject.FindGameObjectWithTag("Player").transform;
         //}
+
+        attackAnim = false;
 
         InvokeRepeating(nameof(UpdatePath), 0f, .5f);
     }
@@ -111,6 +141,65 @@ public class ContactEnemy : MonoBehaviour
             healthBar.transform.localScale = new Vector3(-1f, 1f, 1f);
 
         }
+
+        // Resets attack animation if not colliding with anything
+        if (contactColl.enabled == true) {
+            animator.SetBool("Attack", false);
+        }
+    }
+
+    private void OnTriggerEnter2D(Collider2D collider) {
+
+        // If collided with the player, start attack sequence
+        if (collider.CompareTag("Player")) {
+
+            // If animation has started playing
+            if (attackAnim == true) {
+
+                // Disable collider and animation trigger to prevent looping
+                contactColl.enabled = false;
+                animator.SetBool("Attack", false);
+
+                // Damage entity
+                StartCoroutine(AttackEntity(collider));
+            }
+
+            // Play attack animation (if not already playing)
+            else {
+                attackAnim = false;
+                contactColl.enabled = false;
+                animator.SetBool("Attack", true);
+            }
+
+        } 
+        // If not collided with the player, reset attack sequence
+        else {
+            attackAnim = false;
+            animator.SetBool("Attack", false);
+            contactColl.enabled = true;
+        }
+    }
+
+    // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
+    public void CheckTrigger() {
+        attackAnim = true;
+        animator.SetBool("Attack", false);
+        contactColl.enabled = true;
+    }
+
+    private IEnumerator AttackEntity(Collider2D target) {
+        // Deal damage to enemy                        
+        if (target.TryGetComponent<PlayerController>(out var player)) {
+            player.TakeDamage(damage);
+        } else {
+            Debug.LogError("Tried to damage nonexistent entity! Or the entity has no collider.");
+        }
+        attackAnim = false;
+
+        // Wait for attack cooldown
+        yield return new WaitForSeconds(attackSpeed);
+
+        contactColl.enabled = true;
     }
 
     void OnPathComplete(Pathfinding.Path p) {

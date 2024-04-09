@@ -4,11 +4,16 @@ using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
 {
+    [Header("SCRIPT REFERENCES")]
+
     // Animator component
     public Animator animator;
 
     // Health bar
     public HealthBar healthBar;
+
+    [Space(10)]
+    [Header("STATS")]
 
     // Enemy current health
     public float currentHealth;
@@ -49,6 +54,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float damage) {
         Health -= damage;
+        Debug.Log("Took this amount of damage: " + damage);
         healthBar.SetHealth(currentHealth);
 
         animator.SetBool("Hurt", true);

@@ -7,11 +7,7 @@ using UnityEngine.InputSystem;
 public class PlayerController : MonoBehaviour
 {
 
-    [SerializeField]
-    private float moveSpeed = 1.5f;
-
-    [SerializeField]
-    private float collisionOffset = 0.01f;
+    [Header("SCRIPT REFERENCES")]
 
     [SerializeField]
     private ContactFilter2D movementFilter;
@@ -27,7 +23,13 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private SpriteRenderer spriteRenderer;
 
+    // Health Bar reference
+    public HealthBar healthBar;
+
     readonly List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
+
+    [Space(10)]
+    [Header("STATS")]
 
     // Player max health
     public float maxHealth = 100;
@@ -35,8 +37,24 @@ public class PlayerController : MonoBehaviour
     // Player current health
     public float currentHealth;
 
-    // Health Bar reference
-    public HealthBar healthBar;
+    [SerializeField]
+    private float moveSpeed = 1.5f;
+
+    [SerializeField]
+    private float collisionOffset = 0.01f;
+
+    public float Health {
+        set {
+            currentHealth = value;
+            if(currentHealth <= 0) {
+                DeathAnim();
+            }
+        }
+
+        get {
+            return currentHealth;
+        }
+    }
 
     // Start is called before the first frame update
     void Start()
@@ -58,33 +76,38 @@ public class PlayerController : MonoBehaviour
     }
     
     private void Update() {
-        if(movementInput != Vector2.zero){
-            bool success = TryMove(movementInput);
 
-            if (!success) {
-                success = TryMove(new Vector2(movementInput.x, 0));
+        // Movement system if you're not dead lol
+        if (GameStateManager.getState() != GameStateManager.GAMESTATE.GAMEOVER) {
+            if(movementInput != Vector2.zero){
+                bool success = TryMove(movementInput);
 
                 if (!success) {
-                    success = TryMove(new Vector2(0, movementInput.y));
+                    success = TryMove(new Vector2(movementInput.x, 0));
+
+                    if (!success) {
+                        success = TryMove(new Vector2(0, movementInput.y));
+                    }
                 }
+
+                animator.SetBool("IsMoving", success);
+            } else {
+                animator.SetBool("IsMoving", false);
             }
 
-            animator.SetBool("IsMoving", success);
-        } else {
-            animator.SetBool("IsMoving", false);
+            // Set direction of sprite to movement direction
+            if(movementInput.x < 0) {
+                spriteRenderer.flipX = true;
+            } else if (movementInput.x > 0) {
+                spriteRenderer.flipX = false;
+            }
         }
 
-        // Set direction of sprite to movement direction
-        if(movementInput.x < 0) {
-            spriteRenderer.flipX = true;
-        } else if (movementInput.x > 0) {
-            spriteRenderer.flipX = false;
-        }
-
-        // Test health
+        /* Test health
         if(Input.GetKeyDown(KeyCode.Space)) {
             TakeDamage(20);
         }
+        */
 
     }
 
@@ -113,13 +136,24 @@ public class PlayerController : MonoBehaviour
     }
 
     void OnFire() {
+        /*
         animator.SetTrigger("MeleeAttack");
+        */
     }
 
-    void TakeDamage(float damage) {
+    public void TakeDamage(float damage) {
 
-        currentHealth -= damage;
-        healthBar.SetHealth(currentHealth);
+        if (GameStateManager.getState() != GameStateManager.GAMESTATE.GAMEOVER) {
+            Health -= damage;
+            healthBar.SetHealth(currentHealth);
+            Debug.Log("Player took damage!");
 
+            animator.SetBool("Hurt", true);
+        }
+        
+    }
+
+    public void DeathAnim() {
+        animator.SetBool("Death", true);
     }
 }

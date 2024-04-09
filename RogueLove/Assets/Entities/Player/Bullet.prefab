@@ -103,8 +103,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6018900055118431996}
-  force: 5
   animator: {fileID: 2920130361219395360}
+  coll: {fileID: 5490067005516740771}
+  force: 5
   damage: 3
 --- !u!50 &6018900055118431996
 Rigidbody2D:

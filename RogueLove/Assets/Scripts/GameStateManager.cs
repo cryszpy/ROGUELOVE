@@ -66,4 +66,10 @@ public class GameStateManager : MonoBehaviour
             Time.timeScale = 1;
         }
     }
+
+    public static void GameOver() {
+        if (state == GAMESTATE.PLAYING) {
+            state = GAMESTATE.GAMEOVER;
+        }
+    }
 }

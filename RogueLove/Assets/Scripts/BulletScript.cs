@@ -1,22 +1,32 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Mathematics;
 using UnityEngine;
 
 public class BulletScript : MonoBehaviour
 {
+
+    [Header("SCRIPT REFERENCES")]
+
     private Vector3 mousePos;
     private Camera mainCam;
 
     [SerializeField]
     private Rigidbody2D rb;
 
-    [SerializeField]
-    private float force;
-
     public Animator animator;
 
     private Vector3 direction;
+
+    [SerializeField]
+    private Collider2D coll;
+
+    [Space(10)]
+    [Header("STATS")]
+
+    [SerializeField]
+    private float force;
 
     [SerializeField]
     private float damage = 3;
@@ -25,6 +35,8 @@ public class BulletScript : MonoBehaviour
     void Start()
     {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
+        coll.enabled = true;
 
         if (animator == null) {
             Debug.Log("BulletScript animator is null! Reassigned.");
@@ -59,11 +71,10 @@ public class BulletScript : MonoBehaviour
                     enemy.TakeDamage(damage);
                 }
             }
-            
         }
 
         if (other.gameObject.layer != 3) {
-            //Debug.Log(other.gameObject.layer);
+            coll.enabled = false;
             rb.velocity = (Vector2)direction.normalized * 0;
             animator.SetTrigger("Destroy");
         }

@@ -174,6 +174,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   swordAttack: {fileID: 3487430728950635000}
   spriteRenderer: {fileID: 7125730586454602621}
+  animator: {fileID: 1825931467441451771}
 --- !u!1 &8286204141084347148
 GameObject:
   m_ObjectHideFlags: 0
@@ -266,7 +267,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   swordCollider: {fileID: 437451880687554321}
-  damage: 3
+  damage: 0
 --- !u!1 &8567451438062245733
 GameObject:
   m_ObjectHideFlags: 0
@@ -506,8 +507,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6bea647b224d1d93aeb7d955c8207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  moveSpeed: 1
-  collisionOffset: 0.01
   movementFilter:
     useTriggers: 0
     useLayerMask: 0
@@ -525,6 +524,8 @@ MonoBehaviour:
   rb: {fileID: 2057914311772842495}
   animator: {fileID: 1825931467441451771}
   spriteRenderer: {fileID: 7125730586454602621}
-  maxHealth: 100
-  currentHealth: 0
   healthBar: {fileID: 0}
+  maxHealth: 100
+  currentHealth: 100
+  moveSpeed: 1
+  collisionOffset: 0.01
