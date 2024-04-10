@@ -340,15 +340,6 @@ public class WalkerGenerator : MonoBehaviour
                 }
             }
         }
-        /*
-        int[] test = new int[tileListX.Count];
-        foreach (var pos in tilemap.cellBounds.allPositionsWithin) {
-            
-            for (int i = 0; i < test.Length; i++) {
-                test[i] = pos.x;
-            }
-        }
-        */
         Debug.Log(tileListX.Count);
         Debug.Log(tileListY.Count);
         Debug.Log(gridHandler.Length);

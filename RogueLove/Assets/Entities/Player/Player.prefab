@@ -48,7 +48,7 @@ MonoBehaviour:
   bullet: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
   bulletTransform: {fileID: 4777194430705029824}
   canFire: 1
-  timeBetweenFiring: 0.3
+  timeBetweenFiring: 1
   gun: {fileID: 8252455337123977837}
 --- !u!1 &7808749482456848566
 GameObject:

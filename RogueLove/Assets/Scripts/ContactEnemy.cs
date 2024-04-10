@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
 using System.IO;
+using NUnit.Framework.Constraints;
 
 public class ContactEnemy : MonoBehaviour
 {
@@ -14,11 +15,15 @@ public class ContactEnemy : MonoBehaviour
 
     // This enemy's target
     [SerializeField]
-    private Transform target;
+    public Transform target;
 
     // This enemy's pathfinder script
     [SerializeField]
     private Seeker seeker;
+
+    // This enemy's followRange collider
+    [SerializeField]
+    private Collider2D followCollider;
 
     // This enemy's Rigidbody component
     [SerializeField]
@@ -36,16 +41,14 @@ public class ContactEnemy : MonoBehaviour
     [Header("ENEMY STATS")]
 
     // This enemy's attack damage
-    [SerializeField]
-    private float damage;
+    public float damage;
 
     // This enemy's movement speed
     [SerializeField]
     private float speed;
 
     // This enemy's attack speed
-    [SerializeField]
-    private float attackSpeed;
+    public float attackSpeed;
 
     // Boolean to determine whether attack animation is playing
     private bool attackAnim;
@@ -60,6 +63,8 @@ public class ContactEnemy : MonoBehaviour
     Pathfinding.Path path;
     private int currentWaypoint = 0;
     private bool reachedEndOfPath = false;
+
+    public bool inFollowRadius;
 
     void Start() {
         if (healthBar == null) {
@@ -108,7 +113,11 @@ public class ContactEnemy : MonoBehaviour
         Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
         Vector2 force = direction * speed * Time.deltaTime;
 
-        rb.AddForce(force);
+        if (inFollowRadius == true) {
+            rb.AddForce(force);
+        } 
+        
+        
 
         float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
 
@@ -148,58 +157,11 @@ public class ContactEnemy : MonoBehaviour
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collider) {
-
-        // If collided with the player, start attack sequence
-        if (collider.CompareTag("Player")) {
-
-            // If animation has started playing
-            if (attackAnim == true) {
-
-                // Disable collider and animation trigger to prevent looping
-                contactColl.enabled = false;
-                animator.SetBool("Attack", false);
-
-                // Damage entity
-                StartCoroutine(AttackEntity(collider));
-            }
-
-            // Play attack animation (if not already playing)
-            else {
-                attackAnim = false;
-                contactColl.enabled = false;
-                animator.SetBool("Attack", true);
-            }
-
-        } 
-        // If not collided with the player, reset attack sequence
-        else {
-            attackAnim = false;
-            animator.SetBool("Attack", false);
-            contactColl.enabled = true;
-        }
-    }
-
     // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
     public void CheckTrigger() {
-        attackAnim = true;
+        //attackAnim = false;
         animator.SetBool("Attack", false);
-        contactColl.enabled = true;
-    }
-
-    private IEnumerator AttackEntity(Collider2D target) {
-        // Deal damage to enemy                        
-        if (target.TryGetComponent<PlayerController>(out var player)) {
-            player.TakeDamage(damage);
-        } else {
-            Debug.LogError("Tried to damage nonexistent entity! Or the entity has no collider.");
-        }
-        attackAnim = false;
-
-        // Wait for attack cooldown
-        yield return new WaitForSeconds(attackSpeed);
-
-        contactColl.enabled = true;
+        //contactColl.enabled = true;
     }
 
     void OnPathComplete(Pathfinding.Path p) {

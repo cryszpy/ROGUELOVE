@@ -19,7 +19,7 @@ TagManager:
   - UI
   - Collisions/Ground
   - Collisions/Obstacles
-  - 
+  - Collisions/BulletIgnore
   - 
   - 
   - 
