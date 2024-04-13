@@ -11,10 +11,12 @@ GameObject:
   - component: {fileID: 3622345872674339659}
   - component: {fileID: 163189661128954202}
   - component: {fileID: 5586343462418798160}
+  - component: {fileID: 6989567370104213476}
+  - component: {fileID: 3390970823531793309}
   - component: {fileID: 1923873099500596009}
   - component: {fileID: 7546251876369635720}
-  - component: {fileID: 98975426951688769}
   - component: {fileID: 8722914626086714706}
+  - component: {fileID: 5864921784080032887}
   - component: {fileID: 5977564517870532234}
   m_Layer: 0
   m_Name: Wispling
@@ -121,9 +123,46 @@ MonoBehaviour:
       m_Bits: 4294967295
     useGraphRaycasting: 0
   traversableTags: -1
-  tagPenalties: 0000000005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  tagPenalties: 0000000005000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: 1
+--- !u!114 &6989567370104213476
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2496777416409024874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  smoothType: 0
+  subdivisions: 1
+  iterations: 2
+  strength: 0.5
+  uniformLength: 0
+  maxSegmentLength: 2
+  bezierTangentLength: 0.3
+  offset: 0.2
+  factor: 0.1
+--- !u!114 &3390970823531793309
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2496777416409024874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a537d958aa5bb4f35b0d7b40d72278f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  penalty: 1000
+  randomStep: 10
 --- !u!50 &1923873099500596009
 Rigidbody2D:
   serializedVersion: 4
@@ -188,31 +227,6 @@ CapsuleCollider2D:
   m_Offset: {x: 0.0008405653, y: -0.019552872}
   m_Size: {x: 0.09260666, y: 0.09260666}
   m_Direction: 0
---- !u!114 &98975426951688769
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2496777416409024874}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: fa1d576118f2443fc96482f69e6e5e36, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  animator: {fileID: 8722914626086714706}
-  target: {fileID: 2317871507723600089, guid: 1e66841b19e244033ac3caa2eaab406c, type: 3}
-  seeker: {fileID: 5586343462418798160}
-  followRange: 1.5
-  followCollider: {fileID: 3178784477931702090}
-  rb: {fileID: 1923873099500596009}
-  healthBar: {fileID: 1215961894684457156}
-  contactColl: {fileID: 7721675988448470313}
-  damage: 8
-  speed: 300
-  attackSpeed: 2
-  nextWaypointDistance: 1
-  inFollowRadius: 0
 --- !u!95 &8722914626086714706
 Animator:
   serializedVersion: 7
@@ -235,6 +249,33 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &5864921784080032887
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2496777416409024874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fa1d576118f2443fc96482f69e6e5e36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  animator: {fileID: 8722914626086714706}
+  map: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
+  seeker: {fileID: 5586343462418798160}
+  followCollider: {fileID: 3178784477931702090}
+  rb: {fileID: 1923873099500596009}
+  healthBar: {fileID: 1215961894684457156}
+  contactColl: {fileID: 7721675988448470313}
+  damage: 8
+  speed: 300
+  wanderSpeed: 70
+  attackSpeed: 2
+  nextWaypointDistance: 1
+  inFollowRadius: 0
 --- !u!114 &5977564517870532234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -417,7 +458,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 899addeac43a6407393fc1b8b5030a3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 98975426951688769}
+  parent: {fileID: 5864921784080032887}
   contactColl: {fileID: 7721675988448470313}
 --- !u!70 &8975077011246908917
 CapsuleCollider2D:
@@ -639,7 +680,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff690363546b544edaf3898aac8ed1ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 98975426951688769}
+  parent: {fileID: 5864921784080032887}
 --- !u!1001 &923596922019481717
 PrefabInstance:
   m_ObjectHideFlags: 0

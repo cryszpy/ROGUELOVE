@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 3622345872674339659}
   - component: {fileID: 163189661128954202}
   - component: {fileID: 5586343462418798160}
+  - component: {fileID: 3972200229224842005}
+  - component: {fileID: 8467198963492424262}
   - component: {fileID: 1923873099500596009}
   - component: {fileID: 7546251876369635720}
   - component: {fileID: 98975426951688769}
@@ -120,9 +122,46 @@ MonoBehaviour:
       m_Bits: 4294967295
     useGraphRaycasting: 0
   traversableTags: -1
-  tagPenalties: 0000000005000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
+  tagPenalties: 0000000005000000020000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000
   graphMask:
     value: 1
+--- !u!114 &3972200229224842005
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2496777416409024874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: cb6a34d769a1e4ac7b0b30e433aa443c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  smoothType: 0
+  subdivisions: 1
+  iterations: 2
+  strength: 0.5
+  uniformLength: 0
+  maxSegmentLength: 2
+  bezierTangentLength: 0.4
+  offset: 0.2
+  factor: 0.1
+--- !u!114 &8467198963492424262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2496777416409024874}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a537d958aa5bb4f35b0d7b40d72278f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 1
+  penalty: 1000
+  randomStep: 10
 --- !u!50 &1923873099500596009
 Rigidbody2D:
   serializedVersion: 4
@@ -200,7 +239,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animator: {fileID: 8722914626086714706}
-  target: {fileID: 2317871507723600089, guid: 1e66841b19e244033ac3caa2eaab406c, type: 3}
+  map: {fileID: 0}
+  target: {x: 0, y: 0, z: 0}
+  player: {fileID: 0}
   seeker: {fileID: 5586343462418798160}
   followCollider: {fileID: 7114166369162182342}
   rb: {fileID: 1923873099500596009}
@@ -208,6 +249,7 @@ MonoBehaviour:
   contactColl: {fileID: 8202198943828419774}
   damage: 3
   speed: 500
+  wanderSpeed: 100
   attackSpeed: 1
   nextWaypointDistance: 1
   inFollowRadius: 0
@@ -247,7 +289,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 8722914626086714706}
   healthBar: {fileID: 1215961894684457156}
-  currentHealth: 6
+  currentHealth: 0
   maxHealth: 6
 --- !u!1 &5826619376852643059
 GameObject:

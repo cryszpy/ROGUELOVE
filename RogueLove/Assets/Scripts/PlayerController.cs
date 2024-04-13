@@ -26,7 +26,7 @@ public class PlayerController : MonoBehaviour
     // Health Bar reference
     public HealthBar healthBar;
 
-    readonly List<RaycastHit2D> castCollisions = new List<RaycastHit2D>();
+    readonly List<RaycastHit2D> castCollisions = new();
 
     [Space(10)]
     [Header("STATS")]
@@ -78,7 +78,7 @@ public class PlayerController : MonoBehaviour
     private void Update() {
 
         // Movement system if you're not dead lol
-        if (GameStateManager.getState() != GameStateManager.GAMESTATE.GAMEOVER) {
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
             if(movementInput != Vector2.zero){
                 bool success = TryMove(movementInput);
 
@@ -143,7 +143,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage) {
 
-        if (GameStateManager.getState() != GameStateManager.GAMESTATE.GAMEOVER) {
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
             Health -= damage;
             healthBar.SetHealth(currentHealth);
             Debug.Log("Player took damage!");

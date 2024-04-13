@@ -16,11 +16,11 @@ public class GameStateManager : MonoBehaviour
 
     private static GAMESTATE state;
 
-    public static GAMESTATE getState() {
+    public static GAMESTATE GetState() {
         return state;
     }
 
-    public static void setState(GAMESTATE newState) {
+    public static void SetState(GAMESTATE newState) {
         state = newState;
     }
 

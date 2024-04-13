@@ -4,174 +4,106 @@ using UnityEngine;
 using Pathfinding;
 using System.IO;
 using NUnit.Framework.Constraints;
+using System;
 
-public class ContactEnemy : MonoBehaviour
+public class ContactEnemy : Enemy
 {
+    protected Vector3 tile;
 
-    [Header("SCRIPT REFERENCES")]
+    private int direc;
 
-    // This enemy's Animator component
-    public Animator animator;
+    private EnemyType type = EnemyType.CONTACT;
 
-    // This enemy's target
-    [SerializeField]
-    public Transform target;
-
-    // This enemy's pathfinder script
-    [SerializeField]
-    private Seeker seeker;
-
-    // This enemy's followRange collider
-    [SerializeField]
-    private Collider2D followCollider;
-
-    // This enemy's Rigidbody component
-    [SerializeField]
-    private Rigidbody2D rb;
-
-    [SerializeField]
-    // Enemy health bar
-    private HealthBar healthBar;
-
-    // This enemy's contact collider
-    [SerializeField]
-    private Collider2D contactColl;
-
-    [Space(10)]
-    [Header("ENEMY STATS")]
-
-    // This enemy's attack damage
-    public float damage;
-
-    // This enemy's movement speed
-    [SerializeField]
-    private float speed;
-
-    // This enemy's attack speed
-    public float attackSpeed;
-
-    // Boolean to determine whether attack animation is playing
-    private bool attackAnim;
-
-    [Space(10)]
-    [Header("PATHFINDING")]
-
-    // This enemy's pathfinding waypoint distance
-    [SerializeField]
-    private float nextWaypointDistance = 3f;
-
-    Pathfinding.Path path;
-    private int currentWaypoint = 0;
-    private bool reachedEndOfPath = false;
-
-    public bool inFollowRadius;
-
-    void Start() {
-        if (healthBar == null) {
-            Debug.Log("ContactEnemy healthbar is null! Reassigned.");
-            healthBar = this.GetComponentInChildren<HealthBar>();
-        }
-
-        if (seeker == null) {
-            Debug.Log("ContactEnemy seeker is null! Reassigned.");
-            seeker = GetComponent<Seeker>();
-        }
-        if (rb == null) {
-            Debug.Log("ContactEnemy rb is null! Reassigned.");
-            rb = GetComponent<Rigidbody2D>();
-        }
-        //if (target == null) {
-            //Debug.Log("ContactEnemy target is null! Reassigned.");
-            target = GameObject.FindGameObjectWithTag("Player").transform;
-        //}
-
-        attackAnim = false;
-
-        InvokeRepeating(nameof(UpdatePath), 0f, .5f);
+    public override void Chase() {
+        force = speed * Time.deltaTime * direction.normalized;
+        
+        rb.AddForce(force);
     }
 
-    void UpdatePath() {
-        if (seeker.IsDone()) {
-            seeker.StartPath(rb.position, target.position, OnPathComplete);
-        }
+    public override void Wander() {
+        Debug.Log("Wandering");
+        canWander = false;
+        waiting = false;
+
+        StartCoroutine(Roam());
+        return;
     }
 
-    void FixedUpdate() {
+    public IEnumerator Roam() {
 
-        // Pathfinding
-        if (path == null)
-            return;
+        direc = UnityEngine.Random.Range(0, 8);
+        moveTime = UnityEngine.Random.Range(1, 3);
+        waitTime = UnityEngine.Random.Range(2, 5);
 
-        if (currentWaypoint >= path.vectorPath.Count) {
-            reachedEndOfPath = true;
-            return;
-        } else {
-            reachedEndOfPath = false;
+        switch (direc) {
+            case 0:
+                force = wanderSpeed * Time.deltaTime * Vector2.up;
+                yield return null;
+                break;
+            case 1:
+                force = wanderSpeed * Time.deltaTime * Vector2.down;
+                yield return null;
+                break;
+            case 2:
+                force = wanderSpeed * Time.deltaTime * Vector2.right;
+                yield return null;
+                break;
+            case 3:
+                force = wanderSpeed * Time.deltaTime * Vector2.left;
+                yield return null;
+                break;
+            case 4:
+                force = wanderSpeed * Time.deltaTime * Vector2.zero;
+                yield return null;
+                break;
+            case 5:
+                force = wanderSpeed * Time.deltaTime * Vector2.up;
+                force += wanderSpeed * Time.deltaTime * Vector2.right;
+                yield return null;
+                break;
+            case 6:
+                force = wanderSpeed * Time.deltaTime * Vector2.up;
+                force += wanderSpeed * Time.deltaTime * Vector2.left;
+                yield return null;
+                break;
+            case 7:
+                force = wanderSpeed * Time.deltaTime * Vector2.down;
+                force += wanderSpeed * Time.deltaTime * Vector2.right;
+                yield return null;
+                break;
+            case 8:
+                force = wanderSpeed * Time.deltaTime * Vector2.down;
+                force += wanderSpeed * Time.deltaTime * Vector2.left;
+                yield return null;
+                break;
+            default:
+                direc = UnityEngine.Random.Range(0, 4);
+                yield return null;
+                break;
         }
-
-        // Movement
-        Vector2 direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
-        Vector2 force = direction * speed * Time.deltaTime;
-
-        if (inFollowRadius == true) {
+        Debug.Log("Set Direction");
+        while (canWander == false && !waiting) {
+            Debug.Log("IN THE LOOP");
             rb.AddForce(force);
+            yield return null;
+        }
+        yield return null;
+    }
+
+    /*
+    public override IEnumerator SetTarget() {
+        
+        yield return new WaitForSeconds(UnityEngine.Random.Range(10, 20));
+
+        
+        int rand = map.GetRandomTile();
+        tile = new(map.tileListX[rand], map.tileListY[rand]);
+        bool ihatethis = (Mathf.Abs(map.tileListX[rand] - this.transform.position.x) <= followCollider.radius) && (Mathf.Abs(map.tileListY[rand] - this.transform.position.y) <= followCollider.radius);
+        Debug.Log(ihatethis);
+        if (ihatethis) {
+            
+            target = tile;
+            Debug.Log("Set Tile");
         } 
-        
-        
-
-        float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
-
-        if (distance < nextWaypointDistance) {
-            currentWaypoint++;
-        }
-
-        // Direction facing
-        if (rb.velocity.x >= 0.01f) {
-
-            this.transform.localScale = new Vector3(1f, 1f, 1f);
-            animator.SetBool("IsMoving", true);
-
-        } else if (rb.velocity.y <= -0.01f) {
-
-            this.transform.localScale = new Vector3(-1f, 1f, 1f);
-            animator.SetBool("IsMoving", true);
-
-        } else {
-            animator.SetBool("IsMoving", false);
-        }
-
-        // Make health bar face the same way regardless of enemy sprite
-        if (this.transform.localScale == new Vector3(1f, 1f, 1f)) {
-
-            healthBar.transform.localScale = new Vector3(1f, 1f, 1f);
-
-        } else if (this.transform.localScale == new Vector3(-1f, 1f, 1f)) {
-
-            healthBar.transform.localScale = new Vector3(-1f, 1f, 1f);
-
-        }
-
-        // Resets attack animation if not colliding with anything
-        if (contactColl.enabled == true) {
-            animator.SetBool("Attack", false);
-        }
-    }
-
-    // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
-    public void CheckTrigger() {
-        //attackAnim = false;
-        animator.SetBool("Attack", false);
-        //contactColl.enabled = true;
-    }
-
-    void OnPathComplete(Pathfinding.Path p) {
-        if (!p.error) {
-            path = p;
-            currentWaypoint = 0;
-        }
-    }
-
-    public void RemoveEnemy() {
-        Destroy(gameObject);
-    }
+    } */
 }

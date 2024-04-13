@@ -24,15 +24,15 @@ public class MainMenu : MonoBehaviour
 
     public void TogglePauseMenu() {
         // Unpause
-        if (GameStateManager.getState() == GameStateManager.GAMESTATE.PAUSED) {
+        if (GameStateManager.GetState() == GameStateManager.GAMESTATE.PAUSED) {
             GameStateManager.TogglePause();
-            GameStateManager.setState(GameStateManager.GAMESTATE.PLAYING);
+            GameStateManager.SetState(GameStateManager.GAMESTATE.PLAYING);
             pauseMenu.SetActive(false);
         } 
         // Pause
-        else if (GameStateManager.getState() == GameStateManager.GAMESTATE.PLAYING) {
+        else if (GameStateManager.GetState() == GameStateManager.GAMESTATE.PLAYING) {
             GameStateManager.TogglePause();
-            GameStateManager.setState(GameStateManager.GAMESTATE.PAUSED);
+            GameStateManager.SetState(GameStateManager.GAMESTATE.PAUSED);
             pauseMenu.SetActive(true);
         }
     }
