@@ -7,7 +7,7 @@ using UnityEngine;
 public class EnemyFollowRadius : MonoBehaviour
 {
     [SerializeField]
-    private ContactEnemy parent;
+    private Enemy parent;
 
     private void OnTriggerEnter2D(Collider2D collider) {
 
@@ -16,7 +16,7 @@ public class EnemyFollowRadius : MonoBehaviour
         }
     }
 
-    void OnTriggerExit2D(Collider2D collider) {
+    private void OnTriggerExit2D(Collider2D collider) {
         if(collider.CompareTag("Player")) {
             parent.inFollowRadius = false;
         }

@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bullet: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
-  bulletTransform: {fileID: 4777194430705029824}
+  bulletSpawnPos: {fileID: 4777194430705029824}
   canFire: 1
   timeBetweenFiring: 1
   gun: {fileID: 8252455337123977837}

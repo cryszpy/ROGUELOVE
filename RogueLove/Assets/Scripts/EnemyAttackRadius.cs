@@ -5,19 +5,17 @@ using UnityEngine;
 public class EnemyAttackRadius : MonoBehaviour
 {
 
+    // Parent class
     [SerializeField]
-    private ContactEnemy parent;
-
-    [SerializeField]
-    private Collider2D contactColl;
-
+    private Enemy parent;
+    
     private void OnTriggerEnter2D(Collider2D collider) {
 
         // If collided with the player, start attack sequence
         if (collider.CompareTag("Player")) {
 
             // Disable collider and animation trigger to prevent looping
-            contactColl.enabled = false;
+            parent.contactColl.enabled = false;
 
             // Damage entity
             StartCoroutine(AttackEntity(collider));
@@ -25,8 +23,8 @@ public class EnemyAttackRadius : MonoBehaviour
         } 
     }
 
-    private IEnumerator AttackEntity(Collider2D target) {
-
+    public IEnumerator AttackEntity(Collider2D target)
+    {
         // Deal damage to enemy                        
         if (target.TryGetComponent<PlayerController>(out var player)) {
 
@@ -43,6 +41,6 @@ public class EnemyAttackRadius : MonoBehaviour
         // Wait for attack cooldown
         yield return new WaitForSeconds(parent.attackSpeed);
 
-        contactColl.enabled = true;
+        parent.contactColl.enabled = true;
     }
 }

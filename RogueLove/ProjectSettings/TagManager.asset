@@ -20,7 +20,7 @@ TagManager:
   - Collisions/Ground
   - Collisions/Obstacles
   - Collisions/BulletIgnore
-  - 
+  - Enemy
   - 
   - 
   - 

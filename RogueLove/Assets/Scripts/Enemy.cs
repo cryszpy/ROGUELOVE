@@ -10,6 +10,9 @@ using TMPro;
 
 public abstract class Enemy : MonoBehaviour
 {
+    public enum EnemyType {
+        CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS
+    }
 
     [Header("SCRIPT REFERENCES")]
 
@@ -34,6 +37,9 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField]
     protected CircleCollider2D followCollider;
 
+    // This enemy's contact collider
+    public Collider2D contactColl;
+
     // This enemy's Rigidbody component
     [SerializeField]
     protected Rigidbody2D rb;
@@ -41,14 +47,6 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField]
     // Enemy health bar
     private HealthBar healthBar;
-
-    // This enemy's contact collider
-    [SerializeField]
-    private Collider2D contactColl;
-
-    public enum EnemyType {
-        CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS
-    }
 
     [Space(10)]
     [Header("ENEMY STATS")]
@@ -81,6 +79,7 @@ public abstract class Enemy : MonoBehaviour
     protected bool reachedEndOfPath = false;
     public bool inFollowRadius;
     protected Vector2 direction;
+    private int direc;
     protected Vector2 force;
     protected bool canWander;
     protected float wanderTimer = 0;
@@ -170,18 +169,11 @@ public abstract class Enemy : MonoBehaviour
         direction = ((Vector2)path.vectorPath[currentWaypoint] - rb.position).normalized;
 
         // 3.
-        if (inFollowRadius == true) {
-            target = player.position;
-            Chase();
-        } else if (inFollowRadius == false && canWander && !waiting) {
-            Debug.Log("STARTED WANDERING");
-            canWander = false;
-            Wander();
-        }
+        PlayerCheck();
 
         // 4.
         float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
-        Debug.Log("DISTANCE " + distance);
+        //Debug.Log("DISTANCE " + distance);
 
         if (distance < nextWaypointDistance) {
             currentWaypoint++;
@@ -189,7 +181,8 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void DirectionFacing() {
-        // Direction facing
+        
+        // Sprite direction facing
         if (rb.velocity.x >= 0.01f) {
 
             this.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -216,6 +209,19 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    public virtual void PlayerCheck() {
+        if (inFollowRadius == true) {
+            canWander = false;
+            force = Vector2.zero;
+            target = player.position;
+            Chase();
+        } else if (inFollowRadius == false && canWander && !waiting) {
+            Debug.Log("STARTED WANDERING");
+            canWander = false;
+            Wander();
+        }
+    }
+
     // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
     public void CheckTrigger() {
         //attackAnim = false;
@@ -232,18 +238,97 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void Chase() {
-        
+        // Sets direction and destination of path to Player
+        force = speed * Time.deltaTime * direction;
+
+        // Moves towards target
+        rb.AddForce(force);
     }
 
     public virtual void Wander() {
+        Debug.Log("Wandering");
+        canWander = false;
+        waiting = false;
 
+        StartCoroutine(Roam());
+        return;
+    }
+
+    // Wander logic
+    public IEnumerator Roam() {
+
+        // Picks a random direction
+        direc = UnityEngine.Random.Range(0, 8);
+
+        // Sets the amount of time spent moving
+        moveTime = UnityEngine.Random.Range(1, 3);
+
+        // Sets a cooldown before wandering again
+        waitTime = UnityEngine.Random.Range(2, 5);
+
+        switch (direc) {
+            case 0:
+                force = wanderSpeed * Time.deltaTime * Vector2.up;
+                yield return null;
+                break;
+            case 1:
+                force = wanderSpeed * Time.deltaTime * Vector2.down;
+                yield return null;
+                break;
+            case 2:
+                force = wanderSpeed * Time.deltaTime * Vector2.right;
+                yield return null;
+                break;
+            case 3:
+                force = wanderSpeed * Time.deltaTime * Vector2.left;
+                yield return null;
+                break;
+            case 4:
+                force = wanderSpeed * Time.deltaTime * Vector2.zero;
+                yield return null;
+                break;
+            case 5:
+                force = wanderSpeed * Time.deltaTime * Vector2.up;
+                force += wanderSpeed * Time.deltaTime * Vector2.right;
+                yield return null;
+                break;
+            case 6:
+                force = wanderSpeed * Time.deltaTime * Vector2.up;
+                force += wanderSpeed * Time.deltaTime * Vector2.left;
+                yield return null;
+                break;
+            case 7:
+                force = wanderSpeed * Time.deltaTime * Vector2.down;
+                force += wanderSpeed * Time.deltaTime * Vector2.right;
+                yield return null;
+                break;
+            case 8:
+                force = wanderSpeed * Time.deltaTime * Vector2.down;
+                force += wanderSpeed * Time.deltaTime * Vector2.left;
+                yield return null;
+                break;
+            default:
+                direc = UnityEngine.Random.Range(0, 4);
+                yield return null;
+                break;
+        }
+        //Debug.Log("Set Direction");
+        while (canWander == false && !waiting && !inFollowRadius) {
+            //Debug.Log("IN THE LOOP");
+
+            // Moves in the set direction for wandering
+            rb.AddForce(force);
+            yield return null;
+        }
+        yield return null;
     }
 
     public virtual void AttackCheck() {
-        // Resets attack animation if not colliding with anything
-        if (contactColl.enabled == true) {
-            animator.SetBool("Attack", false);
-        }
+        
+    }
+
+    public virtual IEnumerator AttackEntity(Collider2D target) {
+        yield return null;
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, WalkerGenerator gen) {

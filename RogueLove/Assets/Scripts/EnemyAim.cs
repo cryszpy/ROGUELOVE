@@ -3,11 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class PlayerAim : MonoBehaviour
+public class EnemyAim : MonoBehaviour
 {
-    private Camera mainCam;
-    private Vector3 mousePos;
-
     public GameObject bullet;
     public Transform bulletSpawnPos;
     public bool canFire;
@@ -17,26 +14,28 @@ public class PlayerAim : MonoBehaviour
     private GameObject instantBullet;
 
     [SerializeField]
-    private SpriteRenderer gun;
+    private Enemy parent;
 
-    void Start() {
-        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
-    }
+    private Vector3 direction;
+
+    private bool hitPlayer = false;
 
     void FixedUpdate() {
-        mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
-        Vector3 rotation = mousePos - transform.position;
+        // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot
+        direction = parent.target - transform.position;
+        //Debug.DrawRay(transform.position, direction, Color.cyan, 10);
 
-        float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+        RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 100f, LayerMask.GetMask("Player", "Collisions/Ground", "Collisions/Obstacles"));
 
-        transform.rotation = Quaternion.Euler(0, 0, rotZ);
-
-        if (gun == null) {
-            Debug.Log("PlayerAim gun is null! Reassigned.");
-            gun = GetComponentInChildren<SpriteRenderer>();
+        if (hit.collider != null && hit.collider.gameObject.CompareTag("Player")) {
+            Debug.DrawRay(transform.position, direction, Color.red, 10);
+            hitPlayer = true;
+        } else {
+            hitPlayer = false;
         }
 
+        // Firing cooldown timer
         if (!canFire) {
             timer += Time.deltaTime;
             if(timer > timeBetweenFiring) {
@@ -47,24 +46,17 @@ public class PlayerAim : MonoBehaviour
 
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
 
-            // Flips weapon sprite depending on mouse orientation to character
-            if (this.gameObject.transform.rotation.z > 0.7f || this.gameObject.transform.rotation.z < -0.7f) {
-                gun.flipY = true;
-                //Debug.Log("flipped");
-            } else {
-                gun.flipY = false;
-            }
-
-            // Firing logic, if not on cooldown and mouse button pressed, fire
-            if (Input.GetMouseButton(0) && canFire) {
+            // Firing logic, if not on cooldown and player in range, fire
+            if (canFire && parent.inFollowRadius && hitPlayer) {
                 canFire = false;
+                timeBetweenFiring = UnityEngine.Random.Range(2, 4);
                 instantBullet = Instantiate(bullet, bulletSpawnPos.position, Quaternion.identity);
                 StartCoroutine(BulletDestroy(2, instantBullet));
             }
+            
         } else {
             this.gameObject.SetActive(false);
         }
-        
     }
 
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time
