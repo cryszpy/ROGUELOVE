@@ -6,7 +6,7 @@ AnimationClip:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: forestimp_attack
+  m_Name: dg_bullet_travel
   serializedVersion: 7
   m_Legacy: 0
   m_Compressed: 0
@@ -21,11 +21,21 @@ AnimationClip:
   - serializedVersion: 2
     curve:
     - time: 0
-      value: {fileID: -104433244, guid: 922d0bc72acc546979cf3883fc3a2b9d, type: 3}
+      value: {fileID: -7708566419881877859, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
     - time: 0.1
-      value: {fileID: 95013465, guid: 922d0bc72acc546979cf3883fc3a2b9d, type: 3}
+      value: {fileID: -8505221444059012321, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
     - time: 0.2
-      value: {fileID: 1151018603, guid: 922d0bc72acc546979cf3883fc3a2b9d, type: 3}
+      value: {fileID: 8848433409271040368, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - time: 0.3
+      value: {fileID: -7818008375589327337, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - time: 0.4
+      value: {fileID: 911567115438120346, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - time: 0.5
+      value: {fileID: 237992883910712582, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - time: 0.6
+      value: {fileID: -1199788179, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - time: 0.7
+      value: {fileID: 1962230815, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
     attribute: m_Sprite
     path: 
     classID: 212
@@ -48,15 +58,20 @@ AnimationClip:
       isIntCurve: 0
       isSerializeReferenceCurve: 0
     pptrCurveMapping:
-    - {fileID: -104433244, guid: 922d0bc72acc546979cf3883fc3a2b9d, type: 3}
-    - {fileID: 95013465, guid: 922d0bc72acc546979cf3883fc3a2b9d, type: 3}
-    - {fileID: 1151018603, guid: 922d0bc72acc546979cf3883fc3a2b9d, type: 3}
+    - {fileID: -7708566419881877859, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - {fileID: -8505221444059012321, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - {fileID: 8848433409271040368, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - {fileID: -7818008375589327337, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - {fileID: 911567115438120346, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - {fileID: 237992883910712582, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - {fileID: -1199788179, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
+    - {fileID: 1962230815, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
   m_AnimationClipSettings:
     serializedVersion: 2
     m_AdditiveReferencePoseClip: {fileID: 0}
     m_AdditiveReferencePoseTime: 0
     m_StartTime: 0
-    m_StopTime: 0.3
+    m_StopTime: 0.8
     m_OrientationOffsetY: 0
     m_Level: 0
     m_CycleOffset: 0
@@ -75,11 +90,4 @@ AnimationClip:
   m_EulerEditorCurves: []
   m_HasGenericRootTransform: 0
   m_HasMotionFloatCurves: 0
-  m_Events:
-  - time: 0.3
-    functionName: StopAttackAnim
-    data: 
-    objectReferenceParameter: {fileID: 0}
-    floatParameter: 0
-    intParameter: 0
-    messageOptions: 0
+  m_Events: []

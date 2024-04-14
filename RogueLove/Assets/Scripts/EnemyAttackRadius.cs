@@ -39,7 +39,7 @@ public class EnemyAttackRadius : MonoBehaviour
         //attackAnim = true;
 
         // Wait for attack cooldown
-        yield return new WaitForSeconds(parent.attackSpeed);
+        yield return new WaitForSeconds(parent.attackCooldown);
 
         parent.contactColl.enabled = true;
     }

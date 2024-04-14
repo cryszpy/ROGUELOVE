@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
 
         currentHealth = maxHealth;
+        healthBar.SetHealth(currentHealth);
         healthBar.SetMaxHealth(maxHealth);
     }
     

@@ -14,6 +14,8 @@ public abstract class Enemy : MonoBehaviour
         CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS
     }
 
+    protected EnemyType enemyType;
+
     [Header("SCRIPT REFERENCES")]
 
     // This enemy's Animator component
@@ -56,13 +58,15 @@ public abstract class Enemy : MonoBehaviour
 
     // This enemy's movement speed
     [SerializeField]
-    protected float speed;
+    protected float chaseSpeed;
 
     [SerializeField]
     protected float wanderSpeed;
 
     // This enemy's attack speed
-    public float attackSpeed;
+    public float rangedAttackCooldownMin;
+    public float rangedAttackCooldownMax;
+    public float attackCooldown;
 
     // Boolean to determine whether attack animation is playing
     protected bool attackAnim;
@@ -79,7 +83,7 @@ public abstract class Enemy : MonoBehaviour
     protected bool reachedEndOfPath = false;
     public bool inFollowRadius;
     protected Vector2 direction;
-    private int direc;
+    protected int direc;
     protected Vector2 force;
     protected bool canWander;
     protected float wanderTimer = 0;
@@ -91,14 +95,11 @@ public abstract class Enemy : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        SetEnemyType();
+
         if (healthBar == null) {
             Debug.Log("ContactEnemy healthbar is null! Reassigned.");
             healthBar = this.GetComponentInChildren<HealthBar>();
-        }
-
-        if (seeker == null) {
-            Debug.Log("ContactEnemy seeker is null! Reassigned.");
-            seeker = GetComponent<Seeker>();
         }
         if (rb == null) {
             Debug.Log("ContactEnemy rb is null! Reassigned.");
@@ -108,11 +109,22 @@ public abstract class Enemy : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
         attackAnim = false;
-        canWander = true;
-        waiting = false;
 
-        InvokeRepeating(nameof(UpdatePath), 0f, .5f);
+        if (enemyType != EnemyType.STATIONARY) {
+            if (seeker == null) {
+                Debug.Log("ContactEnemy seeker is null! Reassigned.");
+                seeker = GetComponent<Seeker>();
+            }
+            canWander = true;
+            waiting = false;
+
+            InvokeRepeating(nameof(UpdatePath), 0f, .5f);
+        }
     }
+
+    public virtual void SetEnemyType() {
+        enemyType = EnemyType.CONTACT;
+    }   
 
     void UpdatePath() {
         if (seeker.IsDone()) {
@@ -132,25 +144,26 @@ public abstract class Enemy : MonoBehaviour
                 waitTimer = 0;
             }
         }
-        if (canWander == false && !waiting) {
-            wanderTimer += Time.deltaTime;
-            //Debug.Log("wanderTimer: " + wanderTimer);
-            if(wanderTimer > moveTime) {
-                waiting = true;
-                wanderTimer = 0;
+
+        if (enemyType != EnemyType.STATIONARY) {
+            if (canWander == false && !waiting) {
+                wanderTimer += Time.deltaTime;
+                //Debug.Log("wanderTimer: " + wanderTimer);
+                if(wanderTimer > moveTime) {
+                    //Debug.Log("Done With WanderTimer");
+                    waiting = true;
+                    wanderTimer = 0;
+                }
             }
+            
+            // Pathfinding
+            Pathfinder();
+
+            DirectionFacing();
         }
-        
-        // Pathfinding
-        Pathfinder();
-
-        DirectionFacing();
-
-        AttackCheck();
-
     }
 
-    // PATHFINDER MOVEMENT
+    // PATHFINDER MOVEMENT and calling PlayerCheck()
     public virtual void Pathfinder() {
         // 1.
         if (path == null)
@@ -193,6 +206,8 @@ public abstract class Enemy : MonoBehaviour
             this.transform.localScale = new Vector3(-1f, 1f, 1f);
             animator.SetBool("IsMoving", true);
 
+        } else if (rb.velocity.y <= -0.01 || rb.velocity.y >= 0.01) {
+            animator.SetBool("IsMoving", true);
         } else {
             animator.SetBool("IsMoving", false);
         }
@@ -223,10 +238,9 @@ public abstract class Enemy : MonoBehaviour
     }
 
     // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
-    public void CheckTrigger() {
+    public void StopAttackAnim() {
         //attackAnim = false;
         animator.SetBool("Attack", false);
-        //contactColl.enabled = true;
     }
 
     void OnPathComplete(Pathfinding.Path p) {
@@ -239,7 +253,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void Chase() {
         // Sets direction and destination of path to Player
-        force = speed * Time.deltaTime * direction;
+        force = chaseSpeed * Time.deltaTime * direction;
 
         // Moves towards target
         rb.AddForce(force);
@@ -255,7 +269,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     // Wander logic
-    public IEnumerator Roam() {
+    public virtual IEnumerator Roam() {
 
         // Picks a random direction
         direc = UnityEngine.Random.Range(0, 8);
@@ -321,10 +335,6 @@ public abstract class Enemy : MonoBehaviour
             yield return null;
         }
         yield return null;
-    }
-
-    public virtual void AttackCheck() {
-        
     }
 
     public virtual IEnumerator AttackEntity(Collider2D target) {

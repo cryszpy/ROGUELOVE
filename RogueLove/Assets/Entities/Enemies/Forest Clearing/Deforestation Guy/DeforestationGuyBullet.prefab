@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 5490067005516740771}
   - component: {fileID: 2920130361219395360}
   m_Layer: 0
-  m_Name: ForestImpBullet
+  m_Name: DeforestationGuyBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -79,7 +79,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 3264929006969654993, guid: 6ffb6a133d7fe4c11a00d0c54fbe083c, type: 3}
+  m_Sprite: {fileID: -7708566419881877859, guid: 7d650ceffabb94363ad361f71152e820, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -107,8 +107,8 @@ MonoBehaviour:
   animator: {fileID: 2920130361219395360}
   direction: {x: 0, y: 0, z: 0}
   coll: {fileID: 5490067005516740771}
-  force: 1
-  damage: 2
+  force: 2
+  damage: 6
 --- !u!50 &6018900055118431996
 Rigidbody2D:
   serializedVersion: 4
@@ -192,7 +192,7 @@ Animator:
   m_GameObject: {fileID: 5001664913613443686}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: de3b19e085f1b470fbcab7b36e3a04db, type: 2}
+  m_Controller: {fileID: 9100000, guid: 59b2da2124ccc45f48a67e0324dfafc7, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

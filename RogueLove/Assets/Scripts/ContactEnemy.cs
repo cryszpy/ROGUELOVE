@@ -10,7 +10,10 @@ public class ContactEnemy : Enemy
 {
     //protected Vector3 tile;
 
-    private EnemyType type = EnemyType.CONTACT;
+    public override void SetEnemyType()
+    {
+        enemyType = EnemyType.CONTACT;
+    }
 
     /*
     public override IEnumerator SetTarget() {
@@ -28,15 +31,6 @@ public class ContactEnemy : Enemy
             Debug.Log("Set Tile");
         } 
     } */
-
-    public override void AttackCheck()
-    {
-        // Resets attack animation if not colliding with anything
-        if (contactColl.enabled == true) {
-            //Debug.Log("RAHHHHHH");
-            animator.SetBool("Attack", false);
-        }
-    }
 
 
 }

@@ -9,7 +9,6 @@ public class EnemyAim : MonoBehaviour
     public Transform bulletSpawnPos;
     public bool canFire;
     private float timer;
-    public float timeBetweenFiring;
 
     private GameObject instantBullet;
 
@@ -38,7 +37,7 @@ public class EnemyAim : MonoBehaviour
         // Firing cooldown timer
         if (!canFire) {
             timer += Time.deltaTime;
-            if(timer > timeBetweenFiring) {
+            if(timer > parent.attackCooldown) {
                 canFire = true;
                 timer = 0;
             }
@@ -48,8 +47,9 @@ public class EnemyAim : MonoBehaviour
 
             // Firing logic, if not on cooldown and player in range, fire
             if (canFire && parent.inFollowRadius && hitPlayer) {
+                parent.animator.SetBool("Attack", true);
                 canFire = false;
-                timeBetweenFiring = UnityEngine.Random.Range(2, 4);
+                parent.attackCooldown = UnityEngine.Random.Range(parent.rangedAttackCooldownMin, parent.rangedAttackCooldownMax);
                 instantBullet = Instantiate(bullet, bulletSpawnPos.position, Quaternion.identity);
                 StartCoroutine(BulletDestroy(2, instantBullet));
             }

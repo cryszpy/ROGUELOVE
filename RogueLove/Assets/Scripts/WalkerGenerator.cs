@@ -46,6 +46,15 @@ public class WalkerGenerator : MonoBehaviour
 
     public Tile empty;
 
+    [SerializeField]
+    private Sprite wallUp;
+    [SerializeField]
+    private Sprite wallDown;
+    [SerializeField]
+    private Sprite wallLeft;
+    [SerializeField]
+    private Sprite wallRight;
+
     [Space(10)]
     [Header("MAP SETTINGS")]
 
@@ -106,9 +115,6 @@ public class WalkerGenerator : MonoBehaviour
     // List of all stationary enemies in this level
     public GameObject[] stationEnemies;
 
-    // List of all splitter enemies in this level
-    public GameObject[] splitterEnemies;
-
     // List of all minibosses in this level
     public GameObject[] minibosses;
 
@@ -117,6 +123,8 @@ public class WalkerGenerator : MonoBehaviour
 
     [Space(10)]
     [Header("LEVEL INFO")]
+
+    public int areaLevel;
 
     [SerializeField]
     private bool bossLevel = false;
@@ -360,7 +368,6 @@ public class WalkerGenerator : MonoBehaviour
 
     // SPAWN PLAYER
     public void SpawnRandomPlayer() {
-        //Debug.Log("Spawning Player");
 
         // Finds player
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -472,6 +479,82 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
 
+        if (!IsArrayEmpty(stationEnemies) && !bossLevel) {
+            // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
+            for (int st = 0; st < stationEnemies.Length; st++) {
+
+                // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+                int stationRange = UnityEngine.Random.Range(2, 4);
+
+                // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
+                for (int s = 0; s < stationRange; s++) {
+                    
+                    // Generates random number to pick Enemy spawnpoint
+                    int rand = GetRandomTile();
+
+                    // For as many floor tiles as there are in the tilemap:
+                    for (int i = 0; i < tileListX.Count; i++) {
+
+                        // If suitable floor tiles have been found (Floor tiles and no ground tiles and no obstacles on those tiles)
+                        if ((tilemap.GetTile(new Vector3Int(tileListX[i], tileListY[rand], 0)) == floor)
+                        && (tilemap.GetSprite(new Vector3Int(tileListX[i], tileListY[rand], 0)) != ground)
+                        && (oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[rand], 0)) != obstacles)) {
+
+                            Quaternion rot = Quaternion.Euler(0, 0, 0);
+
+                            // If tile found is one of four different wall tiles then instaniate with correct rotation
+                            // UP WALL
+                            if (tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand] + 1, 0)) == wallUp) {
+                                rot = Quaternion.Euler(0, 0, -90);
+
+                                // Spawns Enemy
+                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f + 0.27f), rot, this);   
+                                    break;
+                                }
+                            } 
+                            // DOWN WALL
+                            else if (tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand] - 1, 0)) == wallDown) {
+                                rot = Quaternion.Euler(0, 0, 90);
+
+                                // Spawns Enemy
+                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f - 0.12f), rot, this);   
+                                    break;
+                                }
+                            } 
+                            // LEFT WALL
+                            else if (tilemap.GetSprite(new Vector3Int(tileListX[rand] - 1, tileListY[rand], 0)) == wallLeft) {
+                                rot = Quaternion.Euler(0, 0, 0);
+
+                                // Spawns Enemy
+                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f - 0.12f, tileListY[rand] * 0.16f + 0.08f), rot, this);   
+                                    break;
+                                }
+                            } 
+                            // RIGHT WALL
+                            else if (tilemap.GetSprite(new Vector3Int(tileListX[rand] + 1, tileListY[rand] + 1, 0)) == wallRight) {
+                                rot = Quaternion.Euler(0, 0, 180);
+
+                                // Spawns Enemy
+                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.27f, tileListY[rand] * 0.16f + 0.24f), rot, this);   
+                                    break;
+                                }
+                            }
+
+                        } else {
+                            
+                            // Generates random number to pick Enemy spawnpoint
+                            rand = GetRandomTile();
+                        }
+                    }
+                }
+            }
+        }
+
+
         if (!IsArrayEmpty(minibosses) && !bossLevel) {
 
             // For every miniboss in the level (e.g. Scout, Chris)
@@ -516,7 +599,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     public int GetRandomTile() {
-        int rand = UnityEngine.Random.Range(0, tileListX.Count);
+        int rand = UnityEngine.Random.Range(0, tileListY.Count);
         return rand;
     }
 

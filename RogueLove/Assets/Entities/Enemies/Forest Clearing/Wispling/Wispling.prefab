@@ -97,7 +97,7 @@ SpriteRenderer:
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
-  m_SpriteSortPoint: 0
+  m_SpriteSortPoint: 1
 --- !u!114 &5586343462418798160
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -270,10 +270,12 @@ MonoBehaviour:
   contactColl: {fileID: 7721675988448470313}
   rb: {fileID: 1923873099500596009}
   healthBar: {fileID: 1215961894684457156}
-  damage: 8
-  speed: 300
+  damage: 5
+  chaseSpeed: 350
   wanderSpeed: 30
-  attackSpeed: 2
+  rangedAttackCooldownMin: 0
+  rangedAttackCooldownMax: 0
+  attackCooldown: 1
   nextWaypointDistance: 1
   inFollowRadius: 0
 --- !u!114 &5977564517870532234
@@ -514,7 +516,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &5255361493749537144
 RectTransform:
   m_ObjectHideFlags: 0
@@ -690,11 +692,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 4728475228696150096, guid: 97ac4ca7d8a0d418094ca9640103934a, type: 3}
       propertyPath: m_AnchorMax.x
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4728475228696150096, guid: 97ac4ca7d8a0d418094ca9640103934a, type: 3}
       propertyPath: m_AnchorMax.y
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4889311365619202629, guid: 97ac4ca7d8a0d418094ca9640103934a, type: 3}
       propertyPath: m_Pivot.x

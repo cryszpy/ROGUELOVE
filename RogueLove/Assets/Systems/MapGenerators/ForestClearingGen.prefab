@@ -53,6 +53,10 @@ MonoBehaviour:
   obstacles: {fileID: 11400000, guid: 9a4202bb60da84934802a13b054cccc0, type: 2}
   decor: {fileID: 11400000, guid: 357e416e3abd34beea7a73953e031064, type: 2}
   empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
+  wallUp: {fileID: 1769894669, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
+  wallDown: {fileID: 528089134, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
+  wallLeft: {fileID: -579220485, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
+  wallRight: {fileID: 1927522313, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
   mapWidth: 35
   mapHeight: 35
   maxWalkers: 4
@@ -65,8 +69,10 @@ MonoBehaviour:
   - {fileID: 2496777416409024874, guid: c60c1e7fb3c7444b892164a662e77a72, type: 3}
   rareEnemies:
   - {fileID: 2496777416409024874, guid: 1ac9bb6fd68ac457489e21c104cf0141, type: 3}
-  stationEnemies: []
-  splitterEnemies: []
+  - {fileID: 2496777416409024874, guid: 3b9dbe641d7d94637a916ba2df5da444, type: 3}
+  stationEnemies:
+  - {fileID: 2496777416409024874, guid: 302b65588e187471ebe5de20fa34b2bd, type: 3}
   minibosses: []
   bosses: []
+  areaLevel: 0
   bossLevel: 0
