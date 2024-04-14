@@ -12,13 +12,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: FC_Obstacles
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: -223848210, guid: 9b954e01bdade4b60980110bd09e0b7e, type: 3}
+  m_DefaultSprite: {fileID: 21300000, guid: b542da5a5eb5849d8a6075218c241f18, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
-    - {fileID: -223848210, guid: 9b954e01bdade4b60980110bd09e0b7e, type: 3}
+    - {fileID: 21300000, guid: b542da5a5eb5849d8a6075218c241f18, type: 3}
     - {fileID: 21300000, guid: b84d2f29bf9b94ab1919c6fda63470fe, type: 3}
     - {fileID: 121979660, guid: b215b7f42b3824ff4bf5fc50f137efe3, type: 3}
     - {fileID: -696837170, guid: b215b7f42b3824ff4bf5fc50f137efe3, type: 3}
@@ -29,11 +29,41 @@ MonoBehaviour:
     m_Output: 0
     m_ColliderType: 1
     m_RandomTransform: 0
-    m_Neighbors: 02000000020000000200000002000000
+    m_Neighbors: 02000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000002000000020000000200000001000000
     m_NeighborPositions:
     - {x: 0, y: 1, z: 0}
     - {x: -1, y: 0, z: 0}
     - {x: 0, y: -1, z: 0}
+    - {x: 0, y: 2, z: 0}
+    - {x: 0, y: -2, z: 0}
+    - {x: 0, y: 3, z: 0}
+    - {x: 0, y: -3, z: 0}
+    - {x: 1, y: 1, z: 0}
+    - {x: -1, y: 1, z: 0}
+    - {x: 1, y: 2, z: 0}
+    - {x: -1, y: 2, z: 0}
+    - {x: 1, y: -1, z: 0}
+    - {x: 1, y: -2, z: 0}
+    - {x: -1, y: -1, z: 0}
+    - {x: -1, y: -2, z: 0}
+    - {x: 1, y: 3, z: 0}
+    - {x: -1, y: 3, z: 0}
+    - {x: -1, y: -3, z: 0}
+    - {x: 1, y: -3, z: 0}
+    - {x: -2, y: 1, z: 0}
+    - {x: -2, y: 0, z: 0}
+    - {x: 2, y: 1, z: 0}
+    - {x: 2, y: 0, z: 0}
+    - {x: 2, y: -1, z: 0}
+    - {x: -2, y: -1, z: 0}
+    - {x: -2, y: -2, z: 0}
+    - {x: -2, y: -3, z: 0}
+    - {x: 2, y: -2, z: 0}
+    - {x: 2, y: -3, z: 0}
+    - {x: -2, y: 2, z: 0}
+    - {x: -2, y: 3, z: 0}
+    - {x: 2, y: 3, z: 0}
+    - {x: 2, y: 2, z: 0}
     - {x: 1, y: 0, z: 0}
     m_RuleTransform: 0
   - m_Id: 1

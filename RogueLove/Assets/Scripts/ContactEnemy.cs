@@ -33,7 +33,7 @@ public class ContactEnemy : Enemy
     {
         // Resets attack animation if not colliding with anything
         if (contactColl.enabled == true) {
-            Debug.Log("RAHHHHHH");
+            //Debug.Log("RAHHHHHH");
             animator.SetBool("Attack", false);
         }
     }

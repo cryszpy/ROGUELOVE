@@ -216,7 +216,7 @@ public abstract class Enemy : MonoBehaviour
             target = player.position;
             Chase();
         } else if (inFollowRadius == false && canWander && !waiting) {
-            Debug.Log("STARTED WANDERING");
+            //Debug.Log("STARTED WANDERING");
             canWander = false;
             Wander();
         }
@@ -246,7 +246,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void Wander() {
-        Debug.Log("Wandering");
+        //Debug.Log("Wandering");
         canWander = false;
         waiting = false;
 

@@ -63,8 +63,8 @@ public class WalkerGenerator : MonoBehaviour
     private int maxWalkers;
 
     [SerializeField]
-    // Chance for a single tile to generate an obstacle
-    private int obstacleChance;
+    // Chance for a single tile to not generate an obstacle
+    private int emptyChance;
 
     // Current tile count
     public int tileCount = default;
@@ -95,7 +95,7 @@ public class WalkerGenerator : MonoBehaviour
     //private int tileLocY;
 
     [Space(10)]
-    [Header("ENEMIES")]
+    [Header("ENTITIES")]
 
     // List of all common enemies in this level
     public GameObject[] commonEnemies;
@@ -307,7 +307,7 @@ public class WalkerGenerator : MonoBehaviour
 
         for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
             for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
-                int rand = UnityEngine.Random.Range(0, obstacleChance);
+                int rand = UnityEngine.Random.Range(0, emptyChance);
 
                 // Checks each x and y value of the grid to see if they are floors
                 if (gridHandler[x, y] == Grid.FLOOR) {
@@ -360,6 +360,7 @@ public class WalkerGenerator : MonoBehaviour
 
     // SPAWN PLAYER
     public void SpawnRandomPlayer() {
+        //Debug.Log("Spawning Player");
 
         // Finds player
         GameObject player = GameObject.FindGameObjectWithTag("Player");
@@ -378,7 +379,8 @@ public class WalkerGenerator : MonoBehaviour
                     // Spawns Player
                     //player.SetActive(true);
                     player.transform.position = new Vector2((tileListX[i] * 0.16f) + 0.08f, (tileListY[randP] * 0.16f) + 0.08f);
-                    
+                    //Debug.Log(player.transform.position);
+                    //Debug.Log("PLAYER HAS BEEN SPAWNED");
                     break;
 
                 } else {

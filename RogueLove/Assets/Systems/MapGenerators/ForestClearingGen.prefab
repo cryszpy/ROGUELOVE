@@ -56,7 +56,7 @@ MonoBehaviour:
   mapWidth: 35
   mapHeight: 35
   maxWalkers: 4
-  obstacleChance: 30
+  emptyChance: 45
   tileCount: 0
   oTileCount: 0
   fillPercentage: 0.6
