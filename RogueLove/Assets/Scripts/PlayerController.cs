@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using System.IO;
+using System;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.Universal;
 
 public class PlayerController : MonoBehaviour
 {
@@ -11,6 +15,11 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField]
     private ContactFilter2D movementFilter;
+
+    [SerializeField]
+    private PlayerAim aim;
+
+    public Collider2D contactColl;
     
     private Vector2 movementInput;
 
@@ -28,17 +37,34 @@ public class PlayerController : MonoBehaviour
 
     readonly List<RaycastHit2D> castCollisions = new();
 
+    // Boolean to see if save file exists
+    private bool loadFromSave;
+    
+    private VolumeProfile volumeProfile;
+
     [Space(10)]
     [Header("STATS")]
 
     // Player max health
-    public float maxHealth = 100;
+    public static float maxHealth;
+    public static void SetMaxPlayerHealth(float hp) {
+        maxHealth = hp;
+    }
+    public static float GetMaxPlayerHealth() {
+        return maxHealth;
+    }
 
     // Player current health
-    public float currentHealth;
+    public static float currentHealth;
 
-    [SerializeField]
-    private float moveSpeed = 1.5f;
+    // Player movement speed
+    private static float moveSpeed = 1.0f;
+    public static void SetMoveSpeed(float speed) {
+        moveSpeed = speed;
+    }
+    public static float GetMoveSpeed() {
+        return moveSpeed;
+    }
 
     [SerializeField]
     private float collisionOffset = 0.01f;
@@ -48,6 +74,7 @@ public class PlayerController : MonoBehaviour
             currentHealth = value;
             if(currentHealth <= 0) {
                 DeathAnim();
+                currentHealth = 0;
             }
         }
 
@@ -60,20 +87,60 @@ public class PlayerController : MonoBehaviour
     void Start()
     {
         if (rb == null) {
-            Debug.Log("PlayerController rb is null! Reassigned.");
             rb = GetComponent<Rigidbody2D>();
+            Debug.Log("PlayerController rb is null! Reassigned.");
         }
         if (animator == null) {
-            Debug.Log("PlayerController animator is null! Reassigned.");
             animator = GetComponentInChildren<Animator>();
+            Debug.Log("PlayerController animator is null! Reassigned.");
         }
-        //spriteRenderer = GetComponent<SpriteRenderer>();
+        if (contactColl == null) {
+            contactColl = GetComponentInChildren<Collider2D>();
+            Debug.Log("Collider2D contactColl is null! Reassigned.");
+        }
+        if (aim == null) {
+            aim = GetComponentInChildren<PlayerAim>();
+            Debug.Log("PlayerAim is null! Reassigned.");
+        }
+        if (volumeProfile == null) {
+            volumeProfile = FindAnyObjectByType<Volume>().sharedProfile;
+            Debug.Log("VolumeProfile volumeProfile is null! Reassigned.");
+        }
 
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
 
-        currentHealth = maxHealth;
-        healthBar.SetHealth(currentHealth);
-        healthBar.SetMaxHealth(maxHealth);
+        string pathPlayer = Application.persistentDataPath + "/player.franny";
+
+        // Load player info from saved game
+        if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+            loadFromSave = true;
+            GameStateManager.SetSave(false);
+        } 
+        // Save data exists but player did not click load save --> most likely a NextLevel() call
+        else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+            loadFromSave = false;
+            GameStateManager.SetSave(false);
+        } 
+        // Save data does not exist, and player clicked load save somehow
+        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+            Debug.LogError("Save data not found while trying to load save. How did you get here?");
+        } 
+        // Save data does not exist and player did not click load save --> most likely started new game
+        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+            loadFromSave = false;
+            SetMaxPlayerHealth(20f);
+            currentHealth = maxHealth;
+            SetMoveSpeed(1.0f);
+            GameStateManager.SetSave(false);
+        }
+
+        if (loadFromSave == true) {
+            LoadPlayer();
+            //Debug.Log("Loaded Player");
+        } else {
+            healthBar.SetMaxHealth(maxHealth);
+            healthBar.SetHealth(currentHealth);
+        }
     }
     
     private void Update() {
@@ -103,13 +170,6 @@ public class PlayerController : MonoBehaviour
                 spriteRenderer.flipX = false;
             }
         }
-
-        /* Test health
-        if(Input.GetKeyDown(KeyCode.Space)) {
-            TakeDamage(20);
-        }
-        */
-
     }
 
     private bool TryMove(Vector2 direction) {
@@ -145,13 +205,46 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(float damage) {
 
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
+            contactColl.enabled = false;
+            StartCoroutine(SetHurtFlash(true));
             Health -= damage;
             healthBar.SetHealth(currentHealth);
             Debug.Log("Player took damage!");
 
             animator.SetBool("Hurt", true);
         }
+    }
+
+    private IEnumerator SetHurtFlash(bool condition) {
+
+        if (volumeProfile.TryGet<ColorAdjustments>(out var colorAdjust)) {
+            colorAdjust.active = condition;
+            yield return new WaitForSeconds(0.2f);
+            colorAdjust.active = !condition;
+        }
+
+        yield return null;
+    }
+
+    public void SavePlayer () {
+        SaveSystem.SavePlayer(this, aim);
+    }
+
+    public void LoadPlayer() {
         
+        // Load save data
+        PlayerData data = SaveSystem.LoadPlayer();
+
+        // Set health
+        Health = data.playerHealth;
+        healthBar.SetHealth(currentHealth);
+
+        maxHealth = data.playerMaxHealth;
+        healthBar.SetMaxHealth(maxHealth);
+
+        // Set speeds
+        SetMoveSpeed(data.playerMoveSpeed);
+        aim.timeBetweenFiring = data.playerAttackSpeed;
     }
 
     public void DeathAnim() {

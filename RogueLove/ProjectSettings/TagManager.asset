@@ -10,6 +10,8 @@ TagManager:
   - SaveSlotMenu
   - A*
   - PlayerHealth
+  - AreaTiles
+  - PostProcessing
   layers:
   - Default
   - TransparentFX

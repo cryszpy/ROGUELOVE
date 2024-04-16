@@ -27,7 +27,7 @@ public class HealthBar : MonoBehaviour
     public void SetMaxHealth (float health) {
 
         slider.maxValue = health;
-        slider.value = health;
+        //slider.value = health;
         if (maxHealthText.TryGetComponent<TextMeshProUGUI>(out var letters)) {
             letters.text = health.ToString();
         }

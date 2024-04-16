@@ -13,6 +13,9 @@ public class PlayerAnimations : MonoBehaviour
     private SpriteRenderer spriteRenderer;
 
     [SerializeField]
+    private PlayerController parent;
+
+    [SerializeField]
     private Animator animator;
 
     void Start() {
@@ -42,6 +45,8 @@ public class PlayerAnimations : MonoBehaviour
 
     public void HurtCheck() {
         animator.SetBool("Hurt", false);
+        parent.contactColl.enabled = true;
+
     }
 
     public void PlayerDeath() {

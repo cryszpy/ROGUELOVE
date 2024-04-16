@@ -28,8 +28,7 @@ public class BulletScript : MonoBehaviour
     [SerializeField]
     private float force;
 
-    [SerializeField]
-    private float damage = 3;
+    public float damage;
 
     // Start is called before the first frame update
     void Start()

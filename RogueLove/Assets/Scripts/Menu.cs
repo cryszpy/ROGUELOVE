@@ -1,6 +1,8 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using System.IO;
 using UnityEngine.SceneManagement;
 
 public class MainMenu : MonoBehaviour
@@ -11,10 +13,6 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField]
     private GameObject pauseMenu;
-
-    void Start() {
-        //saveSlots = GameObject.FindGameObjectWithTag("SaveSlotMenu");
-    }
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null) {
@@ -39,15 +37,40 @@ public class MainMenu : MonoBehaviour
 
     public void LoadMainMenu() {
         Time.timeScale = 1f;
-        SceneManager.LoadScene(GameStateManager.sceneList.loadScene(0));
+        // Load level
+        TransitionManager.StartLeaf(0);
     }
 
     public void PlayButton() {
-        saveSlots.SetActive(true);
+        Debug.Log(GameStateManager.GetLevel());
+        Debug.Log(GameStateManager.GetStage());
+
+        String pathMap = Application.persistentDataPath + "/map.chris";
+        String pathPlayer = Application.persistentDataPath + "/player.franny";
+
+        // Set up SAVED GAME
+        if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
+            // Load save data to get level number
+            MapData data = SaveSystem.LoadMap();
+
+            GameStateManager.SetLevel(data.levelNum);
+            GameStateManager.SetStage(data.stageNum);
+            saveSlots.SetActive(true);
+        } 
+        // START NEW GAME
+        else {
+            GameStateManager.SetLevel(1);
+            GameStateManager.SetStage(1);
+            // Load level
+            TransitionManager.StartLeaf(1);
+        }
     }
 
     public void SaveSlotButton() {
-        SceneManager.LoadScene("EmptyLevel");
+        GameStateManager.SetSave(true);
+        // Load level
+        TransitionManager.StartLeaf(GameStateManager.GetStage());
+        
     }
 
     public void QuitButton() {

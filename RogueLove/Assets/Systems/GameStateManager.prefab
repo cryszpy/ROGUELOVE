@@ -60,3 +60,4 @@ MonoBehaviour:
   scene:
   - Scenes/MainMenu
   - Scenes/EmptyLevel
+  - Scenes/EmptyLevel_2

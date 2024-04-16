@@ -20,20 +20,20 @@ public class MapData
     // Array of all obstacle tile types (OBSTACLES)
     public int[] oTileTypes;
 
+    public int levelNum;
+
+    public int stageNum;
+
+    public int playerHealth;
+
     public MapData (WalkerGenerator map) {
+
+        levelNum = GameStateManager.GetLevel();
+        stageNum = GameStateManager.GetStage();
 
         tileTypes = new int[map.gridHandler.GetLength(0) * map.gridHandler.GetLength(1)];
         oTileTypes = new int[map.gridHandler.GetLength(0) * map.gridHandler.GetLength(1)];
-        Debug.Log("tileTypes length: " + tileTypes.Length);
-
-        /*
-        xTileLoc = new int[map.gridHandler.GetLength(0) * map.gridHandler.GetLength(1)];
-        Debug.Log("xTileLoc length: " + xTileLoc.Length);
-        yTileLoc = new int[map.gridHandler.GetLength(1) * map.gridHandler.GetLength(0)];
-        Debug.Log("yTileLoc length: " + yTileLoc.Length);
-        */
-
-        //float[] duh = new float[14] {1, 2, 9, 6, 7, 5, 4, 7, 8, 34, 56, 22, 24, 23};
+        //Debug.Log("tileTypes length: " + tileTypes.Length);
 
         int listNum = 0;
         
@@ -42,28 +42,21 @@ public class MapData
 
             for (int y = 0; y < map.gridHandler.GetLength(1); y++) {
 
-                //Debug.Log(x);
-                //xTileLoc[listNum] = x;
-                //yTileLoc[listNum] = y;
-
                 TileBase type = map.tilemap.GetTile(new Vector3Int(x, y, 0));
                 TileBase oType = map.oTilemap.GetTile(new Vector3Int(x, y, 0));
-                //Sprite sprite = map.tilemap.GetSprite(new Vector3Int(x, y, 0));
-
-                //Debug.Log(type);
 
                 if (type != null) {
-                    if (type == map.floor) {
+                    if (type == map.tiles.floor) {
                         tileTypes[listNum] = 1;
-                    } else if (type == map.decor) {
+                    } else if (type == map.tiles.decor) {
                         tileTypes[listNum] = 2;
-                    } else if (type == map.empty) {
+                    } else if (type == map.tiles.empty) {
                         tileTypes[listNum] = 3;
                     }
                 }
 
                 if (oType != null) {
-                    if (oType == map.obstacles) {
+                    if (oType == map.tiles.obstacles) {
                         oTileTypes[listNum] = 1;
                     }
                 }
