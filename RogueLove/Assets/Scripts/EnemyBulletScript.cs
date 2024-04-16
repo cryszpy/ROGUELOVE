@@ -9,14 +9,15 @@ public class EnemyBulletScript : MonoBehaviour
 
     [Header("SCRIPT REFERENCES")]
 
-    public Vector3 target;
+    private Vector3 target;
 
     [SerializeField]
     private Rigidbody2D rb;
 
-    public Animator animator;
+    [SerializeField]
+    private Animator animator;
 
-    public Vector3 direction;
+    private Vector3 direction;
 
     [SerializeField]
     private Collider2D coll;

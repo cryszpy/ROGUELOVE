@@ -20,6 +20,8 @@ public class PlayerController : MonoBehaviour
     private PlayerAim aim;
 
     public Collider2D contactColl;
+
+    public bool iFrame;
     
     private Vector2 movementInput;
 
@@ -108,6 +110,7 @@ public class PlayerController : MonoBehaviour
         }
 
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
+        iFrame = false;
 
         string pathPlayer = Application.persistentDataPath + "/player.franny";
 
@@ -204,8 +207,8 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(float damage) {
 
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
-            contactColl.enabled = false;
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && iFrame == false) {
+            iFrame = true;
             StartCoroutine(SetHurtFlash(true));
             Health -= damage;
             healthBar.SetHealth(currentHealth);

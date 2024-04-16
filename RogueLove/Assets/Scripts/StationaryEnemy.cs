@@ -8,11 +8,8 @@ using System;
 
 public class StationaryEnemy : Enemy
 {
-
-    public override void SetEnemyType()
-    {
+    public override void SetEnemyType() {
         enemyType = EnemyType.STATIONARY;
     }
-
 
 }

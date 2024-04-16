@@ -261,6 +261,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa1d576118f2443fc96482f69e6e5e36, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  enemyType: 0
   animator: {fileID: 8722914626086714706}
   map: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
@@ -269,6 +270,7 @@ MonoBehaviour:
   followCollider: {fileID: 3178784477931702090}
   contactColl: {fileID: 7721675988448470313}
   rb: {fileID: 1923873099500596009}
+  hitbox: {fileID: 7546251876369635720}
   healthBar: {fileID: 1215961894684457156}
   damage: 5
   chaseSpeed: 350

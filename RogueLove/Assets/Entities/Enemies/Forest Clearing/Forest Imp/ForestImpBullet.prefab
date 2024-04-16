@@ -102,10 +102,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c0f4f67457a4c769ab07dc2212cace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {x: 0, y: 0, z: 0}
   rb: {fileID: 6018900055118431996}
   animator: {fileID: 2920130361219395360}
-  direction: {x: 0, y: 0, z: 0}
   coll: {fileID: 5490067005516740771}
   force: 1
   damage: 2
@@ -180,7 +178,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.1, y: 0.14}
+  m_Size: {x: 0.06, y: 0.07}
   m_EdgeRadius: 0
 --- !u!95 &2920130361219395360
 Animator:

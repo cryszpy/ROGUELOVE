@@ -10,8 +10,7 @@ public class ContactEnemy : Enemy
 {
     //protected Vector3 tile;
 
-    public override void SetEnemyType()
-    {
+    public override void SetEnemyType() {
         enemyType = EnemyType.CONTACT;
     }
 

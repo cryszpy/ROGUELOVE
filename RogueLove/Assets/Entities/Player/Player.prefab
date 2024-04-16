@@ -537,6 +537,7 @@ MonoBehaviour:
     maxNormalAngle: 0
   aim: {fileID: 207663731094974020}
   contactColl: {fileID: 1781693491292221698}
+  iFrame: 0
   rb: {fileID: 2057914311772842495}
   animator: {fileID: 1825931467441451771}
   spriteRenderer: {fileID: 7125730586454602621}

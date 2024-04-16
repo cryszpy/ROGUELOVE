@@ -45,7 +45,7 @@ public class PlayerAnimations : MonoBehaviour
 
     public void HurtCheck() {
         animator.SetBool("Hurt", false);
-        parent.contactColl.enabled = true;
+        parent.iFrame = false;
 
     }
 

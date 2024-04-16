@@ -5,25 +5,24 @@ using UnityEngine;
 
 public class PlayerAim : MonoBehaviour
 {
-    private Camera mainCam;
-    private Vector3 mousePos;
+    public Camera mainCam;
+    public Vector3 mousePos;
 
     public GameObject bullet;
     public Transform bulletSpawnPos;
     public bool canFire;
-    private float timer;
+    public float timer;
     public float timeBetweenFiring;
 
-    private GameObject instantBullet;
+    public GameObject instantBullet;
 
-    [SerializeField]
-    private SpriteRenderer gun;
+    public SpriteRenderer gun;
 
     void Start() {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
-    void FixedUpdate() {
+    public virtual void FixedUpdate() {
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
         Vector3 rotation = mousePos - transform.position;
@@ -68,7 +67,7 @@ public class PlayerAim : MonoBehaviour
     }
 
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time
-    private IEnumerator BulletDestroy(float waitTime, GameObject obj) {
+    public IEnumerator BulletDestroy(float waitTime, GameObject obj) {
         while (true) {
             yield return new WaitForSeconds(waitTime);
             DestroyImmediate(obj, true);

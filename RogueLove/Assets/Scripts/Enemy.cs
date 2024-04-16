@@ -11,10 +11,10 @@ using TMPro;
 public abstract class Enemy : MonoBehaviour
 {
     public enum EnemyType {
-        CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS
+        CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS, DEAD
     }
 
-    protected EnemyType enemyType;
+    public EnemyType enemyType;
 
     [Header("SCRIPT REFERENCES")]
 
@@ -45,6 +45,9 @@ public abstract class Enemy : MonoBehaviour
     // This enemy's Rigidbody component
     [SerializeField]
     protected Rigidbody2D rb;
+
+    [SerializeField]
+    private Collider2D hitbox;
 
     [SerializeField]
     // Enemy health bar
@@ -93,38 +96,46 @@ public abstract class Enemy : MonoBehaviour
     protected bool waiting;
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
-        SetEnemyType();
+        if (enemyType != EnemyType.DEAD) {
 
-        if (healthBar == null) {
-            Debug.Log("ContactEnemy healthbar is null! Reassigned.");
-            healthBar = this.GetComponentInChildren<HealthBar>();
-        }
-        if (rb == null) {
-            Debug.Log("ContactEnemy rb is null! Reassigned.");
-            rb = GetComponent<Rigidbody2D>();
-        }
+            SetEnemyType();
 
-        player = GameObject.FindGameObjectWithTag("Player").transform;
-
-        attackAnim = false;
-
-        if (enemyType != EnemyType.STATIONARY) {
-            if (seeker == null) {
-                Debug.Log("ContactEnemy seeker is null! Reassigned.");
-                seeker = GetComponent<Seeker>();
+            if (healthBar == null) {
+                healthBar = this.GetComponentInChildren<HealthBar>();
+                Debug.Log("ContactEnemy healthbar is null! Reassigned.");
             }
-            canWander = true;
-            waiting = false;
+            if (rb == null) {
+                rb = GetComponent<Rigidbody2D>();
+                Debug.Log("ContactEnemy rb is null! Reassigned.");
+            }
+            if (hitbox == null) {
+                hitbox = GetComponentInChildren<Collider2D>();
+                Debug.Log("Collider2D hitbox is null! Reassigned.");
+            }
+            hitbox.enabled = true;
 
-            InvokeRepeating(nameof(UpdatePath), 0f, .5f);
+            player = GameObject.FindGameObjectWithTag("Player").transform;
+
+            attackAnim = false;
+
+            if (enemyType != EnemyType.STATIONARY) {
+                if (seeker == null) {
+                    Debug.Log("ContactEnemy seeker is null! Reassigned.");
+                    seeker = GetComponent<Seeker>();
+                }
+                canWander = true;
+                waiting = false;
+
+                InvokeRepeating(nameof(UpdatePath), 0f, .5f);
+            }
         }
     }
 
     public virtual void SetEnemyType() {
         enemyType = EnemyType.CONTACT;
-    }   
+    }
 
     void UpdatePath() {
         if (seeker.IsDone()) {
@@ -135,31 +146,35 @@ public abstract class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        if (waiting) {
-            waitTimer += Time.deltaTime;
-            //Debug.Log("waitTimer: " + waitTimer);
-            if(waitTimer > waitTime) {
-                waiting = false;
-                canWander = true;
-                waitTimer = 0;
-            }
-        }
 
-        if (enemyType != EnemyType.STATIONARY) {
-            if (canWander == false && !waiting) {
-                wanderTimer += Time.deltaTime;
-                //Debug.Log("wanderTimer: " + wanderTimer);
-                if(wanderTimer > moveTime) {
-                    //Debug.Log("Done With WanderTimer");
-                    waiting = true;
-                    wanderTimer = 0;
+        if (enemyType != EnemyType.DEAD) {
+
+            if (waiting) {
+                waitTimer += Time.deltaTime;
+                //Debug.Log("waitTimer: " + waitTimer);
+                if(waitTimer > waitTime) {
+                    waiting = false;
+                    canWander = true;
+                    waitTimer = 0;
                 }
             }
-            
-            // Pathfinding
-            Pathfinder();
 
-            DirectionFacing();
+            if (enemyType != EnemyType.STATIONARY) {
+                if (canWander == false && !waiting) {
+                    wanderTimer += Time.deltaTime;
+                    //Debug.Log("wanderTimer: " + wanderTimer);
+                    if(wanderTimer > moveTime) {
+                        //Debug.Log("Done With WanderTimer");
+                        waiting = true;
+                        wanderTimer = 0;
+                    }
+                }
+                
+                // Pathfinding
+                Pathfinder();
+
+                DirectionFacing();
+            }
         }
     }
 
@@ -353,7 +368,22 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    public void EnemyDeath() {
+        enemyType = EnemyType.DEAD;
+        force = 0 * Time.deltaTime * direction;
+        hitbox.enabled = false;
+        WalkerGenerator.SetDeadEnemy();
+        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
+        //canWander = false;
+        //contactColl.enabled = false;
+        //target = 0 * Time.deltaTime * direction;
+        
+        //Destroy(gameObject);
+    }
+
     public void RemoveEnemy() {
         Destroy(gameObject);
+        WalkerGenerator.SetDeadEnemy();
+        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
     }
 }

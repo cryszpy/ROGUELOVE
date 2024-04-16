@@ -54,6 +54,11 @@ public class GameStateManager : MonoBehaviour
 
     public static SceneList sceneList;
 
+    public static bool levelClear = false;
+    public static void SetLevelClear(bool condition) {
+        levelClear = condition;
+    }
+
     void Start() {
 
         if (instance != null) {
@@ -71,6 +76,15 @@ public class GameStateManager : MonoBehaviour
         sceneList = this.gameObject.GetComponent<SceneList>();
 
         //Debug.Log("previous scene: " + GameStateManager.PreviousScene);  // use this in any level to get the last level.
+    }
+
+    void Update() {
+        if (WalkerGenerator.GetEnemyTotal() != 0) {
+            if (WalkerGenerator.GetEnemyTotal() == WalkerGenerator.GetDeadEnemies() && !levelClear) {
+                levelClear = true;
+                NextLevel();
+            }
+        }
     }
 
     public void NextLevel() {

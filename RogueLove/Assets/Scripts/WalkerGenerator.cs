@@ -117,12 +117,28 @@ public class WalkerGenerator : MonoBehaviour
     [Space(10)]
     [Header("LEVEL INFO")]
 
+    private static int deadEnemies;
+    public static void SetDeadEnemy() {
+        deadEnemies++;
+    }
+    public static int GetDeadEnemies() {
+        return deadEnemies;
+    }
+
+    private static int enemyTotal;
+    public static int GetEnemyTotal() {
+        return enemyTotal;
+    }
+
     [SerializeField]
     private bool bossLevel = false;
 
     // Initializes grid to be generated (size)
     void Start() {
         TransitionManager.SetLoadingBar(true);
+        enemyTotal = 0;
+        deadEnemies = 0;
+        GameStateManager.SetLevelClear(false);
 
         if (tilemap == null) {
             tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
@@ -139,6 +155,7 @@ public class WalkerGenerator : MonoBehaviour
         }
 
         pathMap = Application.persistentDataPath + "/map.chris";
+        enemyTotal = 0;
 
         if (File.Exists(pathMap) && GameStateManager.SavePressed() == true) {
             loadFromSave = true;
@@ -166,7 +183,7 @@ public class WalkerGenerator : MonoBehaviour
             Debug.Log("Loaded Map");
         }
     }
-
+/*
     public void NextLevel() {
 
         // Stages 1, 2, 5, 7, and 8 have 3 randomly-generated levels
@@ -206,7 +223,7 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
     }
-
+*/
     void InitializeGrid() {
 
         // Initializes grid size from variables
@@ -491,6 +508,7 @@ public class WalkerGenerator : MonoBehaviour
                             // Spawns Enemy
                             if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
                                 enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                enemyTotal++;
                                 break;
 
                             }
@@ -528,6 +546,7 @@ public class WalkerGenerator : MonoBehaviour
 
                             if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy)) {
                                 enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                enemyTotal++;
                                 break;
                             }
 
@@ -572,6 +591,7 @@ public class WalkerGenerator : MonoBehaviour
                                 // Spawns Enemy
                                 if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                     enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f + 0.27f), rot, this);   
+                                    enemyTotal++;
                                     break;
                                 }
                             } 
@@ -582,6 +602,7 @@ public class WalkerGenerator : MonoBehaviour
                                 // Spawns Enemy
                                 if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                     enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f - 0.12f), rot, this);   
+                                    enemyTotal++;
                                     break;
                                 }
                             } 
@@ -592,6 +613,7 @@ public class WalkerGenerator : MonoBehaviour
                                 // Spawns Enemy
                                 if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                     enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f - 0.12f, tileListY[rand] * 0.16f + 0.08f), rot, this);   
+                                    enemyTotal++;
                                     break;
                                 }
                             } 
@@ -602,6 +624,7 @@ public class WalkerGenerator : MonoBehaviour
                                 // Spawns Enemy
                                 if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                     enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.27f, tileListY[rand] * 0.16f + 0.24f), rot, this);   
+                                    enemyTotal++;
                                     break;
                                 }
                             }
@@ -640,6 +663,7 @@ public class WalkerGenerator : MonoBehaviour
                             // Spawns Enemy
                             if (minibosses[m].TryGetComponent<Enemy>(out var enemy)) {
                                 enemy.Create(minibosses[m], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                enemyTotal++;
                                 break;
                             }
 

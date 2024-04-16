@@ -3,15 +3,8 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyAim : MonoBehaviour
+public class EnemyAim : PlayerAim
 {
-    public GameObject bullet;
-    public Transform bulletSpawnPos;
-    public bool canFire;
-    private float timer;
-
-    private GameObject instantBullet;
-
     [SerializeField]
     private Enemy parent;
 
@@ -19,7 +12,7 @@ public class EnemyAim : MonoBehaviour
 
     private bool hitPlayer = false;
 
-    void FixedUpdate() {
+    public override void FixedUpdate() {
 
         // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot
         direction = parent.target - transform.position;
@@ -43,7 +36,8 @@ public class EnemyAim : MonoBehaviour
             }
         }
 
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER
+        && parent.enemyType != Enemy.EnemyType.DEAD) {
 
             // Firing logic, if not on cooldown and player in range, fire
             if (canFire && parent.inFollowRadius && hitPlayer) {
@@ -56,14 +50,6 @@ public class EnemyAim : MonoBehaviour
             
         } else {
             this.gameObject.SetActive(false);
-        }
-    }
-
-    // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time
-    private IEnumerator BulletDestroy(float waitTime, GameObject obj) {
-        while (true) {
-            yield return new WaitForSeconds(waitTime);
-            DestroyImmediate(obj, true);
         }
     }
 }

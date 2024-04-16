@@ -13,8 +13,7 @@ public class RangedEnemy : Enemy
     [SerializeField]
     private bool seen;
 
-    public override void SetEnemyType()
-    {
+    public override void SetEnemyType() {
         enemyType = EnemyType.RANGED;
     }
 
