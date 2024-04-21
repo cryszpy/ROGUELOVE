@@ -24,4 +24,8 @@ public class AreaTiles : MonoBehaviour
     public Sprite wallLeft;
 
     public Sprite wallRight;
+
+    public GameObject doorwayObject;
+
+    public GameObject[] breakables;
 }

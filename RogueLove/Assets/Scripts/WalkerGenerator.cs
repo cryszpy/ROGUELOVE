@@ -30,8 +30,6 @@ public class WalkerGenerator : MonoBehaviour
     // List of all active Walkers
     private List<WalkerObject> walkers;
 
-    private static WalkerGenerator instance;
-
     [Header("TILEMAP OBJECTS")]
 
     // TILEMAP REFERENCES
@@ -68,7 +66,7 @@ public class WalkerGenerator : MonoBehaviour
     public int oTileCount = default;
 
     [SerializeField]
-    [Range(0.1f, 0.9f)]
+    [Range(0.1f, 0.98f)]
     // Compares the amount of floor tiles to the percentage of the total grid covered (in floor tiles)
     // NEVER SET THIS TO 1 OR ELSE UNITY WILL CRASH :skull:
     private float fillPercentage;
@@ -90,6 +88,12 @@ public class WalkerGenerator : MonoBehaviour
     private int lvl;
     [SerializeField]
     private int stg;
+
+    [SerializeField]
+    private float spawnRadiusX;
+    
+    [SerializeField]
+    private float spawnRadiusY;
 
     [Space(10)]
     [Header("ENTITIES")]
@@ -183,47 +187,15 @@ public class WalkerGenerator : MonoBehaviour
             Debug.Log("Loaded Map");
         }
     }
-/*
-    public void NextLevel() {
 
-        // Stages 1, 2, 5, 7, and 8 have 3 randomly-generated levels
-        if (GameStateManager.GetStage() == 1
-        || GameStateManager.GetStage() == 2
-        || GameStateManager.GetStage() == 5
-        || GameStateManager.GetStage() == 7
-        || GameStateManager.GetStage() == 8) {
-            // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
-            if (GameStateManager.GetLevel() == 3) {
-                GameStateManager.SetStage(GameStateManager.GetStage() + 1);
-                GameStateManager.SetLevel(1);
-                // Load level
-                TransitionManager.StartLeaf(GameStateManager.GetStage());
-            } 
-            // Else, increment level and generate new level
-            else {
-                GameStateManager.SetLevel(GameStateManager.GetLevel() + 1);
-                // Load level
-                TransitionManager.StartLeaf(GameStateManager.GetStage());
-            }
-        } 
-        // All other stages have 4 randomly-generated levels
-        else {
-            // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
-            if (GameStateManager.GetLevel() == 4) {
-                GameStateManager.SetStage(GameStateManager.GetStage() + 1);
-                GameStateManager.SetLevel(1);
-                // Load level
-                TransitionManager.StartLeaf(GameStateManager.GetStage());
-            } 
-            // Else, increment level and generate new level
-            else {
-                GameStateManager.SetLevel(GameStateManager.GetLevel() + 1);
-                // Load level
-                TransitionManager.StartLeaf(GameStateManager.GetStage());
+    void Update() {
+        if (GetEnemyTotal() != 0) {
+            if (GetEnemyTotal() == GetDeadEnemies() && GameStateManager.GetLevelClear() == false) {
+                GameStateManager.SetLevelClear(true);
+                SpawnDoorway();
             }
         }
     }
-*/
     void InitializeGrid() {
 
         // Initializes grid size from variables
@@ -333,7 +305,10 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
 
-        StartCoroutine(CreateObstacles());
+        if (!bossLevel) {
+            StartCoroutine(CreateObstacles());
+        }
+        StartCoroutine(CreateBreakables());
         
         tilemap.SetTile(new Vector3Int(0, 0, 0), tiles.empty);
         tileCount--;
@@ -416,6 +391,36 @@ public class WalkerGenerator : MonoBehaviour
         }
     }
 
+    IEnumerator CreateBreakables() {
+        // For all different breakables in the level
+        for (int b = 0; b < tiles.breakables.Length; b++) {
+
+            // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+            int breakRange = UnityEngine.Random.Range(6, 10);
+
+            for (int br = 0; br < breakRange; br++) {
+
+                int rand = GetRandomTile();
+
+                // Check all X tiles
+                for (int x = 0; x < tileListX.Count; x++) {
+
+                    // SINGLE FENCE CHECK
+                    if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
+                    && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)) {
+
+                        Instantiate(tiles.breakables[b], new Vector3(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f, 0), Quaternion.identity);
+                        break;
+
+                    } else {
+                        rand = GetRandomTile();
+                    }
+                }
+            }
+        }
+        yield return null;
+    }
+
     IEnumerator CreateDecor() {
 
         for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
@@ -452,7 +457,7 @@ public class WalkerGenerator : MonoBehaviour
     public void SpawnRandomPlayer() {
 
         // Generates random number to pick Player spawnpoint
-        int randP = UnityEngine.Random.Range(0, tileListY.Count);
+        int randP = GetRandomTile();
 
         // For as many floor tiles as there are in the tilemap:
         for (int i = 0; i < tileListX.Count; i++) {
@@ -465,14 +470,43 @@ public class WalkerGenerator : MonoBehaviour
                 // Spawns Player
                 //player.SetActive(true);
                 player.transform.position = new Vector2((tileListX[i] * 0.16f) + 0.08f, (tileListY[randP] * 0.16f) + 0.08f);
-                //Debug.Log(player.transform.position);
-                //Debug.Log("PLAYER HAS BEEN SPAWNED");
                 break;
 
             } else {
                 // Generates random number to pick Player spawnpoint
                 randP = UnityEngine.Random.Range(0, tileListX.Count);
             }
+        }
+    }
+
+    // Spawns doorway to next level after level cleared
+    private void SpawnDoorway() {
+
+        for (int i = gridHandler.GetLength(0); i <= gridHandler.GetLength(0) && i >= 0; i--) {
+            //Debug.Log(i);
+
+            //int rand = UnityEngine.Random.Range(0, tileListY.Count);
+
+            // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+            if ((tilemap.GetSprite(new Vector3Int(i, (int)Mathf.Round(mapHeight/2))) == tiles.wallRight)
+            && (oTilemap.GetTile(new Vector3Int(i, (int)Mathf.Round(mapHeight/2))) != tiles.obstacles)
+            && (gridHandler[i, (int)Mathf.Round(mapHeight/2)] == Grid.FLOOR)) {
+
+                // Spawns doorway
+                if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
+                    door.Create(tiles.doorwayObject, new Vector3((i * 0.16f) + 0.08f, ((int)Mathf.Round(mapHeight/2) * 0.16f) + 0.08f), Quaternion.identity, player);
+                    break;
+                } else {
+                    Debug.LogError("Could not find Doorway component of door while spawning!");
+                    break;
+                }
+
+            } 
+            /*
+            else {
+                // Generates random number to pick doorway spawnpoint
+                rand = GetRandomTile();
+            } */
         }
     }
 
@@ -505,14 +539,20 @@ public class WalkerGenerator : MonoBehaviour
                         if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
                         && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)) {
 
-                            // Spawns Enemy
-                            if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
-                                enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
-                                enemyTotal++;
-                                break;
-
+                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                                rand = GetRandomTile();
+                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                rand = GetRandomTile();
+                            } else {
+                                // Spawns Enemy
+                                if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                    enemyTotal++;
+                                    break;
+                                }
                             }
-
                         } else {
                             
                             // Generates random number to pick Enemy spawnpoint
@@ -542,12 +582,20 @@ public class WalkerGenerator : MonoBehaviour
                         // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
                         if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
                         && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)) {
-                            //Debug.Log(rareEnemies[r]);
 
-                            if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy)) {
-                                enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
-                                enemyTotal++;
-                                break;
+                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                                rand = GetRandomTile();
+                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                rand = GetRandomTile();
+                            } else {
+
+                                if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                    enemyTotal++;
+                                    break;
+                                }
                             }
 
                         } else {

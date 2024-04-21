@@ -58,6 +58,9 @@ public class GameStateManager : MonoBehaviour
     public static void SetLevelClear(bool condition) {
         levelClear = condition;
     }
+    public static bool GetLevelClear() {
+        return levelClear;
+    }
 
     void Start() {
 
@@ -78,16 +81,7 @@ public class GameStateManager : MonoBehaviour
         //Debug.Log("previous scene: " + GameStateManager.PreviousScene);  // use this in any level to get the last level.
     }
 
-    void Update() {
-        if (WalkerGenerator.GetEnemyTotal() != 0) {
-            if (WalkerGenerator.GetEnemyTotal() == WalkerGenerator.GetDeadEnemies() && !levelClear) {
-                levelClear = true;
-                NextLevel();
-            }
-        }
-    }
-
-    public void NextLevel() {
+    public static void NextLevel() {
 
         // Stages 1, 2, 5, 7, and 8 have 3 randomly-generated levels
         if (GetStage() is 1 or 2 or 5 or 7 or 8) {

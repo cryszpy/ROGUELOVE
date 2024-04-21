@@ -12,6 +12,10 @@ public class EnemyAim : PlayerAim
 
     private bool hitPlayer = false;
 
+    void Start() {
+        canFire = false;
+    }
+
     public override void FixedUpdate() {
 
         // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot
@@ -40,7 +44,7 @@ public class EnemyAim : PlayerAim
         && parent.enemyType != Enemy.EnemyType.DEAD) {
 
             // Firing logic, if not on cooldown and player in range, fire
-            if (canFire && parent.inFollowRadius && hitPlayer) {
+            if (canFire && parent.inFollowRadius && hitPlayer && parent.seen) {
                 parent.animator.SetBool("Attack", true);
                 canFire = false;
                 parent.attackCooldown = UnityEngine.Random.Range(parent.rangedAttackCooldownMin, parent.rangedAttackCooldownMax);

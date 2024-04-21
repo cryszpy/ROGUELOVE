@@ -72,7 +72,7 @@ public class BulletScript : MonoBehaviour
             }
         }
 
-        if (other.gameObject.layer != 3) {
+        if (other.gameObject.layer != 3 && other.gameObject.layer != 10) {
             coll.enabled = false;
             rb.velocity = (Vector2)direction.normalized * 0;
             animator.SetTrigger("Destroy");

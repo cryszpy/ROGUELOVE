@@ -46,25 +46,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   tileListX: 
   tileListY: 
+  tiles: {fileID: 0}
   tilemap: {fileID: 0}
   oTilemap: {fileID: 0}
-  floor: {fileID: 11400000, guid: 02049643adde449bc92668684d31b241, type: 2}
-  ground: {fileID: 1828385713, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-  obstacles: {fileID: 11400000, guid: 9a4202bb60da84934802a13b054cccc0, type: 2}
-  decor: {fileID: 11400000, guid: 357e416e3abd34beea7a73953e031064, type: 2}
-  empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
-  wallUp: {fileID: 1769894669, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-  wallDown: {fileID: 528089134, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-  wallLeft: {fileID: -579220485, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-  wallRight: {fileID: 1927522313, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-  mapWidth: 35
-  mapHeight: 35
+  mapWidth: 27
+  mapHeight: 27
   maxWalkers: 4
   emptyChance: 45
   tileCount: 0
   oTileCount: 0
-  fillPercentage: 0.6
+  fillPercentage: 0.95
   waitTime: 0
+  lvl: 0
+  stg: 0
+  spawnRadiusX: 6
+  spawnRadiusY: 6
+  player: {fileID: 0}
   commonEnemies:
   - {fileID: 2496777416409024874, guid: c60c1e7fb3c7444b892164a662e77a72, type: 3}
   rareEnemies:
@@ -74,5 +71,4 @@ MonoBehaviour:
   - {fileID: 2496777416409024874, guid: 302b65588e187471ebe5de20fa34b2bd, type: 3}
   minibosses: []
   bosses: []
-  areaLevel: 0
   bossLevel: 0

@@ -95,11 +95,12 @@ public abstract class Enemy : MonoBehaviour
     protected float waitTimer = 0;
     protected bool waiting;
 
+    public bool seen;
+
     // Start is called before the first frame update
     public virtual void Start()
     {
         if (enemyType != EnemyType.DEAD) {
-
             SetEnemyType();
 
             if (healthBar == null) {
@@ -119,6 +120,7 @@ public abstract class Enemy : MonoBehaviour
             player = GameObject.FindGameObjectWithTag("Player").transform;
 
             attackAnim = false;
+            seen = false;
 
             if (enemyType != EnemyType.STATIONARY) {
                 if (seeker == null) {
@@ -241,6 +243,7 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void PlayerCheck() {
         if (inFollowRadius == true) {
+            seen = true;
             canWander = false;
             force = Vector2.zero;
             target = player.position;
@@ -369,9 +372,9 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public void EnemyDeath() {
-        enemyType = EnemyType.DEAD;
         force = 0 * Time.deltaTime * direction;
         hitbox.enabled = false;
+        enemyType = EnemyType.DEAD;
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
         //canWander = false;

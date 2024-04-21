@@ -139,7 +139,6 @@ public class PlayerController : MonoBehaviour
 
         if (loadFromSave == true) {
             LoadPlayer();
-            //Debug.Log("Loaded Player");
         } else {
             healthBar.SetMaxHealth(maxHealth);
             healthBar.SetHealth(currentHealth);

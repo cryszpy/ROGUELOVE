@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 6018900055118431996}
   - component: {fileID: 5490067005516740771}
   - component: {fileID: 2920130361219395360}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ForestImpBullet
   m_TagString: Untagged
   m_Icon: {fileID: 0}

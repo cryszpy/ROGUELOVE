@@ -280,6 +280,7 @@ MonoBehaviour:
   attackCooldown: 1
   nextWaypointDistance: 1
   inFollowRadius: 0
+  seen: 0
 --- !u!114 &5977564517870532234
 MonoBehaviour:
   m_ObjectHideFlags: 0

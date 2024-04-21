@@ -309,8 +309,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.0008405653, y: -0.019552872}
-  m_Size: {x: 0.09260666, y: 0.09260666}
+  m_Offset: {x: 0.0008405653, y: 0.05}
+  m_Size: {x: 0.09260666, y: 0.14}
   m_Direction: 0
 --- !u!95 &8722914626086714706
 Animator:
@@ -346,7 +346,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b87d0a03c4af423ea7b9f88f3bd609c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  enemyType: 0
+  enemyType: 1
   animator: {fileID: 8722914626086714706}
   map: {fileID: 0}
   target: {x: 0, y: 0, z: 0}
