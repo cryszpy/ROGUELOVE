@@ -52,6 +52,5 @@ public class PlayerAnimations : MonoBehaviour
     public void PlayerDeath() {
         animator.SetBool("Death", false);
         GameStateManager.GameOver();
-        GameStateManager.SetState(GameStateManager.GAMESTATE.GAMEOVER);
     }
 }

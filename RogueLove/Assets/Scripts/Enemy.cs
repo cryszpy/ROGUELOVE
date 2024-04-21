@@ -148,35 +148,40 @@ public abstract class Enemy : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER 
+        && GameStateManager.GetState() != GameStateManager.GAMESTATE.PAUSED) {
 
-        if (enemyType != EnemyType.DEAD) {
+            if (enemyType != EnemyType.DEAD) {
 
-            if (waiting) {
-                waitTimer += Time.deltaTime;
-                //Debug.Log("waitTimer: " + waitTimer);
-                if(waitTimer > waitTime) {
-                    waiting = false;
-                    canWander = true;
-                    waitTimer = 0;
-                }
-            }
-
-            if (enemyType != EnemyType.STATIONARY) {
-                if (canWander == false && !waiting) {
-                    wanderTimer += Time.deltaTime;
-                    //Debug.Log("wanderTimer: " + wanderTimer);
-                    if(wanderTimer > moveTime) {
-                        //Debug.Log("Done With WanderTimer");
-                        waiting = true;
-                        wanderTimer = 0;
+                if (waiting) {
+                    waitTimer += Time.deltaTime;
+                    //Debug.Log("waitTimer: " + waitTimer);
+                    if(waitTimer > waitTime) {
+                        waiting = false;
+                        canWander = true;
+                        waitTimer = 0;
                     }
                 }
-                
-                // Pathfinding
-                Pathfinder();
 
-                DirectionFacing();
+                if (enemyType != EnemyType.STATIONARY) {
+                    if (canWander == false && !waiting) {
+                        wanderTimer += Time.deltaTime;
+                        //Debug.Log("wanderTimer: " + wanderTimer);
+                        if(wanderTimer > moveTime) {
+                            //Debug.Log("Done With WanderTimer");
+                            waiting = true;
+                            wanderTimer = 0;
+                        }
+                    }
+                    
+                    // Pathfinding
+                    Pathfinder();
+
+                    DirectionFacing();
+                }
+                
             }
+
         }
     }
 
@@ -213,17 +218,17 @@ public abstract class Enemy : MonoBehaviour
     public virtual void DirectionFacing() {
         
         // Sprite direction facing
-        if (rb.velocity.x >= 0.01f) {
+        if (rb.velocity.x >= 0.001f) {
 
             this.transform.localScale = new Vector3(1f, 1f, 1f);
             animator.SetBool("IsMoving", true);
 
-        } else if (rb.velocity.x <= -0.01f) {
+        } else if (rb.velocity.x <= -0.001f) {
 
             this.transform.localScale = new Vector3(-1f, 1f, 1f);
             animator.SetBool("IsMoving", true);
 
-        } else if (rb.velocity.y <= -0.01 || rb.velocity.y >= 0.01) {
+        } else if (rb.velocity.y <= -0.001 || rb.velocity.y >= 0.001) {
             animator.SetBool("IsMoving", true);
         } else {
             animator.SetBool("IsMoving", false);

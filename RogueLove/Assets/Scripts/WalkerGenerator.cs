@@ -143,6 +143,7 @@ public class WalkerGenerator : MonoBehaviour
         enemyTotal = 0;
         deadEnemies = 0;
         GameStateManager.SetLevelClear(false);
+        GameStateManager.SetState(GameStateManager.GAMESTATE.PLAYING);
 
         if (tilemap == null) {
             tilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
@@ -159,11 +160,10 @@ public class WalkerGenerator : MonoBehaviour
         }
 
         pathMap = Application.persistentDataPath + "/map.chris";
-        enemyTotal = 0;
 
         if (File.Exists(pathMap) && GameStateManager.SavePressed() == true) {
             loadFromSave = true;
-            GameStateManager.SetSave(false);
+            //GameStateManager.SetSave(false);
         } else {
             loadFromSave = false;
             GameStateManager.SetSave(false);
@@ -179,12 +179,12 @@ public class WalkerGenerator : MonoBehaviour
         lvl = GameStateManager.GetLevel();
         stg = GameStateManager.GetStage();
 
+        Debug.Log("Attempting to initialize grid");
         InitializeGrid();
-        Debug.Log("Attempted to initialize grid");
+        
 
         if (loadFromSave == true) {
             LoadMap();
-            Debug.Log("Loaded Map");
         }
     }
 
@@ -231,6 +231,7 @@ public class WalkerGenerator : MonoBehaviour
             // Handles walker rules
             StartCoroutine(CreateFloors());
         }
+        Debug.Log("INITIALIZED GRID");
     }
 
     // Returns a random single vector direction
@@ -448,9 +449,9 @@ public class WalkerGenerator : MonoBehaviour
         SpawnRandomPlayer();
         SpawnRandomEnemies();
         PathScan();
-        TransitionManager.EndLeaf(true);
         SaveMap();
         playerCont.SavePlayer();
+        TransitionManager.EndLeaf(true);
     }
 
     // SPAWN PLAYER
@@ -511,7 +512,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     // SPAWN ENEMIES
-    void SpawnRandomEnemies() {
+    private void SpawnRandomEnemies() {
 
         // TODO: If level number is the last level in area, then disregard everything except Boss spawning
         if (!IsArrayEmpty(bosses)) {
@@ -629,51 +630,60 @@ public class WalkerGenerator : MonoBehaviour
                         && (tilemap.GetSprite(new Vector3Int(tileListX[i], tileListY[rand], 0)) != tiles.ground)
                         && (oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[rand], 0)) != tiles.obstacles)) {
 
-                            Quaternion rot = Quaternion.Euler(0, 0, 0);
+                            if (tileListX[rand] <= player.transform.position.x + (spawnRadiusX/2) 
+                            && tileListX[rand] >= player.transform.position.x - (spawnRadiusX/2)) {
+                                rand = GetRandomTile();
+                            } else if (tileListY[rand] <= player.transform.position.y + (spawnRadiusY/2) 
+                            && tileListY[rand] >= player.transform.position.y - (spawnRadiusY/2)) {
+                                rand = GetRandomTile();
+                            } else {
 
-                            // If tile found is one of four different wall tiles then instaniate with correct rotation
-                            // UP WALL
-                            if (tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand] + 1, 0)) == tiles.wallUp) {
-                                rot = Quaternion.Euler(0, 0, -90);
+                                Quaternion rot = Quaternion.Euler(0, 0, 0);
 
-                                // Spawns Enemy
-                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f + 0.27f), rot, this);   
-                                    enemyTotal++;
-                                    break;
-                                }
-                            } 
-                            // DOWN WALL
-                            else if (tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand] - 1, 0)) == tiles.wallDown) {
-                                rot = Quaternion.Euler(0, 0, 90);
+                                // If tile found is one of four different wall tiles then instaniate with correct rotation
+                                // UP WALL
+                                if (tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand] + 1, 0)) == tiles.wallUp) {
+                                    rot = Quaternion.Euler(0, 0, -90);
 
-                                // Spawns Enemy
-                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f - 0.12f), rot, this);   
-                                    enemyTotal++;
-                                    break;
-                                }
-                            } 
-                            // LEFT WALL
-                            else if (tilemap.GetSprite(new Vector3Int(tileListX[rand] - 1, tileListY[rand], 0)) == tiles.wallLeft) {
-                                rot = Quaternion.Euler(0, 0, 0);
+                                    // Spawns Enemy
+                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f + 0.27f), rot, this);   
+                                        enemyTotal++;
+                                        break;
+                                    }
+                                } 
+                                // DOWN WALL
+                                else if (tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand] - 1, 0)) == tiles.wallDown) {
+                                    rot = Quaternion.Euler(0, 0, 90);
 
-                                // Spawns Enemy
-                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f - 0.12f, tileListY[rand] * 0.16f + 0.08f), rot, this);   
-                                    enemyTotal++;
-                                    break;
-                                }
-                            } 
-                            // RIGHT WALL
-                            else if (tilemap.GetSprite(new Vector3Int(tileListX[rand] + 1, tileListY[rand] + 1, 0)) == tiles.wallRight) {
-                                rot = Quaternion.Euler(0, 0, 180);
+                                    // Spawns Enemy
+                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f - 0.12f), rot, this);   
+                                        enemyTotal++;
+                                        break;
+                                    }
+                                } 
+                                // LEFT WALL
+                                else if (tilemap.GetSprite(new Vector3Int(tileListX[rand] - 1, tileListY[rand], 0)) == tiles.wallLeft) {
+                                    rot = Quaternion.Euler(0, 0, 0);
 
-                                // Spawns Enemy
-                                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.27f, tileListY[rand] * 0.16f + 0.24f), rot, this);   
-                                    enemyTotal++;
-                                    break;
+                                    // Spawns Enemy
+                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f - 0.12f, tileListY[rand] * 0.16f + 0.08f), rot, this);   
+                                        enemyTotal++;
+                                        break;
+                                    }
+                                } 
+                                // RIGHT WALL
+                                else if (tilemap.GetSprite(new Vector3Int(tileListX[rand] + 1, tileListY[rand] + 1, 0)) == tiles.wallRight) {
+                                    rot = Quaternion.Euler(0, 0, 180);
+
+                                    // Spawns Enemy
+                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.27f, tileListY[rand] * 0.16f + 0.24f), rot, this);   
+                                        enemyTotal++;
+                                        break;
+                                    }
                                 }
                             }
 

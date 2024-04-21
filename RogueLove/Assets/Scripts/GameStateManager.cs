@@ -71,14 +71,21 @@ public class GameStateManager : MonoBehaviour
             DontDestroyOnLoad(gameObject);
         }
 
-        state = GAMESTATE.PLAYING;
-
-        Debug.Log("current level: " + currentLevel);
-        Debug.Log("current stage: " + currentStage);
+        if (GetState() == 0) {
+            state = GAMESTATE.MENU;
+        } else {
+            state = GAMESTATE.PLAYING;
+        }
         
         sceneList = this.gameObject.GetComponent<SceneList>();
 
         //Debug.Log("previous scene: " + GameStateManager.PreviousScene);  // use this in any level to get the last level.
+    }
+
+    void Update() {
+        if (state != GAMESTATE.PAUSED && state != GAMESTATE.GAMEOVER) {
+            Time.timeScale = 1;
+        }
     }
 
     public static void NextLevel() {

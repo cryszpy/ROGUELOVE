@@ -36,14 +36,12 @@ public class MainMenu : MonoBehaviour
     }
 
     public void LoadMainMenu() {
-        Time.timeScale = 1f;
-        // Load level
         TransitionManager.StartLeaf(0);
     }
 
     public void PlayButton() {
-        Debug.Log(GameStateManager.GetLevel());
-        Debug.Log(GameStateManager.GetStage());
+        Debug.Log("current level: " + GameStateManager.GetLevel());
+        Debug.Log("current stage: " + GameStateManager.GetStage());
 
         String pathMap = Application.persistentDataPath + "/map.chris";
         String pathPlayer = Application.persistentDataPath + "/player.franny";

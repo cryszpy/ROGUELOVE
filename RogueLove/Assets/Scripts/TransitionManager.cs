@@ -39,13 +39,6 @@ public class TransitionManager : MonoBehaviour
         loadingBarEnable = condition;
     }
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        //DontDestroyOnLoad(this);
-        loadingBarEnable = false;
-    }
-
     // Update is called once per frame
     void Update()
     {
@@ -70,22 +63,23 @@ public class TransitionManager : MonoBehaviour
     }
 
     IEnumerator LoadLevel(int index) {
+        Time.timeScale = 1f;
         animator.SetTrigger("LeafStart");
 
         yield return new WaitForSeconds(loadTime);
 
         SetLoadingBar(true);
 
-        AsyncOperation operation = SceneManager.LoadSceneAsync(index);
+        SceneManager.LoadSceneAsync(index);
 
-        while (!operation.isDone) {
+        /*while (!operation.isDone) {
             float progress = Mathf.Clamp01(operation.progress / 0.9f);
-            Debug.Log(progress);
+            //Debug.Log(progress);
 
             //slider.value = progress;
 
             yield return null;
-        }
+        }*/
 
         if (index == 0) {
             animator.SetTrigger("LeafEnd");

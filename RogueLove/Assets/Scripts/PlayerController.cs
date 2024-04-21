@@ -38,9 +38,6 @@ public class PlayerController : MonoBehaviour
     public HealthBar healthBar;
 
     readonly List<RaycastHit2D> castCollisions = new();
-
-    // Boolean to see if save file exists
-    private bool loadFromSave;
     
     private VolumeProfile volumeProfile;
 
@@ -113,15 +110,18 @@ public class PlayerController : MonoBehaviour
         iFrame = false;
 
         string pathPlayer = Application.persistentDataPath + "/player.franny";
+        //Debug.Log(File.Exists(pathPlayer));
+        //Debug.Log(GameStateManager.SavePressed());
 
         // Load player info from saved game
         if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            loadFromSave = true;
             GameStateManager.SetSave(false);
+
+            LoadPlayer();
+            //Debug.Log("Loaded player from save");
         } 
         // Save data exists but player did not click load save --> most likely a NextLevel() call
         else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            loadFromSave = false;
             GameStateManager.SetSave(false);
         } 
         // Save data does not exist, and player clicked load save somehow
@@ -130,19 +130,16 @@ public class PlayerController : MonoBehaviour
         } 
         // Save data does not exist and player did not click load save --> most likely started new game
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            loadFromSave = false;
-            SetMaxPlayerHealth(20f);
-            currentHealth = maxHealth;
-            SetMoveSpeed(1.0f);
             GameStateManager.SetSave(false);
+            SetMaxPlayerHealth(20f);
+            Health = maxHealth;
+            SetMoveSpeed(1.0f);
         }
 
-        if (loadFromSave == true) {
-            LoadPlayer();
-        } else {
-            healthBar.SetMaxHealth(maxHealth);
-            healthBar.SetHealth(currentHealth);
-        }
+        healthBar.SetMaxHealth(maxHealth);
+        healthBar.SetHealth(Health);
+        //Debug.Log("MAX HEALTH " + maxHealth);
+        //Debug.Log("HEALTH " + Health);
     }
     
     private void Update() {
@@ -237,12 +234,14 @@ public class PlayerController : MonoBehaviour
         // Load save data
         PlayerData data = SaveSystem.LoadPlayer();
 
+        SetMaxPlayerHealth(data.playerMaxHealth);
+        //Debug.Log("LOAD PLAYER MAX HEALTH: " + data.playerMaxHealth);
+        healthBar.SetMaxHealth(maxHealth);
+
         // Set health
         Health = data.playerHealth;
-        healthBar.SetHealth(currentHealth);
-
-        maxHealth = data.playerMaxHealth;
-        healthBar.SetMaxHealth(maxHealth);
+        //Debug.Log("LOAD PLAYER CURRENT HEALTH: " + data.playerHealth);
+        healthBar.SetHealth(Health);
 
         // Set speeds
         SetMoveSpeed(data.playerMoveSpeed);
