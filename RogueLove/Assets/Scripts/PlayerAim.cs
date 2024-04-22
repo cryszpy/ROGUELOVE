@@ -5,18 +5,31 @@ using UnityEngine;
 
 public class PlayerAim : MonoBehaviour
 {
-    public Camera mainCam;
-    public Vector3 mousePos;
 
+    [Header("SCRIPT REFERENCES")]
+
+    public Camera mainCam;
+    [SerializeField]
+    private CameraShake shake;
+    public Vector3 mousePos;
     public GameObject bullet;
     public Transform bulletSpawnPos;
+    public GameObject instantBullet;
+    public SpriteRenderer gun;
+
+    [Space(10)]
+    [Header("STATS")]
+
     public bool canFire;
     public float timer;
     public float timeBetweenFiring;
 
-    public GameObject instantBullet;
-
-    public SpriteRenderer gun;
+    [SerializeField]
+    private float shakeDuration;
+    [SerializeField]
+    private float shakeAmplitude;
+    [SerializeField]
+    private float shakeFrequency;
 
     void Start() {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -34,6 +47,10 @@ public class PlayerAim : MonoBehaviour
         if (gun == null) {
             Debug.Log("PlayerAim gun is null! Reassigned.");
             gun = GetComponentInChildren<SpriteRenderer>();
+        }
+        if (shake == null) {
+            Debug.Log("CameraShake camShake is null! Reassigned.");
+            shake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
         }
 
         if (!canFire) {
@@ -57,7 +74,10 @@ public class PlayerAim : MonoBehaviour
             // Firing logic, if not on cooldown and mouse button pressed, fire
             if (Input.GetMouseButton(0) && canFire) {
                 canFire = false;
+                FindFirstObjectByType<AudioManager>().Play("PlayerBullet");
                 instantBullet = Instantiate(bullet, bulletSpawnPos.position, Quaternion.identity);
+                StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
+                //camShake.Shake(0.15f, 0.4f);
                 StartCoroutine(BulletDestroy(2, instantBullet));
             }
         } else {

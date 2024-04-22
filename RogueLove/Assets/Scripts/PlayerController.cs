@@ -250,5 +250,6 @@ public class PlayerController : MonoBehaviour
 
     public void DeathAnim() {
         animator.SetBool("Death", true);
+        FindFirstObjectByType<AudioManager>().Play("PlayerDeath");
     }
 }

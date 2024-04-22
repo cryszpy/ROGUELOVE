@@ -93,7 +93,7 @@ public class GameStateManager : MonoBehaviour
         // Stages 1, 2, 5, 7, and 8 have 3 randomly-generated levels
         if (GetStage() is 1 or 2 or 5 or 7 or 8) {
             // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
-            if (GetLevel() == 3) {
+            if (GetLevel() == 5) {
                 SetStage(GetStage() + 1);
                 SetLevel(1);
                 // Load level
@@ -109,7 +109,7 @@ public class GameStateManager : MonoBehaviour
         // All other stages have 4 randomly-generated levels
         else {
             // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
-            if (GetLevel() == 4) {
+            if (GetLevel() == 6) {
                 SetStage(GetStage() + 1);
                 SetLevel(1);
                 // Load level

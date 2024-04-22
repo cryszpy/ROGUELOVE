@@ -46,14 +46,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 0}
+  shake: {fileID: 0}
   mousePos: {x: 0, y: 0, z: 0}
   bullet: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
   bulletSpawnPos: {fileID: 4777194430705029824}
-  canFire: 1
-  timer: 0
-  timeBetweenFiring: 0.5
   instantBullet: {fileID: 0}
   gun: {fileID: 8252455337123977837}
+  canFire: 1
+  timer: 0
+  timeBetweenFiring: 0.3
+  shakeDuration: 0.05
+  shakeAmplitude: 0.3
+  shakeFrequency: 0.4
 --- !u!1 &7808749482456848566
 GameObject:
   m_ObjectHideFlags: 0

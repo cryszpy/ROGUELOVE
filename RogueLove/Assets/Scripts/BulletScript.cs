@@ -41,7 +41,6 @@ public class BulletScript : MonoBehaviour
             Debug.Log("BulletScript animator is null! Reassigned.");
             animator = GetComponent<Animator>();
         }
-
         if (rb == null) {
             Debug.Log("BulletScript rb is null! Reassigned.");
             rb = GetComponent<Rigidbody2D>();

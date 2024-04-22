@@ -95,6 +95,8 @@ public class WalkerGenerator : MonoBehaviour
     [SerializeField]
     private float spawnRadiusY;
 
+    private bool doorwaySpawned;
+
     [Space(10)]
     [Header("ENTITIES")]
 
@@ -482,11 +484,10 @@ public class WalkerGenerator : MonoBehaviour
 
     // Spawns doorway to next level after level cleared
     private void SpawnDoorway() {
+        doorwaySpawned = false;
 
+        //while (doorwaySpawned == false) {
         for (int i = gridHandler.GetLength(0); i <= gridHandler.GetLength(0) && i >= 0; i--) {
-            //Debug.Log(i);
-
-            //int rand = UnityEngine.Random.Range(0, tileListY.Count);
 
             // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
             if ((tilemap.GetSprite(new Vector3Int(i, (int)Mathf.Round(mapHeight/2))) == tiles.wallRight)
@@ -496,6 +497,7 @@ public class WalkerGenerator : MonoBehaviour
                 // Spawns doorway
                 if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
                     door.Create(tiles.doorwayObject, new Vector3((i * 0.16f) + 0.08f, ((int)Mathf.Round(mapHeight/2) * 0.16f) + 0.08f), Quaternion.identity, player);
+                    doorwaySpawned = true;
                     break;
                 } else {
                     Debug.LogError("Could not find Doorway component of door while spawning!");
@@ -509,6 +511,7 @@ public class WalkerGenerator : MonoBehaviour
                 rand = GetRandomTile();
             } */
         }
+        //}
     }
 
     // SPAWN ENEMIES
