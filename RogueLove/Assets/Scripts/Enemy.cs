@@ -43,8 +43,7 @@ public abstract class Enemy : MonoBehaviour
     public Collider2D contactColl;
 
     // This enemy's Rigidbody component
-    [SerializeField]
-    protected Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     [SerializeField]
     private Collider2D hitbox;
@@ -52,6 +51,9 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField]
     // Enemy health bar
     private HealthBar healthBar;
+
+    [SerializeField]
+    private GameObject expOrb;
 
     [Space(10)]
     [Header("ENEMY STATS")]
@@ -97,6 +99,10 @@ public abstract class Enemy : MonoBehaviour
 
     public bool seen;
 
+    public bool kbEd;
+
+    protected bool expSpawn;
+
     // Start is called before the first frame update
     public virtual void Start()
     {
@@ -121,6 +127,7 @@ public abstract class Enemy : MonoBehaviour
 
             attackAnim = false;
             seen = false;
+            expSpawn = false;
 
             if (enemyType != EnemyType.STATIONARY) {
                 if (seeker == null) {
@@ -129,6 +136,7 @@ public abstract class Enemy : MonoBehaviour
                 }
                 canWander = true;
                 waiting = false;
+                kbEd = false;
 
                 InvokeRepeating(nameof(UpdatePath), 0f, .5f);
             }
@@ -216,33 +224,34 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void DirectionFacing() {
-        
-        // Sprite direction facing
-        if (rb.velocity.x >= 0.001f) {
+        if (!kbEd) {
+            // Sprite direction facing
+            if (rb.velocity.x >= 0.001f) {
 
-            this.transform.localScale = new Vector3(1f, 1f, 1f);
-            animator.SetBool("IsMoving", true);
+                this.transform.localScale = new Vector3(1f, 1f, 1f);
+                animator.SetBool("IsMoving", true);
 
-        } else if (rb.velocity.x <= -0.001f) {
+            } else if (rb.velocity.x <= -0.001f) {
 
-            this.transform.localScale = new Vector3(-1f, 1f, 1f);
-            animator.SetBool("IsMoving", true);
+                this.transform.localScale = new Vector3(-1f, 1f, 1f);
+                animator.SetBool("IsMoving", true);
 
-        } else if (rb.velocity.y <= -0.001 || rb.velocity.y >= 0.001) {
-            animator.SetBool("IsMoving", true);
-        } else {
-            animator.SetBool("IsMoving", false);
-        }
+            } else if (rb.velocity.y <= -0.001 || rb.velocity.y >= 0.001) {
+                animator.SetBool("IsMoving", true);
+            } else {
+                animator.SetBool("IsMoving", false);
+            }
 
-        // Make health bar face the same way regardless of enemy sprite
-        if (this.transform.localScale == new Vector3(1f, 1f, 1f)) {
+            // Make health bar face the same way regardless of enemy sprite
+            if (this.transform.localScale == new Vector3(1f, 1f, 1f)) {
 
-            healthBar.transform.localScale = new Vector3(1f, 1f, 1f);
+                healthBar.transform.localScale = new Vector3(1f, 1f, 1f);
 
-        } else if (this.transform.localScale == new Vector3(-1f, 1f, 1f)) {
+            } else if (this.transform.localScale == new Vector3(-1f, 1f, 1f)) {
 
-            healthBar.transform.localScale = new Vector3(-1f, 1f, 1f);
+                healthBar.transform.localScale = new Vector3(-1f, 1f, 1f);
 
+            }
         }
     }
 
@@ -376,10 +385,11 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
-    public void EnemyDeath() {
+    public virtual void EnemyDeath() {
         force = 0 * Time.deltaTime * direction;
         hitbox.enabled = false;
         enemyType = EnemyType.DEAD;
+        Create(expOrb, this.transform.position, Quaternion.identity, this.map);
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
         //canWander = false;
@@ -389,7 +399,8 @@ public abstract class Enemy : MonoBehaviour
         //Destroy(gameObject);
     }
 
-    public void RemoveEnemy() {
+    public virtual void RemoveEnemy() {
+        Create(expOrb, this.transform.position, Quaternion.identity, this.map);
         Destroy(gameObject);
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());

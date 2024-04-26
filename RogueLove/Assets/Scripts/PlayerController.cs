@@ -41,6 +41,9 @@ public class PlayerController : MonoBehaviour
     
     private VolumeProfile volumeProfile;
 
+    [SerializeField]
+    private CameraShake shake;
+
     [Space(10)]
     [Header("STATS")]
 
@@ -65,8 +68,23 @@ public class PlayerController : MonoBehaviour
         return moveSpeed;
     }
 
+    public static float experience;
+    public static void SetExperience(float exp) {
+        experience = exp;
+    }
+    public static float GetExperience() {
+        return experience;
+    }
+
     [SerializeField]
     private float collisionOffset = 0.01f;
+
+    [SerializeField]
+    private float shakeDuration;
+    [SerializeField]
+    private float shakeAmplitude;
+    [SerializeField]
+    private float shakeFrequency;
 
     public float Health {
         set {
@@ -105,6 +123,10 @@ public class PlayerController : MonoBehaviour
             volumeProfile = FindAnyObjectByType<Volume>().sharedProfile;
             Debug.Log("VolumeProfile volumeProfile is null! Reassigned.");
         }
+        if (shake == null) {
+            Debug.Log("CameraShake camShake is null! Reassigned.");
+            shake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
+        }
 
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
         iFrame = false;
@@ -133,6 +155,7 @@ public class PlayerController : MonoBehaviour
             GameStateManager.SetSave(false);
             SetMaxPlayerHealth(20f);
             Health = maxHealth;
+            SetExperience(0f);
             SetMoveSpeed(1.0f);
         }
 
@@ -169,6 +192,7 @@ public class PlayerController : MonoBehaviour
                 spriteRenderer.flipX = false;
             }
         }
+        //Debug.Log(GetExperience());
     }
 
     private bool TryMove(Vector2 direction) {
@@ -206,6 +230,7 @@ public class PlayerController : MonoBehaviour
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && iFrame == false) {
             iFrame = true;
             StartCoroutine(SetHurtFlash(true));
+            StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
             Health -= damage;
             healthBar.SetHealth(currentHealth);
             Debug.Log("Player took damage!");
@@ -242,6 +267,9 @@ public class PlayerController : MonoBehaviour
         Health = data.playerHealth;
         //Debug.Log("LOAD PLAYER CURRENT HEALTH: " + data.playerHealth);
         healthBar.SetHealth(Health);
+
+        // Load experience level
+        SetExperience(data.experienceLevel);
 
         // Set speeds
         SetMoveSpeed(data.playerMoveSpeed);

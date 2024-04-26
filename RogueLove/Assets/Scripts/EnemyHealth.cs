@@ -9,6 +9,9 @@ public class EnemyHealth : MonoBehaviour
     // Animator component
     public Animator animator;
 
+    [SerializeField]
+    private Enemy parent;
+
     // Health bar
     public HealthBar healthBar;
 
@@ -20,6 +23,9 @@ public class EnemyHealth : MonoBehaviour
 
     // Enemy maximum health
     public float maxHealth;
+
+    [SerializeField]
+    private float knockback;
 
     public float Health {
         set {
@@ -52,13 +58,24 @@ public class EnemyHealth : MonoBehaviour
         animator.SetBool("Hurt", false);
     }
 
-    public void TakeDamage(float damage) {
+    public void TakeDamage(float damage, Vector3 direction) {
         Health -= damage;
         Debug.Log("Took this amount of damage: " + damage);
         healthBar.SetHealth(currentHealth);
-
         animator.SetBool("Hurt", true);
+        parent.kbEd = true;
+        StopAllCoroutines();
+        parent.rb.velocity = Vector3.zero;
+        parent.rb.AddForce(direction.normalized * knockback, ForceMode2D.Impulse);
+        StartCoroutine(EnemyKnockback(parent.rb));
+        //Debug.Log("ADDED FORCE");
+    }
 
+    IEnumerator EnemyKnockback(Rigidbody2D rigidBody) {
+        parent.kbEd = true;
+        yield return new WaitForSeconds(0.15f);
+        rigidBody.velocity = Vector3.zero;
+        parent.kbEd = false;
     }
 
     public void Death() {

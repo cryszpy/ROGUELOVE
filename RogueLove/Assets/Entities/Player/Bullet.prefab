@@ -108,6 +108,7 @@ MonoBehaviour:
   coll: {fileID: 5490067005516740771}
   force: 5
   damage: 3
+  accuracy: 0.6
 --- !u!50 &6018900055118431996
 Rigidbody2D:
   serializedVersion: 4
@@ -172,8 +173,8 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.53, y: 0.53}
-    oldSize: {x: 0.16, y: 0.16}
+    pivot: {x: 0.465, y: 0.485}
+    oldSize: {x: 0.16, y: 0.32}
     newSize: {x: 0.068, y: 0.059}
     adaptiveTilingThreshold: 0.5
     drawMode: 0

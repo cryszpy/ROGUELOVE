@@ -30,6 +30,9 @@ public class BulletScript : MonoBehaviour
 
     public float damage;
 
+    [SerializeField]
+    private float accuracy;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -47,10 +50,15 @@ public class BulletScript : MonoBehaviour
         }
 
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        // Direction of the bullet
         direction = mousePos - transform.position;
+       
         Vector3 rotation =  transform.position - mousePos;
 
-        rb.velocity = new Vector2(direction.x, direction.y).normalized * force;
+        Vector2 error = UnityEngine.Random.insideUnitCircle * accuracy;
+
+        rb.velocity = new Vector2(direction.x, direction.y).normalized * force + new Vector2(error.x, error.y);
+        // Rotation of the bullet (which way it is facing, NOT which direction its moving in)
         float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
     }
@@ -66,7 +74,7 @@ public class BulletScript : MonoBehaviour
             if (other != null) {
                             
                 if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
-                    enemy.TakeDamage(damage);
+                    enemy.TakeDamage(damage, direction);
                 }
             }
         }
