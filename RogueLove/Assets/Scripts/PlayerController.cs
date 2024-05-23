@@ -137,7 +137,7 @@ public class PlayerController : MonoBehaviour
 
         // Load player info from saved game
         if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            GameStateManager.SetSave(false);
+            //GameStateManager.SetSave(false);
 
             LoadPlayer();
             //Debug.Log("Loaded player from save");

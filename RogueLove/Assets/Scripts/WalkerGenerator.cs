@@ -163,10 +163,15 @@ public class WalkerGenerator : MonoBehaviour
 
         pathMap = Application.persistentDataPath + "/map.chris";
 
-        if (File.Exists(pathMap) && GameStateManager.SavePressed() == true) {
+        // If save files exist, and the player clicked SAVE SLOT button
+        if (File.Exists(pathMap) && GameStateManager.SavePressed()) {
+            Debug.Log(GameStateManager.SavePressed());
+            Debug.Log("SAVE EXISTS WHAIOGFJAWIOFJIAWFL");
             loadFromSave = true;
             //GameStateManager.SetSave(false);
         } else {
+            Debug.Log("BRUH YOU DIE");
+            Debug.Log(GameStateManager.SavePressed());
             loadFromSave = false;
             GameStateManager.SetSave(false);
         }
@@ -472,7 +477,7 @@ public class WalkerGenerator : MonoBehaviour
 
                 // Spawns Player
                 //player.SetActive(true);
-                player.transform.position = new Vector2((tileListX[i] * 0.16f) + 0.08f, (tileListY[randP] * 0.16f) + 0.08f);
+                player.transform.position = new Vector2((tileListX[i] * 0.16f) + 0.08f, (tileListY[randP] * 0.16f) + 0.13f);
                 break;
 
             } else {
@@ -528,7 +533,7 @@ public class WalkerGenerator : MonoBehaviour
             for (int c = 0; c < commonEnemies.Length; c++) {
 
                 // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
-                int commonRange = UnityEngine.Random.Range(5, 8);
+                int commonRange = UnityEngine.Random.Range(3, 5);
 
                 // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
                 for (int s = 0; s < commonRange; s++) {
@@ -572,7 +577,7 @@ public class WalkerGenerator : MonoBehaviour
             for (int r = 0; r < rareEnemies.Length; r++) {
                 
                 // Generate random amount of rare enemies in level (e.g. 3 Deforestation Guy, 2 Nancy)
-                int rareRange = UnityEngine.Random.Range(3, 5);
+                int rareRange = UnityEngine.Random.Range(1, 3);
                 
                 // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
                 for (int s = 0; s < rareRange; s++) {
@@ -617,9 +622,9 @@ public class WalkerGenerator : MonoBehaviour
             for (int st = 0; st < stationEnemies.Length; st++) {
 
                 // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
-                int stationRange = UnityEngine.Random.Range(2, 4);
+                int stationRange = UnityEngine.Random.Range(1, 3);
 
-                // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
+                // For the amount of every different type of stationary enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
                 for (int s = 0; s < stationRange; s++) {
                     
                     // Generates random number to pick Enemy spawnpoint
@@ -650,7 +655,7 @@ public class WalkerGenerator : MonoBehaviour
 
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f + 0.27f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f + 0.12f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -661,7 +666,7 @@ public class WalkerGenerator : MonoBehaviour
 
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f - 0.12f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.08f, tileListY[rand] * 0.16f - 0.16f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -672,7 +677,7 @@ public class WalkerGenerator : MonoBehaviour
 
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f - 0.12f, tileListY[rand] * 0.16f + 0.08f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f - 0.16f, tileListY[rand] * 0.16f + 0.08f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -683,7 +688,7 @@ public class WalkerGenerator : MonoBehaviour
 
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.27f, tileListY[rand] * 0.16f + 0.24f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[rand] * 0.16f + 0.32f, tileListY[rand] * 0.16f + 0.24f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -747,6 +752,10 @@ public class WalkerGenerator : MonoBehaviour
     public int GetRandomTile() {
         int rand = UnityEngine.Random.Range(0, tileListY.Count);
         return rand;
+    }
+
+    public bool CheckGroundTile(Vector3 vector) {
+        return tilemap.GetSprite(new Vector3Int((int)vector.x, (int)vector.y, 0)) == tiles.ground;
     }
 
     // GENERATE PATHFINDING MAP

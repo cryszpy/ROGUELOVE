@@ -28,8 +28,7 @@ public abstract class Enemy : MonoBehaviour
     public Vector3 target;
 
     // This enemy's player transform reference;
-    [SerializeField]
-    protected Transform player;
+    public Transform player;
 
     // This enemy's pathfinder script
     [SerializeField]
@@ -90,18 +89,25 @@ public abstract class Enemy : MonoBehaviour
     protected Vector2 direction;
     protected int direc;
     protected Vector2 force;
+
+    [SerializeField]
     protected bool canWander;
     protected float wanderTimer = 0;
     protected float moveTime;
     protected float waitTime;
     protected float waitTimer = 0;
-    protected bool waiting;
+
+    protected bool timerSet = false;
+
+    protected bool tileGot = false;
 
     public bool seen;
 
     public bool kbEd;
 
     protected bool expSpawn;
+
+    public bool hitPlayer = false;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -135,7 +141,6 @@ public abstract class Enemy : MonoBehaviour
                     seeker = GetComponent<Seeker>();
                 }
                 canWander = true;
-                waiting = false;
                 kbEd = false;
 
                 InvokeRepeating(nameof(UpdatePath), 0f, .5f);
@@ -159,37 +164,34 @@ public abstract class Enemy : MonoBehaviour
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER 
         && GameStateManager.GetState() != GameStateManager.GAMESTATE.PAUSED) {
 
-            if (enemyType != EnemyType.DEAD) {
+            if (enemyType != EnemyType.DEAD && enemyType != EnemyType.STATIONARY) {
 
-                if (waiting) {
+                if (canWander && timerSet) {
+                    wanderTimer += Time.deltaTime;
+                    //Debug.Log("wanderTimer: " + wanderTimer);
+                    if(wanderTimer > moveTime) {
+                        //Debug.Log("Done With WanderTimer");
+                        canWander = false;
+                        tileGot = false;
+                        wanderTimer = 0;
+                    }
+                }
+                
+                if (!canWander) {
                     waitTimer += Time.deltaTime;
                     //Debug.Log("waitTimer: " + waitTimer);
                     if(waitTimer > waitTime) {
-                        waiting = false;
                         canWander = true;
+                        timerSet = false;
                         waitTimer = 0;
                     }
                 }
 
-                if (enemyType != EnemyType.STATIONARY) {
-                    if (canWander == false && !waiting) {
-                        wanderTimer += Time.deltaTime;
-                        //Debug.Log("wanderTimer: " + wanderTimer);
-                        if(wanderTimer > moveTime) {
-                            //Debug.Log("Done With WanderTimer");
-                            waiting = true;
-                            wanderTimer = 0;
-                        }
-                    }
-                    
-                    // Pathfinding
-                    Pathfinder();
+                // Pathfinding
+                Pathfinder();
 
-                    DirectionFacing();
-                }
-                
+                DirectionFacing();
             }
-
         }
     }
 
@@ -256,15 +258,37 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void PlayerCheck() {
+
+        if (!timerSet) {
+            // Sets the amount of time spent moving
+            moveTime = UnityEngine.Random.Range(3, 5);
+
+            // Sets a cooldown before wandering again
+            waitTime = UnityEngine.Random.Range(5, 7);
+            
+            timerSet = true;
+        }
+
         if (inFollowRadius == true) {
             seen = true;
             canWander = false;
             force = Vector2.zero;
             target = player.position;
             Chase();
-        } else if (inFollowRadius == false && canWander && !waiting) {
-            //Debug.Log("STARTED WANDERING");
-            canWander = false;
+        } else if (inFollowRadius == false && canWander) {
+
+            // Gets target tile
+            Vector3 randTile = GetWanderTile();
+
+            // If tile hasn't been checked for validity
+            if (!tileGot) {
+                tileGot = true;
+
+                // Set target to tile
+                target = randTile;
+            }
+
+            // Wander to tile
             Wander();
         }
     }
@@ -284,6 +308,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void Chase() {
+        Debug.Log("CHASING");
         // Sets direction and destination of path to Player
         force = chaseSpeed * Time.deltaTime * direction;
 
@@ -292,81 +317,33 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void Wander() {
-        //Debug.Log("Wandering");
-        canWander = false;
-        waiting = false;
+        Debug.Log("WANDERING");
+        
+        force = wanderSpeed * Time.deltaTime * direction;
 
-        StartCoroutine(Roam());
-        return;
+        rb.AddForce(force);
+
+        //StartCoroutine(Roam());
+        //return;
     }
 
-    // Wander logic
-    public virtual IEnumerator Roam() {
+    public virtual Vector3 GetWanderTile() {
+        // Picks a random tile within radius
+        float tileX = UnityEngine.Random.Range(this.transform.position.x - followCollider.radius, 
+            this.transform.position.y + followCollider.radius);
 
-        // Picks a random direction
-        direc = UnityEngine.Random.Range(0, 8);
+        float tileY = UnityEngine.Random.Range(this.transform.position.y - followCollider.radius, 
+            this.transform.position.y + followCollider.radius);
 
-        // Sets the amount of time spent moving
-        moveTime = UnityEngine.Random.Range(1, 3);
+        Vector3 tile = new Vector3(tileX, tileY);
 
-        // Sets a cooldown before wandering again
-        waitTime = UnityEngine.Random.Range(2, 5);
-
-        switch (direc) {
-            case 0:
-                force = wanderSpeed * Time.deltaTime * Vector2.up;
-                yield return null;
-                break;
-            case 1:
-                force = wanderSpeed * Time.deltaTime * Vector2.down;
-                yield return null;
-                break;
-            case 2:
-                force = wanderSpeed * Time.deltaTime * Vector2.right;
-                yield return null;
-                break;
-            case 3:
-                force = wanderSpeed * Time.deltaTime * Vector2.left;
-                yield return null;
-                break;
-            case 4:
-                force = wanderSpeed * Time.deltaTime * Vector2.zero;
-                yield return null;
-                break;
-            case 5:
-                force = wanderSpeed * Time.deltaTime * Vector2.up;
-                force += wanderSpeed * Time.deltaTime * Vector2.right;
-                yield return null;
-                break;
-            case 6:
-                force = wanderSpeed * Time.deltaTime * Vector2.up;
-                force += wanderSpeed * Time.deltaTime * Vector2.left;
-                yield return null;
-                break;
-            case 7:
-                force = wanderSpeed * Time.deltaTime * Vector2.down;
-                force += wanderSpeed * Time.deltaTime * Vector2.right;
-                yield return null;
-                break;
-            case 8:
-                force = wanderSpeed * Time.deltaTime * Vector2.down;
-                force += wanderSpeed * Time.deltaTime * Vector2.left;
-                yield return null;
-                break;
-            default:
-                direc = UnityEngine.Random.Range(0, 4);
-                yield return null;
-                break;
+        if (map.CheckGroundTile(tile)) {
+            return tile;
+        } else {
+            GetWanderTile();
         }
-        //Debug.Log("Set Direction");
-        while (canWander == false && !waiting && !inFollowRadius) {
-            //Debug.Log("IN THE LOOP");
 
-            // Moves in the set direction for wandering
-            rb.AddForce(force);
-            yield return null;
-        }
-        yield return null;
+        return Vector3.zero;
     }
 
     public virtual IEnumerator AttackEntity(Collider2D target) {

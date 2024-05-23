@@ -10,8 +10,6 @@ public class EnemyAim : PlayerAim
 
     private Vector3 direction;
 
-    private bool hitPlayer = false;
-
     void Start() {
         canFire = false;
     }
@@ -21,16 +19,18 @@ public class EnemyAim : PlayerAim
         && GameStateManager.GetState() != GameStateManager.GAMESTATE.PAUSED) {
 
             // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot
-            direction = parent.target - transform.position;
+            direction = parent.player.position - transform.position;
             //Debug.DrawRay(transform.position, direction, Color.cyan, 10);
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 100f, LayerMask.GetMask("Player", "Collisions/Ground", "Collisions/Obstacles"));
 
             if (hit.collider != null && hit.collider.gameObject.CompareTag("Player")) {
-                Debug.DrawRay(transform.position, direction, Color.red, 10);
-                hitPlayer = true;
+                Debug.DrawRay(transform.position, direction, Color.red, 0);
+                parent.hitPlayer = true;
+                parent.seen = true;
+                
             } else {
-                hitPlayer = false;
+                parent.hitPlayer = false;
             }
 
             // Firing cooldown timer
@@ -46,7 +46,7 @@ public class EnemyAim : PlayerAim
             && parent.enemyType != Enemy.EnemyType.DEAD) {
 
                 // Firing logic, if not on cooldown and player in range, fire
-                if (canFire && parent.inFollowRadius && hitPlayer && parent.seen) {
+                if (canFire && parent.inFollowRadius && parent.hitPlayer && parent.seen) {
                     parent.animator.SetBool("Attack", true);
                     canFire = false;
                     parent.attackCooldown = UnityEngine.Random.Range(parent.rangedAttackCooldownMin, parent.rangedAttackCooldownMax);

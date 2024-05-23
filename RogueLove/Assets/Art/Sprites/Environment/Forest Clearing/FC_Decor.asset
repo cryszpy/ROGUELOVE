@@ -12,37 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d1514134bc4fbd41bb739b1b9a49231, type: 3}
   m_Name: FC_Decor
   m_EditorClassIdentifier: 
-  m_DefaultSprite: {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
+  m_DefaultSprite: {fileID: -2100054044, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
   m_DefaultGameObject: {fileID: 0}
   m_DefaultColliderType: 1
   m_TilingRules:
   - m_Id: 0
     m_Sprites:
     - {fileID: 21300000, guid: b542da5a5eb5849d8a6075218c241f18, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: -2100054044, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 1945562567, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: -1969580837, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: -1131052506, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 743161799, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: -2100054044, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: -1948284317, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 1945562567, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: -2112892514, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: 721615828, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
-    - {fileID: -1413138981, guid: 81012b89ee55047e783a2b9a2bebce1d, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 721615828, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: -1413138981, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: -1131052506, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 743161799, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: -1969580837, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: -2100054044, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: -1948284317, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: 1945562567, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+    - {fileID: -2112892514, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
     m_GameObject: {fileID: 0}
     m_MinAnimationSpeed: 1
     m_MaxAnimationSpeed: 1

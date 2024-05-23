@@ -16,88 +16,50 @@ public class RangedEnemy : Enemy
 
     public override void PlayerCheck() {
 
-        if (inFollowRadius == true && !waiting && canWander) {
-            seen = true;
-            canWander = false;
+        if (!timerSet) {
+            // Sets the amount of time spent moving
+            moveTime = UnityEngine.Random.Range(3, 5);
+
+            // Sets a cooldown before wandering again
+            waitTime = UnityEngine.Random.Range(5, 7);
+            
+            timerSet = true;
+        }
+
+        // If player is not in follow radius and enemy has seen, move towards player
+        if (inFollowRadius != true && seen) {
+            Debug.Log(1);
             target = player.position;
-            Wander();
-        } else if (inFollowRadius == false && canWander && !waiting && seen) {
+
+            Chase();
+        } 
+        // If player is in follow radius and enemy has seen but something is blocking, move towards player
+        else if (inFollowRadius == true && seen && !hitPlayer) {
+            Debug.Log(2);
             target = player.position;
-            //Debug.Log("STARTED WANDERING");
-            //canWander = false;
+
             Chase();
         }
-    }
+        // If player has not been spotted, wander around
+        else if (!seen && canWander) {
+            Debug.Log(3);
 
-    // Wander logic
-    public override IEnumerator Roam() {
+            // Gets target tile
+            Vector3 randTile = GetWanderTile();
+            
+            
+            // If target hasn't been set
+            if (!tileGot) {
+                tileGot = true;
 
-        // Picks a random direction
-        direc = UnityEngine.Random.Range(0, 8);
+                // Set target to tile
+                target = randTile;
+            }
+            Debug.Log(target);
 
-        // Sets the amount of time spent moving
-        moveTime = UnityEngine.Random.Range(2, 5);
-        //Debug.Log(moveTime);
-
-        // Sets a cooldown before wandering again
-        waitTime = UnityEngine.Random.Range(3, 6);
-        //Debug.Log(waitTime);
-
-        switch (direc) {
-            case 0:
-                force = wanderSpeed * Time.deltaTime * Vector2.up;
-                yield return null;
-                break;
-            case 1:
-                force = wanderSpeed * Time.deltaTime * Vector2.down;
-                yield return null;
-                break;
-            case 2:
-                force = wanderSpeed * Time.deltaTime * Vector2.right;
-                yield return null;
-                break;
-            case 3:
-                force = wanderSpeed * Time.deltaTime * Vector2.left;
-                yield return null;
-                break;
-            case 4:
-                force = wanderSpeed * Time.deltaTime * Vector2.zero;
-                yield return null;
-                break;
-            case 5:
-                force = wanderSpeed * Time.deltaTime * Vector2.up;
-                force += wanderSpeed * Time.deltaTime * Vector2.right;
-                yield return null;
-                break;
-            case 6:
-                force = wanderSpeed * Time.deltaTime * Vector2.up;
-                force += wanderSpeed * Time.deltaTime * Vector2.left;
-                yield return null;
-                break;
-            case 7:
-                force = wanderSpeed * Time.deltaTime * Vector2.down;
-                force += wanderSpeed * Time.deltaTime * Vector2.right;
-                yield return null;
-                break;
-            case 8:
-                force = wanderSpeed * Time.deltaTime * Vector2.down;
-                force += wanderSpeed * Time.deltaTime * Vector2.left;
-                yield return null;
-                break;
-            default:
-                direc = UnityEngine.Random.Range(0, 4);
-                yield return null;
-                break;
+            // Wander to tile
+            Wander();
         }
-        //Debug.Log("Set Direction");
-        while (canWander == false && !waiting) {
-            //Debug.Log("IN THE LOOP");
-
-            // Moves in the set direction for wandering
-            rb.AddForce(force);
-            yield return null;
-        }
-        yield return null;
     }
 
     public override void DirectionFacing()

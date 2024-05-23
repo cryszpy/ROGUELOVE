@@ -49,10 +49,10 @@ MonoBehaviour:
   tiles: {fileID: 0}
   tilemap: {fileID: 0}
   oTilemap: {fileID: 0}
-  mapWidth: 27
-  mapHeight: 27
-  maxWalkers: 4
-  emptyChance: 45
+  mapWidth: 33
+  mapHeight: 33
+  maxWalkers: 8
+  emptyChance: 60
   tileCount: 0
   oTileCount: 0
   fillPercentage: 0.95
