@@ -39,6 +39,12 @@ public class TransitionManager : MonoBehaviour
         loadingBarEnable = condition;
     }
 
+    void Start() {
+        if (loadingBarEnable && GameStateManager.GetStage() == 0) {
+            SetLoadingBar(false);
+        }
+    }
+
     // Update is called once per frame
     void Update()
     {
@@ -50,7 +56,7 @@ public class TransitionManager : MonoBehaviour
             end = false;
             EndLoad();
         }
-        if (loadingBarEnable == true) {
+        if (loadingBarEnable) {
             loadingScreen.SetActive(true);
         } else {
             loadingScreen.SetActive(false);

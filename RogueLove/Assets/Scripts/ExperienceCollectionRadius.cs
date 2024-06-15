@@ -8,6 +8,10 @@ public class ExperienceCollectionRadius : EnemyFollowRadius
     {
         if (collider.CompareTag("Player")) {
             parent.RemoveEnemy();
+            if (collider.TryGetComponent<PlayerController>(out var player)) {
+                PlayerController.AddExperience(1);
+                player.energyBar.SetEnergy(PlayerController.GetExperience());
+            }
         }
     }
 }

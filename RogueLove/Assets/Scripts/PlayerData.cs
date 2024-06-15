@@ -21,6 +21,8 @@ public class PlayerData
 
     public float experienceLevel;
 
+    public float maxExperienceLevel;
+
     public PlayerData (PlayerController player, PlayerAim weapon) {
 
         if (weapon.bullet.TryGetComponent<BulletScript>(out var bull)) {
@@ -28,6 +30,7 @@ public class PlayerData
         }
 
         experienceLevel = PlayerController.GetExperience();
+        maxExperienceLevel = PlayerController.GetMaxEnergy();
 
         playerHealth = player.Health;
         playerMaxHealth = PlayerController.GetMaxPlayerHealth();

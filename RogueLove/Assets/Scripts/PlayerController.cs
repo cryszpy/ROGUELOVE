@@ -37,6 +37,9 @@ public class PlayerController : MonoBehaviour
     // Health Bar reference
     public HealthBar healthBar;
 
+    // Energy Bar reference
+    public EnergyBar energyBar;
+
     readonly List<RaycastHit2D> castCollisions = new();
     
     private VolumeProfile volumeProfile;
@@ -68,9 +71,21 @@ public class PlayerController : MonoBehaviour
         return moveSpeed;
     }
 
+    // Player max energy
+    public static float maxEnergy;
+    public static void SetMaxEnergy(float num) {
+        maxEnergy = num;
+    }
+    public static float GetMaxEnergy() {
+        return maxEnergy;
+    }
+
     public static float experience;
     public static void SetExperience(float exp) {
         experience = exp;
+    }
+    public static void AddExperience(float exp) {
+        experience += exp;
     }
     public static float GetExperience() {
         return experience;
@@ -129,6 +144,10 @@ public class PlayerController : MonoBehaviour
         }
 
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
+        if (energyBar == null) {
+            energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
+            Debug.Log("EnergyBar energy bar is null! Reassigned.");
+        }
         iFrame = false;
 
         string pathPlayer = Application.persistentDataPath + "/player.franny";
@@ -153,16 +172,17 @@ public class PlayerController : MonoBehaviour
         // Save data does not exist and player did not click load save --> most likely started new game
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
             GameStateManager.SetSave(false);
-            SetMaxPlayerHealth(20f);
+            SetMaxPlayerHealth(6f);
             Health = maxHealth;
+            SetMaxEnergy(20f);
             SetExperience(0f);
             SetMoveSpeed(1.0f);
         }
 
         healthBar.SetMaxHealth(maxHealth);
         healthBar.SetHealth(Health);
-        //Debug.Log("MAX HEALTH " + maxHealth);
-        //Debug.Log("HEALTH " + Health);
+        energyBar.SetMaxEnergy(maxEnergy);
+        energyBar.SetEnergy(0f);
     }
     
     private void Update() {
@@ -269,7 +289,10 @@ public class PlayerController : MonoBehaviour
         healthBar.SetHealth(Health);
 
         // Load experience level
+        SetMaxEnergy(data.maxExperienceLevel);
         SetExperience(data.experienceLevel);
+        energyBar.SetMaxEnergy(data.maxExperienceLevel);
+        energyBar.SetEnergy(data.experienceLevel);
 
         // Set speeds
         SetMoveSpeed(data.playerMoveSpeed);

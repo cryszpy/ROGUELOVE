@@ -36,9 +36,6 @@ public class ExperienceOrb : ContactEnemy
     }
 
     public override void RemoveEnemy() {
-        PlayerController.SetExperience(PlayerController.GetExperience() + 1);
         Destroy(gameObject);
-        //WalkerGenerator.SetDeadEnemy();
-        //Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
     }
 }

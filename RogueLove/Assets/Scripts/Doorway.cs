@@ -8,7 +8,7 @@ public class Doorway : MonoBehaviour
     [SerializeField]
     private CinemachineVirtualCamera cam;
     
-    public Transform playerPos;
+    public Transform cameraLookAt;
 
     // Start is called before the first frame update
     void Start()
@@ -27,14 +27,14 @@ public class Doorway : MonoBehaviour
     private IEnumerator CameraSway() {
         cam.Follow = this.transform;
         yield return new WaitForSeconds(2);
-        cam.Follow = playerPos;
+        cam.Follow = cameraLookAt;
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject player) {
         GameObject door = Instantiate(original, position, rotation) as GameObject;
         
         if (door.TryGetComponent<Doorway>(out var doorway)) {
-            doorway.playerPos = player.transform;
+            doorway.cameraLookAt = player.transform;
             Debug.Log("Doorway Spawned!");
             return door;
         } else {

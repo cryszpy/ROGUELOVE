@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor.Experimental.GraphView;
 using UnityEngine;
 
 public class EnemyHealth : MonoBehaviour
@@ -65,16 +66,30 @@ public class EnemyHealth : MonoBehaviour
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
         StopAllCoroutines();
-        parent.rb.velocity = Vector3.zero;
-        parent.rb.AddForce(direction.normalized * knockback, ForceMode2D.Impulse);
-        StartCoroutine(EnemyKnockback(parent.rb));
-        //Debug.Log("ADDED FORCE");
+        if (Health <= 0) {
+            StartCoroutine(EnemyDeathKnockback(parent.rb, direction));
+        } else {
+            StartCoroutine(EnemyKnockback(parent.rb, direction));
+        }
     }
 
-    IEnumerator EnemyKnockback(Rigidbody2D rigidBody) {
+    IEnumerator EnemyKnockback(Rigidbody2D rigidBody, Vector3 dir) {
         parent.kbEd = true;
+        parent.rb.velocity = Vector3.zero;
+        parent.rb.AddForce(dir.normalized * knockback, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.15f);
         rigidBody.velocity = Vector3.zero;
+        yield return new WaitForSeconds(0.35f);
+        parent.kbEd = false;
+    }
+
+    IEnumerator EnemyDeathKnockback(Rigidbody2D rigidBody, Vector3 dir) {
+        parent.kbEd = true;
+        parent.rb.velocity = Vector3.zero;
+        parent.rb.AddForce(dir.normalized * (knockback * 3), ForceMode2D.Impulse);
+        yield return new WaitForSeconds(0.5f);
+        rigidBody.velocity = Vector3.zero;
+        yield return new WaitForSeconds(0.35f);
         parent.kbEd = false;
     }
 

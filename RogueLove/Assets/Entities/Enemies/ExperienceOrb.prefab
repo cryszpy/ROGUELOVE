@@ -49,7 +49,7 @@ MonoBehaviour:
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.6
   m_Color: {r: 0.7971698, g: 0.9671158, b: 1, a: 1}
-  m_Intensity: 1.2
+  m_Intensity: 1.5
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
   m_ApplyToSortingLayers: 00000000efcc8d3ee1bc6284
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.16
+  m_PointLightOuterRadius: 0.08
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -148,7 +148,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 8aeacb998c9d946d5b568d53b528a767, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -363,8 +363,10 @@ MonoBehaviour:
   attackCooldown: 0
   nextWaypointDistance: 3
   inFollowRadius: 0
+  canWander: 0
   seen: 0
   kbEd: 0
+  hitPlayer: 0
 --- !u!1 &5826619376852643059
 GameObject:
   m_ObjectHideFlags: 0

@@ -387,7 +387,7 @@ MonoBehaviour:
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
   maxHealth: 5
-  knockback: 30
+  knockback: 25
 --- !u!1 &3046133085571071947
 GameObject:
   m_ObjectHideFlags: 0

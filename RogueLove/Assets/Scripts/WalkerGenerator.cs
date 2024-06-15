@@ -101,8 +101,8 @@ public class WalkerGenerator : MonoBehaviour
     [Header("ENTITIES")]
 
     // Finds player
-    [SerializeField]
-    private GameObject player;
+    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject cameraLookAt;
     private PlayerController playerCont;
 
     // List of all common enemies in this level
@@ -141,7 +141,7 @@ public class WalkerGenerator : MonoBehaviour
 
     // Initializes grid to be generated (size)
     void Start() {
-        TransitionManager.SetLoadingBar(true);
+        //TransitionManager.SetLoadingBar(true);
         enemyTotal = 0;
         deadEnemies = 0;
         GameStateManager.SetLevelClear(false);
@@ -159,6 +159,9 @@ public class WalkerGenerator : MonoBehaviour
         if (player == null) {
             player = GameObject.FindGameObjectWithTag("Player");
             playerCont = player.GetComponent<PlayerController>();
+        }
+        if (cameraLookAt == null) {
+            cameraLookAt = GameObject.FindGameObjectWithTag("CameraLookAt");
         }
 
         pathMap = Application.persistentDataPath + "/map.chris";
@@ -477,7 +480,7 @@ public class WalkerGenerator : MonoBehaviour
 
                 // Spawns Player
                 //player.SetActive(true);
-                player.transform.position = new Vector2((tileListX[i] * 0.16f) + 0.08f, (tileListY[randP] * 0.16f) + 0.13f);
+                player.transform.position = new Vector2((tileListX[i] * 0.16f) + 0.08f, (tileListY[randP] * 0.16f) + 0.02f);
                 break;
 
             } else {
@@ -501,7 +504,7 @@ public class WalkerGenerator : MonoBehaviour
 
                 // Spawns doorway
                 if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
-                    door.Create(tiles.doorwayObject, new Vector3((i * 0.16f) + 0.08f, ((int)Mathf.Round(mapHeight/2) * 0.16f) + 0.08f), Quaternion.identity, player);
+                    door.Create(tiles.doorwayObject, new Vector3((i * 0.16f) + 0.08f, ((int)Mathf.Round(mapHeight/2) * 0.16f) + 0.08f), Quaternion.identity, cameraLookAt);
                     doorwaySpawned = true;
                     break;
                 } else {
@@ -774,7 +777,7 @@ public class WalkerGenerator : MonoBehaviour
         gg.center = new Vector3(radiusX, radiusY, 0);
 
         AstarPath.active.Scan();
-        //Debug.Log("Scanned!");
+        Debug.Log("Scanned!");
     }
 
     public void SaveMap () {

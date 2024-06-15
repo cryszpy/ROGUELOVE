@@ -43,7 +43,7 @@ public class EnemyAim : PlayerAim
             }
 
             if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER
-            && parent.enemyType != Enemy.EnemyType.DEAD) {
+            && parent.enemyType != Enemy.EnemyType.DEAD && !parent.kbEd) {
 
                 // Firing logic, if not on cooldown and player in range, fire
                 if (canFire && parent.inFollowRadius && parent.hitPlayer && parent.seen) {

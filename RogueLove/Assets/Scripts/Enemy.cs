@@ -269,27 +269,34 @@ public abstract class Enemy : MonoBehaviour
             timerSet = true;
         }
 
-        if (inFollowRadius == true) {
-            seen = true;
-            canWander = false;
-            force = Vector2.zero;
-            target = player.position;
-            Chase();
-        } else if (inFollowRadius == false && canWander) {
+        // If enemy is not currently taking knockback
+        if (!kbEd) {
 
-            // Gets target tile
-            Vector3 randTile = GetWanderTile();
+            // If player is in follow radius then chase
+            if (inFollowRadius == true) {
+                seen = true;
+                canWander = false;
+                force = Vector2.zero;
+                target = player.position;
+                Chase();
+            } 
+            // If player is not in follow radius, and wander cooldown is reset, then wander
+            else if (inFollowRadius == false && canWander) {
 
-            // If tile hasn't been checked for validity
-            if (!tileGot) {
-                tileGot = true;
+                // Gets target tile
+                Vector3 randTile = GetWanderTile();
 
-                // Set target to tile
-                target = randTile;
+                // If tile hasn't been checked for validity
+                if (!tileGot) {
+                    tileGot = true;
+
+                    // Set target to tile
+                    target = randTile;
+                }
+
+                // Wander to tile
+                Wander();
             }
-
-            // Wander to tile
-            Wander();
         }
     }
 

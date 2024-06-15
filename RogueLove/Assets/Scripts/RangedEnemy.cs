@@ -26,39 +26,43 @@ public class RangedEnemy : Enemy
             timerSet = true;
         }
 
-        // If player is not in follow radius and enemy has seen, move towards player
-        if (inFollowRadius != true && seen) {
-            Debug.Log(1);
-            target = player.position;
-
-            Chase();
-        } 
-        // If player is in follow radius and enemy has seen but something is blocking, move towards player
-        else if (inFollowRadius == true && seen && !hitPlayer) {
-            Debug.Log(2);
-            target = player.position;
-
-            Chase();
-        }
-        // If player has not been spotted, wander around
-        else if (!seen && canWander) {
-            Debug.Log(3);
-
-            // Gets target tile
-            Vector3 randTile = GetWanderTile();
+        // If enemy is not currently taking knockback
+        if (!kbEd) {
             
-            
-            // If target hasn't been set
-            if (!tileGot) {
-                tileGot = true;
+            // If player is not in follow radius and enemy has seen, move towards player
+            if (inFollowRadius != true && seen) {
+                Debug.Log(1);
+                target = player.position;
 
-                // Set target to tile
-                target = randTile;
+                Chase();
+            } 
+            // If player is in follow radius and enemy has seen but something is blocking, move towards player
+            else if (inFollowRadius == true && seen && !hitPlayer) {
+                Debug.Log(2);
+                target = player.position;
+
+                Chase();
             }
-            Debug.Log(target);
+            // If player has not been spotted, wander around
+            else if (!seen && canWander) {
+                Debug.Log(3);
 
-            // Wander to tile
-            Wander();
+                // Gets target tile
+                Vector3 randTile = GetWanderTile();
+                
+                
+                // If target hasn't been set
+                if (!tileGot) {
+                    tileGot = true;
+
+                    // Set target to tile
+                    target = randTile;
+                }
+                Debug.Log(target);
+
+                // Wander to tile
+                Wander();
+            }
         }
     }
 
