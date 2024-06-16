@@ -31,21 +31,18 @@ public class RangedEnemy : Enemy
             
             // If player is not in follow radius and enemy has seen, move towards player
             if (inFollowRadius != true && seen) {
-                Debug.Log(1);
                 target = player.position;
 
                 Chase();
             } 
             // If player is in follow radius and enemy has seen but something is blocking, move towards player
             else if (inFollowRadius == true && seen && !hitPlayer) {
-                Debug.Log(2);
                 target = player.position;
 
                 Chase();
             }
             // If player has not been spotted, wander around
             else if (!seen && canWander) {
-                Debug.Log(3);
 
                 // Gets target tile
                 Vector3 randTile = GetWanderTile();
@@ -58,7 +55,6 @@ public class RangedEnemy : Enemy
                     // Set target to tile
                     target = randTile;
                 }
-                Debug.Log(target);
 
                 // Wander to tile
                 Wander();

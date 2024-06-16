@@ -143,20 +143,17 @@ public class PlayerController : MonoBehaviour
             shake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
         }
 
+        // Set health bar and energy bar references on each stage load
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
-        if (energyBar == null) {
-            energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
-            Debug.Log("EnergyBar energy bar is null! Reassigned.");
-        }
+        energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
+
         iFrame = false;
 
         string pathPlayer = Application.persistentDataPath + "/player.franny";
-        //Debug.Log(File.Exists(pathPlayer));
-        //Debug.Log(GameStateManager.SavePressed());
 
         // Load player info from saved game
         if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            //GameStateManager.SetSave(false);
+            GameStateManager.SetSave(false);
 
             LoadPlayer();
             //Debug.Log("Loaded player from save");
@@ -167,7 +164,7 @@ public class PlayerController : MonoBehaviour
         } 
         // Save data does not exist, and player clicked load save somehow
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            Debug.LogError("Save data not found while trying to load save. How did you get here?");
+            Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
         } 
         // Save data does not exist and player did not click load save --> most likely started new game
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
@@ -280,12 +277,10 @@ public class PlayerController : MonoBehaviour
         PlayerData data = SaveSystem.LoadPlayer();
 
         SetMaxPlayerHealth(data.playerMaxHealth);
-        //Debug.Log("LOAD PLAYER MAX HEALTH: " + data.playerMaxHealth);
         healthBar.SetMaxHealth(maxHealth);
 
         // Set health
         Health = data.playerHealth;
-        //Debug.Log("LOAD PLAYER CURRENT HEALTH: " + data.playerHealth);
         healthBar.SetHealth(Health);
 
         // Load experience level

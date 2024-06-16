@@ -1980,6 +1980,10 @@ PrefabInstance:
       propertyPath: m_AnchoredPosition.x
       value: -1920
       objectReference: {fileID: 0}
+    - target: {fileID: 5789413920774883767, guid: 0cbaa71b31c4f4293a0770c492b393fe, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6511775683658123225, guid: 0cbaa71b31c4f4293a0770c492b393fe, type: 3}
       propertyPath: m_Name
       value: TransitionManager

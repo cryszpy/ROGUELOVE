@@ -40,8 +40,8 @@ public class MainMenu : MonoBehaviour
     }
 
     public void PlayButton() {
-        Debug.Log("current level: " + GameStateManager.GetLevel());
-        Debug.Log("current stage: " + GameStateManager.GetStage());
+        //Debug.Log("current level: " + GameStateManager.GetLevel());
+        //Debug.Log("current stage: " + GameStateManager.GetStage());
 
         String pathMap = Application.persistentDataPath + "/map.chris";
         String pathPlayer = Application.persistentDataPath + "/player.franny";
@@ -57,6 +57,7 @@ public class MainMenu : MonoBehaviour
         } 
         // START NEW GAME
         else {
+            GameStateManager.SetSave(false);
             GameStateManager.SetLevel(1);
             GameStateManager.SetStage(1);
             // Load level
@@ -68,7 +69,6 @@ public class MainMenu : MonoBehaviour
         GameStateManager.SetSave(true);
         // Load level
         TransitionManager.StartLeaf(GameStateManager.GetStage());
-        
     }
 
     public void QuitButton() {

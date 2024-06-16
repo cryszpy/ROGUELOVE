@@ -39,6 +39,9 @@ public class GameStateManager : MonoBehaviour
     public static void SetLevel(int level) {
         currentLevel = level;
     }
+    public static void IncrementLevel(int level) {
+        currentLevel += level;
+    }
     public static int GetLevel() {
         return currentLevel;
     }
@@ -101,7 +104,8 @@ public class GameStateManager : MonoBehaviour
             } 
             // Else, increment level and generate new level
             else {
-                SetLevel(GetLevel() + 1);
+                IncrementLevel(1);
+                Debug.Log("INCREMENTED");
                 // Load level
                 TransitionManager.StartLeaf(GetStage());
             }
@@ -117,7 +121,8 @@ public class GameStateManager : MonoBehaviour
             } 
             // Else, increment level and generate new level
             else {
-                SetLevel(GetLevel() + 1);
+                IncrementLevel(1);
+                Debug.Log("INCREMENTED");
                 // Load level
                 TransitionManager.StartLeaf(GetStage());
             }

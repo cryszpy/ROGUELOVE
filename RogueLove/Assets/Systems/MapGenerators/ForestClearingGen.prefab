@@ -62,6 +62,7 @@ MonoBehaviour:
   spawnRadiusX: 6
   spawnRadiusY: 6
   player: {fileID: 0}
+  cameraLookAt: {fileID: 0}
   commonEnemies:
   - {fileID: 2496777416409024874, guid: c60c1e7fb3c7444b892164a662e77a72, type: 3}
   rareEnemies:
@@ -69,6 +70,7 @@ MonoBehaviour:
   - {fileID: 2496777416409024874, guid: 3b9dbe641d7d94637a916ba2df5da444, type: 3}
   stationEnemies:
   - {fileID: 2496777416409024874, guid: 302b65588e187471ebe5de20fa34b2bd, type: 3}
-  minibosses: []
+  minibosses:
+  - {fileID: 2496777416409024874, guid: 27148228a0dd044ab85c079fe96455ad, type: 3}
   bosses: []
   bossLevel: 0

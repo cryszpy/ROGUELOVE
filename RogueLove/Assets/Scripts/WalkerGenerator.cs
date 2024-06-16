@@ -166,19 +166,28 @@ public class WalkerGenerator : MonoBehaviour
 
         pathMap = Application.persistentDataPath + "/map.chris";
 
-        // If save files exist, and the player clicked SAVE SLOT button
+        // Load player info from saved game
         if (File.Exists(pathMap) && GameStateManager.SavePressed()) {
             Debug.Log(GameStateManager.SavePressed());
             Debug.Log("SAVE EXISTS WHAIOGFJAWIOFJIAWFL");
             loadFromSave = true;
-            //GameStateManager.SetSave(false);
-        } else {
-            Debug.Log("BRUH YOU DIE");
-            Debug.Log(GameStateManager.SavePressed());
+        } 
+        // Save data exists but player did not click load save --> most likely a NextLevel() call
+        else if (File.Exists(pathMap) && GameStateManager.SavePressed() == false) {
+            GameStateManager.SetSave(false);
+        }
+        // Save data does not exist, and player clicked load save somehow
+        else if (!File.Exists(pathMap) && GameStateManager.SavePressed() == true) {
+            Debug.LogError("Saved map data not found while trying to load save. How did you get here?");
+        }
+        // Save data does not exist and player did not click load save --> most likely started new game
+        else if (!File.Exists(pathMap) && GameStateManager.SavePressed() == false) {
+            Debug.Log("STARTED NEW GAME");
             loadFromSave = false;
             GameStateManager.SetSave(false);
         }
 
+        // If at the main menu and just starting a game, set stage and level to 1
         if (GameStateManager.GetLevel() == 0) {
             GameStateManager.SetLevel(1);
         }
@@ -494,7 +503,6 @@ public class WalkerGenerator : MonoBehaviour
     private void SpawnDoorway() {
         doorwaySpawned = false;
 
-        //while (doorwaySpawned == false) {
         for (int i = gridHandler.GetLength(0); i <= gridHandler.GetLength(0) && i >= 0; i--) {
 
             // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
@@ -513,13 +521,10 @@ public class WalkerGenerator : MonoBehaviour
                 }
 
             } 
-            /*
-            else {
-                // Generates random number to pick doorway spawnpoint
-                rand = GetRandomTile();
-            } */
         }
-        //}
+        if (!doorwaySpawned) {
+            Debug.LogWarning("Could not find suitable tile to spawn doorway.");
+        }
     }
 
     // SPAWN ENEMIES
@@ -531,15 +536,18 @@ public class WalkerGenerator : MonoBehaviour
             Debug.Log(bosses);
         }
 
-        if (!IsArrayEmpty(commonEnemies) && !bossLevel) {
-            // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
-            for (int c = 0; c < commonEnemies.Length; c++) {
+        // Miniboss spawning
+        if (!IsArrayEmpty(minibosses) && !bossLevel) {
 
-                // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
-                int commonRange = UnityEngine.Random.Range(3, 5);
-
-                // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
-                for (int s = 0; s < commonRange; s++) {
+            // For every miniboss in the level (e.g. Scout, Chris)
+            for (int m = 0; m < minibosses.Length; m++) {
+                
+                // Generate random amount of minibosses in level (e.g. 1 Scout, 1 Chris)
+                int minibossesRange = UnityEngine.Random.Range(0, 2);
+                Debug.Log(minibossesRange);
+                
+                // For the amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
+                for (int s = 0; s < minibossesRange; s++) {
                     
                     // Generates random number to pick Enemy spawnpoint
                     int rand = GetRandomTile();
@@ -551,63 +559,11 @@ public class WalkerGenerator : MonoBehaviour
                         if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
                         && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)) {
 
-                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                                rand = GetRandomTile();
-                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
-                                rand = GetRandomTile();
-                            } else {
-                                // Spawns Enemy
-                                if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
-                                    enemyTotal++;
-                                    break;
-                                }
-                            }
-                        } else {
-                            
-                            // Generates random number to pick Enemy spawnpoint
-                            rand = GetRandomTile();
-                        }
-                    }
-                }
-            }
-        }
-
-        if (!IsArrayEmpty(rareEnemies) && !bossLevel) {
-            // For every rare enemy in the level (e.g. Deforestation Guy, Nancy)
-            for (int r = 0; r < rareEnemies.Length; r++) {
-                
-                // Generate random amount of rare enemies in level (e.g. 3 Deforestation Guy, 2 Nancy)
-                int rareRange = UnityEngine.Random.Range(1, 3);
-                
-                // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
-                for (int s = 0; s < rareRange; s++) {
-                    
-                    // Generates random number to pick Enemy spawnpoint
-                    int rand = GetRandomTile();
-
-                    // For as many floor tiles as there are in the tilemap:
-                    for (int i = 0; i < tileListX.Count; i++) {
-
-                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                        if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
-                        && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)) {
-
-                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                                rand = GetRandomTile();
-                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
-                                rand = GetRandomTile();
-                            } else {
-
-                                if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
-                                    enemyTotal++;
-                                    break;
-                                }
+                            // Spawns Enemy
+                            if (minibosses[m].TryGetComponent<Enemy>(out var enemy)) {
+                                enemy.Create(minibosses[m], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                enemyTotal++;
+                                break;
                             }
 
                         } else {
@@ -619,7 +575,8 @@ public class WalkerGenerator : MonoBehaviour
                 }
             }
         }
-
+    
+        // Stationary enemy spawning
         if (!IsArrayEmpty(stationEnemies) && !bossLevel) {
             // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
             for (int st = 0; st < stationEnemies.Length; st++) {
@@ -707,17 +664,17 @@ public class WalkerGenerator : MonoBehaviour
                 }
             }
         }
-
-        if (!IsArrayEmpty(minibosses) && !bossLevel) {
-
-            // For every miniboss in the level (e.g. Scout, Chris)
-            for (int m = 0; m < minibosses.Length; m++) {
+        
+        // Rare enemy spawning
+        if (!IsArrayEmpty(rareEnemies) && !bossLevel) {
+            // For every rare enemy in the level (e.g. Deforestation Guy, Nancy)
+            for (int r = 0; r < rareEnemies.Length; r++) {
                 
-                // Generate random amount of minibosses in level (e.g. 1 Scout, 1 Chris)
-                int minibossesRange = 1;
+                // Generate random amount of rare enemies in level (e.g. 3 Deforestation Guy, 2 Nancy)
+                int rareRange = UnityEngine.Random.Range(1, 3);
                 
-                // For the amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
-                for (int s = 0; s < minibossesRange; s++) {
+                // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
+                for (int s = 0; s < rareRange; s++) {
                     
                     // Generates random number to pick Enemy spawnpoint
                     int rand = GetRandomTile();
@@ -729,13 +686,66 @@ public class WalkerGenerator : MonoBehaviour
                         if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
                         && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)) {
 
-                            // Spawns Enemy
-                            if (minibosses[m].TryGetComponent<Enemy>(out var enemy)) {
-                                enemy.Create(minibosses[m], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
-                                enemyTotal++;
-                                break;
+                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                                rand = GetRandomTile();
+                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                rand = GetRandomTile();
+                            } else {
+
+                                if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                    enemyTotal++;
+                                    break;
+                                }
                             }
 
+                        } else {
+                            
+                            // Generates random number to pick Enemy spawnpoint
+                            rand = GetRandomTile();
+                        }
+                    }
+                }
+            }
+        }
+        
+        // Common enemy spawning
+        if (!IsArrayEmpty(commonEnemies) && !bossLevel) {
+            // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
+            for (int c = 0; c < commonEnemies.Length; c++) {
+
+                // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+                int commonRange = UnityEngine.Random.Range(3, 5);
+
+                // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
+                for (int s = 0; s < commonRange; s++) {
+                    
+                    // Generates random number to pick Enemy spawnpoint
+                    int rand = GetRandomTile();
+
+                    // For as many floor tiles as there are in the tilemap:
+                    for (int i = 0; i < tileListX.Count; i++) {
+
+                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                        if ((tilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
+                        && (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)) {
+
+                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                                rand = GetRandomTile();
+                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                rand = GetRandomTile();
+                            } else {
+                                // Spawns Enemy
+                                if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
+                                    enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                    enemyTotal++;
+                                    break;
+                                }
+                            }
                         } else {
                             
                             // Generates random number to pick Enemy spawnpoint

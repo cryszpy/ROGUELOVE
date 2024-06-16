@@ -267,7 +267,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 192
+    m_Bits: 1984
   m_Interpolate: 0
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -355,6 +355,8 @@ MonoBehaviour:
   hitbox: {fileID: 0}
   healthBar: {fileID: 0}
   expOrb: {fileID: 0}
+  minExp: 0
+  maxExp: 0
   damage: 0
   chaseSpeed: 2
   wanderSpeed: 1000
@@ -518,7 +520,7 @@ CircleCollider2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 512
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2

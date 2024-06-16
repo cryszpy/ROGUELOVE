@@ -47,12 +47,15 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField]
     private Collider2D hitbox;
 
-    [SerializeField]
     // Enemy health bar
-    private HealthBar healthBar;
+    [SerializeField] protected HealthBar healthBar;
 
     [SerializeField]
     private GameObject expOrb;
+
+    // Minimum and maximum experience / energy to drop on death
+    [SerializeField] private int minExp;
+    [SerializeField] private int maxExp;
 
     [Space(10)]
     [Header("ENEMY STATS")]
@@ -315,7 +318,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void Chase() {
-        Debug.Log("CHASING");
+        //Debug.Log("CHASING");
         // Sets direction and destination of path to Player
         force = chaseSpeed * Time.deltaTime * direction;
 
@@ -324,7 +327,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void Wander() {
-        Debug.Log("WANDERING");
+        //Debug.Log("WANDERING");
         
         force = wanderSpeed * Time.deltaTime * direction;
 
@@ -369,11 +372,18 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    public virtual void SpawnExp() {
+        int rand = UnityEngine.Random.Range(minExp, maxExp);
+        for (int i = 0; i < rand; i++) {
+            Create(expOrb, this.transform.position, Quaternion.identity, this.map);
+        }
+    }
+
     public virtual void EnemyDeath() {
         force = 0 * Time.deltaTime * direction;
         hitbox.enabled = false;
         enemyType = EnemyType.DEAD;
-        Create(expOrb, this.transform.position, Quaternion.identity, this.map);
+        SpawnExp();
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
         //canWander = false;
@@ -384,7 +394,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void RemoveEnemy() {
-        Create(expOrb, this.transform.position, Quaternion.identity, this.map);
+        SpawnExp();
         Destroy(gameObject);
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
