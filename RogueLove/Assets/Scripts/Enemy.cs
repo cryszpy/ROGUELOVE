@@ -44,8 +44,7 @@ public abstract class Enemy : MonoBehaviour
     // This enemy's Rigidbody component
     public Rigidbody2D rb;
 
-    [SerializeField]
-    private Collider2D hitbox;
+    public Collider2D hitbox;
 
     // Enemy health bar
     [SerializeField] protected HealthBar healthBar;
@@ -170,7 +169,7 @@ public abstract class Enemy : MonoBehaviour
             if (enemyType != EnemyType.DEAD && enemyType != EnemyType.STATIONARY) {
 
                 if (canWander && timerSet) {
-                    wanderTimer += Time.deltaTime;
+                    wanderTimer += Time.fixedDeltaTime;
                     //Debug.Log("wanderTimer: " + wanderTimer);
                     if(wanderTimer > moveTime) {
                         //Debug.Log("Done With WanderTimer");
@@ -181,7 +180,7 @@ public abstract class Enemy : MonoBehaviour
                 }
                 
                 if (!canWander) {
-                    waitTimer += Time.deltaTime;
+                    waitTimer += Time.fixedDeltaTime;
                     //Debug.Log("waitTimer: " + waitTimer);
                     if(waitTimer > waitTime) {
                         canWander = true;
@@ -320,7 +319,7 @@ public abstract class Enemy : MonoBehaviour
     public virtual void Chase() {
         //Debug.Log("CHASING");
         // Sets direction and destination of path to Player
-        force = chaseSpeed * Time.deltaTime * direction;
+        force = chaseSpeed * Time.fixedDeltaTime * direction;
 
         // Moves towards target
         rb.AddForce(force);
@@ -329,7 +328,7 @@ public abstract class Enemy : MonoBehaviour
     public virtual void Wander() {
         //Debug.Log("WANDERING");
         
-        force = wanderSpeed * Time.deltaTime * direction;
+        force = wanderSpeed * Time.fixedDeltaTime * direction;
 
         rb.AddForce(force);
 
@@ -380,8 +379,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void EnemyDeath() {
-        force = 0 * Time.deltaTime * direction;
-        hitbox.enabled = false;
+        force = 0 * Time.fixedDeltaTime * direction;
         enemyType = EnemyType.DEAD;
         SpawnExp();
         WalkerGenerator.SetDeadEnemy();

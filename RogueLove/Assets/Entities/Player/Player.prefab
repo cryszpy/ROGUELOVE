@@ -109,7 +109,6 @@ MonoBehaviour:
   canFire: 1
   timer: 0
   timeBetweenFiring: 0.3
-  accuracy: 2
 --- !u!1 &7808749482456848566
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +371,7 @@ GameObject:
   - component: {fileID: 6459627538738078583}
   - component: {fileID: 6062100777377402982}
   - component: {fileID: 2057914311772842495}
-  - component: {fileID: 1781693491292221698}
+  - component: {fileID: 4531581175172355591}
   - component: {fileID: 4365122181230883474}
   m_Layer: 3
   m_Name: Player
@@ -449,14 +448,14 @@ Rigidbody2D:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8974962771436559868}
-  m_BodyType: 1
+  m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
-  m_GravityScale: 1
+  m_Mass: 2
+  m_LinearDrag: 5
+  m_AngularDrag: 5
+  m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -466,10 +465,10 @@ Rigidbody2D:
     m_Bits: 0
   m_Interpolate: 0
   m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
---- !u!61 &1781693491292221698
-BoxCollider2D:
+  m_CollisionDetection: 1
+  m_Constraints: 4
+--- !u!70 &4531581175172355591
+CapsuleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -503,17 +502,8 @@ BoxCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.16, y: 0.16}
-    newSize: {x: 0.48, y: 0.48}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.07965994, y: 0.020016074}
-  m_EdgeRadius: 0
+  m_Size: {x: 0.07965994, y: 0.02001607}
+  m_Direction: 1
 --- !u!114 &4365122181230883474
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -541,13 +531,23 @@ MonoBehaviour:
     minNormalAngle: 0
     maxNormalAngle: 0
   aim: {fileID: 207663731094974020}
-  contactColl: {fileID: 1781693491292221698}
-  iFrame: 0
+  contactColl: {fileID: 0}
   rb: {fileID: 2057914311772842495}
   animator: {fileID: 1825931467441451771}
   spriteRenderer: {fileID: 7125730586454602621}
   healthBar: {fileID: 0}
+  energyBar: {fileID: 0}
   shake: {fileID: 0}
+  dashColl: {fileID: 0}
+  iFrame: 0
+  currentDirection: {x: 0, y: 0}
+  isDashing: 0
+  canDash: 1
+  startDash: 0
+  dashingTime: 0.3
+  dashingCooldown: 0.65
+  dashingPower: 225
+  colliding: 0
   collisionOffset: 0.01
   shakeDuration: 0.2
   shakeAmplitude: 0.5

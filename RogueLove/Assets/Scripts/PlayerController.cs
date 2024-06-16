@@ -19,14 +19,9 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private PlayerAim aim;
 
-    public Collider2D contactColl;
+    public CapsuleCollider2D contactColl;
 
-    public bool iFrame;
-    
-    private Vector2 movementInput;
-
-    [SerializeField]
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
     [SerializeField]
     private Animator animator;
@@ -47,8 +42,31 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private CameraShake shake;
 
-    [Space(10)]
     [Header("STATS")]
+
+    public bool iFrame;
+    
+    private Vector2 movementInput;
+
+    // Current direction vector
+    [SerializeField] private Vector2 currentDirection;
+
+    // Dash duration boolean
+    [SerializeField] private bool isDashing = false;
+
+    // Dash cooldown boolean
+    [SerializeField] private bool canDash = true;
+
+    // Dash duration
+    [SerializeField] private float dashingTime;
+    private float dashTimer = 0;
+
+    // Dash cooldown time
+    [SerializeField] private float dashingCooldown;
+    private float dashcdTimer = 0;
+
+    // Dash force / power
+    [SerializeField] private float dashingPower;
 
     // Player max health
     public static float maxHealth;
@@ -127,7 +145,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("PlayerController animator is null! Reassigned.");
         }
         if (contactColl == null) {
-            contactColl = GetComponentInChildren<Collider2D>();
+            contactColl = GetComponentInChildren<CapsuleCollider2D>();
             Debug.Log("Collider2D contactColl is null! Reassigned.");
         }
         if (aim == null) {
@@ -181,19 +199,69 @@ public class PlayerController : MonoBehaviour
         energyBar.SetMaxEnergy(maxEnergy);
         energyBar.SetEnergy(0f);
     }
-    
+
     private void Update() {
+        if (Input.GetKeyDown(KeyCode.Space) && canDash) {
+            canDash = false;
+            isDashing = true;
+        }
+    }
+    
+    private void FixedUpdate() {
+
+        // Dash for the remaining duration, and don't take anything else as input
+        if (isDashing) {
+
+            // Reset velocity to zero before dashing
+            rb.velocity = Vector2.zero;
+            TryDash(currentDirection);
+            
+            // Dash duration timer
+            dashTimer += Time.fixedDeltaTime;
+                
+            if(dashTimer > dashingTime) {
+
+                // End dash
+                isDashing = false;
+
+                // Reser velocity to zero after dashing
+                rb.velocity = Vector2.zero;
+
+                // Reset dash duration timer
+                dashTimer = 0;
+            }
+
+            return;
+        }
 
         // Movement system if you're not dead lol
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
-            if(movementInput != Vector2.zero){
+
+            // Dash cooldown timer
+            if (!isDashing && !canDash) {
+                dashcdTimer += Time.fixedDeltaTime;
+
+                if(dashcdTimer > dashingCooldown) {
+
+                    // Reset dash cooldown
+                    canDash = true;
+
+                    // Reset dash cooldown timer
+                    dashcdTimer = 0;
+                }
+            }
+
+            if (movementInput != Vector2.zero) {
                 bool success = TryMove(movementInput);
+                currentDirection = movementInput;
 
                 if (!success) {
                     success = TryMove(new Vector2(movementInput.x, 0));
+                    currentDirection = new Vector2(movementInput.x, 0);
 
                     if (!success) {
                         success = TryMove(new Vector2(0, movementInput.y));
+                        currentDirection = new Vector2(0, movementInput.y);
                     }
                 }
 
@@ -209,11 +277,34 @@ public class PlayerController : MonoBehaviour
                 spriteRenderer.flipX = false;
             }
         }
-        //Debug.Log(GetExperience());
     }
 
+    // Dash function
+    private bool TryDash(Vector2 direction) {
+
+        if (direction != Vector2.zero) {
+
+            int count = rb.Cast(
+                direction, 
+                movementFilter, 
+                castCollisions, 
+                moveSpeed * Time.fixedDeltaTime + collisionOffset);
+        
+            if(count == 0) {
+                rb.AddForce(direction * dashingPower * Time.fixedDeltaTime, ForceMode2D.Impulse);
+                return true;
+            } else {
+                return false;
+            }
+        } else {
+            // can't move if there's no direction to move in
+            return false;
+        }
+    }
+
+    // Move function
     private bool TryMove(Vector2 direction) {
-        if(direction != Vector2.zero) {
+        if (direction != Vector2.zero) {
             int count = rb.Cast(
                 direction, 
                 movementFilter, 

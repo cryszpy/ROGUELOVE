@@ -94,6 +94,7 @@ public class EnemyHealth : MonoBehaviour
     }
 
     public void Death() {
+        parent.hitbox.enabled = false;
         animator.SetTrigger("Death");
     }
 }
