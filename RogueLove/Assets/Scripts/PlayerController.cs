@@ -42,6 +42,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private CameraShake shake;
 
+    [SerializeField] private CircleCollider2D dashColl;
+
     [Header("STATS")]
 
     public bool iFrame;
@@ -204,6 +206,7 @@ public class PlayerController : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && canDash) {
             canDash = false;
             isDashing = true;
+            animator.SetBool("Dash", true);
         }
     }
     
@@ -211,6 +214,9 @@ public class PlayerController : MonoBehaviour
 
         // Dash for the remaining duration, and don't take anything else as input
         if (isDashing) {
+
+            // Enable reflection bullet radius
+            dashColl.gameObject.SetActive(true);
 
             // Reset velocity to zero before dashing
             rb.velocity = Vector2.zero;
@@ -221,8 +227,14 @@ public class PlayerController : MonoBehaviour
                 
             if(dashTimer > dashingTime) {
 
+                // Disable reflection bullet radius
+                dashColl.gameObject.SetActive(false);
+
                 // End dash
                 isDashing = false;
+
+                // End dash animation
+                animator.SetBool("Dash", false);
 
                 // Reser velocity to zero after dashing
                 rb.velocity = Vector2.zero;

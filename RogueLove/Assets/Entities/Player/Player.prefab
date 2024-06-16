@@ -109,6 +109,74 @@ MonoBehaviour:
   canFire: 1
   timer: 0
   timeBetweenFiring: 0.3
+--- !u!1 &2165527840187518564
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8925122357426034959}
+  - component: {fileID: 3295279771889110724}
+  m_Layer: 3
+  m_Name: DashRadius
+  m_TagString: PlayerDashRadius
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &8925122357426034959
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165527840187518564}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 2317871507723600089}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &3295279771889110724
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2165527840187518564}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 256
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1791
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.01, y: 0.06}
+  m_Radius: 0.25
 --- !u!1 &7808749482456848566
 GameObject:
   m_ObjectHideFlags: 0
@@ -396,6 +464,7 @@ Transform:
   - {fileID: 9194805987175154789}
   - {fileID: 1477273725828102226}
   - {fileID: 1506479380098376124}
+  - {fileID: 8925122357426034959}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!210 &6459627538738078583
@@ -531,23 +600,21 @@ MonoBehaviour:
     minNormalAngle: 0
     maxNormalAngle: 0
   aim: {fileID: 207663731094974020}
-  contactColl: {fileID: 0}
+  contactColl: {fileID: 4531581175172355591}
   rb: {fileID: 2057914311772842495}
   animator: {fileID: 1825931467441451771}
   spriteRenderer: {fileID: 7125730586454602621}
   healthBar: {fileID: 0}
   energyBar: {fileID: 0}
   shake: {fileID: 0}
-  dashColl: {fileID: 0}
+  dashColl: {fileID: 3295279771889110724}
   iFrame: 0
   currentDirection: {x: 0, y: 0}
   isDashing: 0
   canDash: 1
-  startDash: 0
   dashingTime: 0.3
   dashingCooldown: 0.65
   dashingPower: 225
-  colliding: 0
   collisionOffset: 0.01
   shakeDuration: 0.2
   shakeAmplitude: 0.5

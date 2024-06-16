@@ -16,11 +16,11 @@ public class EnemyAim : PlayerAim
 
     public override void FixedUpdate() {
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER 
-        && GameStateManager.GetState() != GameStateManager.GAMESTATE.PAUSED) {
+        && GameStateManager.GetState() != GameStateManager.GAMESTATE.PAUSED && !parent.kbEd) {
 
             // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot
             direction = parent.player.position - transform.position;
-            //Debug.DrawRay(transform.position, direction, Color.cyan, 10);
+            Debug.DrawRay(transform.position, direction, Color.cyan, 0.1f);
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 100f, LayerMask.GetMask("Player", "Collisions/Ground", "Collisions/Obstacles"));
 
@@ -35,7 +35,7 @@ public class EnemyAim : PlayerAim
 
             // Firing cooldown timer
             if (!canFire) {
-                timer += Time.deltaTime;
+                timer += Time.fixedDeltaTime;
                 if(timer > parent.attackCooldown) {
                     canFire = true;
                     timer = 0;
@@ -43,7 +43,7 @@ public class EnemyAim : PlayerAim
             }
 
             if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER
-            && parent.enemyType != Enemy.EnemyType.DEAD && !parent.kbEd) {
+            && parent.enemyType != Enemy.EnemyType.DEAD) {
 
                 // Firing logic, if not on cooldown and player in range, fire
                 if (canFire && parent.inFollowRadius && parent.hitPlayer && parent.seen) {

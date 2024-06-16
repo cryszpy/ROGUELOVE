@@ -16,6 +16,7 @@ TagManager:
   - Projectile
   - CameraLookAt
   - EnergyBar
+  - PlayerDashRadius
   layers:
   - Default
   - TransparentFX

@@ -11,25 +11,21 @@ public class EnemyBulletScript : MonoBehaviour
 
     private Vector3 target;
 
-    [SerializeField]
-    private Rigidbody2D rb;
+    public Rigidbody2D rb;
 
-    [SerializeField]
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     private Vector3 direction;
 
-    [SerializeField]
-    private Collider2D coll;
+    [SerializeField] private Collider2D coll;
 
-    [Space(10)]
     [Header("STATS")]
 
-    [SerializeField]
-    private float force;
+    [SerializeField] private float force;
 
-    [SerializeField]
-    private float damage = 2;
+    [SerializeField] private float damage = 2;
+
+    [SerializeField] private bool reflected = false;
 
     // Start is called before the first frame update
     void Start()
@@ -61,18 +57,53 @@ public class EnemyBulletScript : MonoBehaviour
         
         direction = target - transform.position;
 
-        // Checks whether collided object is an enemy
-        if (other.CompareTag("Player")) {
-            // Deal damage to enemy
-            if (other != null) {
-                            
-                if (other.TryGetComponent<PlayerController>(out var player)) {
-                    player.TakeDamage(damage);
+        // Checks whether collided object is of layer Player
+        if (other.gameObject.layer == 3) {
+
+            // If not the reflect dash radius
+            if (!other.CompareTag("PlayerDashRadius")) {
+
+                // Deal damage to player if not null
+                if (other != null) {
+                                
+                    if (other.TryGetComponent<PlayerController>(out var player)) {
+                        player.TakeDamage(damage);
+                    }
+
+                    // Destroy bullet on contact with player
+                    coll.enabled = false;
+                    rb.velocity = (Vector2)direction.normalized * 0;
+                    animator.SetTrigger("Destroy");
+                }
+                else {
+                    Debug.LogWarning("Enemy bullet collision is null!");
                 }
             }
-        }
+            // If collided object is the dash radius
+            else {
 
-        if (!other.CompareTag("Enemy")) {
+                // Reflect bullet
+                Vector2 temp = rb.velocity;
+                rb.velocity = Vector2.zero;
+                rb.velocity = new Vector2(temp.x * -1, temp.y * -1);
+                reflected = true;
+            }
+            
+        }
+        // If hitting anything other than the player (should destroy) or an enemy (should passthrough)
+        // then destroy bullet
+        else if (!other.CompareTag("Enemy")) {
+            coll.enabled = false;
+            rb.velocity = (Vector2)direction.normalized * 0;
+            animator.SetTrigger("Destroy");
+        }
+        
+        if (other.CompareTag("Enemy") && reflected) {
+            if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
+                enemy.TakeDamage(damage, rb.velocity);
+            }
+
+            // Destroy bullet on contact with enemy after reflection
             coll.enabled = false;
             rb.velocity = (Vector2)direction.normalized * 0;
             animator.SetTrigger("Destroy");

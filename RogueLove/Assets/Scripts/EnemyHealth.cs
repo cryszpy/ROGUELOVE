@@ -59,37 +59,44 @@ public class EnemyHealth : MonoBehaviour
         animator.SetBool("Hurt", false);
     }
 
-    public void TakeDamage(float damage, Vector3 direction) {
+    public void TakeDamage(float damage, Vector2 direction) {
         Health -= damage;
         Debug.Log("Took this amount of damage: " + damage);
         healthBar.SetHealth(currentHealth);
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
-        StopAllCoroutines();
         if (Health <= 0) {
-            StartCoroutine(EnemyDeathKnockback(parent.rb, direction));
+            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized));
         } else {
-            StartCoroutine(EnemyKnockback(parent.rb, direction));
+            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized));
         }
     }
 
-    IEnumerator EnemyKnockback(Rigidbody2D rigidBody, Vector3 dir) {
+    IEnumerator EnemyKnockback(Rigidbody2D rigidBody, Vector2 dir) {
         parent.kbEd = true;
-        parent.rb.velocity = Vector3.zero;
-        parent.rb.AddForce(dir.normalized * knockback, ForceMode2D.Impulse);
+        rigidBody.velocity = Vector2.zero;
+        rigidBody.AddForce(dir * knockback, ForceMode2D.Impulse);
+
         yield return new WaitForSeconds(0.15f);
-        rigidBody.velocity = Vector3.zero;
+
+        rigidBody.velocity = Vector2.zero;
+
         yield return new WaitForSeconds(0.35f);
+
         parent.kbEd = false;
     }
 
-    IEnumerator EnemyDeathKnockback(Rigidbody2D rigidBody, Vector3 dir) {
+    IEnumerator EnemyDeathKnockback(Rigidbody2D rigidBody, Vector2 dir) {
         parent.kbEd = true;
-        parent.rb.velocity = Vector3.zero;
-        parent.rb.AddForce(dir.normalized * (knockback * 3), ForceMode2D.Impulse);
+        rigidBody.velocity = Vector2.zero;
+        rigidBody.AddForce(dir * (knockback * 2), ForceMode2D.Impulse);
+
         yield return new WaitForSeconds(0.5f);
-        rigidBody.velocity = Vector3.zero;
+
+        rigidBody.velocity = Vector2.zero;
+
         yield return new WaitForSeconds(0.35f);
+
         parent.kbEd = false;
     }
 
