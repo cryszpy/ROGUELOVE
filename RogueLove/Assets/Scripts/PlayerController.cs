@@ -16,8 +16,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private ContactFilter2D movementFilter;
 
-    [SerializeField]
-    private PlayerAim aim;
+    [SerializeField] private Weapon weapon;
 
     public CapsuleCollider2D contactColl;
 
@@ -111,6 +110,8 @@ public class PlayerController : MonoBehaviour
         return experience;
     }
 
+    public float damageModifier;
+
     [SerializeField]
     private float collisionOffset = 0.01f;
 
@@ -150,9 +151,9 @@ public class PlayerController : MonoBehaviour
             contactColl = GetComponentInChildren<CapsuleCollider2D>();
             Debug.Log("Collider2D contactColl is null! Reassigned.");
         }
-        if (aim == null) {
-            aim = GetComponentInChildren<PlayerAim>();
-            Debug.Log("PlayerAim is null! Reassigned.");
+        if (weapon == null) {
+            weapon = GetComponentInChildren<Weapon>();
+            Debug.Log("WeaponFireMethod is null! Reassigned.");
         }
         if (volumeProfile == null) {
             volumeProfile = FindAnyObjectByType<Volume>().sharedProfile;
@@ -371,7 +372,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void SavePlayer () {
-        SaveSystem.SavePlayer(this, aim);
+        SaveSystem.SavePlayer(this, weapon);
     }
 
     public void LoadPlayer() {
@@ -394,7 +395,7 @@ public class PlayerController : MonoBehaviour
 
         // Set speeds
         SetMoveSpeed(data.playerMoveSpeed);
-        aim.timeBetweenFiring = data.playerAttackSpeed;
+        weapon.timeBetweenFiring = data.playerAttackSpeed;
     }
 
     public void DeathAnim() {

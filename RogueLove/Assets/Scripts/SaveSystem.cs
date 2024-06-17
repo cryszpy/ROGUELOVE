@@ -36,7 +36,7 @@ public static class SaveSystem
         }
     }
 
-    public static void SavePlayer (PlayerController player, PlayerAim weapon) {
+    public static void SavePlayer (PlayerController player, Weapon weapon) {
         BinaryFormatter formatter = new();
 
         string pathPlayer = Application.persistentDataPath + "/player.franny";
