@@ -8,11 +8,6 @@ using UnityEngine.Tilemaps;
 [System.Serializable]
 public class MapData
 {
-    // Array of all tile X values
-    //public int[] xTileLoc;
-
-    // Array of all tile Y values
-    //public int[] yTileLoc;
 
     // Array of all tile types (FLOOR, EMPTY, DECOR)
     public int[] tileTypes;
@@ -23,8 +18,6 @@ public class MapData
     public int levelNum;
 
     public int stageNum;
-
-    public int playerHealth;
 
     public MapData (WalkerGenerator map) {
 

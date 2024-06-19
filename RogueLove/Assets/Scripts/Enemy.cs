@@ -379,9 +379,17 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void EnemyDeath() {
+
+        // Sets force to 0 so that the enemy doesn't just fly off
         force = 0 * Time.fixedDeltaTime * direction;
+
+        // Sets enemy type to DEAD
         enemyType = EnemyType.DEAD;
+
+        // Spawns EXP
         SpawnExp();
+
+        // Increments dead enemy counter
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
         //canWander = false;

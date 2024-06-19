@@ -140,7 +140,7 @@ public class WalkerGenerator : MonoBehaviour
     private bool bossLevel = false;
 
     // Initializes grid to be generated (size)
-    void Start() {
+    void Awake() {
         //TransitionManager.SetLoadingBar(true);
         enemyTotal = 0;
         deadEnemies = 0;
@@ -168,13 +168,13 @@ public class WalkerGenerator : MonoBehaviour
 
         // Load player info from saved game
         if (File.Exists(pathMap) && GameStateManager.SavePressed()) {
-            Debug.Log(GameStateManager.SavePressed());
+            Debug.Log("ONE");
             Debug.Log("SAVE EXISTS WHAIOGFJAWIOFJIAWFL");
             loadFromSave = true;
         } 
         // Save data exists but player did not click load save --> most likely a NextLevel() call
         else if (File.Exists(pathMap) && GameStateManager.SavePressed() == false) {
-            GameStateManager.SetSave(false);
+            Debug.Log("TWO");
         }
         // Save data does not exist, and player clicked load save somehow
         else if (!File.Exists(pathMap) && GameStateManager.SavePressed() == true) {
@@ -184,7 +184,9 @@ public class WalkerGenerator : MonoBehaviour
         else if (!File.Exists(pathMap) && GameStateManager.SavePressed() == false) {
             Debug.Log("STARTED NEW GAME");
             loadFromSave = false;
-            GameStateManager.SetSave(false);
+        }
+        else {
+            Debug.Log("THREE");
         }
 
         // If at the main menu and just starting a game, set stage and level to 1
@@ -200,7 +202,6 @@ public class WalkerGenerator : MonoBehaviour
 
         Debug.Log("Attempting to initialize grid");
         InitializeGrid();
-        
 
         if (loadFromSave == true) {
             LoadMap();
@@ -247,6 +248,8 @@ public class WalkerGenerator : MonoBehaviour
         tileCount++;
 
         if (loadFromSave != true) {
+            Debug.Log("CREATED NEW MAP");
+
             // Handles walker rules
             StartCoroutine(CreateFloors());
         }
@@ -471,6 +474,7 @@ public class WalkerGenerator : MonoBehaviour
         SaveMap();
         playerCont.SavePlayer();
         TransitionManager.EndLeaf(true);
+        GameStateManager.SetSave(false);
     }
 
     // SPAWN PLAYER
@@ -544,7 +548,6 @@ public class WalkerGenerator : MonoBehaviour
                 
                 // Generate random amount of minibosses in level (e.g. 1 Scout, 1 Chris)
                 int minibossesRange = UnityEngine.Random.Range(0, 2);
-                Debug.Log(minibossesRange);
                 
                 // For the amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
                 for (int s = 0; s < minibossesRange; s++) {

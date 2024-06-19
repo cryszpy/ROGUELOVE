@@ -18,4 +18,7 @@ public class Weapon : MonoBehaviour
 
     // Weapon charge sound
     public string chargeSound;
+
+    // Bullet Spawn Point
+    public GameObject spawnPos;
 }

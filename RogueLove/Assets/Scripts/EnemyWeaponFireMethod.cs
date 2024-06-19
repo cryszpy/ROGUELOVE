@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class EnemyWeaponFireMethod : WeaponFireMethod
+public class EnemyWeaponFireMethod : WeaponSingleShotFire
 {
     [SerializeField] private Enemy enemy;
 

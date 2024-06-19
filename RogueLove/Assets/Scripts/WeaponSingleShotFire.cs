@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class WeaponFireMethod : MonoBehaviour
+public class WeaponSingleShotFire : MonoBehaviour
 {
     [Header("SCRIPT REFERENCES")]
 
@@ -12,7 +12,7 @@ public class WeaponFireMethod : MonoBehaviour
     [Header("STATS")]
 
     public bool canFire = true;
-    public float timer;
+    protected float timer;
 
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
@@ -56,7 +56,7 @@ public class WeaponFireMethod : MonoBehaviour
                 bullet.damage *= player.damageModifier;
             }
 
-            GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
+            GameObject instantBullet = Instantiate(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity);
             //StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
             //camShake.Shake(0.15f, 0.4f);
             StartCoroutine(BulletDestroy(2, instantBullet));

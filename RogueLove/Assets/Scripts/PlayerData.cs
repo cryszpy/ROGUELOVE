@@ -27,12 +27,12 @@ public class PlayerData
 
         playerDamage = player.damageModifier;
 
-        experienceLevel = PlayerController.GetExperience();
-        maxExperienceLevel = PlayerController.GetMaxEnergy();
+        experienceLevel = PlayerController.Experience;
+        maxExperienceLevel = PlayerController.MaxEnergy;
 
         playerHealth = player.Health;
-        playerMaxHealth = PlayerController.GetMaxPlayerHealth();
-        playerMoveSpeed = PlayerController.GetMoveSpeed();
+        playerMaxHealth = PlayerController.MaxHealth;
+        playerMoveSpeed = PlayerController.MoveSpeed;
         playerAttackSpeed = weapon.timeBetweenFiring;
         
     }

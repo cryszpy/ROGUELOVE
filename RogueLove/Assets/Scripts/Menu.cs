@@ -40,11 +40,8 @@ public class MainMenu : MonoBehaviour
     }
 
     public void PlayButton() {
-        //Debug.Log("current level: " + GameStateManager.GetLevel());
-        //Debug.Log("current stage: " + GameStateManager.GetStage());
-
-        String pathMap = Application.persistentDataPath + "/map.chris";
-        String pathPlayer = Application.persistentDataPath + "/player.franny";
+        string pathMap = Application.persistentDataPath + "/map.chris";
+        string pathPlayer = Application.persistentDataPath + "/player.franny";
 
         // Set up SAVED GAME
         if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
@@ -67,6 +64,7 @@ public class MainMenu : MonoBehaviour
 
     public void SaveSlotButton() {
         GameStateManager.SetSave(true);
+        
         // Load level
         TransitionManager.StartLeaf(GameStateManager.GetStage());
     }

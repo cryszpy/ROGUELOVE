@@ -70,12 +70,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashingPower;
 
     // Player max health
-    public static float maxHealth;
-    public static void SetMaxPlayerHealth(float hp) {
-        maxHealth = hp;
-    }
-    public static float GetMaxPlayerHealth() {
-        return maxHealth;
+    private static float maxHealth;
+    public static float MaxHealth { get => maxHealth; set => maxHealth = value; }
+
+    public static void AddMaxHealth(float num) {
+        MaxHealth += num;
     }
 
     // Player current health
@@ -83,44 +82,30 @@ public class PlayerController : MonoBehaviour
 
     // Player movement speed
     private static float moveSpeed = 1.0f;
-    public static void SetMoveSpeed(float speed) {
-        moveSpeed = speed;
-    }
-    public static float GetMoveSpeed() {
-        return moveSpeed;
+    public static float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+    public static void ChangeMoveSpeed(float speed) {
+        MoveSpeed += speed;
     }
 
     // Player max energy
-    public static float maxEnergy;
-    public static void SetMaxEnergy(float num) {
-        maxEnergy = num;
-    }
-    public static float GetMaxEnergy() {
-        return maxEnergy;
-    }
+    private static float maxEnergy;
+    public static float MaxEnergy { get => maxEnergy; set => maxEnergy = value; }
 
-    public static float experience;
-    public static void SetExperience(float exp) {
-        experience = exp;
-    }
+    // Player experience / energy
+    private static float experience;
+    public static float Experience { get => experience; set => experience = value; }
+
     public static void AddExperience(float exp) {
-        experience += exp;
-    }
-    public static float GetExperience() {
-        return experience;
+        Experience += exp;
     }
 
     public float damageModifier;
 
-    [SerializeField]
-    private float collisionOffset = 0.01f;
+    [SerializeField] private float collisionOffset = 0.01f;
 
-    [SerializeField]
-    private float shakeDuration;
-    [SerializeField]
-    private float shakeAmplitude;
-    [SerializeField]
-    private float shakeFrequency;
+    [SerializeField] private float shakeDuration;
+    [SerializeField] private float shakeAmplitude;
+    [SerializeField] private float shakeFrequency;
 
     public float Health {
         set {
@@ -174,14 +159,10 @@ public class PlayerController : MonoBehaviour
 
         // Load player info from saved game
         if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            GameStateManager.SetSave(false);
-
             LoadPlayer();
-            //Debug.Log("Loaded player from save");
         } 
         // Save data exists but player did not click load save --> most likely a NextLevel() call
         else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            GameStateManager.SetSave(false);
         } 
         // Save data does not exist, and player clicked load save somehow
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
@@ -189,18 +170,17 @@ public class PlayerController : MonoBehaviour
         } 
         // Save data does not exist and player did not click load save --> most likely started new game
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            GameStateManager.SetSave(false);
-            SetMaxPlayerHealth(6f);
-            Health = maxHealth;
-            SetMaxEnergy(20f);
-            SetExperience(0f);
-            SetMoveSpeed(1.0f);
+            MaxHealth = 6;
+            Health = MaxHealth;
+            MaxEnergy = 20;
+            Experience = 0;
+            MoveSpeed = 1;
         }
-
-        healthBar.SetMaxHealth(maxHealth);
+        
+        healthBar.SetMaxHealth(MaxHealth);
         healthBar.SetHealth(Health);
-        energyBar.SetMaxEnergy(maxEnergy);
-        energyBar.SetEnergy(0f);
+        energyBar.SetMaxEnergy(MaxEnergy);
+        energyBar.SetEnergy(Experience);
     }
 
     private void Update() {
@@ -301,7 +281,7 @@ public class PlayerController : MonoBehaviour
                 direction, 
                 movementFilter, 
                 castCollisions, 
-                moveSpeed * Time.fixedDeltaTime + collisionOffset);
+                MoveSpeed * Time.fixedDeltaTime + collisionOffset);
         
             if(count == 0) {
                 rb.AddForce(direction * dashingPower * Time.fixedDeltaTime, ForceMode2D.Impulse);
@@ -322,10 +302,10 @@ public class PlayerController : MonoBehaviour
                 direction, 
                 movementFilter, 
                 castCollisions, 
-                moveSpeed * Time.fixedDeltaTime + collisionOffset);
+                MoveSpeed * Time.fixedDeltaTime + collisionOffset);
         
             if(count == 0) {
-                rb.MovePosition(rb.position + direction * moveSpeed * Time.fixedDeltaTime);
+                rb.MovePosition(rb.position + direction * MoveSpeed * Time.fixedDeltaTime);
                 return true;
             } else {
                 return false;
@@ -380,21 +360,21 @@ public class PlayerController : MonoBehaviour
         // Load save data
         PlayerData data = SaveSystem.LoadPlayer();
 
-        SetMaxPlayerHealth(data.playerMaxHealth);
-        healthBar.SetMaxHealth(maxHealth);
+        MaxHealth = data.playerMaxHealth;
+        healthBar.SetMaxHealth(MaxHealth);
 
         // Set health
         Health = data.playerHealth;
         healthBar.SetHealth(Health);
 
         // Load experience level
-        SetMaxEnergy(data.maxExperienceLevel);
-        SetExperience(data.experienceLevel);
+        MaxEnergy = data.maxExperienceLevel;
+        Experience = data.experienceLevel;
         energyBar.SetMaxEnergy(data.maxExperienceLevel);
         energyBar.SetEnergy(data.experienceLevel);
 
         // Set speeds
-        SetMoveSpeed(data.playerMoveSpeed);
+        MoveSpeed = data.playerMoveSpeed;
         weapon.timeBetweenFiring = data.playerAttackSpeed;
     }
 

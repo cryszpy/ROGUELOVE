@@ -10,7 +10,7 @@ public class ExperienceCollectionRadius : EnemyFollowRadius
             parent.RemoveEnemy();
             if (collider.TryGetComponent<PlayerController>(out var player)) {
                 PlayerController.AddExperience(1);
-                player.energyBar.SetEnergy(PlayerController.GetExperience());
+                player.energyBar.SetEnergy(PlayerController.Experience);
             }
         }
     }
