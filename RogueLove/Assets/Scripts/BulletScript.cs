@@ -33,6 +33,8 @@ public class BulletScript : MonoBehaviour
     [SerializeField]
     private float accuracy;
 
+    [SerializeField] private bool isFire;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -70,12 +72,20 @@ public class BulletScript : MonoBehaviour
 
         // Checks whether collided object is an enemy
         if (other.CompareTag("Enemy")) {
-            // Deal damage to enemy
-            if (other != null) {
-                            
-                if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
+
+            // Tries to get the EnemyHealth component of collided enemy
+            if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
+
+                // If bullet is a flame bullet, deal fire damage
+                if (isFire && !enemy.immuneToFire) {
+                    enemy.TakeFireDamage(damage, direction);
+                }
+                else {
                     enemy.TakeDamage(damage, direction);
                 }
+            }
+            else {
+                Debug.LogError("Could not get collided enemy's EnemyHealth component!");
             }
         }
 

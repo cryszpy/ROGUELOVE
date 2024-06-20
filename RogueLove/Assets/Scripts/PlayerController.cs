@@ -7,6 +7,7 @@ using System.IO;
 using System;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
+using System.Security.Cryptography;
 
 public class PlayerController : MonoBehaviour
 {
@@ -44,6 +45,12 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private CircleCollider2D dashColl;
 
     [Header("STATS")]
+
+    public List<GameObject> heldWeapons = new();
+
+    [SerializeField] private int currentWeaponIndex;
+
+    [SerializeField] private bool canSwitchWeapons = true;
 
     public bool iFrame;
     
@@ -100,6 +107,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public float damageModifier;
+
+    public float fireRateModifier;
 
     [SerializeField] private float collisionOffset = 0.01f;
 
@@ -181,6 +190,11 @@ public class PlayerController : MonoBehaviour
         healthBar.SetHealth(Health);
         energyBar.SetMaxEnergy(MaxEnergy);
         energyBar.SetEnergy(Experience);
+
+        if (weapon == null && heldWeapons[0].TryGetComponent<Weapon>(out var component)) {
+            weapon = component;
+            currentWeaponIndex = 0;
+        }
     }
 
     private void Update() {
@@ -189,6 +203,53 @@ public class PlayerController : MonoBehaviour
             isDashing = true;
             animator.SetBool("Dash", true);
         }
+
+        // WEAPON SWITCHING MECHANICS
+
+        // Switch to first weapon
+        if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && canSwitchWeapons 
+        && !heldWeapons[0].activeInHierarchy 
+        && heldWeapons[0] != null 
+        && heldWeapons[1] != null) {
+
+            StartCoroutine(SwitchWeapons(0, currentWeaponIndex));
+        }
+        // Switch to second weapon
+        else if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && canSwitchWeapons 
+        && !heldWeapons[1].activeInHierarchy 
+        && heldWeapons[0] != null 
+        && heldWeapons[1] != null) {
+
+            StartCoroutine(SwitchWeapons(1, currentWeaponIndex));
+        }
+    }
+
+    private IEnumerator SwitchWeapons(int switchTo, int switchFrom) {
+
+        // Prevent switching weapons while already switching weapons
+        canSwitchWeapons = false;
+
+        // Disable old weapon
+        heldWeapons[switchFrom].SetActive(false);
+
+        if (heldWeapons[switchTo].TryGetComponent<Weapon>(out var gotWeapon)) {
+
+            // Set weapon script reference to new weapon
+            weapon = gotWeapon;
+
+            // Set currently held weapon index number to new weapon
+            currentWeaponIndex = switchTo;
+
+            // Enable new weapon
+            heldWeapons[switchTo].SetActive(true);
+        }
+        else {
+            Debug.LogError("Tried to switch to nonexistent weapon!");
+        }
+
+        yield return new WaitForSeconds(0.75f);
+
+        canSwitchWeapons = true;
     }
     
     private void FixedUpdate() {
@@ -360,12 +421,16 @@ public class PlayerController : MonoBehaviour
         // Load save data
         PlayerData data = SaveSystem.LoadPlayer();
 
+        // Load max health
         MaxHealth = data.playerMaxHealth;
         healthBar.SetMaxHealth(MaxHealth);
 
-        // Set health
+        // Load health
         Health = data.playerHealth;
         healthBar.SetHealth(Health);
+
+        // Load damage modifier
+        damageModifier = data.playerDamageModifier;
 
         // Load experience level
         MaxEnergy = data.maxExperienceLevel;
@@ -375,7 +440,7 @@ public class PlayerController : MonoBehaviour
 
         // Set speeds
         MoveSpeed = data.playerMoveSpeed;
-        weapon.timeBetweenFiring = data.playerAttackSpeed;
+        fireRateModifier = data.playerFireRateModifier;
     }
 
     public void DeathAnim() {

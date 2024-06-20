@@ -303,8 +303,10 @@ MonoBehaviour:
   parent: {fileID: 228780233094893626}
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
-  maxHealth: 40
-  knockback: 0.2
+  maxHealth: 75
+  knockback: 0.1
+  takingFireDamage: 0
+  immuneToFire: 1
 --- !u!1 &5298915112532488095
 GameObject:
   m_ObjectHideFlags: 0

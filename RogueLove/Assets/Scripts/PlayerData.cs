@@ -9,7 +9,7 @@ using UnityEngine.Tilemaps;
 public class PlayerData
 {
 
-    public float playerDamage;
+    public float playerDamageModifier;
 
     public float playerHealth;
 
@@ -17,7 +17,7 @@ public class PlayerData
 
     public float playerMoveSpeed;
 
-    public float playerAttackSpeed;
+    public float playerFireRateModifier;
 
     public float experienceLevel;
 
@@ -25,7 +25,7 @@ public class PlayerData
 
     public PlayerData (PlayerController player, Weapon weapon) {
 
-        playerDamage = player.damageModifier;
+        playerDamageModifier = player.damageModifier;
 
         experienceLevel = PlayerController.Experience;
         maxExperienceLevel = PlayerController.MaxEnergy;
@@ -33,7 +33,7 @@ public class PlayerData
         playerHealth = player.Health;
         playerMaxHealth = PlayerController.MaxHealth;
         playerMoveSpeed = PlayerController.MoveSpeed;
-        playerAttackSpeed = weapon.timeBetweenFiring;
+        playerFireRateModifier = player.fireRateModifier;
         
     }
 }

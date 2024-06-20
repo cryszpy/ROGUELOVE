@@ -149,7 +149,7 @@ GameObject:
   m_Layer: 3
   m_Name: Sonora Bloom
   m_TagString: Untagged
-  m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 1206586993520771344, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 0
@@ -856,7 +856,7 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  weapon: {fileID: 4314833407542651076}
+  weapon: {fileID: 3899810785635096974}
   contactColl: {fileID: 4531581175172355591}
   rb: {fileID: 2057914311772842495}
   animator: {fileID: 1825931467441451771}
@@ -865,14 +865,19 @@ MonoBehaviour:
   energyBar: {fileID: 0}
   shake: {fileID: 0}
   dashColl: {fileID: 3295279771889110724}
+  heldWeapons:
+  - {fileID: 8567451438062245733}
+  - {fileID: 4351454945345230079}
+  canSwitchWeapons: 1
   iFrame: 0
   currentDirection: {x: 0, y: 0}
   isDashing: 0
   canDash: 1
   dashingTime: 0.3
-  dashingCooldown: 0.65
+  dashingCooldown: 0.5
   dashingPower: 225
   damageModifier: 1
+  fireRateModifier: 1
   collisionOffset: 0.01
   shakeDuration: 0.2
   shakeAmplitude: 0.5

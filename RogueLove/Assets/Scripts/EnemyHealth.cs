@@ -28,11 +28,15 @@ public class EnemyHealth : MonoBehaviour
     [SerializeField]
     private float knockback;
 
+    public bool takingFireDamage;
+
+    public bool immuneToFire;
+
     public float Health {
         set {
             currentHealth = value;
             if(currentHealth <= 0) {
-                Death();
+                StartDeath();
             }
         }
 
@@ -66,9 +70,58 @@ public class EnemyHealth : MonoBehaviour
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
         if (Health <= 0) {
+            StopAllCoroutines();
             StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized));
         } else {
+            StopAllCoroutines();
             StartCoroutine(EnemyKnockback(parent.rb, direction.normalized));
+        }
+    }
+
+    public void TakeFireDamage(float damage, Vector2 direction) {
+        Health -= damage;
+        Debug.Log("Took this amount of damage: " + damage);
+        healthBar.SetHealth(currentHealth);
+        animator.SetBool("Hurt", true);
+        parent.kbEd = true;
+        if (Health <= 0) {
+            StopAllCoroutines();
+            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized));
+        } else {
+            StopAllCoroutines();
+            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized));
+        }
+        animator.SetBool("FireHurt", true);
+        StartCoroutine(FireDamage(2));
+    }
+
+    public IEnumerator FireDamage(float damage) {
+        takingFireDamage = true;
+        Health -= damage;
+        Debug.Log("Took this amount of FIRE damage: " + damage);
+        healthBar.SetHealth(currentHealth);
+
+        yield return new WaitForSeconds(1f);
+
+        Health -= damage;
+        Debug.Log("Took this amount of FIRE damage: " + damage);
+        healthBar.SetHealth(currentHealth);
+
+        yield return new WaitForSeconds(1f);
+
+        Health -= damage;
+        Debug.Log("Took this amount of FIRE damage: " + damage);
+        healthBar.SetHealth(currentHealth);
+
+        takingFireDamage = false;
+    }
+
+    public void FireDamageAnim() {
+        if (takingFireDamage) {
+            animator.SetBool("FireHurt", true);
+        }
+        else {
+            animator.SetBool("FireHurt", false);
         }
     }
 
@@ -100,8 +153,7 @@ public class EnemyHealth : MonoBehaviour
         parent.kbEd = false;
     }
 
-    public void Death() {
-        parent.hitbox.enabled = false;
+    public void StartDeath() {
         animator.SetTrigger("Death");
     }
 }

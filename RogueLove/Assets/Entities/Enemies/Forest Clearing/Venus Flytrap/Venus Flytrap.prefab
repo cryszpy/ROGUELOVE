@@ -355,7 +355,7 @@ MonoBehaviour:
   expOrb: {fileID: 2496777416409024874, guid: c277ee52a28e84f81881014f10b695ab, type: 3}
   minExp: 2
   maxExp: 4
-  damage: 3
+  damage: 1
   chaseSpeed: 0
   wanderSpeed: 0
   rangedAttackCooldownMin: 0
@@ -405,8 +405,10 @@ MonoBehaviour:
   parent: {fileID: 8270643478835597212}
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
-  maxHealth: 7
+  maxHealth: 9
   knockback: 0
+  takingFireDamage: 0
+  immuneToFire: 0
 --- !u!1 &4921378223618343124
 GameObject:
   m_ObjectHideFlags: 0

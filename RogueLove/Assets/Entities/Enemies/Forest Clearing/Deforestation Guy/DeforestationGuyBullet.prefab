@@ -199,7 +199,8 @@ MonoBehaviour:
   animator: {fileID: 2920130361219395360}
   coll: {fileID: 5490067005516740771}
   force: 2
-  damage: 3
+  damage: 1
+  reflected: 0
 --- !u!50 &6018900055118431996
 Rigidbody2D:
   serializedVersion: 4

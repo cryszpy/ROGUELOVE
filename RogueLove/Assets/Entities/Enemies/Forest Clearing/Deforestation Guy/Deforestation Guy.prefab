@@ -106,6 +106,7 @@ MonoBehaviour:
   sprite: {fileID: 8757874228822253330}
   fireSound: 
   chargeSound: 
+  spawnPos: {fileID: 0}
 --- !u!114 &5391249807630986660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -121,7 +122,6 @@ MonoBehaviour:
   parent: {fileID: 5280903974753059358}
   player: {fileID: 0}
   canFire: 1
-  timer: 0
   enemy: {fileID: 688565378050225313}
 --- !u!114 &2378006073827404992
 MonoBehaviour:
@@ -438,8 +438,10 @@ MonoBehaviour:
   parent: {fileID: 688565378050225313}
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
-  maxHealth: 5
+  maxHealth: 8
   knockback: 2
+  takingFireDamage: 0
+  immuneToFire: 0
 --- !u!1 &3046133085571071947
 GameObject:
   m_ObjectHideFlags: 0

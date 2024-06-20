@@ -378,6 +378,10 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    public virtual void RemoveHitbox() {
+        hitbox.enabled = false;
+    }
+
     public virtual void EnemyDeath() {
 
         // Sets force to 0 so that the enemy doesn't just fly off
@@ -392,11 +396,6 @@ public abstract class Enemy : MonoBehaviour
         // Increments dead enemy counter
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
-        //canWander = false;
-        //contactColl.enabled = false;
-        //target = 0 * Time.deltaTime * direction;
-        
-        //Destroy(gameObject);
     }
 
     public virtual void RemoveEnemy() {

@@ -18,11 +18,18 @@ public class WeaponSingleShotFire : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
 
-    // Update is called once per frame
+    /* void Update() {
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
+            
+            Cooldown();
+
+        }
+    } */
+
     public virtual void FixedUpdate()
     {
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
-            
+
             Cooldown();
 
             Fire();
@@ -33,9 +40,9 @@ public class WeaponSingleShotFire : MonoBehaviour
     public virtual void Cooldown() {
         
         if (!canFire) {
-            timer += Time.deltaTime;
+            timer += Time.fixedDeltaTime;
             
-            if(timer > parent.timeBetweenFiring) {
+            if(timer > parent.timeBetweenFiring * player.fireRateModifier) {
                 canFire = true;
                 timer = 0;
             }
