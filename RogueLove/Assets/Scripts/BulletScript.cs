@@ -30,6 +30,7 @@ public class BulletScript : MonoBehaviour
 
     public float damage;
 
+    // Lower is more accurate
     [SerializeField]
     private float accuracy;
 

@@ -80,12 +80,12 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 9002574545939734802, guid: c596fa8edadf64845b1f47e76cd82929, type: 3}
+  m_Sprite: {fileID: 21300000, guid: c596fa8edadf64845b1f47e76cd82929, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.068, y: 0.059}
+  m_Size: {x: 0.15, y: 0.15}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -108,7 +108,7 @@ MonoBehaviour:
   coll: {fileID: 5490067005516740771}
   force: 5
   damage: 5
-  accuracy: 0.6
+  accuracy: 0.5
   isFire: 0
 --- !u!50 &6018900055118431996
 Rigidbody2D:
@@ -174,9 +174,9 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.465, y: 0.485}
-    oldSize: {x: 0.16, y: 0.32}
-    newSize: {x: 0.068, y: 0.059}
+    pivot: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.15, y: 0.15}
+    newSize: {x: 0.15, y: 0.15}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
@@ -221,7 +221,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &321038370266723945
 Transform:
   m_ObjectHideFlags: 0

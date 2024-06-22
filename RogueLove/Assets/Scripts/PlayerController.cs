@@ -39,10 +39,9 @@ public class PlayerController : MonoBehaviour
     
     private VolumeProfile volumeProfile;
 
-    [SerializeField]
-    private CameraShake shake;
-
     [SerializeField] private CircleCollider2D dashColl;
+
+    [SerializeField] public CameraShake hurtShake;
 
     [Header("STATS")]
 
@@ -112,9 +111,9 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float collisionOffset = 0.01f;
 
-    [SerializeField] private float shakeDuration;
-    [SerializeField] private float shakeAmplitude;
-    [SerializeField] private float shakeFrequency;
+    [SerializeField] private float hurtShakeDuration;
+    [SerializeField] private float hurtShakeAmplitude;
+    [SerializeField] private float hurtShakeFrequency;
 
     public float Health {
         set {
@@ -153,9 +152,9 @@ public class PlayerController : MonoBehaviour
             volumeProfile = FindAnyObjectByType<Volume>().sharedProfile;
             Debug.Log("VolumeProfile volumeProfile is null! Reassigned.");
         }
-        if (shake == null) {
+        if (hurtShake == null) {
             Debug.Log("CameraShake camShake is null! Reassigned.");
-            shake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
+            hurtShake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
         }
 
         // Set health bar and energy bar references on each stage load
@@ -392,7 +391,7 @@ public class PlayerController : MonoBehaviour
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && iFrame == false) {
             iFrame = true;
             StartCoroutine(SetHurtFlash(true));
-            StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
+            StartCoroutine(hurtShake.Shake(hurtShakeDuration, hurtShakeAmplitude, hurtShakeFrequency));
             Health -= damage;
             healthBar.SetHealth(currentHealth);
             Debug.Log("Player took damage!");
