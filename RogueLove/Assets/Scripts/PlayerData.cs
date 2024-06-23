@@ -11,9 +11,9 @@ public class PlayerData
 
     public float playerDamageModifier;
 
-    public float playerHealth;
+    public int playerHealth;
 
-    public float playerMaxHealth;
+    public int playerMaxHealth;
 
     public float playerMoveSpeed;
 

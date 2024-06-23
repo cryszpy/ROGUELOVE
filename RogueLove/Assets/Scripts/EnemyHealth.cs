@@ -51,7 +51,7 @@ public class EnemyHealth : MonoBehaviour
             healthBar = this.GetComponentInChildren<HealthBar>();
         }
         currentHealth = maxHealth;
-        healthBar.SetMaxHealth(maxHealth);
+        //healthBar.SetMaxHealth(maxHealth);
 
         if (animator == null) {
             Debug.Log("EnemyHealth animator is null! Reassigned.");
@@ -66,7 +66,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float damage, Vector2 direction) {
         Health -= damage;
         Debug.Log("Took this amount of damage: " + damage);
-        healthBar.SetHealth(currentHealth);
+        //healthBar.SetHealth(currentHealth);
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
         if (Health <= 0) {
@@ -81,7 +81,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeFireDamage(float damage, Vector2 direction) {
         Health -= damage;
         Debug.Log("Took this amount of damage: " + damage);
-        healthBar.SetHealth(currentHealth);
+        //healthBar.SetHealth(currentHealth);
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
         if (Health <= 0) {
@@ -99,19 +99,19 @@ public class EnemyHealth : MonoBehaviour
         takingFireDamage = true;
         Health -= damage;
         Debug.Log("Took this amount of FIRE damage: " + damage);
-        healthBar.SetHealth(currentHealth);
+        //healthBar.SetHealth(currentHealth);
 
         yield return new WaitForSeconds(1f);
 
         Health -= damage;
         Debug.Log("Took this amount of FIRE damage: " + damage);
-        healthBar.SetHealth(currentHealth);
+        //healthBar.SetHealth(currentHealth);
 
         yield return new WaitForSeconds(1f);
 
         Health -= damage;
         Debug.Log("Took this amount of FIRE damage: " + damage);
-        healthBar.SetHealth(currentHealth);
+        //healthBar.SetHealth(currentHealth);
 
         takingFireDamage = false;
     }

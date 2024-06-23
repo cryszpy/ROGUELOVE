@@ -60,7 +60,7 @@ public abstract class Enemy : MonoBehaviour
     [Header("ENEMY STATS")]
 
     // This enemy's attack damage
-    public float damage;
+    public int damage;
 
     // This enemy's movement speed
     [SerializeField]

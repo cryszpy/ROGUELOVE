@@ -275,7 +275,7 @@ MonoBehaviour:
   expOrb: {fileID: 2496777416409024874, guid: c277ee52a28e84f81881014f10b695ab, type: 3}
   minExp: 2
   maxExp: 5
-  damage: 2
+  damage: 1
   chaseSpeed: 350
   wanderSpeed: 30
   rangedAttackCooldownMin: 0
@@ -703,6 +703,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5255361493749537144}
     m_Modifications:
+    - target: {fileID: 2021747240465232049, guid: 97ac4ca7d8a0d418094ca9640103934a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4728475228696150096, guid: 97ac4ca7d8a0d418094ca9640103934a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -814,7 +818,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 923596922019481717}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31933609d165c4e33afa3185f108f1e9, type: 3}
   m_Name: 

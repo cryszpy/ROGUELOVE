@@ -76,15 +76,15 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float dashingPower;
 
     // Player max health
-    private static float maxHealth;
-    public static float MaxHealth { get => maxHealth; set => maxHealth = value; }
+    private static int maxHealth;
+    public static int MaxHealth { get => maxHealth; set => maxHealth = value; }
 
-    public static void AddMaxHealth(float num) {
+    public static void AddMaxHealth(int num) {
         MaxHealth += num;
     }
 
     // Player current health
-    public static float currentHealth;
+    public static int currentHealth;
 
     // Player movement speed
     private static float moveSpeed = 1.0f;
@@ -115,7 +115,7 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hurtShakeAmplitude;
     [SerializeField] private float hurtShakeFrequency;
 
-    public float Health {
+    public int Health {
         set {
             currentHealth = value;
             if(currentHealth <= 0) {
@@ -174,11 +174,12 @@ public class PlayerController : MonoBehaviour
         } 
         // Save data does not exist, and player clicked load save somehow
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+            GameStateManager.SetSave(false);
             Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
         } 
         // Save data does not exist and player did not click load save --> most likely started new game
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            MaxHealth = 6;
+            MaxHealth = 4;
             Health = MaxHealth;
             MaxEnergy = 20;
             Experience = 0;
@@ -386,7 +387,7 @@ public class PlayerController : MonoBehaviour
         */
     }
 
-    public void TakeDamage(float damage) {
+    public void TakeDamage(int damage) {
 
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && iFrame == false) {
             iFrame = true;

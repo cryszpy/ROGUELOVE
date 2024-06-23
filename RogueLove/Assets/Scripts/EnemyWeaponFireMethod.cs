@@ -16,8 +16,12 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
     public override void FixedUpdate()
     {
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && enemy.enemyType != Enemy.EnemyType.DEAD) {
+
+            Cooldown();
             
-            base.FixedUpdate();
+            if (canFire) {
+                Fire();
+            }
         }
     }
 

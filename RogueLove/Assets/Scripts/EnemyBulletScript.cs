@@ -23,7 +23,7 @@ public class EnemyBulletScript : MonoBehaviour
 
     [SerializeField] private float force;
 
-    [SerializeField] private float damage = 2;
+    [SerializeField] private int damage = 2;
 
     [SerializeField] private bool reflected = false;
 

@@ -102,6 +102,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: 3c18aea30c50847148d1d43d8fa191ac, type: 3}
+  ammoMax: 100
+  ammoPerClick: 0
+  currentAmmo: 100
+  infiniteAmmo: 1
   timeBetweenFiring: 0
   sprite: {fileID: 164230574282869635}
   fireSound: 
@@ -121,7 +125,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   parent: {fileID: 5875939324330161573}
   player: {fileID: 0}
+  shake: {fileID: 0}
   canFire: 1
+  shakeDuration: 0
+  shakeAmplitude: 0
+  shakeFrequency: 0
   enemy: {fileID: 688565378050225313}
 --- !u!114 &6787036634362172547
 MonoBehaviour:
@@ -666,6 +674,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 5255361493749537144}
     m_Modifications:
+    - target: {fileID: 2021747240465232049, guid: 97ac4ca7d8a0d418094ca9640103934a, type: 3}
+      propertyPath: m_Enabled
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 4728475228696150096, guid: 97ac4ca7d8a0d418094ca9640103934a, type: 3}
       propertyPath: m_AnchorMax.x
       value: 1
@@ -781,7 +793,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 923596922019481717}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 31933609d165c4e33afa3185f108f1e9, type: 3}
   m_Name: 

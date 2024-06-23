@@ -236,6 +236,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
+  ammoMax: 270
+  ammoPerClick: 3
+  currentAmmo: 270
+  infiniteAmmo: 0
   timeBetweenFiring: 1
   sprite: {fileID: 8597708387981352064}
   fireSound: PlayerBullet
@@ -281,8 +285,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 4314833407542651076}
+  shake: {fileID: 0}
   player: {fileID: 0}
   canFire: 1
+  shakeDuration: 0
+  shakeAmplitude: 0
+  shakeFrequency: 0
 --- !u!1 &4873271851133285175
 GameObject:
   m_ObjectHideFlags: 0
@@ -738,6 +746,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
+  ammoMax: 100
+  ammoPerClick: 0
+  currentAmmo: 100
+  infiniteAmmo: 1
   timeBetweenFiring: 0.3
   sprite: {fileID: 7665278464688674251}
   fireSound: PlayerBullet
