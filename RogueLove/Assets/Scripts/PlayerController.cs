@@ -115,6 +115,8 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hurtShakeAmplitude;
     [SerializeField] private float hurtShakeFrequency;
 
+    public bool savePressed = false;
+
     public int Health {
         set {
             currentHealth = value;
@@ -130,7 +132,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void Start()
+    void PlayerStart()
     {
         if (rb == null) {
             rb = GetComponent<Rigidbody2D>();
@@ -171,6 +173,7 @@ public class PlayerController : MonoBehaviour
         } 
         // Save data exists but player did not click load save --> most likely a NextLevel() call
         else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+            Debug.Log("BRUH");
         } 
         // Save data does not exist, and player clicked load save somehow
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
@@ -198,6 +201,14 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update() {
+
+        if (savePressed) {
+            savePressed = false;
+            PlayerStart();
+            SavePlayer();
+            GameStateManager.SetSave(false);
+        }
+
         if (Input.GetKeyDown(KeyCode.Space) && canDash) {
             canDash = false;
             isDashing = true;
@@ -414,6 +425,7 @@ public class PlayerController : MonoBehaviour
 
     public void SavePlayer () {
         SaveSystem.SavePlayer(this, weapon);
+        Debug.Log("SAVE CALLED");
     }
 
     public void LoadPlayer() {
@@ -426,8 +438,10 @@ public class PlayerController : MonoBehaviour
         healthBar.SetMaxHealth(MaxHealth);
 
         // Load health
+        Debug.Log(data.playerHealth);
         Health = data.playerHealth;
         healthBar.SetHealth(Health);
+        
 
         // Load damage modifier
         damageModifier = data.playerDamageModifier;

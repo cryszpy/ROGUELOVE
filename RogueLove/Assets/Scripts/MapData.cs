@@ -26,7 +26,6 @@ public class MapData
 
         tileTypes = new int[map.gridHandler.GetLength(0) * map.gridHandler.GetLength(1)];
         oTileTypes = new int[map.gridHandler.GetLength(0) * map.gridHandler.GetLength(1)];
-        //Debug.Log("tileTypes length: " + tileTypes.Length);
 
         int listNum = 0;
         
@@ -35,18 +34,22 @@ public class MapData
 
             for (int y = 0; y < map.gridHandler.GetLength(1); y++) {
 
-                TileBase type = map.tilemap.GetTile(new Vector3Int(x, y, 0));
+                //TileBase type = map.floorTilemap.GetTile(new Vector3Int(x, y, 0));
+                //TileBase oType = map.oTilemap.GetTile(new Vector3Int(x, y, 0));
+                int type = (int)map.gridHandler[x, y];
                 TileBase oType = map.oTilemap.GetTile(new Vector3Int(x, y, 0));
 
-                if (type != null) {
-                    if (type == map.tiles.floor) {
-                        tileTypes[listNum] = 1;
-                    } else if (type == map.tiles.decor) {
-                        tileTypes[listNum] = 2;
-                    } else if (type == map.tiles.empty) {
-                        tileTypes[listNum] = 3;
-                    }
+                //if (type != null) {
+                if (type == (int)Grid.FLOOR) {
+                    tileTypes[listNum] = 1;
+                } 
+                /*else if (type == map.tiles.decor) {
+                    tileTypes[listNum] = 2;
+                }*/ 
+                else if (type == (int)Grid.WALLS) {
+                    tileTypes[listNum] = 2;
                 }
+                //}
 
                 if (oType != null) {
                     if (oType == map.tiles.obstacles) {

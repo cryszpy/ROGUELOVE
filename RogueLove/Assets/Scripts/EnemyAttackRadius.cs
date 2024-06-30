@@ -7,9 +7,9 @@ public class EnemyAttackRadius : MonoBehaviour
 
     // Parent class
     [SerializeField]
-    private Enemy parent;
+    protected Enemy parent;
     
-    private void OnTriggerEnter2D(Collider2D collider) {
+    public virtual void OnTriggerEnter2D(Collider2D collider) {
 
         // If collided with the player, start attack sequence
         if (collider.CompareTag("Player")) {
@@ -23,7 +23,7 @@ public class EnemyAttackRadius : MonoBehaviour
         } 
     }
 
-    public IEnumerator AttackEntity(Collider2D target)
+    public virtual IEnumerator AttackEntity(Collider2D target)
     {
         // Deal damage to enemy                        
         if (target.TryGetComponent<PlayerController>(out var player)) {

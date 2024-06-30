@@ -17,6 +17,7 @@ TagManager:
   - CameraLookAt
   - EnergyBar
   - PlayerDashRadius
+  - WallsTilemap
   layers:
   - Default
   - TransparentFX

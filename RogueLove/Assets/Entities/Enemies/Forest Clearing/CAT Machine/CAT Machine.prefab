@@ -42,6 +42,7 @@ Transform:
   - {fileID: 1581292779354591126}
   - {fileID: 5643919067637981619}
   - {fileID: 6100693915990985616}
+  - {fileID: 9048533724289133424}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &163189661128954202
@@ -307,6 +308,88 @@ MonoBehaviour:
   knockback: 0.1
   takingFireDamage: 0
   immuneToFire: 1
+--- !u!1 &3143351202906502989
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9048533724289133424}
+  - component: {fileID: 3443175255637603175}
+  - component: {fileID: 9009111568807654337}
+  m_Layer: 9
+  m_Name: BreakWallRadius
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9048533724289133424
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3143351202906502989}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3622345872674339659}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!58 &3443175255637603175
+CircleCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3143351202906502989}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 64
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 1983
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 0.2}
+  m_Radius: 0.3
+--- !u!114 &9009111568807654337
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3143351202906502989}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: da23943db90db451ca9c3ccb595efc50, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parent: {fileID: 228780233094893626}
 --- !u!1 &5298915112532488095
 GameObject:
   m_ObjectHideFlags: 0
@@ -401,7 +484,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5643919067637981619}
   - component: {fileID: 7721675988448470313}
-  - component: {fileID: 4092740606560947124}
+  - component: {fileID: 4743777430853698853}
   m_Layer: 8
   m_Name: DamageRadius
   m_TagString: Untagged
@@ -460,7 +543,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.2}
   m_Radius: 0.45
---- !u!114 &4092740606560947124
+--- !u!114 &4743777430853698853
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -469,7 +552,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5716199046430564954}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 10b3bd717376649b8b9c5629339fa384, type: 3}
+  m_Script: {fileID: 11500000, guid: e5cb2c17a98ac4bd6925c9a3c58891a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 228780233094893626}
