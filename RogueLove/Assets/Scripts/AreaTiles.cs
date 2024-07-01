@@ -7,15 +7,18 @@ public class AreaTiles : MonoBehaviour
 {
     [Header("TILEMAP OBJECTS")]
 
-    public Tile floor;
+    public RuleTile floor;
 
     public Sprite ground;
 
     public RuleTile obstacles;
 
-    public Tile decor;
+    public RuleTile walls;
 
     public Tile empty;
+
+    public Tile borderUp;
+    public Tile borderDown;
 
     public Sprite wallUp;
 

@@ -23,19 +23,19 @@ public class EnemyBreakWall : MonoBehaviour
             Debug.Log(hitPosition);
             Debug.Log("Cell:" + grid.WorldToCell(hitPosition));
 
-            if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y)) == parent.map.tiles.decor) {
+            if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y), parent.map.tiles.empty);
             } 
-            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y + 1)) == parent.map.tiles.decor) {
+            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y + 1)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y + 1), parent.map.tiles.empty);
             } 
-            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x + 1, cellPos.y)) == parent.map.tiles.decor) {
+            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x + 1, cellPos.y)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x + 1, cellPos.y), parent.map.tiles.empty);
             }
-            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y - 1)) == parent.map.tiles.decor) {
+            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y - 1)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 1), parent.map.tiles.empty);
             } 
-            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x - 1, cellPos.y)) == parent.map.tiles.decor) {
+            else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x - 1, cellPos.y)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x - 1, cellPos.y), parent.map.tiles.empty);
             } else {
                 Debug.LogWarning("Could not find wall for " + parent.gameObject.name + " to break!");

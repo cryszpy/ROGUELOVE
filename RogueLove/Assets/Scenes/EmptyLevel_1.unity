@@ -598,15 +598,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1bbc9f81db5154f67bdb1e8662d7ab42, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  floor: {fileID: 11400000, guid: bdf5160cc905c45f7b3ccb04838b3c83, type: 2}
+  floor: {fileID: 11400000, guid: cbc82f1a7e4644f9d8c901e5b24aef76, type: 2}
   ground: {fileID: 1828385713, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
   obstacles: {fileID: 11400000, guid: 9a4202bb60da84934802a13b054cccc0, type: 2}
-  decor: {fileID: 11400000, guid: c0c096c9d8b3a43828755964daef08fb, type: 2}
+  walls: {fileID: 11400000, guid: 2bb634a50b99e43a2bbaba3bb5cfbc4e, type: 2}
   empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
+  borderUp: {fileID: 11400000, guid: 8d06dc7e0d8114c7f884afcdc01c83d3, type: 2}
+  borderDown: {fileID: 11400000, guid: c0c096c9d8b3a43828755964daef08fb, type: 2}
   wallUp: {fileID: 21300000, guid: 116de4e1677f747a198b713e9e246853, type: 3}
-  wallDown: {fileID: 528089134, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
-  wallLeft: {fileID: -579220485, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
-  wallRight: {fileID: 1927522313, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+  wallDown: {fileID: 21300000, guid: 116de4e1677f747a198b713e9e246853, type: 3}
+  wallLeft: {fileID: 21300000, guid: 116de4e1677f747a198b713e9e246853, type: 3}
+  wallRight: {fileID: 21300000, guid: 116de4e1677f747a198b713e9e246853, type: 3}
   doorwayObject: {fileID: 600595444076492859, guid: 5f4696210434b47c9aabda4fe42d5233, type: 3}
   breakables:
   - {fileID: 370015407570139740, guid: 2ee1f97e3845b40499272d07022ba644, type: 3}

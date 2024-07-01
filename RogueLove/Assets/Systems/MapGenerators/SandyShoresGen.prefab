@@ -47,21 +47,23 @@ MonoBehaviour:
   tileListX: 
   tileListY: 
   tiles: {fileID: 0}
-  tilemap: {fileID: 0}
+  floorTilemap: {fileID: 0}
+  wallsTilemap: {fileID: 0}
   oTilemap: {fileID: 0}
-  mapWidth: 35
-  mapHeight: 35
+  mapWidth: 50
+  mapHeight: 50
   maxWalkers: 4
   emptyChance: 45
   tileCount: 0
   oTileCount: 0
-  fillPercentage: 0.6
+  fillPercentage: 0.47
   waitTime: 0
   lvl: 0
   stg: 0
   spawnRadiusX: 4
   spawnRadiusY: 4
   player: {fileID: 0}
+  cameraLookAt: {fileID: 0}
   commonEnemies: []
   rareEnemies: []
   stationEnemies:
