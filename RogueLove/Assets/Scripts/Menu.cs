@@ -45,11 +45,6 @@ public class MainMenu : MonoBehaviour
 
         // Set up SAVED GAME
         if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
-            // Load save data to get level number
-            MapData data = SaveSystem.LoadMap();
-
-            GameStateManager.SetLevel(data.levelNum);
-            GameStateManager.SetStage(data.stageNum);
             saveSlots.SetActive(true);
         } 
         // START NEW GAME
@@ -63,8 +58,14 @@ public class MainMenu : MonoBehaviour
     }
 
     public void SaveSlotButton() {
+        // Load save data to get level number
+        MapData data = SaveSystem.LoadMap();
+
+        GameStateManager.SetLevel(data.levelNum);
+        GameStateManager.SetStage(data.stageNum);
+
         GameStateManager.SetSave(true);
-        
+
         // Load level
         TransitionManager.StartLeaf(GameStateManager.GetStage());
     }

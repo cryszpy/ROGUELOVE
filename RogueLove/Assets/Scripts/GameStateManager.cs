@@ -11,6 +11,9 @@ public class GameStateManager : MonoBehaviour
     // Reference to the active instance of this object
     private static GameStateManager instance;
 
+    // Dialogue Manager attached to this GameObject
+    public static DialogueManager dialogueManager;
+
     // State of the game
     public enum GAMESTATE {
         MENU, PLAYING, PAUSED, GAMEOVER
@@ -23,6 +26,14 @@ public class GameStateManager : MonoBehaviour
     }
     public static void SetState(GAMESTATE newState) {
         state = newState;
+        Time.timeScale = state switch
+        {
+            GAMESTATE.MENU => 1,
+            GAMESTATE.GAMEOVER => 1,
+            GAMESTATE.PAUSED => 0,
+            GAMESTATE.PLAYING => 1,
+            _ => (float)1,
+        };
     }
 
     // Methods to check whether the load save button was pressed
@@ -71,13 +82,15 @@ public class GameStateManager : MonoBehaviour
             Destroy(gameObject);
         } else {
             instance = this;
+            dialogueManager = this.GetComponent<DialogueManager>();
+            Debug.Log(dialogueManager);
             DontDestroyOnLoad(gameObject);
         }
 
         if (GetState() == 0) {
-            state = GAMESTATE.MENU;
+            SetState(GAMESTATE.MENU);
         } else {
-            state = GAMESTATE.PLAYING;
+            SetState(GAMESTATE.PLAYING);
         }
         
         sceneList = this.gameObject.GetComponent<SceneList>();
@@ -85,11 +98,11 @@ public class GameStateManager : MonoBehaviour
         //Debug.Log("previous scene: " + GameStateManager.PreviousScene);  // use this in any level to get the last level.
     }
 
-    void Update() {
+    /* void Update() {
         if (state != GAMESTATE.PAUSED && state != GAMESTATE.GAMEOVER) {
             Time.timeScale = 1;
         }
-    }
+    } */
 
     public static void NextLevel() {
 
@@ -135,18 +148,16 @@ public class GameStateManager : MonoBehaviour
     }
 
     public static void TogglePause() {
-        if (state == GAMESTATE.PLAYING) {
-            state = GAMESTATE.PAUSED;
-            Time.timeScale = 0;
-        } else if (state == GAMESTATE.PAUSED) {
-            state = GAMESTATE.PLAYING;
-            Time.timeScale = 1;
+        if (GetState() == GAMESTATE.PLAYING) {
+            SetState(GAMESTATE.PAUSED);
+        } else if (GetState() == GAMESTATE.PAUSED) {
+            SetState(GAMESTATE.PLAYING);
         }
     }
 
     public static void GameOver() {
-        if (state == GAMESTATE.PLAYING) {
-            state = GAMESTATE.GAMEOVER;
+        if (GetState() == GAMESTATE.PLAYING) {
+            SetState(GAMESTATE.GAMEOVER);
         }
     }
 }

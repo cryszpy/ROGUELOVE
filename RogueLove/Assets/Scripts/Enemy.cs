@@ -262,6 +262,7 @@ public abstract class Enemy : MonoBehaviour
     public virtual void PlayerCheck() {
 
         if (!timerSet) {
+
             // Sets the amount of time spent moving
             moveTime = UnityEngine.Random.Range(3, 5);
 
@@ -331,12 +332,10 @@ public abstract class Enemy : MonoBehaviour
         force = wanderSpeed * Time.fixedDeltaTime * direction;
 
         rb.AddForce(force);
-
-        //StartCoroutine(Roam());
-        //return;
     }
 
     public virtual Vector3 GetWanderTile() {
+
         // Picks a random tile within radius
         float tileX = UnityEngine.Random.Range(this.transform.position.x - followCollider.radius, 
             this.transform.position.y + followCollider.radius);
@@ -395,13 +394,13 @@ public abstract class Enemy : MonoBehaviour
 
         // Increments dead enemy counter
         WalkerGenerator.SetDeadEnemy();
-        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
+        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.EnemyTotal);
     }
 
     public virtual void RemoveEnemy() {
         SpawnExp();
         Destroy(gameObject);
         WalkerGenerator.SetDeadEnemy();
-        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.GetEnemyTotal());
+        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.EnemyTotal);
     }
 }

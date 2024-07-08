@@ -15,7 +15,8 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
     // Update is called once per frame
     public override void FixedUpdate()
     {
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && enemy.enemyType != Enemy.EnemyType.DEAD) {
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && GameStateManager.GetState() != GameStateManager.GAMESTATE.MENU 
+            && enemy.enemyType != Enemy.EnemyType.DEAD) {
 
             Cooldown();
             

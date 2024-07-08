@@ -18,6 +18,12 @@ TagManager:
   - EnergyBar
   - PlayerDashRadius
   - WallsTilemap
+  - ContinueButton
+  - DialogueName
+  - DialogueDialogue
+  - DialogueSprite
+  - GameStateManager
+  - DialogueBox
   layers:
   - Default
   - TransparentFX

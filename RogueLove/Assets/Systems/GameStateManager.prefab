@@ -11,9 +11,10 @@ GameObject:
   - component: {fileID: 8162904416319405166}
   - component: {fileID: 1304198974309830220}
   - component: {fileID: 1649054577632431320}
+  - component: {fileID: 6653023602489195133}
   m_Layer: 0
   m_Name: GameStateManager
-  m_TagString: Untagged
+  m_TagString: GameStateManager
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -61,3 +62,23 @@ MonoBehaviour:
   - Scenes/MainMenu
   - Scenes/EmptyLevel
   - Scenes/EmptyLevel_2
+--- !u!114 &6653023602489195133
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7135090300805884794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f9aa0da60fde4522a7e9486770a5ab6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dialogueSprite: {fileID: 0}
+  nameText: {fileID: 0}
+  dialogueText: {fileID: 0}
+  animator: {fileID: 0}
+  dialogueList: {fileID: 11400000, guid: bc6e93211537a4eeba2a8eb6207a3304, type: 2}
+  continueButton: {fileID: 0}
+  textCPS: 0.03
+  previousGameState: 0

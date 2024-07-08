@@ -28,6 +28,7 @@ public class Doorway : MonoBehaviour
         cam.Follow = this.transform;
         yield return new WaitForSeconds(2);
         cam.Follow = cameraLookAt;
+        WalkerGenerator.doneWithLevel = true;
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject player) {

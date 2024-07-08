@@ -17,8 +17,16 @@ public class AreaTiles : MonoBehaviour
 
     public Tile empty;
 
-    public Tile borderUp;
+    public Tile grass;
+
+    public Tile grassTop;
+
+    public Tile borderTop;
     public Tile borderDown;
+
+    public Tile borderLeft;
+
+    public Tile borderRight;
 
     public Sprite wallUp;
 

@@ -7,7 +7,7 @@ using System.IO;
 using System;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using System.Security.Cryptography;
+using UnityEngine.Tilemaps;
 
 public class PlayerController : MonoBehaviour
 {
@@ -97,9 +97,32 @@ public class PlayerController : MonoBehaviour
     private static float maxEnergy;
     public static float MaxEnergy { get => maxEnergy; set => maxEnergy = value; }
 
+    private static bool chargedBattery = false;
+
     // Player experience / energy
     private static float experience;
-    public static float Experience { get => experience; set => experience = value; }
+    public static float Experience { 
+        get => experience; 
+
+        set {
+            experience = value;
+
+            if (experience >= maxEnergy) {
+
+                if (!chargedBattery) {
+                    chargedBattery = true;
+
+                    // Play battery full animation here!!
+                    Debug.Log("Battery full!");
+
+                    GameStateManager.dialogueManager.AddRandomDialogueOfType(DialogueType.NOREQ);
+                }
+                
+            } else {
+                chargedBattery = false;
+            }
+        }
+    }
 
     public static void AddExperience(float exp) {
         Experience += exp;
@@ -134,6 +157,10 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void PlayerStart()
     {
+
+        // Ignores any collisions with enemies (layer 9)
+        movementFilter.SetLayerMask(~(1 << 9));
+        
         if (rb == null) {
             rb = GetComponent<Rigidbody2D>();
             Debug.Log("PlayerController rb is null! Reassigned.");
@@ -198,6 +225,8 @@ public class PlayerController : MonoBehaviour
             weapon = component;
             currentWeaponIndex = 0;
         }
+
+        
     }
 
     private void Update() {
@@ -207,6 +236,11 @@ public class PlayerController : MonoBehaviour
             PlayerStart();
             SavePlayer();
             GameStateManager.SetSave(false);
+        }
+
+        // If in a menu, then do not take any input
+        if (GameStateManager.GetState() == GameStateManager.GAMESTATE.MENU) {
+            return;
         }
 
         if (Input.GetKeyDown(KeyCode.Space) && canDash) {
@@ -264,6 +298,12 @@ public class PlayerController : MonoBehaviour
     }
     
     private void FixedUpdate() {
+
+        // If in a menu, then do not take any input
+        if (GameStateManager.GetState() == GameStateManager.GAMESTATE.MENU) {
+            animator.SetBool("IsMoving", false);
+            return;
+        }
 
         // Dash for the remaining duration, and don't take anything else as input
         if (isDashing) {
@@ -370,11 +410,7 @@ public class PlayerController : MonoBehaviour
     // Move function
     private bool TryMove(Vector2 direction) {
         if (direction != Vector2.zero) {
-            int count = rb.Cast(
-                direction, 
-                movementFilter, 
-                castCollisions, 
-                MoveSpeed * Time.fixedDeltaTime + collisionOffset);
+            int count = rb.Cast(direction, movementFilter, castCollisions, MoveSpeed * Time.fixedDeltaTime + collisionOffset);
         
             if(count == 0) {
                 rb.MovePosition(rb.position + direction * MoveSpeed * Time.fixedDeltaTime);
@@ -425,7 +461,7 @@ public class PlayerController : MonoBehaviour
 
     public void SavePlayer () {
         SaveSystem.SavePlayer(this, weapon);
-        Debug.Log("SAVE CALLED");
+        Debug.Log("SAVE PLAYER CALLED");
     }
 
     public void LoadPlayer() {
@@ -438,7 +474,6 @@ public class PlayerController : MonoBehaviour
         healthBar.SetMaxHealth(MaxHealth);
 
         // Load health
-        Debug.Log(data.playerHealth);
         Health = data.playerHealth;
         healthBar.SetHealth(Health);
         
@@ -455,6 +490,8 @@ public class PlayerController : MonoBehaviour
         // Set speeds
         MoveSpeed = data.playerMoveSpeed;
         fireRateModifier = data.playerFireRateModifier;
+
+        Debug.Log("LOADED PLAYER");
     }
 
     public void DeathAnim() {

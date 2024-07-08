@@ -50,13 +50,13 @@ MonoBehaviour:
   floorTilemap: {fileID: 0}
   wallsTilemap: {fileID: 0}
   oTilemap: {fileID: 0}
-  mapWidth: 50
-  mapHeight: 50
+  mapWidth: 40
+  mapHeight: 40
   maxWalkers: 8
-  emptyChance: 60
+  emptyChance: 70
   tileCount: 0
   oTileCount: 0
-  fillPercentage: 0.47
+  fillPercentage: 0.67
   waitTime: 0
   lvl: 0
   stg: 0

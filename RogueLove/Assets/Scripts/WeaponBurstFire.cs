@@ -29,7 +29,7 @@ public class WeaponBurstFire : MonoBehaviour
     // Update is called once per frame
     public virtual void FixedUpdate()
     {
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
+        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && GameStateManager.GetState() != GameStateManager.GAMESTATE.MENU) {
             
             Cooldown();
 

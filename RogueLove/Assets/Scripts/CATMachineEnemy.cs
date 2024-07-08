@@ -9,6 +9,15 @@ using System;
 public class CATMachineEnemy : ContactEnemy
 {
 
+    public Collider2D breakWallColl;
+
+    /* public override void Start() {
+
+        base.Start();
+
+        Physics2D.IgnoreCollision(breakWallColl, player.gameObject.GetComponent<PlayerController>().contactColl);
+    } */
+
     public override void PlayerCheck() {
 
         if (!timerSet) {
