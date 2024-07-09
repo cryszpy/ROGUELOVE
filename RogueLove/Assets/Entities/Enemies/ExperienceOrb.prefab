@@ -359,7 +359,7 @@ MonoBehaviour:
   maxExp: 0
   damage: 0
   chaseSpeed: 8
-  wanderSpeed: 4000
+  wanderSpeed: 200
   rangedAttackCooldownMin: 0
   rangedAttackCooldownMax: 0
   attackCooldown: 0

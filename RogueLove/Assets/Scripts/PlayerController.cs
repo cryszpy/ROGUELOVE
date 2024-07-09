@@ -116,6 +116,9 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Battery full!");
 
                     GameStateManager.dialogueManager.AddRandomDialogueOfType(DialogueType.NOREQ);
+
+                    // Experience carries over to the next level (still need to make exponentially higher max energy reqs)
+                    experience -= maxEnergy;
                 }
                 
             } else {

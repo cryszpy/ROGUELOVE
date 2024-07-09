@@ -33,7 +33,6 @@ public class ExperienceOrb : ContactEnemy
                     dir1 = Vector2.up;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1;
                     combined = dir1;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -43,7 +42,6 @@ public class ExperienceOrb : ContactEnemy
                     dir2 = Vector2.left;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1 * dir2;
                     combined = dir1 * dir2;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -52,7 +50,6 @@ public class ExperienceOrb : ContactEnemy
                     dir1 = Vector2.left;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1;
                     combined = dir1;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -62,7 +59,6 @@ public class ExperienceOrb : ContactEnemy
                     dir2 = Vector2.down;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1 * dir2;
                     combined = dir1 * dir2;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -71,7 +67,6 @@ public class ExperienceOrb : ContactEnemy
                     dir1 = Vector2.down;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1;
                     combined = dir1;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -81,7 +76,6 @@ public class ExperienceOrb : ContactEnemy
                     dir2 = Vector2.down;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1 * dir2;
                     combined = dir1 * dir2;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -90,7 +84,6 @@ public class ExperienceOrb : ContactEnemy
                     dir1 = Vector2.right;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1;
                     combined = dir1;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -100,7 +93,6 @@ public class ExperienceOrb : ContactEnemy
                     dir2 = Vector2.up;
 
                     force = Vector2.zero;
-                    force = Time.deltaTime * wanderSpeed * dir1 * dir2;
                     combined = dir1 * dir2;
                     StartCoroutine(Emerge(combined));
                     break;
@@ -114,8 +106,8 @@ public class ExperienceOrb : ContactEnemy
         }
     }
 
-    private IEnumerator Emerge(Vector2 direction) {
-        rb.AddForce(direction * new Vector2(0, 10) * Time.deltaTime, ForceMode2D.Impulse);
+    private IEnumerator Emerge(Vector2 fuerza) {
+        rb.AddForce(Time.deltaTime * wanderSpeed * fuerza, ForceMode2D.Impulse);
         yield return new WaitForSeconds(0.3f);
         expSpawn = false;
     }
