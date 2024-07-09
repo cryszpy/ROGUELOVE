@@ -10,6 +10,9 @@ public class Doorway : MonoBehaviour
     
     public Transform cameraLookAt;
 
+    [SerializeField]
+    private Animator animator;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -26,9 +29,13 @@ public class Doorway : MonoBehaviour
 
     private IEnumerator CameraSway() {
         cam.Follow = this.transform;
-        yield return new WaitForSeconds(2);
+        yield return new WaitForSeconds(3.5f);
         cam.Follow = cameraLookAt;
         WalkerGenerator.doneWithLevel = true;
+    }
+
+    public void TriggerAnimOpen() {
+        animator.SetTrigger("Open");
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject player) {

@@ -9,8 +9,40 @@ public class EnemyBreakWall : MonoBehaviour
     // Parent class
     [SerializeField]
     protected Enemy parent;
+
+    private bool canCheck = true;
+
+    [SerializeField]
+    private float checkTime;
+
+    private float checkTimer = 0;
+
+    void FixedUpdate() {
+
+        if (!canCheck) {
+            checkTimer += Time.fixedDeltaTime;
+            //Debug.Log("wanderTimer: " + wanderTimer);
+            if(checkTimer > checkTime) {
+                //Debug.Log("Done With WanderTimer");
+                canCheck = true;
+                checkTimer = 0;
+            }
+        }
+    }
     
-    public void OnCollisionEnter2D(Collision2D collider) {
+    /* public void OnCollisionEnter2D(Collision2D collider) {
+        CheckCollisions(collider);
+    } */
+
+    public void OnCollisionStay2D(Collision2D collider) {
+        if (canCheck) {
+            canCheck = false;
+            parent.animator.SetBool("Attack", true);
+            CheckCollisions(collider);
+        }
+    }
+
+    public void CheckCollisions(Collision2D collider) {
         var grid = parent.map.floorTilemap.layoutGrid;
         Vector3 hitPosition = Vector3.zero;
 
@@ -26,31 +58,23 @@ public class EnemyBreakWall : MonoBehaviour
 
             if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y), parent.map.tiles.empty);
-                AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
-                Debug.Log("Updated graph bounds because of broken block!");
             } 
             else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y + 1)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y + 1), parent.map.tiles.empty);
-                AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
-                Debug.Log("Updated graph bounds because of broken block!");
             } 
             else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x + 1, cellPos.y)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x + 1, cellPos.y), parent.map.tiles.empty);
-                AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
-                Debug.Log("Updated graph bounds because of broken block!");
             }
             else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x, cellPos.y - 1)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 1), parent.map.tiles.empty);
-                AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
-                Debug.Log("Updated graph bounds because of broken block!");
             } 
             else if (parent.map.wallsTilemap.GetTile(new Vector3Int(cellPos.x - 1, cellPos.y)) == parent.map.tiles.walls) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x - 1, cellPos.y), parent.map.tiles.empty);
-                AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
-                Debug.Log("Updated graph bounds because of broken block!");
             } else {
                 Debug.LogWarning("Could not find wall for " + parent.gameObject.name + " to break!");
             }
         }
+        AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
+        Debug.Log("Updated graph bounds because of broken block!");
     }
 }

@@ -225,8 +225,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.2}
-  m_Size: {x: 0.3, y: 0.3}
+  m_Offset: {x: 0, y: 0.8}
+  m_Size: {x: 1.2, y: 1.2}
   m_Direction: 0
 --- !u!95 &8722914626086714706
 Animator:
@@ -277,8 +277,8 @@ MonoBehaviour:
   minExp: 5
   maxExp: 12
   damage: 1
-  chaseSpeed: 225
-  wanderSpeed: 15
+  chaseSpeed: 900
+  wanderSpeed: 60
   rangedAttackCooldownMin: 0
   rangedAttackCooldownMax: 0
   attackCooldown: 0
@@ -306,7 +306,7 @@ MonoBehaviour:
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
   maxHealth: 75
-  knockback: 0.1
+  knockback: 0.4
   takingFireDamage: 0
   immuneToFire: 1
 --- !u!1 &3143351202906502989
@@ -365,7 +365,7 @@ CircleCollider2D:
     m_Bits: 4294967295
   m_ForceReceiveLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 1983
   m_ContactCaptureLayers:
     serializedVersion: 2
     m_Bits: 4294967295
@@ -376,8 +376,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.2}
-  m_Radius: 0.3
+  m_Offset: {x: 0, y: 0.8}
+  m_Radius: 1.4
 --- !u!114 &9009111568807654337
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -391,6 +391,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 228780233094893626}
+  checkTime: 2
 --- !u!1 &5298915112532488095
 GameObject:
   m_ObjectHideFlags: 0
@@ -542,8 +543,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.2}
-  m_Radius: 0.45
+  m_Offset: {x: 0, y: 0.8}
+  m_Radius: 1.2
 --- !u!114 &4743777430853698853
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -726,8 +727,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.2}
-  m_Radius: 1.5
+  m_Offset: {x: 0, y: 0.8}
+  m_Radius: 6
 --- !u!114 &591328465342926331
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -15,9 +15,12 @@ using UnityEngine.Tilemaps;
 
 public class WalkerGenerator : MonoBehaviour
 {
+
+    [SerializeField]
+    private Grid mapGrid;
     
     // 2D Array
-    public Grid[,] gridHandler;
+    public TileType[,] gridHandler;
 
     public List<int> tileListX = new();
 
@@ -240,13 +243,13 @@ public class WalkerGenerator : MonoBehaviour
     void InitializeGrid() {
 
         // Initializes grid size from variables
-        gridHandler = new Grid[mapWidth, mapHeight];
+        gridHandler = new TileType[mapWidth, mapHeight];
         tileCount = 0;
 
         // Loops through grid size and sets every tile to EMPTY tile
         for (int x = 0; x < gridHandler.GetLength(0); x++) {
             for (int y = 0; y < gridHandler.GetLength(1); y++) {
-                gridHandler[x,y] = Grid.EMPTY;
+                gridHandler[x,y] = TileType.EMPTY;
             }
         }
 
@@ -260,7 +263,7 @@ public class WalkerGenerator : MonoBehaviour
         WalkerObject currWalker = new WalkerObject(new Vector2(tileCenter.x, tileCenter.y), GetDirection(), 0.5f);
 
         // Sets current grid location to floor
-        gridHandler[tileCenter.x, tileCenter.y] = Grid.FLOOR;
+        gridHandler[tileCenter.x, tileCenter.y] = TileType.FLOOR;
         floorTilemap.SetTile(tileCenter, tiles.floor);
 
         // Adds current walker to Walker list
@@ -358,7 +361,7 @@ public class WalkerGenerator : MonoBehaviour
                 Vector3Int currPos4 = new Vector3Int((int)currWalker.position.x - 1, (int)currWalker.position.y - 1, 0);
 
                 // If the current position is not a floor tile, then set a new FLOOR tile in that position and increment the total tile count
-                if (gridHandler[currPos.x, currPos.y] != Grid.FLOOR) {
+                if (gridHandler[currPos.x, currPos.y] != TileType.FLOOR) {
                     floorTilemap.SetTile(currPos, tiles.floor);
                     tileListX.Add(currPos.x);
                     tileListY.Add(currPos.y);
@@ -379,10 +382,10 @@ public class WalkerGenerator : MonoBehaviour
                     tileListY.Add(currPos4.y);
                     tileCount++;
 
-                    gridHandler[currPos.x, currPos.y] = Grid.FLOOR;
-                    gridHandler[currPos.x - 1, currPos.y] = Grid.FLOOR;
-                    gridHandler[currPos.x, currPos.y - 1] = Grid.FLOOR;
-                    gridHandler[currPos.x - 1, currPos.y - 1] = Grid.FLOOR;
+                    gridHandler[currPos.x, currPos.y] = TileType.FLOOR;
+                    gridHandler[currPos.x - 1, currPos.y] = TileType.FLOOR;
+                    gridHandler[currPos.x, currPos.y - 1] = TileType.FLOOR;
+                    gridHandler[currPos.x - 1, currPos.y - 1] = TileType.FLOOR;
 
                 }
             }
@@ -396,7 +399,7 @@ public class WalkerGenerator : MonoBehaviour
         
         floorTilemap.SetTile(new Vector3Int(0, 0, 0), tiles.empty);
         tileCount--;
-        gridHandler[0, 0] = Grid.EMPTY;
+        gridHandler[0, 0] = TileType.EMPTY;
 
         CreateWalls();
         FillFloors();
@@ -416,12 +419,12 @@ public class WalkerGenerator : MonoBehaviour
             for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
 
                 // Checks each x and y value of the grid to see if they are floors
-                if (gridHandler[x, y] == Grid.EMPTY) {
+                if (gridHandler[x, y] == TileType.EMPTY) {
                     //bool hasCreatedDecor = false;
 
                     // DECOR CHECK
                     wallsTilemap.SetTile(new Vector3Int(x, y, 0), tiles.walls);
-                    gridHandler[x, y] = Grid.WALLS;
+                    gridHandler[x, y] = TileType.WALLS;
                     //hasCreatedDecor = true;
                     tileCount++;
                 }
@@ -438,7 +441,7 @@ public class WalkerGenerator : MonoBehaviour
             for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
 
                 // Checks each x and y value of the grid to see if they are floors
-                if (gridHandler[x, y] == Grid.WALLS) {
+                if (gridHandler[x, y] == TileType.WALLS) {
 
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.floor);
                     tileListX.Add(x);
@@ -458,12 +461,12 @@ public class WalkerGenerator : MonoBehaviour
             if (wallsTilemap.GetTile(new Vector3Int(x, gridHandler.GetLength(1) - 2, 0)) == tiles.walls) {
 
                 oTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grassTop);
-                gridHandler[x, gridHandler.GetLength(1) - 1] = Grid.BORDER;
+                gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created top border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.borderTop);
-                gridHandler[x, gridHandler.GetLength(1) - 1] = Grid.BORDER;
+                gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created top border tile");
             }
@@ -474,12 +477,12 @@ public class WalkerGenerator : MonoBehaviour
                 wallsTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
                 oTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
 
-                gridHandler[x, 0] = Grid.BORDER;
+                gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created bottom border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.borderDown);
-                gridHandler[x, 0] = Grid.BORDER;
+                gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created bottom border tile");
             }
@@ -495,12 +498,12 @@ public class WalkerGenerator : MonoBehaviour
                 wallsTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
                 oTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
 
-                gridHandler[0, y] = Grid.BORDER;
+                gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created left border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(0, y, 0), tiles.borderLeft);
-                gridHandler[0, y] = Grid.BORDER;
+                gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created left border tile");
             }
@@ -509,12 +512,12 @@ public class WalkerGenerator : MonoBehaviour
             if (wallsTilemap.GetTile(new Vector3Int(gridHandler.GetLength(1) - 2, y, 0)) == tiles.walls) {
 
                 oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(1) - 1, y, 0), tiles.grass);
-                gridHandler[gridHandler.GetLength(1) - 1, y] = Grid.BORDER;
+                gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created left border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(1) - 1, y, 0), tiles.borderRight);
-                gridHandler[gridHandler.GetLength(1) - 1, y] = Grid.BORDER;
+                gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
                 tileCount++;
                 Debug.Log("Created left border tile");
             }
@@ -533,12 +536,12 @@ public class WalkerGenerator : MonoBehaviour
                 int rand = UnityEngine.Random.Range(0, emptyChance);
 
                 // Checks each x and y value of the grid to see if they are floors
-                if (gridHandler[x, y] == Grid.FLOOR) {
+                if (gridHandler[x, y] == TileType.FLOOR) {
 
                     // If selected tile is a FLOOR tile, and chances are good, create an obstacle
-                    if (gridHandler[x, y] == Grid.FLOOR && rand == 0) {
+                    if (gridHandler[x, y] == TileType.FLOOR && rand == 0) {
                         oTilemap.SetTile(new Vector3Int(x, y, 0), tiles.obstacles);
-                        gridHandler[x, y] = Grid.OBSTACLES;
+                        gridHandler[x, y] = TileType.OBSTACLES;
                         oTileCount++;
                     }
                 }
@@ -551,7 +554,7 @@ public class WalkerGenerator : MonoBehaviour
         // For all different breakables in the level
         for (int b = 0; b < tiles.breakables.Length; b++) {
 
-            // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+            // Generate random amount of each breakable
             int breakRange = UnityEngine.Random.Range(6, 10);
 
             for (int br = 0; br < breakRange; br++) {
@@ -565,11 +568,11 @@ public class WalkerGenerator : MonoBehaviour
                     if (
                         //(floorTilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
                         //&& (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)
-                        gridHandler[tileListX[rand], tileListY[rand]] == Grid.FLOOR 
+                        gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR 
                         && oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles
                     ) {
 
-                        Instantiate(tiles.breakables[b], new Vector3(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f, 0), Quaternion.identity);
+                        Instantiate(tiles.breakables[b], new Vector3(tileListX[rand] * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tileListY[rand] * mapGrid.cellSize.y + (mapGrid.cellSize.y / 2), 0), Quaternion.identity);
                         break;
 
                     } else {
@@ -598,12 +601,12 @@ public class WalkerGenerator : MonoBehaviour
             for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
 
                 // Checks each x and y value of the grid to see if they are floors
-                if (gridHandler[x, y] == Grid.EMPTY) {
+                if (gridHandler[x, y] == TileType.EMPTY) {
                     bool hasCreatedDecor = false;
 
                     // DECOR CHECK
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.walls);
-                    gridHandler[x, y] = Grid.BORDER;
+                    gridHandler[x, y] = TileType.BORDER;
                     hasCreatedDecor = true;
                     tileCount++;
 
@@ -625,7 +628,7 @@ public class WalkerGenerator : MonoBehaviour
         for (int i = 0; i < tileListX.Count; i++) {
 
             // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-            if (gridHandler[tileListX[i], tileListY[randP]] == Grid.FLOOR 
+            if (gridHandler[tileListX[i], tileListY[randP]] == TileType.FLOOR 
                 && oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[randP])) != tiles.obstacles
                 /*(floorTilemap.GetSprite(new Vector3Int(tileListX[i], tileListY[randP])) == tiles.ground)
                 && (oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[randP])) != tiles.obstacles)
@@ -633,7 +636,7 @@ public class WalkerGenerator : MonoBehaviour
 
                 // Spawns Player
                 //player.SetActive(true);
-                player.transform.position = new Vector2((tileListX[i] * 0.16f) + 0.08f, (tileListY[randP] * 0.16f) + 0.02f);
+                player.transform.position = new Vector2((tileListX[i] * mapGrid.cellSize.x) + 0.08f, (tileListY[randP] * mapGrid.cellSize.y) + 0.02f);
                 break;
 
             } else {
@@ -647,30 +650,43 @@ public class WalkerGenerator : MonoBehaviour
     private void SpawnDoorway() {
         doorwaySpawned = false;
 
-        for (int i = gridHandler.GetLength(0); i <= gridHandler.GetLength(0) && i >= 0; i--) {
+        int rand = GetRandomTile();
 
-            // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-            if ((floorTilemap.GetSprite(new Vector3Int(i, (int)Mathf.Round(mapHeight/2))) == tiles.wallRight)
-            && (oTilemap.GetTile(new Vector3Int(i, (int)Mathf.Round(mapHeight/2))) != tiles.obstacles)
-            && (gridHandler[i, (int)Mathf.Round(mapHeight/2)] == Grid.FLOOR)) {
+        // For all tiles in the map
+        for (int x = 0; x < tileListX.Count; x++) {
 
-                // Spawns doorway
-                if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
-                    door.Create(tiles.doorwayObject, new Vector3((i * 0.16f) + 0.08f, ((int)Mathf.Round(mapHeight/2) * 0.16f) + 0.08f), Quaternion.identity, cameraLookAt);
-                    doorwaySpawned = true;
-                    break;
-                } else {
-                    Debug.LogError("Could not find Doorway component of door while spawning!");
-                    break;
-                }
+            // If chosen tile is a floor tile, and doesn't have obstacles, then generate breakable
+            if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
+                // Makes sure the chosen tile is not near the player (avoids accidentally skipping animation)
+                if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                        rand = GetRandomTile();
+                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                        rand = GetRandomTile();
+                    } else {
+
+                        // Spawn doorway
+                        if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
+                            door.Create(tiles.doorwayObject, new Vector2((tileListX[rand] * mapGrid.cellSize.x) + (mapGrid.cellSize.x / 2), (tileListY[rand] * mapGrid.cellSize.y) + (mapGrid.cellSize.y / 2)), Quaternion.identity, cameraLookAt);
+                            doorwaySpawned = true;
+                            break;
+                        } else {
+                            Debug.LogError("Could not find Doorway component of door while spawning!");
+                            break;
+                        }
+                    }
             } 
+            else {
+                rand = GetRandomTile();
+            }
         }
         if (!doorwaySpawned) {
             Debug.LogWarning("Could not find suitable tile to spawn doorway.");
 
             // DIALOGUE DEBUG ONLY, remove after done
-            doneWithLevel = true;
+            //doneWithLevel = true;
         }
     }
 
@@ -703,7 +719,7 @@ public class WalkerGenerator : MonoBehaviour
                     for (int i = 0; i < tileListX.Count; i++) {
                         
                         // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                        if (gridHandler[tileListX[randX], tileListY[randY]] == Grid.FLOOR) {
+                        if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
 
                             if (tileListX[randX] <= player.transform.position.x + spawnRadiusX 
                             && tileListX[randX] >= player.transform.position.x - spawnRadiusX) {
@@ -715,7 +731,7 @@ public class WalkerGenerator : MonoBehaviour
 
                                 // Spawns Enemy
                                 if (minibosses[m].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(minibosses[m], new Vector2(tileListX[randX] * 0.16f, tileListY[randY] * 0.16f), Quaternion.identity, this);   
+                                    enemy.Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);   
                                     enemyTotal++;
                                     break;
                                 }
@@ -752,7 +768,7 @@ public class WalkerGenerator : MonoBehaviour
                     for (int i = 0; i < tileListX.Count; i++) {
 
                         // Choose from the available floor tiles
-                        if (gridHandler[tileListX[randX], tileListY[randY]] == Grid.FLOOR) {
+                        if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
 
                             if (tileListX[randX] <= player.transform.position.x + (spawnRadiusX/2) 
                             && tileListX[randX] >= player.transform.position.x - (spawnRadiusX/2)) {
@@ -771,7 +787,7 @@ public class WalkerGenerator : MonoBehaviour
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                         //Debug.Log("Spawned UP WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * 0.16f + 0.08f, tileListY[randY] * 0.16f + 0.12f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, tileListY[randY] * mapGrid.cellSize.y + 0.12f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -783,7 +799,7 @@ public class WalkerGenerator : MonoBehaviour
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                         //Debug.Log("Spawned DOWN WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * 0.16f + 0.08f, (tileListY[randY] + 1) * 0.16f - 0.16f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, (tileListY[randY] + 1) * mapGrid.cellSize.y - 0.16f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -795,7 +811,7 @@ public class WalkerGenerator : MonoBehaviour
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                         //Debug.Log("Spawned LEFT WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] + 1) * 0.16f - 0.16f, (tileListY[randY] - 1) * 0.16f + 0.08f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] + 1) * mapGrid.cellSize.x - 0.16f, (tileListY[randY] - 1) * mapGrid.cellSize.y + 0.08f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -807,7 +823,7 @@ public class WalkerGenerator : MonoBehaviour
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                         //Debug.Log("Spawned RIGHT WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] - 1) * 0.16f + 0.32f, tileListY[randY] * 0.16f + 0.24f), rot, this);   
+                                        enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] - 1) * mapGrid.cellSize.x + 0.32f, tileListY[randY] * mapGrid.cellSize.y + 0.24f), rot, this);   
                                         enemyTotal++;
                                         break;
                                     }
@@ -847,7 +863,7 @@ public class WalkerGenerator : MonoBehaviour
                     for (int i = 0; i < tileListX.Count; i++) {
 
                         // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                        if (gridHandler[tileListX[rand], tileListY[rand]] == Grid.FLOOR) {
+                        if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
                             if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
                             && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
@@ -858,7 +874,7 @@ public class WalkerGenerator : MonoBehaviour
                             } else {
 
                                 if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                    enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
                                     enemyTotal++;
                                     break;
                                 }
@@ -892,7 +908,7 @@ public class WalkerGenerator : MonoBehaviour
                     for (int i = 0; i < tileListX.Count; i++) {
 
                         // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                        if (gridHandler[tileListX[rand], tileListY[rand]] == Grid.FLOOR) {
+                        if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
                             if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
                             && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
@@ -903,7 +919,7 @@ public class WalkerGenerator : MonoBehaviour
                             } else {
                                 // Spawns Enemy
                                 if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * 0.16f, tileListY[rand] * 0.16f), Quaternion.identity, this);   
+                                    enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
                                     enemyTotal++;
                                     break;
                                 }
@@ -953,11 +969,11 @@ public class WalkerGenerator : MonoBehaviour
         GridGraph gg = aData.gridGraph;
 
         // Gets the distance from 0,0 on the x axis (half of the total tilemap size)
-        float radiusX = (0.16f * (mapWidth - 1f)) / 2f;
+        float radiusX = (mapGrid.cellSize.x * (mapWidth - 1f)) / 2f;
         // Gets the distance from 0,0 on the y axis (half of the total tilemap size)
-        float radiusY = (0.16f * (mapHeight - 1f)) / 2f;
+        float radiusY = (mapGrid.cellSize.y * (mapHeight - 1f)) / 2f;
 
-        gg.SetDimensions((mapWidth - 1) * 4, (mapHeight - 1) * 4, 0.04f);
+        gg.SetDimensions((mapWidth - 1) * 4, (mapHeight - 1) * 4, mapGrid.cellSize.x / 4f);
         gg.center = new Vector3(radiusX, radiusY, 0);
 
         if (AstarPath.active.data.gridGraph.nodes == null) {
@@ -1002,7 +1018,7 @@ public class WalkerGenerator : MonoBehaviour
                 // If save data indicates 1, then set current tile position / type to a FLOOR tile
                 if (data.tileTypes[listNum] == 1) {
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.floor);
-                    gridHandler[x, y] = Grid.FLOOR;
+                    gridHandler[x, y] = TileType.FLOOR;
                     tileCount++;
                 }
                 /* If save data indicates 2, then set current tile position / type to an EMPTY tile
@@ -1015,7 +1031,7 @@ public class WalkerGenerator : MonoBehaviour
                 // If save data indicates 3, then set current tile position / type to an EMPTY tile (for wall generation)
                 else if (data.tileTypes[listNum] == 2) {
                     //floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.empty);
-                    gridHandler[x, y] = Grid.EMPTY;
+                    gridHandler[x, y] = TileType.EMPTY;
                     //tileCount++;
                 }
 
@@ -1023,7 +1039,7 @@ public class WalkerGenerator : MonoBehaviour
                 if (data.oTileTypes[listNum] == 1) {
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.floor);
                     oTilemap.SetTile(new Vector3Int(x, y, 0), tiles.obstacles);
-                    gridHandler[x, y] = Grid.OBSTACLES;
+                    gridHandler[x, y] = TileType.OBSTACLES;
                     oTileCount++;
                     oTileCount++;
                 }
@@ -1037,7 +1053,7 @@ public class WalkerGenerator : MonoBehaviour
         // Set grid origin to empty
         floorTilemap.SetTile(new Vector3Int(0, 0, 0), tiles.empty);
         tileCount--;
-        gridHandler[0, 0] = Grid.EMPTY;
+        gridHandler[0, 0] = TileType.EMPTY;
 
         // Create walls around map
         CreateWalls();
@@ -1052,6 +1068,6 @@ public class WalkerGenerator : MonoBehaviour
 }
 
 // TILE TYPES
-public enum Grid {
+public enum TileType {
     FLOOR, EMPTY, OBSTACLES, BORDER, WALLS
 }

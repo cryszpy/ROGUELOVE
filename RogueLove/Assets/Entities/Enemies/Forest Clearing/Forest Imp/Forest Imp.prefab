@@ -29,8 +29,8 @@ Transform:
   m_GameObject: {fileID: 2337100247536706055}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0125, y: -0.0071, z: 0}
-  m_LocalScale: {x: 0.16, y: 0.16, z: 1}
+  m_LocalPosition: {x: 0.05, y: -0.0284, z: 0}
+  m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4974444872918686841}
@@ -367,8 +367,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.016, y: 0.05}
-  m_Size: {x: 0.1, y: 0.15}
+  m_Offset: {x: 0.064, y: 0.2}
+  m_Size: {x: 0.4, y: 0.6}
   m_Direction: 0
 --- !u!95 &8722914626086714706
 Animator:
@@ -419,8 +419,8 @@ MonoBehaviour:
   minExp: 1
   maxExp: 4
   damage: 0
-  chaseSpeed: 225
-  wanderSpeed: 180
+  chaseSpeed: 900
+  wanderSpeed: 720
   rangedAttackCooldownMin: 2
   rangedAttackCooldownMax: 3
   attackCooldown: 1
@@ -447,7 +447,7 @@ MonoBehaviour:
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
   maxHealth: 10
-  knockback: 2
+  knockback: 8
   takingFireDamage: 0
   immuneToFire: 0
 --- !u!1 &5826619376852643059
@@ -577,7 +577,7 @@ Transform:
   m_GameObject: {fileID: 7127760726768429096}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0076, y: 0.0437, z: 0}
+  m_LocalPosition: {x: 0.0304, y: 0.1748, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -651,8 +651,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.02}
-  m_Radius: 1
+  m_Offset: {x: 0, y: 0.2}
+  m_Radius: 4
 --- !u!114 &7840131883434394246
 MonoBehaviour:
   m_ObjectHideFlags: 0

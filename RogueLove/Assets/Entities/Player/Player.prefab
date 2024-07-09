@@ -126,7 +126,7 @@ Transform:
   m_GameObject: {fileID: 2548433935717590138}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0958, y: -0.0182, z: 0}
+  m_LocalPosition: {x: 0.3832, y: -0.0728, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -162,7 +162,7 @@ Transform:
   m_GameObject: {fileID: 4351454945345230079}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0144, y: 0.0365, z: 0}
+  m_LocalPosition: {x: 0.0576, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -318,7 +318,7 @@ Transform:
   m_GameObject: {fileID: 4873271851133285175}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.0958, y: -0.0182, z: 0}
+  m_LocalPosition: {x: 0.3832, y: -0.0728, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -553,7 +553,7 @@ Transform:
   m_GameObject: {fileID: 8286204141084347148}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.11, y: 0.07, z: 0}
+  m_LocalPosition: {x: 0.44, y: 0.28, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -650,7 +650,7 @@ Transform:
   m_GameObject: {fileID: 8567451438062245733}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0144, y: 0.0365, z: 0}
+  m_LocalPosition: {x: 0.0576, y: 0.1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -945,7 +945,7 @@ CapsuleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Size: {x: 0.07965994, y: 0.02001607}
+  m_Size: {x: 0.32, y: 0.08}
   m_Direction: 1
 --- !u!114 &4365122181230883474
 MonoBehaviour:
@@ -993,10 +993,11 @@ MonoBehaviour:
   canDash: 1
   dashingTime: 0.3
   dashingCooldown: 0.5
-  dashingPower: 225
+  dashingPower: 900
   damageModifier: 1
   fireRateModifier: 1
   collisionOffset: 0.01
   hurtShakeDuration: 0
   hurtShakeAmplitude: 0
   hurtShakeFrequency: 0
+  savePressed: 0

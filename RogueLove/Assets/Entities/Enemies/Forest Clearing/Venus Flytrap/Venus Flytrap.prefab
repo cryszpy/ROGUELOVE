@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 108576551062275741}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.034, y: -0.102, z: 0}
+  m_LocalPosition: {x: 0.105, y: -0.319, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.06
+  m_PointLightOuterRadius: 0.24
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -110,7 +110,7 @@ Transform:
   m_GameObject: {fileID: 1369582843828871386}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.043, y: 0.086, z: 0}
+  m_LocalPosition: {x: 0.139, y: 0.288, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -157,7 +157,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.06
+  m_PointLightOuterRadius: 0.24
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -326,8 +326,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.05, y: -0.01}
-  m_Size: {x: 0.1, y: 0.18}
+  m_Offset: {x: 0.2, y: -0.04}
+  m_Size: {x: 0.4, y: 0.72}
   m_Direction: 0
 --- !u!114 &8270643478835597212
 MonoBehaviour:
@@ -435,7 +435,7 @@ Transform:
   m_GameObject: {fileID: 4921378223618343124}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.131, y: 0.073, z: 0}
+  m_LocalPosition: {x: 0.421, y: 0.242, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -482,7 +482,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.06
+  m_PointLightOuterRadius: 0.24
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -519,7 +519,7 @@ Transform:
   m_GameObject: {fileID: 5298915112532488095}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.015, y: 0.115, z: 0}
+  m_LocalPosition: {x: 0.057, y: 0.399, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -566,7 +566,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.06
+  m_PointLightOuterRadius: 0.24
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -644,8 +644,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.24, y: -0.02}
-  m_Size: {x: 0.4, y: 0.18}
+  m_Offset: {x: 0.96, y: -0.08}
+  m_Size: {x: 1.6, y: 0.72}
   m_Direction: 1
 --- !u!114 &4092740606560947124
 MonoBehaviour:

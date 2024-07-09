@@ -213,7 +213,7 @@ public class PlayerController : MonoBehaviour
             Health = MaxHealth;
             MaxEnergy = 20;
             Experience = 0;
-            MoveSpeed = 1;
+            MoveSpeed = 3.2f;
         }
         
         healthBar.SetMaxHealth(MaxHealth);

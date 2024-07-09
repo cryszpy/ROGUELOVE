@@ -40,13 +40,13 @@ public class MapData
                 TileBase oType = map.oTilemap.GetTile(new Vector3Int(x, y, 0));
 
                 //if (type != null) {
-                if (type == (int)Grid.FLOOR) {
+                if (type == (int)TileType.FLOOR) {
                     tileTypes[listNum] = 1;
                 } 
                 /*else if (type == map.tiles.decor) {
                     tileTypes[listNum] = 2;
                 }*/ 
-                else if (type == (int)Grid.WALLS) {
+                else if (type == (int)TileType.WALLS) {
                     tileTypes[listNum] = 2;
                 }
                 //}

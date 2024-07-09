@@ -56,6 +56,8 @@ public class HealthBar : MonoBehaviour
                 updateHealthList.Add((int)HEARTSTATUS.EMPTY);
                 healthList.Add((int)HEARTSTATUS.EMPTY);
 
+                Debug.Log(startPos.y);
+
                 // Spawn heart at each offset interval from spawn position
                 GameObject spawnedHeart = Instantiate(heartObject, new Vector2(startPos.x + (xOffset * i), startPos.y), Quaternion.identity, parentTo.transform);
 

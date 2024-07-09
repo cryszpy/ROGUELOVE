@@ -59,5 +59,15 @@ public class CATMachineEnemy : ContactEnemy
         }
     }
 
+    /* public override void Chase() {
+        //Debug.Log("CHASING");
+        // Sets direction and destination of path to Player
+        float force = chaseSpeed * Time.fixedDeltaTime;
+
+        // Moves towards target
+        //rb.AddForce(force);
+        gameObject.transform.position = Vector3.MoveTowards(this.transform.position, player.position, force);
+    } */
+
 
 }

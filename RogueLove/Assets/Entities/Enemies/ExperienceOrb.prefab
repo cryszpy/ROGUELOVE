@@ -73,7 +73,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.08
+  m_PointLightOuterRadius: 0.32
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -358,8 +358,8 @@ MonoBehaviour:
   minExp: 0
   maxExp: 0
   damage: 0
-  chaseSpeed: 2
-  wanderSpeed: 1000
+  chaseSpeed: 8
+  wanderSpeed: 4000
   rangedAttackCooldownMin: 0
   rangedAttackCooldownMax: 0
   attackCooldown: 0
@@ -539,7 +539,7 @@ CircleCollider2D:
   m_CompositeOperation: 0
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
-  m_Radius: 0.15
+  m_Radius: 0.6
 --- !u!114 &2851998319916186881
 MonoBehaviour:
   m_ObjectHideFlags: 0
