@@ -306,7 +306,7 @@ MonoBehaviour:
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
   maxHealth: 75
-  knockback: 0.4
+  knockback: 0.2
   takingFireDamage: 0
   immuneToFire: 1
 --- !u!1 &3143351202906502989

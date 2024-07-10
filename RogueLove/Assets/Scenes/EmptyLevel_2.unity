@@ -528,7 +528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: orthographic size
-      value: 1.1903992
+      value: 0.996875
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7124,61 +7124,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 84dead5ba7c6e41f5a0af3f61975459c, type: 3}
---- !u!1 &1911532501
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1911532503}
-  - component: {fileID: 1911532502}
-  m_Layer: 0
-  m_Name: AreaTiles
-  m_TagString: AreaTiles
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1911532502
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1911532501}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 1bbc9f81db5154f67bdb1e8662d7ab42, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  floor: {fileID: 11400000, guid: c13a987ac45d84354b8241f8739a3bf1, type: 2}
-  ground: {fileID: -46800347, guid: 3a02950cf490040888fed8be75d12732, type: 3}
-  obstacles: {fileID: 11400000, guid: 6b52994f6b6cd4fb89cb73e714420282, type: 2}
-  decor: {fileID: 11400000, guid: d479f1f3b460d4a92846ee75193b2720, type: 2}
-  empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
-  wallUp: {fileID: 744855470, guid: 3a02950cf490040888fed8be75d12732, type: 3}
-  wallDown: {fileID: 588868556, guid: 3a02950cf490040888fed8be75d12732, type: 3}
-  wallLeft: {fileID: -623775070, guid: 3a02950cf490040888fed8be75d12732, type: 3}
-  wallRight: {fileID: -717575264, guid: 3a02950cf490040888fed8be75d12732, type: 3}
-  doorwayObject: {fileID: 600595444076492859, guid: 5f4696210434b47c9aabda4fe42d5233, type: 3}
-  breakables: []
---- !u!4 &1911532503
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1911532501}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 3.383063, y: 2.8840172, z: -0.027321737}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1944969259
 GameObject:
   m_ObjectHideFlags: 0
@@ -7544,7 +7489,6 @@ SceneRoots:
   - {fileID: 1545173003}
   - {fileID: 6443939825314878546}
   - {fileID: 1866604036}
-  - {fileID: 1911532503}
   - {fileID: 275217012}
   - {fileID: 627421760}
   - {fileID: 1944969260}

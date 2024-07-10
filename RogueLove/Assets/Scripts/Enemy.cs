@@ -49,8 +49,14 @@ public abstract class Enemy : MonoBehaviour
     // Enemy health bar
     [SerializeField] protected HealthBar healthBar;
 
-    [SerializeField]
-    private GameObject expOrb;
+    [SerializeField] private List<GameObject> dropsList;
+
+    [SerializeField] private List<GameObject> coinsList;
+
+    [SerializeField] private int minCoins;
+    [SerializeField] private int maxCoins;
+
+    [SerializeField] private GameObject expOrb;
 
     // Minimum and maximum experience / energy to drop on death
     [SerializeField] private int minExp;
@@ -371,9 +377,30 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void SpawnExp() {
+
         int rand = UnityEngine.Random.Range(minExp, maxExp);
+
         for (int i = 0; i < rand; i++) {
             Create(expOrb, this.transform.position, Quaternion.identity, this.map);
+        }
+    }
+
+    public virtual void SpawnDrops() {
+
+        foreach (var coin in coinsList) {
+
+            int rand = UnityEngine.Random.Range(minCoins, maxCoins);
+
+            Debug.Log("Drop coins!");
+        }
+
+        foreach (var drop in dropsList) {
+
+            int rand = UnityEngine.Random.Range(0, 11);
+
+            if (rand == 1) {
+                Debug.Log("Created pickup drop!");
+            }
         }
     }
 
@@ -391,6 +418,7 @@ public abstract class Enemy : MonoBehaviour
 
         // Spawns EXP
         SpawnExp();
+        SpawnDrops();
 
         // Increments dead enemy counter
         WalkerGenerator.SetDeadEnemy();
@@ -398,8 +426,15 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void RemoveEnemy() {
+
+        // Spawns EXP and drops
         SpawnExp();
+        SpawnDrops();
+
+        // Removes enemy
         Destroy(gameObject);
+
+        // Increments dead enemy counter
         WalkerGenerator.SetDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.EnemyTotal);
     }

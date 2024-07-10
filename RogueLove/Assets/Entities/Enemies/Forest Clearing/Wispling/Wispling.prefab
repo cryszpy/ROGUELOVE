@@ -276,8 +276,8 @@ MonoBehaviour:
   minExp: 2
   maxExp: 5
   damage: 1
-  chaseSpeed: 1400
-  wanderSpeed: 120
+  chaseSpeed: 1550
+  wanderSpeed: 150
   rangedAttackCooldownMin: 0
   rangedAttackCooldownMax: 0
   attackCooldown: 1
@@ -303,8 +303,8 @@ MonoBehaviour:
   parent: {fileID: 5864921784080032887}
   healthBar: {fileID: 1215961894684457156}
   currentHealth: 0
-  maxHealth: 15
-  knockback: 6
+  maxHealth: 10
+  knockback: 4
   takingFireDamage: 0
   immuneToFire: 0
 --- !u!1 &5298915112532488095

@@ -56,7 +56,7 @@ public class HealthBar : MonoBehaviour
                 updateHealthList.Add((int)HEARTSTATUS.EMPTY);
                 healthList.Add((int)HEARTSTATUS.EMPTY);
 
-                Debug.Log(startPos.y);
+                //Debug.Log(startPos.y);
 
                 // Spawn heart at each offset interval from spawn position
                 GameObject spawnedHeart = Instantiate(heartObject, new Vector2(startPos.x + (xOffset * i), startPos.y), Quaternion.identity, parentTo.transform);
@@ -84,9 +84,9 @@ public class HealthBar : MonoBehaviour
 
         //slider.maxValue = health;
         //slider.value = health;
-        if (maxHealthText.TryGetComponent<TextMeshProUGUI>(out var letters)) {
+        /* if (maxHealthText.TryGetComponent<TextMeshProUGUI>(out var letters)) {
             letters.text = health.ToString();
-        }
+        } */
 
     }
 
@@ -111,9 +111,9 @@ public class HealthBar : MonoBehaviour
             }
         }
 
-        if (currentHealthText.TryGetComponent<TextMeshProUGUI>(out var letters)) {
+        /* if (currentHealthText.TryGetComponent<TextMeshProUGUI>(out var letters)) {
             letters.text = health.ToString();
-        }
+        } */
 
     }
 

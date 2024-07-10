@@ -1,0 +1,32 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bbc9f81db5154f67bdb1e8662d7ab42, type: 3}
+  m_Name: ForestClearingTIles
+  m_EditorClassIdentifier: 
+  floor: {fileID: 11400000, guid: cbc82f1a7e4644f9d8c901e5b24aef76, type: 2}
+  ground: {fileID: 1828385713, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+  obstacles: {fileID: 11400000, guid: 9a4202bb60da84934802a13b054cccc0, type: 2}
+  walls: {fileID: 11400000, guid: 2bb634a50b99e43a2bbaba3bb5cfbc4e, type: 2}
+  empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
+  grass: {fileID: 11400000, guid: 8d06dc7e0d8114c7f884afcdc01c83d3, type: 2}
+  grassTop: {fileID: 11400000, guid: b1dc22a03af974ad483f281ebc74be30, type: 2}
+  borderTop: {fileID: 11400000, guid: 1842b72306175454b8d63c2a5c1a1a3a, type: 2}
+  borderDown: {fileID: 11400000, guid: 3681fde4c677b4698983b7220a817b6a, type: 2}
+  borderLeft: {fileID: 11400000, guid: 0779a567f384c47a9bdc7a28f6a301cb, type: 2}
+  borderRight: {fileID: 11400000, guid: 94cc65d33b56c4a08bb53d6c542d8559, type: 2}
+  wallUp: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
+  wallDown: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
+  wallLeft: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
+  wallRight: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
+  doorwayObject: {fileID: 600595444076492859, guid: 5f4696210434b47c9aabda4fe42d5233, type: 3}
+  breakables:
+  - {fileID: 370015407570139740, guid: 2ee1f97e3845b40499272d07022ba644, type: 3}

@@ -522,6 +522,16 @@ public class WalkerGenerator : MonoBehaviour
                 Debug.Log("Created left border tile");
             }
         }
+
+        // Set bottom left corner
+        wallsTilemap.SetTile(new Vector3Int(0, 0, 0), tiles.grass);
+        oTilemap.SetTile(new Vector3Int(0, 0, 0), tiles.grass);
+        gridHandler[0, 0] = TileType.BORDER;
+
+        // Set bottom right corner
+        wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, 0, 0), tiles.grass);
+        oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, 0, 0), tiles.grass);
+        gridHandler[gridHandler.GetLength(0) - 1, 0] = TileType.BORDER;
     }
 
     // CREATES OBSTACLES

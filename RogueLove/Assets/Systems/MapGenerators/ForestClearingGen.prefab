@@ -44,9 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a4759d0508c394df1a511daed5df7d31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mapGrid: {fileID: 0}
   tileListX: 
   tileListY: 
-  tiles: {fileID: 0}
+  tiles: {fileID: 11400000, guid: 00e3ab89f66224aab872af8f45f89fc1, type: 2}
   floorTilemap: {fileID: 0}
   wallsTilemap: {fileID: 0}
   oTilemap: {fileID: 0}

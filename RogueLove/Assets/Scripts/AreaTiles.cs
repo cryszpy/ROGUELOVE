@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Tilemaps;
 
-public class AreaTiles : MonoBehaviour
+[System.Serializable]
+[CreateAssetMenu(menuName = "ScriptableObjects/AreaTiles")]
+public class AreaTiles : ScriptableObject
 {
     [Header("TILEMAP OBJECTS")]
 
