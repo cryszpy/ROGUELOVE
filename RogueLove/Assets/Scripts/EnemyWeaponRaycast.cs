@@ -11,7 +11,7 @@ public class EnemyWeaponRaycast : MonoBehaviour
         if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER 
         && GameStateManager.GetState() != GameStateManager.GAMESTATE.PAUSED 
         && GameStateManager.GetState() != GameStateManager.GAMESTATE.MENU
-        && enemy.enemyType != Enemy.EnemyType.DEAD
+        && enemy.enemyType != EnemyType.DEAD
         && !enemy.kbEd) {
 
             // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot

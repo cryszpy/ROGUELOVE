@@ -10,11 +10,7 @@ public class EnemyHealth : MonoBehaviour
     // Animator component
     public Animator animator;
 
-    [SerializeField]
-    private Enemy parent;
-
-    // Health bar
-    public HealthBar healthBar;
+    [SerializeField] private Enemy parent;
 
     [Space(10)]
     [Header("STATS")]
@@ -25,8 +21,7 @@ public class EnemyHealth : MonoBehaviour
     // Enemy maximum health
     public float maxHealth;
 
-    [SerializeField]
-    private float knockback;
+    [SerializeField] private float knockback;
 
     public bool takingFireDamage;
 
@@ -46,12 +41,8 @@ public class EnemyHealth : MonoBehaviour
     }
 
     void Start() {
-        if (healthBar == null) {
-            Debug.Log("EnemyHealth healthbar is null! Reassigned.");
-            healthBar = this.GetComponentInChildren<HealthBar>();
-        }
+
         currentHealth = maxHealth;
-        //healthBar.SetMaxHealth(maxHealth);
 
         if (animator == null) {
             Debug.Log("EnemyHealth animator is null! Reassigned.");
@@ -66,7 +57,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeDamage(float damage, Vector2 direction) {
         Health -= damage;
         Debug.Log("Took this amount of damage: " + damage);
-        //healthBar.SetHealth(currentHealth);
+
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
         if (Health <= 0) {
@@ -81,7 +72,7 @@ public class EnemyHealth : MonoBehaviour
     public void TakeFireDamage(float damage, Vector2 direction) {
         Health -= damage;
         Debug.Log("Took this amount of damage: " + damage);
-        //healthBar.SetHealth(currentHealth);
+
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
         if (Health <= 0) {
@@ -99,19 +90,16 @@ public class EnemyHealth : MonoBehaviour
         takingFireDamage = true;
         Health -= damage;
         Debug.Log("Took this amount of FIRE damage: " + damage);
-        //healthBar.SetHealth(currentHealth);
 
         yield return new WaitForSeconds(1f);
 
         Health -= damage;
         Debug.Log("Took this amount of FIRE damage: " + damage);
-        //healthBar.SetHealth(currentHealth);
 
         yield return new WaitForSeconds(1f);
 
         Health -= damage;
         Debug.Log("Took this amount of FIRE damage: " + damage);
-        //healthBar.SetHealth(currentHealth);
 
         takingFireDamage = false;
     }

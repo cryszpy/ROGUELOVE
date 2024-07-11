@@ -744,6 +744,10 @@ public class WalkerGenerator : MonoBehaviour
                                     enemy.Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);   
                                     enemyTotal++;
                                     break;
+                                } else if (minibosses[m].GetComponentInChildren<Enemy>()) {
+                                    minibosses[m].GetComponentInChildren<Enemy>().Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);
+                                    enemyTotal++;
+                                    break;
                                 }
                             }
 
@@ -800,6 +804,10 @@ public class WalkerGenerator : MonoBehaviour
                                         enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, tileListY[randY] * mapGrid.cellSize.y + 0.12f), rot, this);   
                                         enemyTotal++;
                                         break;
+                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, tileListY[randY] * mapGrid.cellSize.y + 0.12f), rot, this);
+                                        enemyTotal++;
+                                        break;
                                     }
                                 } 
                                 // DOWN WALL
@@ -810,6 +818,10 @@ public class WalkerGenerator : MonoBehaviour
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
                                         //Debug.Log("Spawned DOWN WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
                                         enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, (tileListY[randY] + 1) * mapGrid.cellSize.y - 0.16f), rot, this);   
+                                        enemyTotal++;
+                                        break;
+                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, (tileListY[randY] + 1) * mapGrid.cellSize.y - 0.16f), rot, this);
                                         enemyTotal++;
                                         break;
                                     }
@@ -824,6 +836,10 @@ public class WalkerGenerator : MonoBehaviour
                                         enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] + 1) * mapGrid.cellSize.x - 0.16f, (tileListY[randY] - 1) * mapGrid.cellSize.y + 0.08f), rot, this);   
                                         enemyTotal++;
                                         break;
+                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2((tileListX[randX] + 1) * mapGrid.cellSize.x - 0.16f, (tileListY[randY] - 1) * mapGrid.cellSize.y + 0.08f), rot, this);
+                                        enemyTotal++;
+                                        break;
                                     }
                                 } 
                                 // RIGHT WALL
@@ -836,8 +852,13 @@ public class WalkerGenerator : MonoBehaviour
                                         enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] - 1) * mapGrid.cellSize.x + 0.32f, tileListY[randY] * mapGrid.cellSize.y + 0.24f), rot, this);   
                                         enemyTotal++;
                                         break;
+                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2((tileListX[randX] - 1) * mapGrid.cellSize.x + 0.32f, tileListY[randY] * mapGrid.cellSize.y + 0.24f), rot, this);
+                                        enemyTotal++;
+                                        break;
                                     }
-                                } else {
+                                } 
+                                else {
                                     // Generates random number to pick Enemy spawnpoint
                                     randX = GetRandomXTile();
                                     randY = GetRandomTile();
@@ -887,6 +908,10 @@ public class WalkerGenerator : MonoBehaviour
                                     enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
                                     enemyTotal++;
                                     break;
+                                } else if (rareEnemies[r].GetComponentInChildren<Enemy>()) {
+                                    rareEnemies[r].GetComponentInChildren<Enemy>().Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
+                                    enemyTotal++;
+                                    break;
                                 }
                             }
 
@@ -930,6 +955,10 @@ public class WalkerGenerator : MonoBehaviour
                                 // Spawns Enemy
                                 if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
                                     enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                    enemyTotal++;
+                                    break;
+                                } else if (commonEnemies[c].GetComponentInChildren<Enemy>()) {
+                                    commonEnemies[c].GetComponentInChildren<Enemy>().Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
                                     enemyTotal++;
                                     break;
                                 }

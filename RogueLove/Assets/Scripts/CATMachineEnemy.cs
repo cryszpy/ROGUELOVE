@@ -11,13 +11,6 @@ public class CATMachineEnemy : ContactEnemy
 
     public Collider2D breakWallColl;
 
-    /* public override void Start() {
-
-        base.Start();
-
-        Physics2D.IgnoreCollision(breakWallColl, player.gameObject.GetComponent<PlayerController>().contactColl);
-    } */
-
     public override void PlayerCheck() {
 
         if (!timerSet) {
@@ -58,16 +51,4 @@ public class CATMachineEnemy : ContactEnemy
             Wander();
         }
     }
-
-    /* public override void Chase() {
-        //Debug.Log("CHASING");
-        // Sets direction and destination of path to Player
-        float force = chaseSpeed * Time.fixedDeltaTime;
-
-        // Moves towards target
-        //rb.AddForce(force);
-        gameObject.transform.position = Vector3.MoveTowards(this.transform.position, player.position, force);
-    } */
-
-
 }

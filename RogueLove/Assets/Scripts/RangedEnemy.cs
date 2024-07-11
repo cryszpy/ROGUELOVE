@@ -153,34 +153,6 @@ public class RangedEnemy : Enemy
             else {
                 animator.SetBool("IsMoving", false);
             }         
-
-            // Make health bar face the same way regardless of enemy sprite
-            if (this.transform.localScale == new Vector3(1f, 1f, 1f)) {
-
-                healthBar.transform.localScale = new Vector3(1f, 1f, 1f);
-
-            } else if (this.transform.localScale == new Vector3(-1f, 1f, 1f)) {
-
-                healthBar.transform.localScale = new Vector3(-1f, 1f, 1f);
-
-            }
         }
-
-
-
-
-        
-        // If player is NOT in direct line of sight, face whatever target block the enemy is wandering to
-        /* else {
-
-            if (target.x - this.transform.position.x >= 0f) {
-                this.transform.localScale = new Vector3(1f, 1f, 1f);
-            } 
-            else if (target.x - this.transform.position.x < 0f) {
-                this.transform.localScale = new Vector3(-1f, 1f, 1f);
-            }
-
-            base.DirectionFacing();
-        } */
     }
 }

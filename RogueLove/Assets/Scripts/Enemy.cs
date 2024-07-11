@@ -7,55 +7,70 @@ using NUnit.Framework.Constraints;
 using System;
 using UnityEngine.Serialization;
 using TMPro;
+using Game.Core.Rendering;
+
+public enum EnemyType {
+    CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS, DEAD
+}
 
 public abstract class Enemy : MonoBehaviour
 {
-    public enum EnemyType {
-        CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS, DEAD
-    }
 
+    [Tooltip("This enemy's type.")]
     public EnemyType enemyType;
 
     [Header("SCRIPT REFERENCES")]
 
-    // This enemy's Animator component
+    [Tooltip("This enemy's animator component.")]
     public Animator animator;
 
-    // This enemy's map reference
+    [Tooltip("This enemy's level map reference. (Assigned at runtime)")]
     public WalkerGenerator map;
 
-    // This enemy's target
-    public Vector3 target;
+    [Tooltip("This enemy's current target.")]
+    protected Vector3 target;
 
-    // This enemy's player transform reference;
+    [Tooltip("This enemy's player Transform reference. (Assigned at runtime)")]
     public Transform player;
 
-    // This enemy's pathfinder script
-    [SerializeField]
-    private Seeker seeker;
+    [Tooltip("This enemy's pathfinder script.")]
+    [SerializeField] private Seeker seeker;
 
-    // This enemy's followRange collider
+    [Tooltip("This enemy's follow collider, responsible for how far away it will follow a target.")]
     [SerializeField]
     protected CircleCollider2D followCollider;
 
-    // This enemy's contact collider
+    [Tooltip("This enemy's contact collider, responsible for how far contact enemies can attack from (NOT EQUAL TO HITBOX). Should only be set for Contact enemies.")]
     public Collider2D contactColl;
 
-    // This enemy's Rigidbody component
+    [Tooltip("This enemy's Rigidbody2D component.")]
     public Rigidbody2D rb;
 
+    [Tooltip("This enemy's hitbox.")]
     public Collider2D hitbox;
 
-    // Enemy health bar
-    [SerializeField] protected HealthBar healthBar;
+    [Tooltip("This enemy's SpriteRenderer that is responsible for drawing the line of fire.")]
+    public SpriteRenderer lineSpriteRenderer;
 
+    [Tooltip("This enemy's LineRenderer2D component for drawing line of fire.")]
+    public LineRenderer2D lineRenderer;
+
+    [Tooltip("Time it takes for the enemy to charge a shot.")]
+    public float chargeTime;
+
+    [Tooltip("List of this enemy's possible loot drops (excluding coins and energy).")]
     [SerializeField] private List<GameObject> dropsList;
 
+    [Tooltip("List of this enemy's possible coin drops.")]
     [SerializeField] private List<GameObject> coinsList;
 
+    [Tooltip("The minimum possible amount of coins this enemy drops upon death.")]
     [SerializeField] private int minCoins;
+
+    [Tooltip("The maximum possible amount of coins this enemy drops upon death.")]
     [SerializeField] private int maxCoins;
 
+    [Tooltip("The experience orb GameObject this enemy drops upon death.")]
     [SerializeField] private GameObject expOrb;
 
     // Minimum and maximum experience / energy to drop on death
@@ -123,10 +138,6 @@ public abstract class Enemy : MonoBehaviour
         if (enemyType != EnemyType.DEAD) {
             SetEnemyType();
 
-            if (healthBar == null) {
-                healthBar = this.GetComponentInChildren<HealthBar>();
-                Debug.Log("ContactEnemy healthbar is null! Reassigned.");
-            }
             if (rb == null) {
                 rb = GetComponent<Rigidbody2D>();
                 Debug.Log("ContactEnemy rb is null! Reassigned.");
@@ -210,7 +221,6 @@ public abstract class Enemy : MonoBehaviour
             return;
 
         if (currentWaypoint >= path.vectorPath.Count) {
-            //Debug.Log("REACHED END OF PATH");
             reachedEndOfPath = true;
             return;
 
@@ -226,16 +236,17 @@ public abstract class Enemy : MonoBehaviour
 
         // 4.
         float distance = Vector2.Distance(rb.position, path.vectorPath[currentWaypoint]);
-        //Debug.Log("DISTANCE " + distance);
 
         if (distance < nextWaypointDistance) {
             currentWaypoint++;
         }
     }
 
+    // Sprite direction facing
     public virtual void DirectionFacing() {
+
         if (!kbEd) {
-            // Sprite direction facing
+
             if (rb.velocity.x >= 0.001f) {
 
                 this.transform.localScale = new Vector3(1f, 1f, 1f);
@@ -250,17 +261,6 @@ public abstract class Enemy : MonoBehaviour
                 animator.SetBool("IsMoving", true);
             } else {
                 animator.SetBool("IsMoving", false);
-            }
-
-            // Make health bar face the same way regardless of enemy sprite
-            if (this.transform.localScale == new Vector3(1f, 1f, 1f)) {
-
-                healthBar.transform.localScale = new Vector3(1f, 1f, 1f);
-
-            } else if (this.transform.localScale == new Vector3(-1f, 1f, 1f)) {
-
-                healthBar.transform.localScale = new Vector3(-1f, 1f, 1f);
-
             }
         }
     }
@@ -311,12 +311,10 @@ public abstract class Enemy : MonoBehaviour
 
     // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
     public void StopAttackAnim() {
-        //attackAnim = false;
         animator.SetBool("Attack", false);
     }
 
     void OnPathComplete(Pathfinding.Path p) {
-        //Debug.Log("OnPathComplete CALLED");
         if (!p.error) {
             path = p;
             currentWaypoint = 0;
@@ -324,7 +322,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     public virtual void Chase() {
-        //Debug.Log("CHASING");
+
         // Sets direction and destination of path to Player
         force = chaseSpeed * Time.fixedDeltaTime * direction;
 
@@ -332,9 +330,7 @@ public abstract class Enemy : MonoBehaviour
         rb.AddForce(force);
     }
 
-    public virtual void Wander() {
-        //Debug.Log("WANDERING");
-        
+    public virtual void Wander() {        
         force = wanderSpeed * Time.fixedDeltaTime * direction;
 
         rb.AddForce(force);
@@ -369,6 +365,9 @@ public abstract class Enemy : MonoBehaviour
         
         if (entity.TryGetComponent<Enemy>(out var enemy)) {
             enemy.map = gen;
+            return entity;
+        } else if (entity.GetComponentInChildren<Enemy>()) {
+            entity.GetComponentInChildren<Enemy>().map = gen;
             return entity;
         } else {
             Debug.LogError("Could not find Enemy script or extension of such on this Object.");
