@@ -4,6 +4,11 @@ using System.Linq;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
+// State of the game
+public enum GAMESTATE {
+    MENU, PLAYING, PAUSED, GAMEOVER
+}
+
 public class GameStateManager : MonoBehaviour
 {
     public static string PreviousScene { get; private set; }
@@ -13,11 +18,6 @@ public class GameStateManager : MonoBehaviour
 
     // Dialogue Manager attached to this GameObject
     public static DialogueManager dialogueManager;
-
-    // State of the game
-    public enum GAMESTATE {
-        MENU, PLAYING, PAUSED, GAMEOVER
-    }
 
     // Methods to check the state of the game
     private static GAMESTATE state;
@@ -83,7 +83,6 @@ public class GameStateManager : MonoBehaviour
         } else {
             instance = this;
             dialogueManager = this.GetComponent<DialogueManager>();
-            Debug.Log(dialogueManager);
             DontDestroyOnLoad(gameObject);
         }
 

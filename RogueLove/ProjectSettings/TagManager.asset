@@ -24,6 +24,7 @@ TagManager:
   - DialogueSprite
   - GameStateManager
   - DialogueBox
+  - AmmoBar
   layers:
   - Default
   - TransparentFX

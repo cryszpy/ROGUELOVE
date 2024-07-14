@@ -2,8 +2,16 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public enum WeaponType {
+    MAGIC, TECHNOLOGY, SPECIAL
+}
+
 public class Weapon : MonoBehaviour
 {
+
+    [Tooltip("The weapon's type.")]
+    public WeaponType type;
+
     // Type of bullet to be fired
     public GameObject ammo;
 

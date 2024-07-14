@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
+// DIALOGUE TYPES
+public enum DialogueType {
+    NOREQ, REQ, QUEST, SUPPORT, SHOP, TRADE, STORYLINE
+}
+
 [System.Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/DialogueList")]
 public class DialogueList : ScriptableObject
@@ -162,9 +167,4 @@ public class DialogueList : ScriptableObject
     [SerializeField]
     private List<Dialogue> seenStoryline;
 
-}
-
-// DIALOGUE TYPES
-public enum DialogueType {
-    NOREQ, REQ, QUEST, SUPPORT, SHOP, TRADE, STORYLINE
 }

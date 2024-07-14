@@ -16,8 +16,7 @@ using UnityEngine.Tilemaps;
 public class WalkerGenerator : MonoBehaviour
 {
 
-    [SerializeField]
-    private Grid mapGrid;
+    public Grid mapGrid;
     
     // 2D Array
     public TileType[,] gridHandler;
@@ -40,8 +39,12 @@ public class WalkerGenerator : MonoBehaviour
 
     public Tilemap oTilemap;
 
+    [SerializeField] private ChestList chestList;
+
     [Space(10)]
     [Header("MAP SETTINGS")]
+
+    public float ppu;
 
     [Range(7, 60)]
     // Map maximum width <-->
@@ -76,19 +79,15 @@ public class WalkerGenerator : MonoBehaviour
     // Generation method, pause time between each successful movement
     private float waitTime;
 
-    // A* pathfinder object
-    private AstarPath astarPath;
-
     // SAVE FILE PATH
     private string pathMap;
 
     // Boolean to see if save file exists
     private bool loadFromSave;
 
-    [SerializeField]
-    private int lvl;
-    [SerializeField]
-    private int stg;
+    [SerializeField] private int lvl;
+
+    [SerializeField] private int stg;
 
     [SerializeField]
     private float spawnRadiusX;
@@ -153,7 +152,7 @@ public class WalkerGenerator : MonoBehaviour
         enemyTotal = 0;
         deadEnemies = 0;
         GameStateManager.SetLevelClear(false);
-        GameStateManager.SetState(GameStateManager.GAMESTATE.PLAYING);
+        GameStateManager.SetState(GAMESTATE.PLAYING);
 
         if (floorTilemap == null) {
             floorTilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
@@ -575,10 +574,7 @@ public class WalkerGenerator : MonoBehaviour
                 for (int x = 0; x < tileListX.Count; x++) {
 
                     // If chosen tile is a floor tile, and doesn't have obstacles, then generate breakable
-                    if (
-                        //(floorTilemap.GetSprite(new Vector3Int(tileListX[rand], tileListY[rand], 0)) == tiles.ground)
-                        //&& (oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles)
-                        gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR 
+                    if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR 
                         && oTilemap.GetTile(new Vector3Int(tileListX[rand], tileListY[rand], 0)) != tiles.obstacles
                     ) {
 
@@ -592,7 +588,46 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
         SpawnRandomPlayer();
+        SpawnChests();
         StartCoroutine(SpawnStuff());
+    }
+
+    private void SpawnChests() {
+
+        // Generate random amount of chests per level
+        int chestRange = 1;
+        
+        // For the amount of chests generated per level
+        for (int s = 0; s < chestRange; s++) {
+            
+            // Generates random number to pick chest spawnpoint
+            int rand = GetRandomTile();
+
+            // For as many floor tiles as there are in the tilemap:
+            for (int i = 0; i < tileListX.Count; i++) {
+
+                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
+
+                    if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                        rand = GetRandomTile();
+                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                        rand = GetRandomTile();
+                    } else {
+
+                        Instantiate(chestList.weaponChest, new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity);
+                        break;
+                    }
+
+                } else {
+                    
+                    // Generates random number to pick chest spawnpoint
+                    rand = GetRandomTile();
+                }
+            }
+        }
     }
 
     public IEnumerator SpawnStuff() {
@@ -639,10 +674,7 @@ public class WalkerGenerator : MonoBehaviour
 
             // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
             if (gridHandler[tileListX[i], tileListY[randP]] == TileType.FLOOR 
-                && oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[randP])) != tiles.obstacles
-                /*(floorTilemap.GetSprite(new Vector3Int(tileListX[i], tileListY[randP])) == tiles.ground)
-                && (oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[randP])) != tiles.obstacles)
-                && (gridHandler[tileListX[i], tileListY[i]] == Grid.FLOOR)*/) {
+                && oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[randP])) != tiles.obstacles) {
 
                 // Spawns Player
                 //player.SetActive(true);
@@ -769,7 +801,7 @@ public class WalkerGenerator : MonoBehaviour
             for (int st = 0; st < stationEnemies.Length; st++) {
 
                 // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
-                int stationRange = UnityEngine.Random.Range(1, 3);
+                int stationRange = UnityEngine.Random.Range(1, 4);
 
                 // For the amount of every different type of stationary enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
                 for (int s = 0; s < stationRange; s++) {
@@ -782,7 +814,7 @@ public class WalkerGenerator : MonoBehaviour
                     for (int i = 0; i < tileListX.Count; i++) {
 
                         // Choose from the available floor tiles
-                        if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
+                        if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.WALLS) {
 
                             if (tileListX[randX] <= player.transform.position.x + (spawnRadiusX/2) 
                             && tileListX[randX] >= player.transform.position.x - (spawnRadiusX/2)) {
@@ -794,66 +826,82 @@ public class WalkerGenerator : MonoBehaviour
 
                                 Quaternion rot = Quaternion.Euler(0, 0, 0);
 
-                                // UP WALL
-                                if (wallsTilemap.GetSprite(new Vector3Int(tileListX[randX], tileListY[randY] + 1, 0)) == tiles.wallUp) {
+                                // TOP WALL
+                                if (gridHandler[tileListX[randX], tileListY[randY] - 1] == TileType.FLOOR) {
                                     rot = Quaternion.Euler(0, 0, -90);
+
+                                    float xCoord = (tileListX[randX] + 0.5f) * mapGrid.cellSize.x;
+                                    float yCoord = (tileListY[randY] - 0.3f) * mapGrid.cellSize.y;
+                                    Debug.Log("TOP WALL SPAWNED");
 
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        //Debug.Log("Spawned UP WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, tileListY[randY] * mapGrid.cellSize.y + 0.12f), rot, this);   
+                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
                                         enemyTotal++;
                                         break;
                                     } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, tileListY[randY] * mapGrid.cellSize.y + 0.12f), rot, this);
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
                                         enemyTotal++;
                                         break;
                                     }
                                 } 
-                                // DOWN WALL
-                                else if (wallsTilemap.GetSprite(new Vector3Int(tileListX[randX], tileListY[randY] - 1, 0)) == tiles.wallDown) {
+                                // BOTTOM WALL
+                                else if (gridHandler[tileListX[randX], tileListY[randY] + 1] == TileType.FLOOR) {
                                     rot = Quaternion.Euler(0, 0, 90);
 
+                                    float xCoord = (tileListX[randX] + 0.5f) * mapGrid.cellSize.x;
+                                    float yCoord = (tileListY[randY] + 1) * mapGrid.cellSize.y;
+
+                                    Debug.Log("BOTTOM WALL SPAWNED");
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        //Debug.Log("Spawned DOWN WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, (tileListY[randY] + 1) * mapGrid.cellSize.y - 0.16f), rot, this);   
+                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
                                         enemyTotal++;
                                         break;
                                     } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(tileListX[randX] * mapGrid.cellSize.x + 0.08f, (tileListY[randY] + 1) * mapGrid.cellSize.y - 0.16f), rot, this);
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
                                         enemyTotal++;
                                         break;
                                     }
                                 } 
                                 // LEFT WALL
-                                else if (wallsTilemap.GetSprite(new Vector3Int(tileListX[randX] - 1, tileListY[randY], 0)) == tiles.wallLeft) {
+                                else if (gridHandler[tileListX[randX] + 1, tileListY[randY]] == TileType.FLOOR) {
                                     rot = Quaternion.Euler(0, 0, 0);
 
+                                    float xCoord = (tileListX[randX] + 1f) * mapGrid.cellSize.x;
+                                    float yCoord = (tileListY[randY] + 0.6f) * mapGrid.cellSize.y;
+
+                                    Debug.Log("LEFT WALL SPAWNED");
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        //Debug.Log("Spawned LEFT WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] + 1) * mapGrid.cellSize.x - 0.16f, (tileListY[randY] - 1) * mapGrid.cellSize.y + 0.08f), rot, this);   
+                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
                                         enemyTotal++;
                                         break;
                                     } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2((tileListX[randX] + 1) * mapGrid.cellSize.x - 0.16f, (tileListY[randY] - 1) * mapGrid.cellSize.y + 0.08f), rot, this);
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
                                         enemyTotal++;
                                         break;
                                     }
                                 } 
                                 // RIGHT WALL
-                                else if (wallsTilemap.GetSprite(new Vector3Int(tileListX[randX] + 1, tileListY[randY], 0)) == tiles.wallRight) {
+                                else if (gridHandler[tileListX[randX] - 1, tileListY[randY]] == TileType.FLOOR) {
                                     rot = Quaternion.Euler(0, 0, 180);
 
+                                    float xCoord = (tileListX[randX] * mapGrid.cellSize.x);
+                                    float yCoord = (tileListY[randY] + 0.3f) * mapGrid.cellSize.y;
+
+                                    Debug.Log("RIGHT WALL SPAWNED");
                                     // Spawns Enemy
                                     if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        //Debug.Log("Spawned RIGHT WALL stationary enemy!" + new Vector3Int(tileListX[randX], tileListY[randY]));
-                                        enemy.Create(stationEnemies[st], new Vector2((tileListX[randX] - 1) * mapGrid.cellSize.x + 0.32f, tileListY[randY] * mapGrid.cellSize.y + 0.24f), rot, this);   
+                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
                                         enemyTotal++;
                                         break;
                                     } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2((tileListX[randX] - 1) * mapGrid.cellSize.x + 0.32f, tileListY[randY] * mapGrid.cellSize.y + 0.24f), rot, this);
+                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
                                         enemyTotal++;
                                         break;
                                     }
@@ -878,6 +926,7 @@ public class WalkerGenerator : MonoBehaviour
         
         // Rare enemy spawning
         if (!IsArrayEmpty(rareEnemies) && !bossLevel) {
+            
             // For every rare enemy in the level (e.g. Deforestation Guy, Nancy)
             for (int r = 0; r < rareEnemies.Length; r++) {
                 

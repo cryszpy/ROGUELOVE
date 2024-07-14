@@ -19,6 +19,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private Weapon weapon;
 
+    public GameObject weaponPivot;
+
     public CapsuleCollider2D contactColl;
 
     public Rigidbody2D rb;
@@ -29,11 +31,14 @@ public class PlayerController : MonoBehaviour
     [SerializeField]
     private SpriteRenderer spriteRenderer;
 
-    // Health Bar reference
+    [Tooltip("A reference to the player's health meter.")]
     public HealthBar healthBar;
 
-    // Energy Bar reference
+    [Tooltip("A reference to the player's battery meter.")]
     public EnergyBar energyBar;
+
+    [Tooltip("A reference to the player's ammo meter.")]
+    public WeaponInfo ammoBar;
 
     readonly List<RaycastHit2D> castCollisions = new();
     
@@ -41,13 +46,13 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private CircleCollider2D dashColl;
 
-    [SerializeField] public CameraShake hurtShake;
+    public CameraShake hurtShake;
 
     [Header("STATS")]
 
     public List<GameObject> heldWeapons = new();
 
-    [SerializeField] private int currentWeaponIndex;
+    public int currentWeaponIndex;
 
     [SerializeField] private bool canSwitchWeapons = true;
 
@@ -192,6 +197,7 @@ public class PlayerController : MonoBehaviour
         // Set health bar and energy bar references on each stage load
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
         energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
+        ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
 
         iFrame = false;
 
@@ -221,15 +227,21 @@ public class PlayerController : MonoBehaviour
         
         healthBar.SetMaxHealth(MaxHealth);
         healthBar.SetHealth(Health);
+
         energyBar.SetMaxEnergy(MaxEnergy);
         energyBar.SetEnergy(Experience);
 
-        if (weapon == null && heldWeapons[0].TryGetComponent<Weapon>(out var component)) {
-            weapon = component;
-            currentWeaponIndex = 0;
-        }
+        if (heldWeapons[0].TryGetComponent<Weapon>(out var component)) {
 
-        
+            if (weapon == null) {
+                weapon = component;
+                currentWeaponIndex = 0;
+            }
+
+            ammoBar.SetMaxAmmo(component.ammoMax);
+            ammoBar.SetAmmo(component.currentAmmo, component);
+            ammoBar.weaponSprite.sprite = component.sprite.sprite;
+        }
     }
 
     private void Update() {
@@ -242,7 +254,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // If in a menu, then do not take any input
-        if (GameStateManager.GetState() == GameStateManager.GAMESTATE.MENU) {
+        if (GameStateManager.GetState() == GAMESTATE.MENU) {
             return;
         }
 
@@ -256,23 +268,27 @@ public class PlayerController : MonoBehaviour
 
         // Switch to first weapon
         if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && canSwitchWeapons 
-        && !heldWeapons[0].activeInHierarchy 
-        && heldWeapons[0] != null 
-        && heldWeapons[1] != null) {
+        && heldWeapons.Count == 2) {
 
-            StartCoroutine(SwitchWeapons(0, currentWeaponIndex));
+            if (!heldWeapons[0].activeInHierarchy) {
+                StartWeaponSwitch(0, currentWeaponIndex);
+            }
         }
         // Switch to second weapon
         else if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && canSwitchWeapons 
-        && !heldWeapons[1].activeInHierarchy 
-        && heldWeapons[0] != null 
-        && heldWeapons[1] != null) {
+        && heldWeapons.Count == 2) {
 
-            StartCoroutine(SwitchWeapons(1, currentWeaponIndex));
+            if (!heldWeapons[1].activeInHierarchy) {
+                StartWeaponSwitch(1, currentWeaponIndex);
+            }
         }
     }
 
-    private IEnumerator SwitchWeapons(int switchTo, int switchFrom) {
+    public void StartWeaponSwitch(int switchTo, int switchFrom) {
+        StartCoroutine(SwitchWeapons(switchTo, switchFrom));
+    }
+
+    public IEnumerator SwitchWeapons(int switchTo, int switchFrom) {
 
         // Prevent switching weapons while already switching weapons
         canSwitchWeapons = false;
@@ -289,7 +305,13 @@ public class PlayerController : MonoBehaviour
             currentWeaponIndex = switchTo;
 
             // Enable new weapon
-            heldWeapons[switchTo].SetActive(true);
+            if (!heldWeapons[switchTo].activeInHierarchy) {
+                heldWeapons[switchTo].SetActive(true);
+            }
+
+            ammoBar.SetMaxAmmo(gotWeapon.ammoMax);
+            ammoBar.SetAmmo(gotWeapon.currentAmmo, gotWeapon);
+            ammoBar.weaponSprite.sprite = gotWeapon.sprite.sprite;
         }
         else {
             Debug.LogError("Tried to switch to nonexistent weapon!");
@@ -303,7 +325,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate() {
 
         // If in a menu, then do not take any input
-        if (GameStateManager.GetState() == GameStateManager.GAMESTATE.MENU) {
+        if (GameStateManager.GetState() == GAMESTATE.MENU) {
             animator.SetBool("IsMoving", false);
             return;
         }
@@ -343,7 +365,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Movement system if you're not dead lol
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
 
             // Dash cooldown timer
             if (!isDashing && !canDash) {
@@ -439,7 +461,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage) {
 
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && iFrame == false) {
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && iFrame == false) {
             iFrame = true;
             StartCoroutine(SetHurtFlash(true));
             StartCoroutine(hurtShake.Shake(hurtShakeDuration, hurtShakeAmplitude, hurtShakeFrequency));

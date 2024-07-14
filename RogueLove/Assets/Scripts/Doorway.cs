@@ -28,10 +28,15 @@ public class Doorway : MonoBehaviour
     }
 
     private IEnumerator CameraSway() {
+        var gameState = GameStateManager.GetState();
+        GameStateManager.SetState(GAMESTATE.MENU);
         cam.Follow = this.transform;
+
         yield return new WaitForSeconds(3.5f);
+        
         cam.Follow = cameraLookAt;
         WalkerGenerator.doneWithLevel = true;
+        GameStateManager.SetState(gameState);
     }
 
     public void TriggerAnimOpen() {

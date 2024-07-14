@@ -18,7 +18,7 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
     // Update is called once per frame
     public override void FixedUpdate()
     {
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && GameStateManager.GetState() != GameStateManager.GAMESTATE.MENU 
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU 
             && enemy.enemyType != EnemyType.DEAD) {
 
             Cooldown();
@@ -84,18 +84,21 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
     // Firing logic
     public override void Fire()
     {
-        
-        enemy.animator.SetBool("Attack", true);
+        if (enemy.enemyType != EnemyType.DEAD) {
+            
+            enemy.animator.SetBool("Attack", true);
 
-        canFire = false;
+            canFire = false;
 
-        enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
+            enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
 
-        if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
-            FireSound();
+            if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
+                FireSound();
+            }
+
+            GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
+            StartCoroutine(BulletDestroy(2, instantBullet));
         }
-
-        GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
-        StartCoroutine(BulletDestroy(2, instantBullet));
+        
     }
 }

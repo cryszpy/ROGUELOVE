@@ -30,17 +30,9 @@ public class WeaponSingleShotFire : MonoBehaviour
         }
     }
 
-    /* void Update() {
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER) {
-            
-            Cooldown();
-
-        }
-    } */
-
     public virtual void FixedUpdate()
     {
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER && GameStateManager.GetState() != GameStateManager.GAMESTATE.MENU) {
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU) {
 
             Cooldown();
 
@@ -109,11 +101,15 @@ public class WeaponSingleShotFire : MonoBehaviour
     }
 
     public virtual void UseAmmo() {
+
+        // Prevents ammo from going negative
         if (parent.currentAmmo - parent.ammoPerClick < 0) {
             parent.currentAmmo = 0;
         }
+        // Reduces current ammo by ammoPerClick amount
         else {
             parent.currentAmmo -= parent.ammoPerClick;
+            player.ammoBar.SetAmmo(parent.currentAmmo, parent);
         }
     }
 

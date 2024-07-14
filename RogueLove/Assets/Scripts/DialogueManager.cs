@@ -38,7 +38,7 @@ public class DialogueManager : MonoBehaviour
     private float textCPS;
 
     [SerializeField]
-    private GameStateManager.GAMESTATE previousGameState;
+    private GAMESTATE previousGameState;
 
     /* private static bool playDialogue = false;
     public static bool PlayDialogue { get => playDialogue; set => playDialogue = value; } */
@@ -111,7 +111,7 @@ public class DialogueManager : MonoBehaviour
 
         // Save previous game state and set current game state to MENU (disables input and enemies)
         previousGameState = GameStateManager.GetState();
-        GameStateManager.SetState(GameStateManager.GAMESTATE.MENU);
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         // Sets the character's sprite for this piece of dialogue
         dialogueSprite.sprite = dialogue.characterSprite;

@@ -1,0 +1,67 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74297b47a40fd4f82807fa2d79814a74, type: 3}
+  m_Name: LootList
+  m_EditorClassIdentifier: 
+  areaOne:
+  - 0.35
+  - 0.61
+  - 0.81
+  - 0.95
+  areaTwo:
+  - 0.2
+  - 0.51
+  - 0.81
+  - 0.95
+  areaThree:
+  - 0.16
+  - 0.43
+  - 0.78
+  - 0.94
+  areaFour:
+  - 0.08
+  - 0.35
+  - 0.76
+  - 0.94
+  areaFive:
+  - 0.06
+  - 0.29
+  - 0.7
+  - 0.92
+  areaSix:
+  - 0.02
+  - 0.18
+  - 0.63
+  - 0.9
+  areaSeven:
+  - -0.1
+  - 0.1
+  - 0.53
+  - 0.88
+  areaEight:
+  - -0.1
+  - 0.09
+  - 0.45
+  - 0.85
+  commonWeapons: []
+  seenCommonWeapons:
+  - {fileID: 8481469185648990204, guid: 1a999c34ce8cd47d8b6e1fd78d2f894e, type: 3}
+  uncommonWeapons: []
+  seenUncommonWeapons: []
+  rareWeapons: []
+  seenRareWeapons: []
+  epicWeapons: []
+  seenEpicWeapons: []
+  legendaryWeapons: []
+  seenLegendaryWeapons: []
+  items: []
+  seenItems: []

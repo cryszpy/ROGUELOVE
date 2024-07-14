@@ -8,9 +8,9 @@ public class EnemyWeaponRaycast : MonoBehaviour
     [SerializeField] private Enemy enemy;
 
     public virtual void FixedUpdate() {
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.GAMEOVER 
-        && GameStateManager.GetState() != GameStateManager.GAMESTATE.PAUSED 
-        && GameStateManager.GetState() != GameStateManager.GAMESTATE.MENU
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER 
+        && GameStateManager.GetState() != GAMESTATE.PAUSED 
+        && GameStateManager.GetState() != GAMESTATE.MENU
         && enemy.enemyType != EnemyType.DEAD
         && !enemy.kbEd) {
 

@@ -10,7 +10,7 @@ public class CameraLookAt : MonoBehaviour
  
     private void Update()
     {
-        if (GameStateManager.GetState() != GameStateManager.GAMESTATE.MENU) {
+        if (GameStateManager.GetState() != GAMESTATE.MENU) {
             var mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
             var cameraTargetPosition = (mousePosition + (cameraTargetDivider - 1) * playerTransform.position) / cameraTargetDivider;
             transform.position = cameraTargetPosition;
