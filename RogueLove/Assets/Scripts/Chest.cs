@@ -106,7 +106,18 @@ public class Chest : MonoBehaviour
 
     private void GetWeaponProbability(float value, float[] lootTable) {
 
-        if (value <= lootTable[0]) {
+        // TESTING ONLY
+        if (lootList.rareWeapons.Count != 0) {
+            var weapon = lootList.GetRandomWeapon(WeaponRarity.RARE);
+            Instantiate(weapon, transform.position, Quaternion.identity);
+            lootList.RemoveWeapon(weapon, WeaponRarity.RARE);
+        } else {
+            Debug.Log("Would've spawned a RARE weapon but there are none!");
+        }
+
+        // ACTUAL CODE
+
+        /* if (value <= lootTable[0]) {
             if (lootList.commonWeapons.Count != 0) {
                 var weapon = lootList.GetRandomWeapon(WeaponRarity.COMMON);
                 Instantiate(weapon, transform.position, Quaternion.identity);
@@ -150,6 +161,6 @@ public class Chest : MonoBehaviour
             } else {
                 Debug.Log("Would've spawned a LEGENDARY weapon but there are none!");
             }
-        }
+        } */
     }
 }

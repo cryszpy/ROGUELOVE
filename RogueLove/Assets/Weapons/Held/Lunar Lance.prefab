@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 767796559657468289}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.55, y: 0, z: 0}
+  m_LocalPosition: {x: 1.478, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 6661772877316794564}
   - component: {fileID: 5151835637289417907}
   m_Layer: 12
-  m_Name: Thornbloom
+  m_Name: Lunar Lance
   m_TagString: Untagged
   m_Icon: {fileID: 7174288486110832750, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -138,13 +138,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4603566924701312467}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5515260998857416831}
-  - {fileID: 7409228223749898102}
+  - {fileID: 472067458173965640}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!95 &9055512062003494860
@@ -182,17 +182,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
-  ammo: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
-  ammoMax: 60
+  ammo: {fileID: 5001664913613443686, guid: 158e9acc693b14eedafffcf52f3148c1, type: 3}
+  ammoMax: 45
   ammoPerClick: 1
-  currentAmmo: 60
+  currentAmmo: 45
   infiniteAmmo: 0
-  timeBetweenFiring: 0.3
-  sprite: {fileID: 2386080452617086367}
+  timeBetweenFiring: 1
+  sprite: {fileID: 8096842307378342048}
   fireSound: PlayerBullet
   chargeSound: 
   spawnPos: {fileID: 767796559657468289}
   distance: {x: 0, y: 0}
+  behindWeapon: 0
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -239,7 +240,7 @@ MonoBehaviour:
   shakeDuration: 0.1
   shakeAmplitude: 0.2
   shakeFrequency: 1
---- !u!1 &7017868593839262584
+--- !u!1 &6924588348523518064
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -247,8 +248,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7409228223749898102}
-  - component: {fileID: 2386080452617086367}
+  - component: {fileID: 472067458173965640}
+  - component: {fileID: 8096842307378342048}
   m_Layer: 12
   m_Name: Sprite
   m_TagString: Untagged
@@ -256,28 +257,28 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7409228223749898102
+--- !u!4 &472067458173965640
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7017868593839262584}
+  m_GameObject: {fileID: 6924588348523518064}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 813626564883701878}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
---- !u!212 &2386080452617086367
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!212 &8096842307378342048
 SpriteRenderer:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7017868593839262584}
+  m_GameObject: {fileID: 6924588348523518064}
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 0
@@ -314,7 +315,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: f76f6a291a786447094e30741bdef5e1, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 42adafa44094f4d41963e10950c5722c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

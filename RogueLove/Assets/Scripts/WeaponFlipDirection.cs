@@ -12,7 +12,7 @@ public class WeaponFlipDirection : MonoBehaviour
         if (gameObject.transform.rotation.z > 0.7f || gameObject.transform.rotation.z < -0.7f) {
             
             // Flip weapon sprite
-            parent.sprite.flipY = true;
+            gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x, -1, gameObject.transform.localScale.z);
 
             // Flip spawn position sprite (muzzle flash)
             if (parent.spawnPos.TryGetComponent<SpriteRenderer>(out var renderer)) {
@@ -20,7 +20,7 @@ public class WeaponFlipDirection : MonoBehaviour
             }
         } else {
             // Flip weapon sprite
-            parent.sprite.flipY = false;
+            gameObject.transform.localScale = new Vector3(gameObject.transform.localScale.x, 1, gameObject.transform.localScale.z);
 
             // Flip spawn position sprite (muzzle flash)
             if (parent.spawnPos.TryGetComponent<SpriteRenderer>(out var renderer)) {

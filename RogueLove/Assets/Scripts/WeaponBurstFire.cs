@@ -5,6 +5,8 @@ public class WeaponBurstFire : MonoBehaviour
 {
     [Header("SCRIPT REFERENCES")]
 
+    private Camera mainCam;
+
     public Weapon parent;
 
     [SerializeField] private CameraShake shake;
@@ -24,6 +26,7 @@ public class WeaponBurstFire : MonoBehaviour
 
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
 
     // Update is called once per frame
@@ -60,54 +63,42 @@ public class WeaponBurstFire : MonoBehaviour
     }
 
     public virtual IEnumerator BurstFire() {
-
-        // Add player damage modifier
-        if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
-            bullet.damage *= player.damageModifier;
-        }
-
+        
         if (shake == null) {
             Debug.Log("CameraShake camShake is null! Reassigned.");
             //shake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
             shake = player.hurtShake;
         }
 
-        if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
-            FireSound();
+        for (int i = 0; i < 3; i++) {
+
+            // Play firing sound
+            if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
+                FireSound();
+            }
+
+            // Start camera shake
+            StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
+            //camShake.Shake(0.15f, 0.4f);
+
+            // Spawn bullet and add player damage modifier
+            if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
+                bullet.damage *= player.damageModifier;
+                GameObject instantBullet = bullet.Create(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity, parent, mainCam) as GameObject;
+
+                // Play muzzle flash animation
+                if (parent.spawnPos.TryGetComponent<Animator>(out var animator)) {
+                    animator.SetTrigger("MuzzleFlash");
+                }
+
+                // Destroy bullet after 2 seconds
+                StartCoroutine(BulletDestroy(2, instantBullet));
+            } else {
+                Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
+            }
+
+            yield return new WaitForSeconds(0.15f);
         }
-
-        // Start camera shake
-        StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
-        //camShake.Shake(0.15f, 0.4f);
-
-        GameObject instantBullet = Instantiate(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity);
-        StartCoroutine(BulletDestroy(2, instantBullet));
-
-        yield return new WaitForSeconds(0.15f);
-
-        if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
-            FireSound();
-        }
-
-        // Start camera shake
-        StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
-        //camShake.Shake(0.15f, 0.4f);
-
-        GameObject instantBullet1 = Instantiate(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity);
-        StartCoroutine(BulletDestroy(2, instantBullet1));
-
-        yield return new WaitForSeconds(0.15f);
-
-        if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
-            FireSound();
-        }
-
-        // Start camera shake
-        StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
-        //camShake.Shake(0.15f, 0.4f);
-
-        GameObject instantBullet2 = Instantiate(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity);
-        StartCoroutine(BulletDestroy(2, instantBullet2));
         
         bursting = false;
         canFire = false;

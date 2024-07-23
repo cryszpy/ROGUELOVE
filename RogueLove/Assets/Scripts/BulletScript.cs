@@ -9,37 +9,39 @@ public class BulletScript : MonoBehaviour
 
     [Header("SCRIPT REFERENCES")]
 
-    private Vector3 mousePos;
-    private Camera mainCam;
+    protected Vector3 mousePos;
+    protected Camera mainCam;
 
     [SerializeField]
-    private Rigidbody2D rb;
+    protected Rigidbody2D rb;
 
     public Animator animator;
 
-    private Vector3 direction;
+    protected Vector3 direction;
 
     [SerializeField]
-    private Collider2D coll;
+    protected Collider2D coll;
+
+    [SerializeField]
+    protected Weapon weapon;
 
     [Space(10)]
     [Header("STATS")]
 
     [SerializeField]
-    private float force;
+    protected float force;
 
     public float damage;
 
-    // Lower is more accurate
+    [Tooltip("Lower values are more accurate— 0 fires in a straight line.")]
     [SerializeField]
-    private float accuracy;
+    protected float accuracy;
 
-    [SerializeField] private bool isFire;
+    [SerializeField] protected bool isFire;
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
-        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
         coll.enabled = true;
 
@@ -53,8 +55,14 @@ public class BulletScript : MonoBehaviour
         }
 
         mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
-        // Direction of the bullet
-        direction = mousePos - transform.position;
+
+        // DIRECTION OF THE BULLET
+
+        direction = mousePos - weapon.transform.position;
+
+        if (direction == Vector3.zero) {
+            direction = weapon.spawnPos.transform.position - weapon.transform.position;
+        }
        
         Vector3 rotation =  transform.position - mousePos;
 
@@ -66,8 +74,26 @@ public class BulletScript : MonoBehaviour
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
     }
 
+    public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, Weapon weapon, Camera cam) {
+        GameObject bullet = Instantiate(original, position, rotation) as GameObject;
+        
+        if (bullet.TryGetComponent<BulletScript>(out var script)) {
+            script.weapon = weapon;
+            script.mainCam = cam;
+            return bullet;
+        } else if (bullet.GetComponentInChildren<BulletScript>()) {
+            BulletScript bulletScript = bullet.GetComponentInChildren<BulletScript>();
+            bulletScript.weapon = weapon;
+            bulletScript.mainCam = cam;
+            return bullet;
+        } else {
+            Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
+            return null;
+        }
+    }
+
     // Damage enemies or destroy self when hitting obstacles
-    private void OnTriggerEnter2D(Collider2D other) {
+    public virtual void OnTriggerEnter2D(Collider2D other) {
         
         direction = mousePos - transform.position;
 
@@ -90,14 +116,15 @@ public class BulletScript : MonoBehaviour
             }
         }
 
-        if (other.gameObject.layer != 3 && other.gameObject.layer != 10) {
+        // If collided object layer is not player (3), weapon (12), or breakables (10)
+        if (other.gameObject.layer != 3  && other.gameObject.layer != 12 && other.gameObject.layer != 10) {
             coll.enabled = false;
             rb.velocity = (Vector2)direction.normalized * 0;
             animator.SetTrigger("Destroy");
         }
     }
 
-    public void DestroyBullet() {
+    public virtual void DestroyBullet() {
         Destroy(gameObject);
     }
 }

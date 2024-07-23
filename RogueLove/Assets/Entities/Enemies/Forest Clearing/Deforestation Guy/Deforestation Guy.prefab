@@ -101,6 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  type: 0
   ammo: {fileID: 5001664913613443686, guid: 2e57be75894714088842f71df58c7a6c, type: 3}
   ammoMax: 100
   ammoPerClick: 0
@@ -110,7 +111,8 @@ MonoBehaviour:
   sprite: {fileID: 8757874228822253330}
   fireSound: 
   chargeSound: 
-  spawnPos: {fileID: 0}
+  spawnPos: {fileID: 3046133085571071947}
+  distance: {x: 0, y: 0}
 --- !u!114 &5391249807630986660
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -172,8 +174,8 @@ Transform:
   m_GameObject: {fileID: 1561680727378319464}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.025641026, y: 0.025641026, z: 0}
-  m_LocalScale: {x: 0.051282052, y: 0.051282052, z: 1}
+  m_LocalPosition: {x: -0.022522522, y: 0.022522522, z: 0}
+  m_LocalScale: {x: 0.045045044, y: 0.045045044, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3622345872674339659}
@@ -596,7 +598,6 @@ MonoBehaviour:
   lineSpriteRenderer: {fileID: 1232581607278071763}
   lineRenderer: {fileID: 8896287817164861507}
   chargeTime: 2
-  healthBar: {fileID: 0}
   dropsList: []
   coinsList: []
   minCoins: 0
@@ -630,7 +631,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   animator: {fileID: 8201166932476317417}
   parent: {fileID: 7320282791248086331}
-  healthBar: {fileID: 0}
   currentHealth: 0
   maxHealth: 8
   knockback: 6

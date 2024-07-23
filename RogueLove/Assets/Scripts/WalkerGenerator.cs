@@ -524,12 +524,12 @@ public class WalkerGenerator : MonoBehaviour
 
         // Set bottom left corner
         wallsTilemap.SetTile(new Vector3Int(0, 0, 0), tiles.grass);
-        oTilemap.SetTile(new Vector3Int(0, 0, 0), tiles.grass);
+        //oTilemap.SetTile(new Vector3Int(0, 0, 0), tiles.grass);
         gridHandler[0, 0] = TileType.BORDER;
 
         // Set bottom right corner
         wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, 0, 0), tiles.grass);
-        oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, 0, 0), tiles.grass);
+        //oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, 0, 0), tiles.grass);
         gridHandler[gridHandler.GetLength(0) - 1, 0] = TileType.BORDER;
     }
 
@@ -638,29 +638,6 @@ public class WalkerGenerator : MonoBehaviour
         SaveMap();
         TransitionManager.EndLeaf(true);
         playerCont.savePressed = true;
-    }
-
-    IEnumerator CreateDecor() {
-
-        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
-            for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
-
-                // Checks each x and y value of the grid to see if they are floors
-                if (gridHandler[x, y] == TileType.EMPTY) {
-                    bool hasCreatedDecor = false;
-
-                    // DECOR CHECK
-                    floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.walls);
-                    gridHandler[x, y] = TileType.BORDER;
-                    hasCreatedDecor = true;
-                    tileCount++;
-
-                    if (hasCreatedDecor) {
-                        yield return new WaitForSeconds(waitTime);
-                    }
-                }
-            }
-        }
     }
 
     // SPAWN PLAYER

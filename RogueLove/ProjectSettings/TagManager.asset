@@ -37,8 +37,8 @@ TagManager:
   - Collisions/BulletIgnore
   - Enemy
   - Collisions/Breakables
-  - 
-  - 
+  - UI/Crosshair
+  - Weapon
   - 
   - 
   - 

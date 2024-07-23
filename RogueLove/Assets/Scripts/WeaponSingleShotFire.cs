@@ -5,6 +5,8 @@ public class WeaponSingleShotFire : MonoBehaviour
 {
     [Header("SCRIPT REFERENCES")]
 
+    private Camera mainCam;
+
     public Weapon parent;
 
     [SerializeField] private PlayerController player;
@@ -22,6 +24,7 @@ public class WeaponSingleShotFire : MonoBehaviour
 
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
 
         if (shake == null) {
             Debug.Log("CameraShake camShake is null! Reassigned.");
@@ -65,10 +68,7 @@ public class WeaponSingleShotFire : MonoBehaviour
     public virtual void Fire() {
         canFire = false;
 
-        // Add player damage modifier
-        if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
-            bullet.damage *= player.damageModifier;
-        }
+        
 
         // Play firing sound
         if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
@@ -84,16 +84,21 @@ public class WeaponSingleShotFire : MonoBehaviour
         StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
         //camShake.Shake(0.15f, 0.4f);
 
-        // Spawn bullet
-        GameObject instantBullet = Instantiate(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity);
+        // Spawn bullet and add player damage modifier
+        if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
+            bullet.damage *= player.damageModifier;
+            GameObject instantBullet = bullet.Create(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity, parent, mainCam) as GameObject;
 
-        // Play muzzle flash animation
-        if (parent.spawnPos.TryGetComponent<Animator>(out var animator)) {
-            animator.SetTrigger("MuzzleFlash");
+            // Play muzzle flash animation
+            if (parent.spawnPos.TryGetComponent<Animator>(out var animator)) {
+                animator.SetTrigger("MuzzleFlash");
+            }
+
+            // Destroy bullet after 2 seconds
+            StartCoroutine(BulletDestroy(2, instantBullet));
+        } else {
+            Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
         }
-
-        // Destroy bullet after 2 seconds
-        StartCoroutine(BulletDestroy(2, instantBullet));
     }
 
     public virtual void FireSound() {

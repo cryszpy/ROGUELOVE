@@ -41,4 +41,7 @@ public class Weapon : MonoBehaviour
 
     // Bullet Spawn Point
     public GameObject spawnPos;
+
+    public Vector2 distance;
+
 }
