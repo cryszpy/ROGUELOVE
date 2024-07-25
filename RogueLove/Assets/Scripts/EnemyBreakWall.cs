@@ -62,7 +62,7 @@ public class EnemyBreakWall : MonoBehaviour
             if (parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.OBSTACLES) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y), parent.map.tiles.empty);
             } 
-             else if (parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.OBSTACLES) {
+            else if (parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.OBSTACLES) {
                 parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y + 1), parent.map.tiles.empty);
             } /*
             else if (parent.map.gridHandler[cellPos.x + 1, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x + 1, cellPos.y] == TileType.OBSTACLES) {

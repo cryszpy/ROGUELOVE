@@ -15,6 +15,10 @@ public class WeaponBurstFire : MonoBehaviour
 
     [Header("STATS")]
 
+    [SerializeField] private float timeBetweenBulletBurst;
+
+    [SerializeField] private float numberOfBurstShots;
+
     public bool canFire = true;
     protected float timer;
 
@@ -70,7 +74,7 @@ public class WeaponBurstFire : MonoBehaviour
             shake = player.hurtShake;
         }
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < numberOfBurstShots; i++) {
 
             // Play firing sound
             if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
@@ -97,7 +101,7 @@ public class WeaponBurstFire : MonoBehaviour
                 Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
             }
 
-            yield return new WaitForSeconds(0.15f);
+            yield return new WaitForSeconds(timeBetweenBulletBurst);
         }
         
         bursting = false;

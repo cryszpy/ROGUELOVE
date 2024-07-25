@@ -30,6 +30,12 @@ public class Weapon : MonoBehaviour
     // Fire rate / cooldown
     public float timeBetweenFiring;
 
+    [Tooltip("The worth of this weapon when sold, in coins.")]
+    public float coinValue;
+
+    [Tooltip("Flavor text that appears on screen when a weapon is picked up for the first time.")]
+    public string flavorText;
+
     // Weapon sprite
     public SpriteRenderer sprite;
 

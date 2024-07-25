@@ -52,13 +52,11 @@ MonoBehaviour:
   - 0.09
   - 0.45
   - 0.85
-  commonWeapons:
-  - {fileID: 8481469185648990204, guid: 1a999c34ce8cd47d8b6e1fd78d2f894e, type: 3}
+  commonWeapons: []
   seenCommonWeapons: []
   uncommonWeapons: []
   seenUncommonWeapons: []
-  rareWeapons:
-  - {fileID: 8481469185648990204, guid: 48a0a9a8f309f4098ad11dc5df735a87, type: 3}
+  rareWeapons: []
   seenRareWeapons: []
   epicWeapons: []
   seenEpicWeapons: []

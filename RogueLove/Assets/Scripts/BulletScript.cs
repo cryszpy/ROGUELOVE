@@ -117,7 +117,7 @@ public class BulletScript : MonoBehaviour
         }
 
         // If collided object layer is not player (3), weapon (12), or breakables (10)
-        if (other.gameObject.layer != 3  && other.gameObject.layer != 12 && other.gameObject.layer != 10) {
+        if (other.gameObject.layer != 3  && other.gameObject.layer != 12 && other.gameObject.layer != 10 && other.gameObject.tag != "Projectile") {
             coll.enabled = false;
             rb.velocity = (Vector2)direction.normalized * 0;
             animator.SetTrigger("Destroy");

@@ -25,13 +25,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 3681682569378540574}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: -0.38268343, w: 0.92387956}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 5124224574534849688}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: -45}
 --- !u!212 &7395041985158127922
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -142,12 +142,13 @@ MonoBehaviour:
   currentAmmo: 60
   infiniteAmmo: 0
   timeBetweenFiring: 1
+  coinValue: 22
+  flavorText: Wild bloom of the valley with magical properties.
   sprite: {fileID: 7395041985158127922}
   fireSound: PlayerBullet
   chargeSound: 
   spawnPos: {fileID: 6524611403680658214}
   distance: {x: 0, y: 0}
-  behindWeapon: 0
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -190,6 +191,8 @@ MonoBehaviour:
   parent: {fileID: 4769477716828700568}
   shake: {fileID: 0}
   player: {fileID: 0}
+  timeBetweenBulletBurst: 0.15
+  numberOfBurstShots: 3
   canFire: 1
   shakeDuration: 0
   shakeAmplitude: 0
@@ -219,7 +222,7 @@ Transform:
   m_GameObject: {fileID: 6524611403680658214}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.3832, y: -0.0728, z: 0}
+  m_LocalPosition: {x: 0.461, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

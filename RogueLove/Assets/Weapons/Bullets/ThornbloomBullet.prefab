@@ -106,7 +106,8 @@ MonoBehaviour:
   rb: {fileID: 6018900055118431996}
   animator: {fileID: 2920130361219395360}
   coll: {fileID: 5490067005516740771}
-  force: 20
+  weapon: {fileID: 0}
+  force: 15
   damage: 5
   accuracy: 0.5
   isFire: 0
