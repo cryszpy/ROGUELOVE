@@ -141,8 +141,9 @@ public class WalkerGenerator : MonoBehaviour
         }
     }
 
-    [SerializeField]
-    private bool bossLevel = false;
+    [SerializeField] private bool bossLevel = false;
+
+    [SerializeField] private bool minibossSpawned = false;
 
     public static bool doneWithLevel = false;
 
@@ -153,6 +154,10 @@ public class WalkerGenerator : MonoBehaviour
         deadEnemies = 0;
         GameStateManager.SetLevelClear(false);
         GameStateManager.SetState(GAMESTATE.PLAYING);
+
+        if (GameStateManager.GetLevel() == 1) {
+            minibossSpawned = false;
+        }
 
         if (floorTilemap == null) {
             floorTilemap = GameObject.Find("Tilemap").GetComponent<Tilemap>();
@@ -721,51 +726,92 @@ public class WalkerGenerator : MonoBehaviour
         // Miniboss spawning
         if (!IsArrayEmpty(minibosses) && !bossLevel) {
 
-            // For every miniboss in the level (e.g. Scout, Chris)
+            // For every possible miniboss in the level (e.g. Scout, Chris)
             for (int m = 0; m < minibosses.Length; m++) {
                 
-                // Generate random amount of minibosses in level (e.g. 1 Scout, 1 Chris)
-                int minibossesRange = UnityEngine.Random.Range(0, 2);
+                // Generate random max amount of each unique miniboss in level (e.g. 1 Scout, 1 Chris)
+                int minibossesRange = UnityEngine.Random.Range(1, 2);
                 
-                // For the amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
+                // For the max amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
                 for (int s = 0; s < minibossesRange; s++) {
-                    
-                    // Generates random number to pick Enemy spawnpoint
-                    int randX = GetRandomXTile();
-                    int randY = GetRandomTile();
 
-                    // For as many floor tiles as there are in the tilemap:
-                    for (int i = 0; i < tileListX.Count; i++) {
-                        
-                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                        if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
+                    // If able to get script—
+                    if (minibosses[m].TryGetComponent<Enemy>(out var enemy) || minibosses[m].GetComponentInChildren<Enemy>()) {
 
-                            if (tileListX[randX] <= player.transform.position.x + spawnRadiusX 
-                            && tileListX[randX] >= player.transform.position.x - spawnRadiusX) {
-                                randX = GetRandomXTile();
-                            } else if (tileListY[randY] <= player.transform.position.y + spawnRadiusY 
-                            && tileListY[randY] >= player.transform.position.y - spawnRadiusY) {
-                                randY = GetRandomTile();
-                            } else {
+                        if (enemy == null) {
+                            enemy = minibosses[m].GetComponentInChildren<Enemy>();
+                        }
 
-                                // Spawns Enemy
-                                if (minibosses[m].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                    enemyTotal++;
-                                    break;
-                                } else if (minibosses[m].GetComponentInChildren<Enemy>()) {
-                                    minibosses[m].GetComponentInChildren<Enemy>().Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);
-                                    enemyTotal++;
-                                    break;
+                        // Current level
+                        int level = GameStateManager.GetLevel();
+
+                        if (minibossSpawned) {
+                            level = 1;
+                        }
+
+                        // Roll to see if enemy is able to spawn
+                        float spawnValue = UnityEngine.Random.value;
+
+                        float exponent = Mathf.Pow(Mathf.Abs(enemy.spawnChanceMultiplier * level - enemy.spawnChanceXTransform), enemy.spawnChanceExponent);
+
+                        // Complete spawn rate equation formula
+                        float spawnChance = (1 / (enemy.spawnChanceVertAmp + exponent)) + enemy.spawnChanceYTransform;
+
+                        // If enemy spawn roll is over the max chance, then compress to threshold
+                        if (spawnChance > enemy.maxSpawnChance) {
+                            spawnChance = enemy.maxSpawnChance;
+                        }
+
+                        Debug.Log(minibosses[m] + ": " + spawnChance);
+
+                        // If enemy spawn roll is a success, spawn enemy 
+                        if (spawnValue <= spawnChance) {
+
+                            // Generates random number to pick Enemy spawnpoint
+                            int randX = GetRandomXTile();
+                            int randY = GetRandomTile();
+
+                            // For as many floor tiles as there are in the tilemap:
+                            for (int i = 0; i < tileListX.Count; i++) {
+                                
+                                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                                if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
+
+                                    if (tileListX[randX] <= player.transform.position.x + spawnRadiusX 
+                                    && tileListX[randX] >= player.transform.position.x - spawnRadiusX) {
+                                        randX = GetRandomXTile();
+                                    } else if (tileListY[randY] <= player.transform.position.y + spawnRadiusY 
+                                    && tileListY[randY] >= player.transform.position.y - spawnRadiusY) {
+                                        randY = GetRandomTile();
+                                    } else {
+
+                                        // Spawns Enemy
+                                        if (minibosses[m].GetComponentInChildren<Enemy>()) {
+                                            minibosses[m].GetComponentInChildren<Enemy>().Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);
+                                            enemyTotal++;
+                                            minibossSpawned = true;
+                                            break;
+                                        } else {
+                                            enemy.Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                            enemyTotal++;
+                                            minibossSpawned = true;
+                                            break;
+                                        }
+                                    }
+
+                                } else {
+                                    
+                                    // Generates random number to pick Enemy spawnpoint
+                                    randX = GetRandomXTile();
+                                    randY = GetRandomTile();
                                 }
                             }
-
                         } else {
-                            
-                            // Generates random number to pick Enemy spawnpoint
-                            randX = GetRandomXTile();
-                            randY = GetRandomTile();
+                            Debug.Log(minibosses[m] + " failed the spawn roll!");
                         }
+
+                    } else {
+                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
                 }
             }
@@ -777,113 +823,150 @@ public class WalkerGenerator : MonoBehaviour
             // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
             for (int st = 0; st < stationEnemies.Length; st++) {
 
-                // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+                // Generate random max amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
                 int stationRange = UnityEngine.Random.Range(1, 4);
 
-                // For the amount of every different type of stationary enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
+                // For the max amount of every different type of stationary enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
                 for (int s = 0; s < stationRange; s++) {
-                    
-                    // Generates random number to pick Enemy spawnpoint
-                    int randX = GetRandomXTile();
-                    int randY = GetRandomTile();
 
-                    // For as many floor tiles as there are in the tilemap:
-                    for (int i = 0; i < tileListX.Count; i++) {
+                    // If able to get script—
+                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy) || stationEnemies[st].GetComponentInChildren<Enemy>()) {
 
-                        // Choose from the available floor tiles
-                        if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.WALLS) {
+                        if (enemy == null) {
+                            enemy = stationEnemies[st].GetComponentInChildren<Enemy>();
+                        }
 
-                            if (tileListX[randX] <= player.transform.position.x + (spawnRadiusX/2) 
-                            && tileListX[randX] >= player.transform.position.x - (spawnRadiusX/2)) {
-                                randX = GetRandomXTile();
-                            } else if (tileListY[randY] <= player.transform.position.y + (spawnRadiusY/2) 
-                            && tileListY[randY] >= player.transform.position.y - (spawnRadiusY/2)) {
-                                randY = GetRandomTile();
-                            } else {
+                        // Current level
+                        int level = GameStateManager.GetLevel();
 
-                                Quaternion rot = Quaternion.Euler(0, 0, 0);
+                        // Roll to see if enemy is able to spawn
+                        var spawnValue = UnityEngine.Random.value;
+                        Debug.Log(spawnValue);
 
-                                // TOP WALL
-                                if (gridHandler[tileListX[randX], tileListY[randY] - 1] == TileType.FLOOR) {
-                                    rot = Quaternion.Euler(0, 0, -90);
+                        var exponent = Mathf.Pow(Mathf.Abs(enemy.spawnChanceMultiplier * level - enemy.spawnChanceXTransform), enemy.spawnChanceExponent);
 
-                                    float xCoord = (tileListX[randX] + 0.5f) * mapGrid.cellSize.x;
-                                    float yCoord = (tileListY[randY] - 0.3f) * mapGrid.cellSize.y;
-                                    Debug.Log("TOP WALL SPAWNED");
+                        // Complete spawn rate equation formula
+                        var spawnChance = (1 / (enemy.spawnChanceVertAmp + exponent)) + enemy.spawnChanceYTransform;
 
-                                    // Spawns Enemy
-                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                        enemyTotal++;
-                                        break;
-                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                        enemyTotal++;
-                                        break;
+                        // If enemy spawn roll is over the max chance, then compress to threshold
+                        if (spawnChance > enemy.maxSpawnChance) {
+                            spawnChance = enemy.maxSpawnChance;
+                        }
+
+                        Debug.Log(stationEnemies[st] + ": " + spawnChance);
+
+                        // If enemy spawn roll is a success, spawn enemy 
+                        if (spawnValue <= spawnChance) {
+
+                            // Generates random number to pick Enemy spawnpoint
+                            int randX = GetRandomXTile();
+                            int randY = GetRandomTile();
+
+                            // For as many floor tiles as there are in the tilemap:
+                            for (int i = 0; i < tileListX.Count; i++) {
+
+                                // Choose from the available floor tiles
+                                if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.WALLS) {
+
+                                    if (tileListX[randX] <= player.transform.position.x + (spawnRadiusX/2) 
+                                    && tileListX[randX] >= player.transform.position.x - (spawnRadiusX/2)) {
+                                        randX = GetRandomXTile();
+                                    } else if (tileListY[randY] <= player.transform.position.y + (spawnRadiusY/2) 
+                                    && tileListY[randY] >= player.transform.position.y - (spawnRadiusY/2)) {
+                                        randY = GetRandomTile();
+                                    } else {
+
+                                        Quaternion rot = Quaternion.Euler(0, 0, 0);
+
+                                        // TOP WALL
+                                        if (gridHandler[tileListX[randX], tileListY[randY] - 1] == TileType.FLOOR) {
+                                            rot = Quaternion.Euler(0, 0, -90);
+
+                                            float xCoord = (tileListX[randX] + 0.5f) * mapGrid.cellSize.x;
+                                            float yCoord = (tileListY[randY] - 0.3f) * mapGrid.cellSize.y;
+                                            Debug.Log("TOP WALL SPAWNED");
+
+                                            // Spawns Enemy
+                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
+                                                enemyTotal++;
+                                                break;
+                                            } else {
+                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                                enemyTotal++;
+                                                break;
+                                            }
+                                        } 
+                                        // BOTTOM WALL
+                                        else if (gridHandler[tileListX[randX], tileListY[randY] + 1] == TileType.FLOOR) {
+                                            rot = Quaternion.Euler(0, 0, 90);
+
+                                            float xCoord = (tileListX[randX] + 0.5f) * mapGrid.cellSize.x;
+                                            float yCoord = (tileListY[randY] + 1) * mapGrid.cellSize.y;
+
+                                            Debug.Log("BOTTOM WALL SPAWNED");
+                                            // Spawns Enemy
+                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
+                                                enemyTotal++;
+                                                break;
+                                            } else {
+                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                                enemyTotal++;
+                                                break;
+                                            }
+                                        } 
+                                        // LEFT WALL
+                                        else if (gridHandler[tileListX[randX] + 1, tileListY[randY]] == TileType.FLOOR) {
+                                            rot = Quaternion.Euler(0, 0, 0);
+
+                                            float xCoord = (tileListX[randX] + 1f) * mapGrid.cellSize.x;
+                                            float yCoord = (tileListY[randY] + 0.6f) * mapGrid.cellSize.y;
+
+                                            Debug.Log("LEFT WALL SPAWNED");
+                                            // Spawns Enemy
+                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
+                                                enemyTotal++;
+                                                break;
+                                            } else {
+                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                                enemyTotal++;
+                                                break;
+                                            }
+                                        } 
+                                        // RIGHT WALL
+                                        else if (gridHandler[tileListX[randX] - 1, tileListY[randY]] == TileType.FLOOR) {
+                                            rot = Quaternion.Euler(0, 0, 180);
+
+                                            float xCoord = (tileListX[randX] * mapGrid.cellSize.x);
+                                            float yCoord = (tileListY[randY] + 0.3f) * mapGrid.cellSize.y;
+
+                                            Debug.Log("RIGHT WALL SPAWNED");
+                                            // Spawns Enemy
+                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
+                                                enemyTotal++;
+                                                break;
+                                            } else {
+                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                                enemyTotal++;
+                                                break;
+                                            }
+                                        } 
+                                        else {
+                                            // Generates random number to pick Enemy spawnpoint
+                                            randX = GetRandomXTile();
+                                            randY = GetRandomTile();
+                                        }
                                     }
-                                } 
-                                // BOTTOM WALL
-                                else if (gridHandler[tileListX[randX], tileListY[randY] + 1] == TileType.FLOOR) {
-                                    rot = Quaternion.Euler(0, 0, 90);
 
-                                    float xCoord = (tileListX[randX] + 0.5f) * mapGrid.cellSize.x;
-                                    float yCoord = (tileListY[randY] + 1) * mapGrid.cellSize.y;
-
-                                    Debug.Log("BOTTOM WALL SPAWNED");
-                                    // Spawns Enemy
-                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                        enemyTotal++;
-                                        break;
-                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                        enemyTotal++;
-                                        break;
-                                    }
-                                } 
-                                // LEFT WALL
-                                else if (gridHandler[tileListX[randX] + 1, tileListY[randY]] == TileType.FLOOR) {
-                                    rot = Quaternion.Euler(0, 0, 0);
-
-                                    float xCoord = (tileListX[randX] + 1f) * mapGrid.cellSize.x;
-                                    float yCoord = (tileListY[randY] + 0.6f) * mapGrid.cellSize.y;
-
-                                    Debug.Log("LEFT WALL SPAWNED");
-                                    // Spawns Enemy
-                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                        enemyTotal++;
-                                        break;
-                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                        enemyTotal++;
-                                        break;
-                                    }
-                                } 
-                                // RIGHT WALL
-                                else if (gridHandler[tileListX[randX] - 1, tileListY[randY]] == TileType.FLOOR) {
-                                    rot = Quaternion.Euler(0, 0, 180);
-
-                                    float xCoord = (tileListX[randX] * mapGrid.cellSize.x);
-                                    float yCoord = (tileListY[randY] + 0.3f) * mapGrid.cellSize.y;
-
-                                    Debug.Log("RIGHT WALL SPAWNED");
-                                    // Spawns Enemy
-                                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy)) {
-                                        gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                        enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                        enemyTotal++;
-                                        break;
-                                    } else if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                        stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                        enemyTotal++;
-                                        break;
-                                    }
-                                } 
-                                else {
+                                } else {
+                                    
                                     // Generates random number to pick Enemy spawnpoint
                                     randX = GetRandomXTile();
                                     randY = GetRandomTile();
@@ -891,11 +974,11 @@ public class WalkerGenerator : MonoBehaviour
                             }
 
                         } else {
-                            
-                            // Generates random number to pick Enemy spawnpoint
-                            randX = GetRandomXTile();
-                            randY = GetRandomTile();
+                            Debug.Log(stationEnemies[st] + " failed the spawn roll!");
                         }
+
+                    } else {
+                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
                 }
             }
@@ -912,40 +995,76 @@ public class WalkerGenerator : MonoBehaviour
                 
                 // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
                 for (int s = 0; s < rareRange; s++) {
-                    
-                    // Generates random number to pick Enemy spawnpoint
-                    int rand = GetRandomTile();
 
-                    // For as many floor tiles as there are in the tilemap:
-                    for (int i = 0; i < tileListX.Count; i++) {
+                    // If able to get script—
+                    if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy) || rareEnemies[r].GetComponentInChildren<Enemy>()) {
 
-                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                        if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
+                        if (enemy == null) {
+                            enemy = rareEnemies[r].GetComponentInChildren<Enemy>();
+                        }
 
-                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                                rand = GetRandomTile();
-                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
-                                rand = GetRandomTile();
-                            } else {
+                        // Current level
+                        int level = GameStateManager.GetLevel();
 
-                                if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                    enemyTotal++;
-                                    break;
-                                } else if (rareEnemies[r].GetComponentInChildren<Enemy>()) {
-                                    rareEnemies[r].GetComponentInChildren<Enemy>().Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
-                                    enemyTotal++;
-                                    break;
+                        // Roll to see if enemy is able to spawn
+                        float spawnValue = UnityEngine.Random.value;
+
+                        float exponent = Mathf.Pow(Mathf.Abs(enemy.spawnChanceMultiplier * level - enemy.spawnChanceXTransform), enemy.spawnChanceExponent);
+
+                        // Complete spawn rate equation formula
+                        float spawnChance = (1 / (enemy.spawnChanceVertAmp + exponent)) + enemy.spawnChanceYTransform;
+
+                        // If enemy spawn roll is over the max chance, then compress to threshold
+                        if (spawnChance > enemy.maxSpawnChance) {
+                            spawnChance = enemy.maxSpawnChance;
+                        }
+
+                        Debug.Log(rareEnemies[r] + ": " + spawnChance);
+
+                        // If enemy spawn roll is a success, spawn enemy 
+                        if (spawnValue <= spawnChance) {
+
+                            // Generates random number to pick Enemy spawnpoint
+                            int rand = GetRandomTile();
+
+                            // For as many floor tiles as there are in the tilemap:
+                            for (int i = 0; i < tileListX.Count; i++) {
+
+                                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                                if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
+
+                                    if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                                        rand = GetRandomTile();
+                                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                        rand = GetRandomTile();
+                                    } else {
+
+                                        if (rareEnemies[r].GetComponentInChildren<Enemy>()) {
+                                            rareEnemies[r].GetComponentInChildren<Enemy>().Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
+                                            enemyTotal++;
+                                            break;
+                                        } else {
+                                            enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                            enemyTotal++;
+                                            break;
+                                        }
+                                    }
+
+                                } else {
+                                    
+                                    // Generates random number to pick Enemy spawnpoint
+                                    rand = GetRandomTile();
                                 }
                             }
 
                         } else {
-                            
-                            // Generates random number to pick Enemy spawnpoint
-                            rand = GetRandomTile();
+                            Debug.Log(rareEnemies[r] + " failed the spawn roll!");
                         }
+
+                    } else {
+                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
                 }
             }
@@ -961,39 +1080,76 @@ public class WalkerGenerator : MonoBehaviour
 
                 // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
                 for (int s = 0; s < commonRange; s++) {
-                    
-                    // Generates random number to pick Enemy spawnpoint
-                    int rand = GetRandomTile();
 
-                    // For as many floor tiles as there are in the tilemap:
-                    for (int i = 0; i < tileListX.Count; i++) {
+                    // If able to get script—
+                    if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy) || commonEnemies[c].GetComponentInChildren<Enemy>()) {
 
-                        // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                        if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
+                        if (enemy == null) {
+                            enemy = commonEnemies[c].GetComponentInChildren<Enemy>();
+                        }
 
-                            if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                            && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                                rand = GetRandomTile();
-                            } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                            && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
-                                rand = GetRandomTile();
-                            } else {
-                                // Spawns Enemy
-                                if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy)) {
-                                    enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                    enemyTotal++;
-                                    break;
-                                } else if (commonEnemies[c].GetComponentInChildren<Enemy>()) {
-                                    commonEnemies[c].GetComponentInChildren<Enemy>().Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
-                                    enemyTotal++;
-                                    break;
+                        // Current level
+                        int level = GameStateManager.GetLevel();
+
+                        // Roll to see if enemy is able to spawn
+                        float spawnValue = UnityEngine.Random.value;
+
+                        float exponent = Mathf.Pow(Mathf.Abs(enemy.spawnChanceMultiplier * level - enemy.spawnChanceXTransform), enemy.spawnChanceExponent);
+
+                        // Complete spawn rate equation formula
+                        float spawnChance = (1 / (enemy.spawnChanceVertAmp + exponent)) + enemy.spawnChanceYTransform;
+
+                        // If enemy spawn roll is over the max chance, then compress to threshold
+                        if (spawnChance > enemy.maxSpawnChance) {
+                            spawnChance = enemy.maxSpawnChance;
+                        }
+
+                        Debug.Log(commonEnemies[c] + ": " + spawnChance);
+
+                        // If enemy spawn roll is a success, spawn enemy 
+                        if (spawnValue <= spawnChance) {
+
+                            // Generates random number to pick Enemy spawnpoint
+                            int rand = GetRandomTile();
+
+                            // For as many floor tiles as there are in the tilemap:
+                            for (int i = 0; i < tileListX.Count; i++) {
+
+                                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                                if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
+
+                                    if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
+                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
+                                        rand = GetRandomTile();
+                                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                        rand = GetRandomTile();
+                                    } else {
+                                        
+                                        // Spawns Enemy
+                                        if (commonEnemies[c].GetComponentInChildren<Enemy>()) {
+                                            commonEnemies[c].GetComponentInChildren<Enemy>().Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
+                                            enemyTotal++;
+                                            break;
+                                        } else {
+                                            enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                            enemyTotal++;
+                                            break;
+                                        }
+                                    }
+                                } else {
+                                    
+                                    // Generates random number to pick Enemy spawnpoint
+                                    rand = GetRandomTile();
                                 }
                             }
-                        } else {
                             
-                            // Generates random number to pick Enemy spawnpoint
-                            rand = GetRandomTile();
+                        } else {
+                            Debug.Log(commonEnemies[c] + " failed the spawn roll!");
                         }
+
+                    } else {
+                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
                 }
             }

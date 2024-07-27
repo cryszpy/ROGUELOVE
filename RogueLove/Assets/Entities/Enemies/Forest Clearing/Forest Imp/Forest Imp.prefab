@@ -428,6 +428,12 @@ MonoBehaviour:
   expOrb: {fileID: 2496777416409024874, guid: c277ee52a28e84f81881014f10b695ab, type: 3}
   minExp: 1
   maxExp: 4
+  spawnChanceVertAmp: 0.6
+  spawnChanceMultiplier: 0.1
+  spawnChanceXTransform: -0.3
+  spawnChanceExponent: 3
+  spawnChanceYTransform: -0.7
+  maxSpawnChance: 1
   damage: 0
   chaseSpeed: 900
   wanderSpeed: 720

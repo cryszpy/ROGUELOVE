@@ -60,7 +60,7 @@ public class Chest : MonoBehaviour
 
     private void OpenItemChest() {
         int rand = Random.Range(0, lootList.items.Count - 1);
-        
+        // TODO
     }
 
     public void OpenWeaponChest() {

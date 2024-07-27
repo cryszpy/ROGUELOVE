@@ -105,7 +105,7 @@ public class GameStateManager : MonoBehaviour
 
     public static void NextLevel() {
 
-        // Stages 1, 2, 5, 7, and 8 have 3 randomly-generated levels
+        // Stages 1, 2, 5, 7, and 8 have 5 randomly-generated levels
         if (GetStage() is 1 or 2 or 5 or 7 or 8) {
             // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
             if (GetLevel() == 5) {
@@ -122,7 +122,7 @@ public class GameStateManager : MonoBehaviour
                 TransitionManager.StartLeaf(GetStage());
             }
         } 
-        // All other stages have 4 randomly-generated levels
+        // All other stages have 6 randomly-generated levels
         else {
             // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
             if (GetLevel() == 6) {

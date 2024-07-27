@@ -80,6 +80,24 @@ public abstract class Enemy : MonoBehaviour
     [Space(10)]
     [Header("ENEMY STATS")]
 
+    [Tooltip("The variable responsible for how much the spawn rate curve is vertically amplified. - (a)")]
+    public float spawnChanceVertAmp = 1;
+
+    [Tooltip("The variable responsible for how steep the spawn rate curve is across levels. - (m)")]
+    public float spawnChanceMultiplier = 1;
+
+    [Tooltip("The variable responsible for horizontal transformation of the spawn rate curve. - (h)")]
+    public float spawnChanceXTransform = 1;
+
+    [Tooltip("The variable responsible for the exponential amplification of the spawn rate curve. - (p)")]
+    public float spawnChanceExponent = 2;
+
+    [Tooltip("The variable responsible for vertical transformation of the spawn rate curve. - (v)")]
+    public float spawnChanceYTransform = 0;
+
+    [Tooltip("Maximum overall target chance for this enemy to spawn in any level.")]
+    public float maxSpawnChance = 1;
+
     // This enemy's attack damage
     public int damage;
 

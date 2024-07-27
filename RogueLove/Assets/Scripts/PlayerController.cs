@@ -209,7 +209,7 @@ public class PlayerController : MonoBehaviour
         } 
         // Save data exists but player did not click load save --> most likely a NextLevel() call
         else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            Debug.Log("BRUH");
+            Debug.Log("PLAYER SAVE DATA NEXT LEVEL CALL!");
         } 
         // Save data does not exist, and player clicked load save somehow
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
