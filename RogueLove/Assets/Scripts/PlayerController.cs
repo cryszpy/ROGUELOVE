@@ -14,8 +14,9 @@ public class PlayerController : MonoBehaviour
 
     [Header("SCRIPT REFERENCES")]
 
-    [SerializeField]
-    private ContactFilter2D movementFilter;
+    [SerializeField] private LootList lootList;
+
+    [SerializeField] private ContactFilter2D movementFilter;
 
     [SerializeField] private Weapon weapon;
 
@@ -154,6 +155,7 @@ public class PlayerController : MonoBehaviour
             if(currentHealth <= 0) {
                 DeathAnim();
                 currentHealth = 0;
+                lootList.ResetAllWeapons();
             }
         }
 

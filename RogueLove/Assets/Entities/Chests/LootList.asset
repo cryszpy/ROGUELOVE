@@ -52,13 +52,23 @@ MonoBehaviour:
   - 0.09
   - 0.45
   - 0.85
-  commonWeapons: []
+  commonWeapons:
+  - {fileID: 8481469185648990204, guid: 02a18205ae3074177804e439537ee1ae, type: 3}
+  - {fileID: 8481469185648990204, guid: 262462e0d43ba4677ade48936cbee1f0, type: 3}
+  - {fileID: 8481469185648990204, guid: 351ee1ba98552449e928007381888579, type: 3}
+  - {fileID: 8481469185648990204, guid: e41b32bcd9a10431a8d5ec130988c02d, type: 3}
+  - {fileID: 8481469185648990204, guid: 1a999c34ce8cd47d8b6e1fd78d2f894e, type: 3}
+  - {fileID: 8481469185648990204, guid: 58975b23149df42ee9af64b19916dcc2, type: 3}
   seenCommonWeapons: []
-  uncommonWeapons: []
+  uncommonWeapons:
+  - {fileID: 8481469185648990204, guid: 5e6cbc8da0fee422f822ec374e69c9fa, type: 3}
   seenUncommonWeapons: []
-  rareWeapons: []
+  rareWeapons:
+  - {fileID: 8481469185648990204, guid: 4d5fc598d58bc49cebaaf052baca35d8, type: 3}
+  - {fileID: 8481469185648990204, guid: 48a0a9a8f309f4098ad11dc5df735a87, type: 3}
   seenRareWeapons: []
-  epicWeapons: []
+  epicWeapons:
+  - {fileID: 8481469185648990204, guid: e24cc781d37874b7f9ffd7ca9a6de2e0, type: 3}
   seenEpicWeapons: []
   legendaryWeapons: []
   seenLegendaryWeapons: []

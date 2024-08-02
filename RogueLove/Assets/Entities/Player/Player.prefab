@@ -477,6 +477,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6bb6bea647b224d1d93aeb7d955c8207, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  lootList: {fileID: 11400000, guid: 2504b60e808b24eb88270a566affbfd0, type: 2}
   movementFilter:
     useTriggers: 0
     useLayerMask: 0

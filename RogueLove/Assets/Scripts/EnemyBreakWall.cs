@@ -59,23 +59,27 @@ public class EnemyBreakWall : MonoBehaviour
 
             Vector3Int vec = new(cellPos.x, cellPos.y);
 
-            if (parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.OBSTACLES) {
-                parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y), parent.map.tiles.empty);
-            } 
-            else if (parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.OBSTACLES) {
-                parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y + 1), parent.map.tiles.empty);
-            } /*
-            else if (parent.map.gridHandler[cellPos.x + 1, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x + 1, cellPos.y] == TileType.OBSTACLES) {
-                parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x + 1, cellPos.y), parent.map.tiles.empty);
-            }
-            else if (parent.map.gridHandler[cellPos.x, cellPos.y - 1] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y - 1] == TileType.OBSTACLES) {
-                parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 1), parent.map.tiles.empty);
-            } 
-            else if (parent.map.gridHandler[cellPos.x - 1, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x - 1, cellPos.y] == TileType.OBSTACLES) {
-                parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x - 1, cellPos.y), parent.map.tiles.empty);
-            }  */
-            else {
-                Debug.LogWarning("Could not find wall for " + parent.gameObject.name + " to break!");
+            if (cellPos.x + 1 <= parent.map.mapWidth || cellPos.y + 1 <= parent.map.mapHeight) {
+                if (parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.OBSTACLES) {
+                    parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y), parent.map.tiles.empty);
+                } 
+                else if (parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y + 1] == TileType.OBSTACLES) {
+                    parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y + 1), parent.map.tiles.empty);
+                } /*
+                else if (parent.map.gridHandler[cellPos.x + 1, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x + 1, cellPos.y] == TileType.OBSTACLES) {
+                    parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x + 1, cellPos.y), parent.map.tiles.empty);
+                }
+                else if (parent.map.gridHandler[cellPos.x, cellPos.y - 1] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y - 1] == TileType.OBSTACLES) {
+                    parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y - 1), parent.map.tiles.empty);
+                } 
+                else if (parent.map.gridHandler[cellPos.x - 1, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x - 1, cellPos.y] == TileType.OBSTACLES) {
+                    parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x - 1, cellPos.y), parent.map.tiles.empty);
+                }  */
+                else {
+                    Debug.LogWarning("Could not find wall for " + parent.gameObject.name + " to break!");
+                }
+            } else {
+                Debug.LogWarning("Tried to break wall out of map bounds!");
             }
         }
         AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);

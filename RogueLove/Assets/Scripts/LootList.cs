@@ -95,10 +95,20 @@ public class LootList : ScriptableObject
     }
 
     public void ResetWeapons(List<GameObject> swapFrom, List<GameObject> swapTo) {
-        foreach (GameObject weapon in swapFrom.ToArray()) {
-            swapTo.Add(weapon);
-            swapFrom.Remove(weapon);
+        if (swapFrom.Count != 0) {
+            foreach (GameObject weapon in swapFrom.ToArray()) {
+                swapTo.Add(weapon);
+                swapFrom.Remove(weapon);
+            }
         }
+    }
+
+    public void ResetAllWeapons() {
+        ResetWeapons(seenCommonWeapons, commonWeapons);
+        ResetWeapons(seenUncommonWeapons, uncommonWeapons);
+        ResetWeapons(seenRareWeapons, rareWeapons);
+        ResetWeapons(seenEpicWeapons, epicWeapons);
+        ResetWeapons(seenLegendaryWeapons, legendaryWeapons);
     }
 
     public GameObject GetRandomItem() {
