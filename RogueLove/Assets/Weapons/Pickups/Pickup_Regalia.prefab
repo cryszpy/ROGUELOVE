@@ -138,3 +138,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   weaponObject: {fileID: 4603566924701312467, guid: 50e9f9bdb9acd401f8a48ec3f644ed2a, type: 3}
+  weaponID: 16
+  weaponObjectRarity: 3

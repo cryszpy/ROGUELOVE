@@ -8,6 +8,7 @@ using System;
 using UnityEngine.Serialization;
 using TMPro;
 using Game.Core.Rendering;
+using UnityEngine.AI;
 
 public enum EnemyType {
     CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS, DEAD
@@ -61,8 +62,14 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("List of this enemy's possible loot drops (excluding coins and energy).")]
     [SerializeField] private List<GameObject> dropsList;
 
-    [Tooltip("List of this enemy's possible coin drops.")]
-    [SerializeField] private List<GameObject> coinsList;
+    [Tooltip("A reference to the bronze coin prefab for spawning.")]
+    [SerializeField] private GameObject coinBronze;
+
+    [Tooltip("A reference to the silver coin prefab for spawning.")]
+    [SerializeField] private GameObject coinSilver;
+
+    [Tooltip("A reference to the gold coin prefab for spawning.")]
+    [SerializeField] private GameObject coinGold;
 
     [Tooltip("The minimum possible amount of coins this enemy drops upon death.")]
     [SerializeField] private int minCoins;
@@ -98,15 +105,14 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("Maximum overall target chance for this enemy to spawn in any level.")]
     public float maxSpawnChance = 1;
 
-    // This enemy's attack damage
+    [Tooltip("This enemy's damage-per-hit.")]
     public int damage;
 
-    // This enemy's movement speed
-    [SerializeField]
-    protected float chaseSpeed;
+    [Tooltip("The speed that this enemy moves when it is chasing a target.")]
+    [SerializeField] protected float chaseSpeed;
 
-    [SerializeField]
-    protected float wanderSpeed;
+    [Tooltip("The speed that this enemy moves when it is wandering around.")]
+    [SerializeField] protected float wanderSpeed;
 
     // This enemy's attack speed
     public float rangedAttackCooldownMin;
@@ -120,8 +126,7 @@ public abstract class Enemy : MonoBehaviour
     [Header("PATHFINDING")]
 
     // This enemy's pathfinding waypoint distance
-    [SerializeField]
-    private float nextWaypointDistance = 3f;
+    [SerializeField] private float nextWaypointDistance = 3f;
 
     Pathfinding.Path path;
     private int currentWaypoint = 0;
@@ -147,6 +152,7 @@ public abstract class Enemy : MonoBehaviour
     public bool kbEd;
 
     protected bool expSpawn;
+    protected bool coinSpawn;
 
     public bool hitPlayer = false;
 
@@ -171,6 +177,7 @@ public abstract class Enemy : MonoBehaviour
             attackAnim = false;
             seen = false;
             expSpawn = false;
+            coinSpawn = false;
 
             if (enemyType != EnemyType.STATIONARY) {
                 if (seeker == null) {
@@ -404,18 +411,68 @@ public abstract class Enemy : MonoBehaviour
 
     public virtual void SpawnDrops() {
 
-        foreach (var coin in coinsList) {
+        int rand = UnityEngine.Random.Range(minCoins, maxCoins);
 
-            int rand = UnityEngine.Random.Range(minCoins, maxCoins);
+        Debug.Log("total coins:" + rand);
 
-            Debug.Log("Drop coins!");
+        // Separate coin values and incrementally drop from highest value to lowest value coins to meet total
+        if (rand >= 20) {
+
+            // Drop a single gold coin if total coins is exactly 20
+            if (rand == 20) {
+                Create(coinGold, this.transform.position, Quaternion.identity, this.map);
+                return;
+            }
+
+            // Drop gold coins
+            for (int g = 0; g < (rand - (rand % 20)) / 20; g++) {
+                Create(coinGold, this.transform.position, Quaternion.identity, this.map);
+            }
+
+            // Update total amount of coins to exclude gold
+            rand %= 20;
+
+            // Drop silver coins
+            for (int s = 0; s < (rand - (rand % 5)) / 5; s++) {
+                Create(coinSilver, this.transform.position, Quaternion.identity, this.map);
+            }
+
+            // Drop bronze coins as leftover
+            for (int b = 0; b < rand % 5; b++) {
+                Create(coinBronze, this.transform.position, Quaternion.identity, this.map);
+            }
+
+        } else if (rand >= 5) {
+
+            // Drop a single silver coin if total coins is exactly 5
+            if (rand == 5) {
+                Create(coinSilver, this.transform.position, Quaternion.identity, this.map);
+                return;
+            }
+
+            // Drop silver coins
+            for (int s = 0; s < (rand - (rand % 5)) / 5; s++) {
+                Create(coinSilver, this.transform.position, Quaternion.identity, this.map);
+            }
+
+            // Drop bronze coins as leftover
+            for (int b = 0; b < rand % 5; b++) {
+                Create(coinBronze, this.transform.position, Quaternion.identity, this.map);
+            }
+
+        } else {
+
+            // Drop bronze coins
+            for (int b = 0; b < rand; b++) {
+                Create(coinBronze, this.transform.position, Quaternion.identity, this.map);
+            }
         }
 
         foreach (var drop in dropsList) {
 
-            int rand = UnityEngine.Random.Range(0, 11);
+            int rando = UnityEngine.Random.Range(0, 11);
 
-            if (rand == 1) {
+            if (rando == 1) {
                 Debug.Log("Created pickup drop!");
             }
         }

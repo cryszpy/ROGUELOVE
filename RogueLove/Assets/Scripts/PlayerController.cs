@@ -14,11 +14,11 @@ public class PlayerController : MonoBehaviour
 
     [Header("SCRIPT REFERENCES")]
 
-    [SerializeField] private LootList lootList;
+    public LootList lootList;
 
     [SerializeField] private ContactFilter2D movementFilter;
 
-    [SerializeField] private Weapon weapon;
+    public Weapon weapon;
 
     public GameObject weaponPivot;
 
@@ -38,6 +38,9 @@ public class PlayerController : MonoBehaviour
     [Tooltip("A reference to the player's battery meter.")]
     public EnergyBar energyBar;
 
+    [Tooltip("A reference to the player's coins.")]
+    public CoinsUI coinsUI;
+
     [Tooltip("A reference to the player's ammo meter.")]
     public WeaponInfo ammoBar;
 
@@ -53,7 +56,30 @@ public class PlayerController : MonoBehaviour
 
     public List<GameObject> heldWeapons = new();
 
-    public int currentWeaponIndex;
+    private static int currentWeaponIndex;
+    public static int CurrentWeaponIndex { get => currentWeaponIndex; set => currentWeaponIndex = value; }
+
+    private static WeaponRarity primaryWeaponRarity;
+    public static WeaponRarity PrimaryWeaponRarity { get => primaryWeaponRarity; set => primaryWeaponRarity = value; }
+
+    private static float primaryWeaponCurrentAmmo;
+    public static float PrimaryWeaponCurrentAmmo { get => primaryWeaponCurrentAmmo; set => primaryWeaponCurrentAmmo = value; }
+
+    private static WeaponRarity secondaryWeaponRarity;
+    public static WeaponRarity SecondaryWeaponRarity { get => secondaryWeaponRarity; set => secondaryWeaponRarity = value; }
+
+    private static float secondaryWeaponCurrentAmmo;
+    public static float SecondaryWeaponCurrentAmmo { get => secondaryWeaponCurrentAmmo; set => secondaryWeaponCurrentAmmo = value; }
+
+    private static int primaryWeaponID;
+    public static int PrimaryWeaponID { get => primaryWeaponID; set => primaryWeaponID = value; }
+
+    private static int secondaryWeaponID;
+    public static int SecondaryWeaponID { get => secondaryWeaponID; set => secondaryWeaponID = value; }
+
+    [Tooltip("A multiplier that increases or decreases the maximum ammo capacity of the player's weapons.")]
+    private static float ammoMaxMultiplier;
+    public static float AmmoMaxMultiplier { get => ammoMaxMultiplier; set => ammoMaxMultiplier = value; }
 
     [SerializeField] private bool canSwitchWeapons = true;
 
@@ -137,6 +163,14 @@ public class PlayerController : MonoBehaviour
         Experience += exp;
     }
 
+    // Player coins
+    private static int coins;
+    public static int Coins { get => coins; set => coins = value; }
+
+    public static void AddCoins(int value) {
+        Coins += value;
+    }
+
     public float damageModifier;
 
     public float fireRateModifier;
@@ -200,6 +234,7 @@ public class PlayerController : MonoBehaviour
         healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
         energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
         ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
+        coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
 
         iFrame = false;
 
@@ -220,12 +255,30 @@ public class PlayerController : MonoBehaviour
         } 
         // Save data does not exist and player did not click load save --> most likely started new game
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+
+            // SET DEFAULT STATS
             MaxHealth = 4;
             Health = MaxHealth;
             MaxEnergy = 20;
             Experience = 0;
             MoveSpeed = 3.2f;
+            Coins = 0;
+
+            CurrentWeaponIndex = 0;
+            PrimaryWeaponID = 1;
+            PrimaryWeaponRarity = WeaponRarity.COMMON;
+            SecondaryWeaponID = 0;
+            SecondaryWeaponRarity = WeaponRarity.COMMON;
+
+            AmmoMaxMultiplier = 1;
+
+            if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
+                PrimaryWeaponCurrentAmmo = script.ammoMax * AmmoMaxMultiplier;
+                script.currentAmmo = PrimaryWeaponCurrentAmmo;
+            }
         }
+
+        // Set UI stat objects
         
         healthBar.SetMaxHealth(MaxHealth);
         healthBar.SetHealth(Health);
@@ -233,16 +286,133 @@ public class PlayerController : MonoBehaviour
         energyBar.SetMaxEnergy(MaxEnergy);
         energyBar.SetEnergy(Experience);
 
-        if (heldWeapons[0].TryGetComponent<Weapon>(out var component)) {
+        coinsUI.SetCoins(Coins);
 
-            if (weapon == null) {
-                weapon = component;
-                currentWeaponIndex = 0;
+        // Set primary weapon stats
+        if (PrimaryWeaponID != 1) {
+
+            WeaponPair pair;
+            GameObject weaponObject;
+            
+            switch (PrimaryWeaponRarity) {
+
+                case WeaponRarity.COMMON:
+                    pair = lootList.commonWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.UNCOMMON:
+                    pair = lootList.uncommonWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.RARE:
+                    pair = lootList.rareWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.EPIC:
+                    pair = lootList.epicWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.LEGENDARY:
+                    pair = lootList.legendaryWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+            }
+        }
+
+        // Set secondary weapon stats
+        if (SecondaryWeaponID != 0) {
+
+            WeaponPair pair;
+            GameObject weaponObject;
+            
+            switch (SecondaryWeaponRarity) {
+
+                case WeaponRarity.COMMON:
+                    pair = lootList.seenCommonWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.UNCOMMON:
+                    pair = lootList.seenUncommonWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.RARE:
+                    pair = lootList.seenRareWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.EPIC:
+                    pair = lootList.seenEpicWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+                case WeaponRarity.LEGENDARY:
+                    pair = lootList.seenLegendaryWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
+                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    heldWeapons.Add(weaponObject);
+                    break;
+            }
+        }
+
+        // Update weapons with saved ammo amounts
+        if (heldWeapons.Count == 2) {
+            if (heldWeapons[0].TryGetComponent<Weapon>(out var primary)) {
+                primary.currentAmmo = PrimaryWeaponCurrentAmmo;
+                primary.ammoMax *= AmmoMaxMultiplier;
+                Debug.Log(PrimaryWeaponCurrentAmmo);
             }
 
-            ammoBar.SetMaxAmmo(component.ammoMax);
-            ammoBar.SetAmmo(component.currentAmmo, component);
-            ammoBar.weaponSprite.sprite = component.sprite.sprite;
+            if (heldWeapons[1].TryGetComponent<Weapon>(out var secondary)) {
+                secondary.currentAmmo = SecondaryWeaponCurrentAmmo;
+                secondary.ammoMax *= AmmoMaxMultiplier;
+                Debug.Log(SecondaryWeaponCurrentAmmo);
+            }
+        } else {
+            if (heldWeapons[0].TryGetComponent<Weapon>(out var primary)) {
+                primary.currentAmmo = PrimaryWeaponCurrentAmmo;
+                primary.ammoMax *= AmmoMaxMultiplier;
+            }
+        }
+
+        // Set held weapon to previously held weapon upon entering new level
+        if (CurrentWeaponIndex == 0) {
+            if (heldWeapons[0].TryGetComponent<Weapon>(out var weaponScript)) {
+
+                if (heldWeapons.Count > 1) {
+                    heldWeapons[1].SetActive(false);
+                }
+
+                if (weapon == null) {
+                    weapon = weaponScript;
+                    CurrentWeaponIndex = 0;
+                }
+
+                // Sets maximum weapon ammo UI stat to base value * static multiplier
+                ammoBar.SetMaxAmmo(weaponScript.ammoMax * AmmoMaxMultiplier);
+                ammoBar.SetAmmo(PrimaryWeaponCurrentAmmo, weaponScript);
+                ammoBar.weaponSprite.sprite = weaponScript.sprite.sprite;
+            }
+        } else if (CurrentWeaponIndex == 1) {
+            if (heldWeapons[1].TryGetComponent<Weapon>(out var weaponScript)) {
+
+                heldWeapons[0].SetActive(false);
+
+                if (weapon == null) {
+                    weapon = weaponScript;
+                    CurrentWeaponIndex = 1;
+                }
+
+                // Sets maximum weapon ammo to base value * static multiplier
+                ammoBar.SetMaxAmmo(weaponScript.ammoMax * AmmoMaxMultiplier);
+                ammoBar.SetAmmo(SecondaryWeaponCurrentAmmo, weaponScript);
+                ammoBar.weaponSprite.sprite = weaponScript.sprite.sprite;
+            }
         }
     }
 
@@ -311,15 +481,24 @@ public class PlayerController : MonoBehaviour
                 heldWeapons[switchTo].SetActive(true);
             }
 
-            ammoBar.SetMaxAmmo(gotWeapon.ammoMax);
-            ammoBar.SetAmmo(gotWeapon.currentAmmo, gotWeapon);
+            ammoBar.SetMaxAmmo(gotWeapon.ammoMax * AmmoMaxMultiplier);
+
+            switch (switchTo) {
+                case 0:
+                    ammoBar.SetAmmo(PrimaryWeaponCurrentAmmo, gotWeapon);
+                    break;
+                case 1:
+                    ammoBar.SetAmmo(SecondaryWeaponCurrentAmmo, gotWeapon);
+                    break;
+            }
+
             ammoBar.weaponSprite.sprite = gotWeapon.sprite.sprite;
         }
         else {
             Debug.LogError("Tried to switch to nonexistent weapon!");
         }
 
-        yield return new WaitForSeconds(0.75f);
+        yield return new WaitForSeconds(0.6f);
 
         canSwitchWeapons = true;
     }
@@ -496,14 +675,11 @@ public class PlayerController : MonoBehaviour
         // Load save data
         PlayerData data = SaveSystem.LoadPlayer();
 
-        // Load max health
-        MaxHealth = data.playerMaxHealth;
-        healthBar.SetMaxHealth(MaxHealth);
-
         // Load health
+        MaxHealth = data.playerMaxHealth;
         Health = data.playerHealth;
+        healthBar.SetMaxHealth(MaxHealth);
         healthBar.SetHealth(Health);
-        
 
         // Load damage modifier
         damageModifier = data.playerDamageModifier;
@@ -517,6 +693,20 @@ public class PlayerController : MonoBehaviour
         // Set speeds
         MoveSpeed = data.playerMoveSpeed;
         fireRateModifier = data.playerFireRateModifier;
+
+        // Load coins
+        Coins = data.playerCoins;
+        coinsUI.SetCoins(data.playerCoins);
+
+        // Load weapons
+        PrimaryWeaponID = data.primaryWeaponID;
+        PrimaryWeaponRarity = (WeaponRarity)data.primaryWeaponRarity;
+        SecondaryWeaponID = data.secondaryWeaponID;
+        SecondaryWeaponRarity = (WeaponRarity)data.secondaryWeaponRarity;
+
+        AmmoMaxMultiplier = data.ammoMaxMultiplier;
+        PrimaryWeaponCurrentAmmo = data.primaryWeaponCurrentAmmo;
+        SecondaryWeaponCurrentAmmo = data.secondaryWeaponCurrentAmmo;
 
         Debug.Log("LOADED PLAYER");
     }

@@ -6,8 +6,7 @@ using UnityEngine;
 
 public class EnemyFollowRadius : MonoBehaviour
 {
-    [SerializeField]
-    protected Enemy parent;
+    [SerializeField] protected Enemy parent;
 
     public virtual void OnTriggerEnter2D(Collider2D collider) {
 

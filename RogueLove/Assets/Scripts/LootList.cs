@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -6,7 +7,13 @@ public enum WeaponRarity {
     COMMON, UNCOMMON, RARE, EPIC, LEGENDARY
 }
 
-[System.Serializable]
+[Serializable]
+public class WeaponPair {
+    public GameObject pickupObject;
+    public WeaponPickup pickupScript;
+}
+
+[Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/LootList")]
 public class LootList : ScriptableObject
 {
@@ -21,29 +28,31 @@ public class LootList : ScriptableObject
     public float[] areaEight;
     
     [Tooltip("List of all common weapon *pickup* objects.")]
-    public List<GameObject> commonWeapons;
-    public List<GameObject> seenCommonWeapons;
+    public List<WeaponPair> commonWeapons;
+    public List<WeaponPair> seenCommonWeapons;
 
     [Tooltip("List of all uncommon weapon *pickup* objects.")]
-    public List<GameObject> uncommonWeapons;
-    public List<GameObject> seenUncommonWeapons;
+    public List<WeaponPair> uncommonWeapons;
+    public List<WeaponPair> seenUncommonWeapons;
 
     [Tooltip("List of all rare weapon *pickup* objects.")]
-    public List<GameObject> rareWeapons;
-    public List<GameObject> seenRareWeapons;
+    public List<WeaponPair> rareWeapons;
+    public List<WeaponPair> seenRareWeapons;
 
     [Tooltip("List of all epic weapon *pickup* objects.")]
-    public List<GameObject> epicWeapons;
-    public List<GameObject> seenEpicWeapons;
+    public List<WeaponPair> epicWeapons;
+    public List<WeaponPair> seenEpicWeapons;
 
     [Tooltip("List of all legendary weapon *pickup* objects.")]
-    public List<GameObject> legendaryWeapons;
-    public List<GameObject> seenLegendaryWeapons;
+    public List<WeaponPair> legendaryWeapons;
+    public List<WeaponPair> seenLegendaryWeapons;
 
     public List<GameObject> items;
     public List<GameObject> seenItems;
 
-    public GameObject GetRandomWeapon(WeaponRarity rarity) {
+    public int drawnWeaponID;
+
+    public WeaponPair GetRandomWeapon(WeaponRarity rarity) {
 
         int rand;
         switch (rarity) {
@@ -68,37 +77,37 @@ public class LootList : ScriptableObject
         }
     }
 
-    public void RemoveWeapon(GameObject weapon, WeaponRarity rarity) {
+    public void RemoveWeapon(WeaponPair pair, WeaponRarity rarity) {
 
         switch (rarity) {
             case WeaponRarity.COMMON:
-                seenCommonWeapons.Add(weapon);
-                commonWeapons.Remove(weapon);
+                seenCommonWeapons.Add(pair);
+                commonWeapons.Remove(pair);
                 break;
             case WeaponRarity.UNCOMMON:
-                seenUncommonWeapons.Add(weapon);
-                uncommonWeapons.Remove(weapon);
+                seenUncommonWeapons.Add(pair);
+                uncommonWeapons.Remove(pair);
                 break;
             case WeaponRarity.RARE:
-                seenRareWeapons.Add(weapon);
-                rareWeapons.Remove(weapon);
+                seenRareWeapons.Add(pair);
+                rareWeapons.Remove(pair);
                 break;
             case WeaponRarity.EPIC:
-                seenEpicWeapons.Add(weapon);
-                epicWeapons.Remove(weapon);
+                seenEpicWeapons.Add(pair);
+                epicWeapons.Remove(pair);
                 break;
             case WeaponRarity.LEGENDARY:
-                seenLegendaryWeapons.Add(weapon);
-                legendaryWeapons.Remove(weapon);
+                seenLegendaryWeapons.Add(pair);
+                legendaryWeapons.Remove(pair);
                 break;
         }
     }
 
-    public void ResetWeapons(List<GameObject> swapFrom, List<GameObject> swapTo) {
+    public void ResetWeapons(List<WeaponPair> swapFrom, List<WeaponPair> swapTo) {
         if (swapFrom.Count != 0) {
-            foreach (GameObject weapon in swapFrom.ToArray()) {
-                swapTo.Add(weapon);
-                swapFrom.Remove(weapon);
+            foreach (WeaponPair pair in swapFrom.ToArray()) {
+                swapTo.Add(pair);
+                swapFrom.Remove(pair);
             }
         }
     }

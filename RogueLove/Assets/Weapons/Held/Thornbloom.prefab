@@ -182,12 +182,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  rarity: 0
+  id: 1
   ammo: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
   ammoMax: 60
   ammoPerClick: 1
   currentAmmo: 60
   infiniteAmmo: 0
   timeBetweenFiring: 0.3
+  coinValue: 0
+  flavorText: 
   sprite: {fileID: 2386080452617086367}
   fireSound: PlayerBullet
   chargeSound: 

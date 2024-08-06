@@ -7,17 +7,13 @@ using UnityEngine.UI;
 public class TransitionManager : MonoBehaviour
 {
 
-    [SerializeField]
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
-    [SerializeField]
-    private GameObject loadingScreen;
+    [SerializeField] private GameObject loadingScreen;
 
-    [SerializeField]
-    private Slider slider;
+    [SerializeField] private Slider slider;
 
-    [SerializeField]
-    private float loadTime = 1f;
+    [SerializeField] private float loadTime = 1f;
 
     private static int start = -1;
     public static void StartLeaf(int index) {

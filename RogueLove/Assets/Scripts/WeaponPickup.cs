@@ -4,13 +4,17 @@ using UnityEngine;
 
 public class WeaponPickup : MonoBehaviour
 {
-    [SerializeField] private GameObject weaponObject;
+    public GameObject weaponObject;
+
+    public int weaponID;
 
     private PlayerController player;
     
     private bool playerFound;
 
     private bool playerInRadius;
+
+    [SerializeField] private WeaponRarity weaponObjectRarity;
 
     private void Awake() {
         playerFound = false;
@@ -43,7 +47,33 @@ public class WeaponPickup : MonoBehaviour
 
             GameObject weapon = Instantiate(weaponObject, player.weaponPivot.transform.position, Quaternion.identity, player.weaponPivot.transform);
             player.heldWeapons.Add(weapon);
-            player.StartWeaponSwitch(1, player.currentWeaponIndex);
+            
+            // If picked up weapon goes into the primary weapon slot
+            if (player.heldWeapons[0] == weapon) {
+                Debug.Log("numba 1");
+
+                PlayerController.PrimaryWeaponRarity = weaponObjectRarity;
+
+                PlayerController.PrimaryWeaponID = player.lootList.drawnWeaponID;
+
+                if (weapon.TryGetComponent<Weapon>(out var primary)) {
+                    PlayerController.PrimaryWeaponCurrentAmmo = primary.currentAmmo;
+                }
+            } 
+            // If picked up weapon goes into the secondary weapon slot
+            else if (player.heldWeapons[1] == weapon) {
+                Debug.Log("numba 2");
+
+                PlayerController.SecondaryWeaponRarity = weaponObjectRarity;
+
+                PlayerController.SecondaryWeaponID = player.lootList.drawnWeaponID;
+
+                if (weapon.TryGetComponent<Weapon>(out var secondary)) {
+                    PlayerController.SecondaryWeaponCurrentAmmo = secondary.currentAmmo;
+                }
+            }
+
+            player.StartWeaponSwitch(1, PlayerController.CurrentWeaponIndex);
             RemoveObject();
         }
     }

@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class Crosshair : MonoBehaviour
 {
+
+    [SerializeField] private Camera mainCam;
+
     // Start is called before the first frame update
     void Awake()
     {
@@ -13,7 +16,7 @@ public class Crosshair : MonoBehaviour
     // Update is called once per frame
     void FixedUpdate()
     {
-        Vector2 mousePos = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+        Vector2 mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
         this.transform.position = mousePos;
     }
 }

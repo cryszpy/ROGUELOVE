@@ -123,6 +123,17 @@ public class WeaponBurstFire : MonoBehaviour
             parent.currentAmmo -= parent.ammoPerClick;
             player.ammoBar.SetAmmo(parent.currentAmmo, parent);
         }
+
+        // Set static current ammo variables according to what slot this weapon is in
+        if (PlayerController.CurrentWeaponIndex == 0) {
+            if (player.weapon.id == parent.id) {
+                PlayerController.PrimaryWeaponCurrentAmmo = parent.currentAmmo;
+            }
+        } else if (PlayerController.CurrentWeaponIndex == 1) {
+            if (player.weapon.id == parent.id) {
+                PlayerController.SecondaryWeaponCurrentAmmo = parent.currentAmmo;
+            }
+        }
     }
 
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time

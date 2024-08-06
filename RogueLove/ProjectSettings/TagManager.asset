@@ -25,6 +25,7 @@ TagManager:
   - GameStateManager
   - DialogueBox
   - AmmoBar
+  - CoinsUI
   layers:
   - Default
   - TransparentFX

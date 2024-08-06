@@ -182,18 +182,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 0
+  rarity: 2
+  id: 5
   ammo: {fileID: 5001664913613443686, guid: 158e9acc693b14eedafffcf52f3148c1, type: 3}
   ammoMax: 45
   ammoPerClick: 1
   currentAmmo: 45
   infiniteAmmo: 0
   timeBetweenFiring: 1
+  coinValue: 0
+  flavorText: 
   sprite: {fileID: 8096842307378342048}
   fireSound: PlayerBullet
   chargeSound: 
   spawnPos: {fileID: 767796559657468289}
   distance: {x: 0, y: 0}
-  behindWeapon: 0
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -287,6 +287,7 @@ GameObject:
   - component: {fileID: 3257926145347544512}
   - component: {fileID: 8369608252533722590}
   - component: {fileID: 1121202328323387463}
+  - component: {fileID: 4387949804357366151}
   m_Layer: 5
   m_Name: LeafTransition
   m_TagString: Untagged
@@ -348,6 +349,20 @@ Animator:
   m_AllowConstantClipSamplingOptimization: 1
   m_KeepAnimatorStateOnDisable: 0
   m_WriteDefaultValuesOnDisable: 0
+--- !u!114 &4387949804357366151
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5789413920774883767}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c10b9e49afafc43ddad7fd75629c45f2, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  areaTransition: {fileID: 0}
+  areaTransitionAnimator: {fileID: 0}
 --- !u!1 &6135299459971714069
 GameObject:
   m_ObjectHideFlags: 0

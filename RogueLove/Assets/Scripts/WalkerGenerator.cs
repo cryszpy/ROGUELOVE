@@ -28,6 +28,8 @@ public class WalkerGenerator : MonoBehaviour
     // List of all active Walkers
     private List<WalkerObject> walkers;
 
+    public Camera mainCam;
+
     [Header("TILEMAP OBJECTS")]
 
     // TILEMAP REFERENCES
@@ -43,8 +45,6 @@ public class WalkerGenerator : MonoBehaviour
 
     [Space(10)]
     [Header("MAP SETTINGS")]
-
-    public float ppu;
 
     [Range(7, 60)]
     // Map maximum width <-->
@@ -504,12 +504,10 @@ public class WalkerGenerator : MonoBehaviour
 
                 gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created left border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(0, y, 0), tiles.borderLeft);
                 gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created left border tile");
             }
 
             // Create border along right of map
@@ -518,12 +516,11 @@ public class WalkerGenerator : MonoBehaviour
                 oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(1) - 1, y, 0), tiles.grass);
                 gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created left border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(1) - 1, y, 0), tiles.borderRight);
                 gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created left border tile");
+
             }
         }
 
@@ -751,6 +748,7 @@ public class WalkerGenerator : MonoBehaviour
 
                         // Roll to see if enemy is able to spawn
                         float spawnValue = UnityEngine.Random.value;
+                        Debug.Log(spawnValue);
 
                         float exponent = Mathf.Pow(Mathf.Abs(enemy.spawnChanceMultiplier * level - enemy.spawnChanceXTransform), enemy.spawnChanceExponent);
 
@@ -778,10 +776,10 @@ public class WalkerGenerator : MonoBehaviour
                                 if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
 
                                     if (tileListX[randX] <= player.transform.position.x + spawnRadiusX 
-                                    && tileListX[randX] >= player.transform.position.x - spawnRadiusX) {
-                                        randX = GetRandomXTile();
-                                    } else if (tileListY[randY] <= player.transform.position.y + spawnRadiusY 
+                                    && tileListX[randX] >= player.transform.position.x - spawnRadiusX
+                                    && tileListY[randY] <= player.transform.position.y + spawnRadiusY 
                                     && tileListY[randY] >= player.transform.position.y - spawnRadiusY) {
+                                        randX = GetRandomXTile();
                                         randY = GetRandomTile();
                                     } else {
 
@@ -869,10 +867,10 @@ public class WalkerGenerator : MonoBehaviour
                                 if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.WALLS) {
 
                                     if (tileListX[randX] <= player.transform.position.x + (spawnRadiusX/2) 
-                                    && tileListX[randX] >= player.transform.position.x - (spawnRadiusX/2)) {
-                                        randX = GetRandomXTile();
-                                    } else if (tileListY[randY] <= player.transform.position.y + (spawnRadiusY/2) 
+                                    && tileListX[randX] >= player.transform.position.x - (spawnRadiusX/2)
+                                    && tileListY[randY] <= player.transform.position.y + (spawnRadiusY/2) 
                                     && tileListY[randY] >= player.transform.position.y - (spawnRadiusY/2)) {
+                                        randX = GetRandomXTile();
                                         randY = GetRandomTile();
                                     } else {
 
@@ -1034,9 +1032,8 @@ public class WalkerGenerator : MonoBehaviour
                                 if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
                                     if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                                        rand = GetRandomTile();
-                                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX
+                                    && tileListY[rand] <= player.transform.position.y + spawnRadiusY 
                                     && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
                                         rand = GetRandomTile();
                                     } else {
@@ -1119,9 +1116,8 @@ public class WalkerGenerator : MonoBehaviour
                                 if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
                                     if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                                        rand = GetRandomTile();
-                                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
+                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX
+                                    && tileListY[rand] <= player.transform.position.y + spawnRadiusY 
                                     && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
                                         rand = GetRandomTile();
                                     } else {

@@ -182,6 +182,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   type: 1
+  rarity: 0
+  id: 13
   ammo: {fileID: 5001664913613443686, guid: 92b778e4037fc4f6eb4e2cfe15a59aed, type: 3}
   ammoMax: 65
   ammoPerClick: 1

@@ -108,9 +108,12 @@ public class Chest : MonoBehaviour
 
         // TESTING ONLY
         if (lootList.commonWeapons.Count != 0) {
-            var weapon = lootList.GetRandomWeapon(WeaponRarity.COMMON);
-            Instantiate(weapon, transform.position, Quaternion.identity);
-            lootList.RemoveWeapon(weapon, WeaponRarity.COMMON);
+            WeaponPair weaponPair = lootList.GetRandomWeapon(WeaponRarity.COMMON);
+            Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
+
+            lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+
+            lootList.RemoveWeapon(weaponPair, WeaponRarity.COMMON);
         } else {
             Debug.Log("Would've spawned a COMMON weapon but there are none!");
         }

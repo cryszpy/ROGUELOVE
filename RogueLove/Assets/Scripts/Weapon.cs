@@ -12,10 +12,15 @@ public class Weapon : MonoBehaviour
     [Tooltip("The weapon's type.")]
     public WeaponType type;
 
-    // Type of bullet to be fired
+    [Tooltip("The weapon's rarity.")]
+    public WeaponRarity rarity;
+
+    public int id;
+
+    [Tooltip("The object reference for this weapon's projectile object.")]
     public GameObject ammo;
 
-    // Max ammo capacity of the weapon
+    [Tooltip("The maximum ammo capacity of this weapon.")]
     public float ammoMax;
 
     // Used ammo per click
