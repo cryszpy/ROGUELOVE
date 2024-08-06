@@ -135,10 +135,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ammo: {fileID: 5001664913613443686, guid: 60058ea293ac94561bf4eb29d16191e2, type: 3}
+  sprite: {fileID: 7395041985158127922}
+  spawnPos: {fileID: 6524611403680658214}
+  weaponPickup: {fileID: 8481469185648990204, guid: 4d5fc598d58bc49cebaaf052baca35d8, type: 3}
   type: 1
   rarity: 2
   id: 9
-  ammo: {fileID: 5001664913613443686, guid: 60058ea293ac94561bf4eb29d16191e2, type: 3}
   ammoMax: 55
   ammoPerClick: 1
   currentAmmo: 55
@@ -146,10 +149,8 @@ MonoBehaviour:
   timeBetweenFiring: 0.25
   coinValue: 53
   flavorText: Utter doom.
-  sprite: {fileID: 7395041985158127922}
   fireSound: PlayerBullet
   chargeSound: 
-  spawnPos: {fileID: 6524611403680658214}
   distance: {x: 0, y: 0}
 --- !u!114 &1044425668205847616
 MonoBehaviour:

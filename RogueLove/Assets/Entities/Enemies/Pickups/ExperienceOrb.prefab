@@ -346,17 +346,30 @@ MonoBehaviour:
   enemyType: 0
   animator: {fileID: 8722914626086714706}
   map: {fileID: 0}
-  target: {x: 0, y: 0, z: 0}
   player: {fileID: 0}
   seeker: {fileID: 5586343462418798160}
   followCollider: {fileID: 0}
   contactColl: {fileID: 7114166369162182342}
   rb: {fileID: 1923873099500596009}
-  hitbox: {fileID: 0}
-  healthBar: {fileID: 0}
+  hitbox: {fileID: 7546251876369635720}
+  lineSpriteRenderer: {fileID: 0}
+  lineRenderer: {fileID: 0}
+  chargeTime: 0
+  dropsList: []
+  coinBronze: {fileID: 0}
+  coinSilver: {fileID: 0}
+  coinGold: {fileID: 0}
+  minCoins: 0
+  maxCoins: 0
   expOrb: {fileID: 0}
   minExp: 0
   maxExp: 0
+  spawnChanceVertAmp: 1
+  spawnChanceMultiplier: 1
+  spawnChanceXTransform: 1
+  spawnChanceExponent: 2
+  spawnChanceYTransform: 0
+  maxSpawnChance: 1
   damage: 0
   chaseSpeed: 8
   wanderSpeed: 200

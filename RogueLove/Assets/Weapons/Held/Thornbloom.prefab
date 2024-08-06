@@ -181,10 +181,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ammo: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
+  sprite: {fileID: 2386080452617086367}
+  spawnPos: {fileID: 767796559657468289}
+  weaponPickup: {fileID: 8481469185648990204, guid: ccda4bad0b9a44e79857fd05cc61bb67, type: 3}
   type: 0
   rarity: 0
   id: 1
-  ammo: {fileID: 5001664913613443686, guid: a0d5618c8c5404d0094a0be21e068461, type: 3}
   ammoMax: 60
   ammoPerClick: 1
   currentAmmo: 60
@@ -192,10 +195,8 @@ MonoBehaviour:
   timeBetweenFiring: 0.3
   coinValue: 0
   flavorText: 
-  sprite: {fileID: 2386080452617086367}
   fireSound: PlayerBullet
   chargeSound: 
-  spawnPos: {fileID: 767796559657468289}
   distance: {x: 0, y: 0}
 --- !u!114 &8444947705294881318
 MonoBehaviour:

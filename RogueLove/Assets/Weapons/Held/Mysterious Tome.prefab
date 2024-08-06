@@ -135,10 +135,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ammo: {fileID: 5001664913613443686, guid: 552eba752424140179d0520247dd765f, type: 3}
+  sprite: {fileID: 7395041985158127922}
+  spawnPos: {fileID: 6524611403680658214}
+  weaponPickup: {fileID: 8481469185648990204, guid: 262462e0d43ba4677ade48936cbee1f0, type: 3}
   type: 0
   rarity: 0
   id: 10
-  ammo: {fileID: 5001664913613443686, guid: 552eba752424140179d0520247dd765f, type: 3}
   ammoMax: 40
   ammoPerClick: 1
   currentAmmo: 40
@@ -147,10 +150,8 @@ MonoBehaviour:
   coinValue: 24
   flavorText: An old book someone must have left behind . . . how careless can you
     be?
-  sprite: {fileID: 7395041985158127922}
   fireSound: PlayerBullet
   chargeSound: 
-  spawnPos: {fileID: 6524611403680658214}
   distance: {x: 0, y: 0}
 --- !u!114 &1044425668205847616
 MonoBehaviour:

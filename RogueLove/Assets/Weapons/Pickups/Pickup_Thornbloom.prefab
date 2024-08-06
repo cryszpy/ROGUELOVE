@@ -10,10 +10,10 @@ GameObject:
   m_Component:
   - component: {fileID: 267672357322451602}
   - component: {fileID: 7664968669742215844}
-  - component: {fileID: 2975088654449525875}
+  - component: {fileID: 4777721838432760723}
   - component: {fileID: 5054346420906217912}
   m_Layer: 0
-  m_Name: Pickup_ShortBarrel
+  m_Name: Pickup_Thornbloom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -77,7 +77,7 @@ SpriteRenderer:
   m_SortingLayerID: 1049480431
   m_SortingLayer: 1
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: eab841a6da2a14f51b753b594ec062a3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: f76f6a291a786447094e30741bdef5e1, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -88,8 +88,8 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!70 &2975088654449525875
-CapsuleCollider2D:
+--- !u!58 &4777721838432760723
+CircleCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -101,10 +101,10 @@ CapsuleCollider2D:
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 8
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 2039
   m_LayerOverridePriority: 0
   m_ForceSendLayers:
     serializedVersion: 2
@@ -114,17 +114,16 @@ CapsuleCollider2D:
     m_Bits: 4294967295
   m_ContactCaptureLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8
   m_CallbackLayers:
     serializedVersion: 2
-    m_Bits: 4294967295
+    m_Bits: 8
   m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.06, y: -0.03}
-  m_Size: {x: 1.1, y: 0.92}
-  m_Direction: 1
+  m_Offset: {x: 0.12, y: 0.11}
+  m_Radius: 0.62
 --- !u!114 &5054346420906217912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -137,7 +136,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2b5381f312e4208bfd1d95b5829191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponObject: {fileID: 5022271830850601891, guid: ae6cf7861a9d349058c8bc1c421dc9c4, type: 3}
-  weaponID: 11
-  dropped: 0
-  weaponObjectRarity: 1
+  weaponObject: {fileID: 4603566924701312467, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
+  weaponID: 1
+  weaponObjectRarity: 0

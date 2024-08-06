@@ -89,11 +89,9 @@ public class WalkerGenerator : MonoBehaviour
 
     [SerializeField] private int stg;
 
-    [SerializeField]
-    private float spawnRadiusX;
+    [SerializeField] private float spawnRadiusX;
     
-    [SerializeField]
-    private float spawnRadiusY;
+    [SerializeField] private float spawnRadiusY;
 
     private bool doorwaySpawned;
 
@@ -679,12 +677,13 @@ public class WalkerGenerator : MonoBehaviour
             // If chosen tile is a floor tile, and doesn't have obstacles, then generate breakable
             if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
+                Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[rand], tileListY[rand]));
+
                 // Makes sure the chosen tile is not near the player (avoids accidentally skipping animation)
-                if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                        rand = GetRandomTile();
-                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                if (genPos.x <= player.transform.position.x + spawnRadiusX 
+                    && genPos.x >= player.transform.position.x - spawnRadiusX
+                    && genPos.y <= player.transform.position.y + spawnRadiusY 
+                    && genPos.y >= player.transform.position.y - spawnRadiusY) {
                         rand = GetRandomTile();
                     } else {
 
@@ -775,10 +774,12 @@ public class WalkerGenerator : MonoBehaviour
                                 // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
                                 if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
 
-                                    if (tileListX[randX] <= player.transform.position.x + spawnRadiusX 
-                                    && tileListX[randX] >= player.transform.position.x - spawnRadiusX
-                                    && tileListY[randY] <= player.transform.position.y + spawnRadiusY 
-                                    && tileListY[randY] >= player.transform.position.y - spawnRadiusY) {
+                                    Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[randX], tileListY[randY]));
+
+                                    if (genPos.x <= player.transform.position.x + spawnRadiusX 
+                                    && genPos.x >= player.transform.position.x - spawnRadiusX
+                                    && genPos.y <= player.transform.position.y + spawnRadiusY 
+                                    && genPos.y >= player.transform.position.y - spawnRadiusY) {
                                         randX = GetRandomXTile();
                                         randY = GetRandomTile();
                                     } else {
@@ -866,10 +867,12 @@ public class WalkerGenerator : MonoBehaviour
                                 // Choose from the available floor tiles
                                 if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.WALLS) {
 
-                                    if (tileListX[randX] <= player.transform.position.x + (spawnRadiusX/2) 
-                                    && tileListX[randX] >= player.transform.position.x - (spawnRadiusX/2)
-                                    && tileListY[randY] <= player.transform.position.y + (spawnRadiusY/2) 
-                                    && tileListY[randY] >= player.transform.position.y - (spawnRadiusY/2)) {
+                                    Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[randX], tileListY[randY]));
+
+                                    if (genPos.x <= player.transform.position.x + (spawnRadiusX/2) 
+                                    && genPos.x >= player.transform.position.x - (spawnRadiusX/2)
+                                    && genPos.y <= player.transform.position.y + (spawnRadiusY/2) 
+                                    && genPos.y >= player.transform.position.y - (spawnRadiusY/2)) {
                                         randX = GetRandomXTile();
                                         randY = GetRandomTile();
                                     } else {
@@ -1031,10 +1034,12 @@ public class WalkerGenerator : MonoBehaviour
                                 // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
                                 if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
-                                    if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX
-                                    && tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                    Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[rand], tileListY[rand]));
+
+                                    if (genPos.x <= player.transform.position.x + spawnRadiusX 
+                                    && genPos.x >= player.transform.position.x - spawnRadiusX
+                                    && genPos.y <= player.transform.position.y + spawnRadiusY 
+                                    && genPos.y >= player.transform.position.y - spawnRadiusY) {
                                         rand = GetRandomTile();
                                     } else {
 
@@ -1115,10 +1120,12 @@ public class WalkerGenerator : MonoBehaviour
                                 // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
                                 if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
-                                    if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX
-                                    && tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
+                                    Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[rand], tileListY[rand]));
+
+                                    if (genPos.x <= player.transform.position.x + spawnRadiusX 
+                                    && genPos.x >= player.transform.position.x - spawnRadiusX
+                                    && genPos.y <= player.transform.position.y + spawnRadiusY 
+                                    && genPos.y >= player.transform.position.y - spawnRadiusY) {
                                         rand = GetRandomTile();
                                     } else {
                                         

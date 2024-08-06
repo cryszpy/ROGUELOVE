@@ -28,8 +28,7 @@ Transform:
   m_LocalPosition: {x: 0, y: 0.17, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 4777194430705029824}
+  m_Children: []
   m_Father: {fileID: 2317871507723600089}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &2165527840187518564
@@ -478,6 +477,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootList: {fileID: 11400000, guid: 2504b60e808b24eb88270a566affbfd0, type: 2}
+  defaultWeapon:
+    pickupObject: {fileID: 8481469185648990204, guid: ccda4bad0b9a44e79857fd05cc61bb67, type: 3}
+    pickupScript: {fileID: 5054346420906217912, guid: ccda4bad0b9a44e79857fd05cc61bb67, type: 3}
   movementFilter:
     useTriggers: 0
     useLayerMask: 0
@@ -492,7 +494,7 @@ MonoBehaviour:
     maxDepth: 0
     minNormalAngle: 0
     maxNormalAngle: 0
-  weapon: {fileID: 3899810785635096974}
+  weapon: {fileID: 0}
   weaponPivot: {fileID: 921415640764457431}
   contactColl: {fileID: 4531581175172355591}
   rb: {fileID: 2057914311772842495}
@@ -500,12 +502,11 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7125730586454602621}
   healthBar: {fileID: 0}
   energyBar: {fileID: 0}
+  coinsUI: {fileID: 0}
   ammoBar: {fileID: 0}
   dashColl: {fileID: 3295279771889110724}
   hurtShake: {fileID: 0}
-  heldWeapons:
-  - {fileID: 8567451438062245733}
-  currentWeaponIndex: 0
+  heldWeapons: []
   canSwitchWeapons: 1
   iFrame: 0
   currentDirection: {x: 0, y: 0}
@@ -521,57 +522,3 @@ MonoBehaviour:
   hurtShakeAmplitude: 0
   hurtShakeFrequency: 0
   savePressed: 0
---- !u!1001 &5262055989100884662
-PrefabInstance:
-  m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 1506479380098376124}
-    m_Modifications:
-    - target: {fileID: 813626564883701878, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 813626564883701878, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 813626564883701878, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4603566924701312467, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-      propertyPath: m_Name
-      value: Thornbloom
-      objectReference: {fileID: 0}
-    - target: {fileID: 5151835637289417907, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-      propertyPath: player
-      value: 
-      objectReference: {fileID: 4365122181230883474}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
---- !u!114 &3899810785635096974 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 9158207511991905080, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-  m_PrefabInstance: {fileID: 5262055989100884662}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8567451438062245733}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &4777194430705029824 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 813626564883701878, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-  m_PrefabInstance: {fileID: 5262055989100884662}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &8567451438062245733 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4603566924701312467, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
-  m_PrefabInstance: {fileID: 5262055989100884662}
-  m_PrefabAsset: {fileID: 0}

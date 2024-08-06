@@ -127,7 +127,6 @@ public class WeaponSingleShotFire : MonoBehaviour
                 PlayerController.SecondaryWeaponCurrentAmmo = parent.currentAmmo;
             }
         }
-        
     }
 
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time

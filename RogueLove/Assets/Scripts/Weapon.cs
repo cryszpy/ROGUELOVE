@@ -8,6 +8,20 @@ public enum WeaponType {
 
 public class Weapon : MonoBehaviour
 {
+    [Header("SCRIPT REFERENCES")]
+
+    [Tooltip("The object reference for this weapon's projectile object.")]
+    public GameObject ammo;
+
+    // Weapon sprite
+    public SpriteRenderer sprite;
+
+    // Bullet Spawn Point
+    public GameObject spawnPos;
+
+    public GameObject weaponPickup;
+
+    [Header("STATS")]
 
     [Tooltip("The weapon's type.")]
     public WeaponType type;
@@ -16,9 +30,6 @@ public class Weapon : MonoBehaviour
     public WeaponRarity rarity;
 
     public int id;
-
-    [Tooltip("The object reference for this weapon's projectile object.")]
-    public GameObject ammo;
 
     [Tooltip("The maximum ammo capacity of this weapon.")]
     public float ammoMax;
@@ -41,17 +52,11 @@ public class Weapon : MonoBehaviour
     [Tooltip("Flavor text that appears on screen when a weapon is picked up for the first time.")]
     public string flavorText;
 
-    // Weapon sprite
-    public SpriteRenderer sprite;
-
     // Weapon fire sound
     public string fireSound;
 
     // Weapon charge sound
     public string chargeSound;
-
-    // Bullet Spawn Point
-    public GameObject spawnPos;
 
     public Vector2 distance;
 

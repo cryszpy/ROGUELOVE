@@ -181,10 +181,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ammo: {fileID: 5001664913613443686, guid: 92b778e4037fc4f6eb4e2cfe15a59aed, type: 3}
+  sprite: {fileID: 8096842307378342048}
+  spawnPos: {fileID: 767796559657468289}
+  weaponPickup: {fileID: 8481469185648990204, guid: 58975b23149df42ee9af64b19916dcc2, type: 3}
   type: 1
   rarity: 0
   id: 13
-  ammo: {fileID: 5001664913613443686, guid: 92b778e4037fc4f6eb4e2cfe15a59aed, type: 3}
   ammoMax: 65
   ammoPerClick: 1
   currentAmmo: 65
@@ -192,10 +195,8 @@ MonoBehaviour:
   timeBetweenFiring: 1.2
   coinValue: 26
   flavorText: Who would abandon a perfectly good longbow like this?
-  sprite: {fileID: 8096842307378342048}
   fireSound: PlayerBullet
   chargeSound: 
-  spawnPos: {fileID: 767796559657468289}
   distance: {x: 0, y: 0}
 --- !u!114 &8444947705294881318
 MonoBehaviour:

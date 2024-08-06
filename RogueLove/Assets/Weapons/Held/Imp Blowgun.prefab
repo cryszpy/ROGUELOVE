@@ -181,10 +181,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ammo: {fileID: 5001664913613443686, guid: a58003a5f4cc046dd962514e80c9805e, type: 3}
+  sprite: {fileID: 8096842307378342048}
+  spawnPos: {fileID: 767796559657468289}
+  weaponPickup: {fileID: 8481469185648990204, guid: 02a18205ae3074177804e439537ee1ae, type: 3}
   type: 1
   rarity: 0
   id: 12
-  ammo: {fileID: 5001664913613443686, guid: a58003a5f4cc046dd962514e80c9805e, type: 3}
   ammoMax: 70
   ammoPerClick: 1
   currentAmmo: 70
@@ -193,10 +196,8 @@ MonoBehaviour:
   coinValue: 17
   flavorText: The natural denizens of the forest turned mad by encroaching industrialization,
     fashioned crude weapons to thwart attackers.
-  sprite: {fileID: 8096842307378342048}
   fireSound: PlayerBullet
   chargeSound: 
-  spawnPos: {fileID: 767796559657468289}
   distance: {x: 0, y: 0}
 --- !u!114 &8444947705294881318
 MonoBehaviour:

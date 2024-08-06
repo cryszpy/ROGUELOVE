@@ -181,10 +181,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  ammo: {fileID: 5001664913613443686, guid: b9ce255d1180d46adbb580eca56d933e, type: 3}
+  sprite: {fileID: 8096842307378342048}
+  spawnPos: {fileID: 767796559657468289}
+  weaponPickup: {fileID: 8481469185648990204, guid: e24cc781d37874b7f9ffd7ca9a6de2e0, type: 3}
   type: 0
   rarity: 3
   id: 16
-  ammo: {fileID: 5001664913613443686, guid: b9ce255d1180d46adbb580eca56d933e, type: 3}
   ammoMax: 85
   ammoPerClick: 1
   currentAmmo: 85
@@ -192,10 +195,8 @@ MonoBehaviour:
   timeBetweenFiring: 0.4
   coinValue: 167
   flavorText: A gift fit for royalty.
-  sprite: {fileID: 8096842307378342048}
   fireSound: PlayerBullet
   chargeSound: 
-  spawnPos: {fileID: 767796559657468289}
   distance: {x: 0, y: 0}
 --- !u!114 &8444947705294881318
 MonoBehaviour:

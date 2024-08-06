@@ -106,64 +106,70 @@ public class Chest : MonoBehaviour
 
     private void GetWeaponProbability(float value, float[] lootTable) {
 
-        // TESTING ONLY
-        if (lootList.commonWeapons.Count != 0) {
-            WeaponPair weaponPair = lootList.GetRandomWeapon(WeaponRarity.COMMON);
-            Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
-
-            lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
-
-            lootList.RemoveWeapon(weaponPair, WeaponRarity.COMMON);
-        } else {
-            Debug.Log("Would've spawned a COMMON weapon but there are none!");
-        }
-
-        // ACTUAL CODE
-
-        /* if (value <= lootTable[0]) {
+        if (value <= lootTable[0]) {
             if (lootList.commonWeapons.Count != 0) {
-                var weapon = lootList.GetRandomWeapon(WeaponRarity.COMMON);
-                Instantiate(weapon, transform.position, Quaternion.identity);
-                lootList.RemoveWeapon(weapon, WeaponRarity.COMMON);
+                WeaponPair weaponPair = lootList.GetRandomWeapon(WeaponRarity.COMMON);
+                weaponPair.pickupScript.dropped = false;
+                Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
+
+                lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+
+                lootList.RemoveWeapon(weaponPair, WeaponRarity.COMMON);
             } else {
                 Debug.Log("Would've spawned a COMMON weapon but there are none!");
             }
         }
         else if (value <= lootTable[1]) {
             if (lootList.uncommonWeapons.Count != 0) {
-                var weapon = lootList.GetRandomWeapon(WeaponRarity.UNCOMMON);
-                Instantiate(weapon, transform.position, Quaternion.identity);
-                lootList.RemoveWeapon(weapon, WeaponRarity.UNCOMMON);
+                WeaponPair weaponPair = lootList.GetRandomWeapon(WeaponRarity.UNCOMMON);
+                weaponPair.pickupScript.dropped = false;
+                Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
+
+                lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+
+                lootList.RemoveWeapon(weaponPair, WeaponRarity.UNCOMMON);
             } else {
                 Debug.Log("Would've spawned an UNCOMMON weapon but there are none!");
             }
         }
         else if (value <= lootTable[2]) {
             if (lootList.rareWeapons.Count != 0) {
-                var weapon = lootList.GetRandomWeapon(WeaponRarity.RARE);
-                Instantiate(weapon, transform.position, Quaternion.identity);
-                lootList.RemoveWeapon(weapon, WeaponRarity.RARE);
+                WeaponPair weaponPair = lootList.GetRandomWeapon(WeaponRarity.RARE);
+                weaponPair.pickupScript.dropped = false;
+                Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
+
+                lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+
+                lootList.RemoveWeapon(weaponPair, WeaponRarity.RARE);
             } else {
                 Debug.Log("Would've spawned a RARE weapon but there are none!");
             }
         }
         else if (value <= lootTable[3]) {
             if (lootList.epicWeapons.Count != 0) {
-                var weapon = lootList.GetRandomWeapon(WeaponRarity.EPIC);
-                Instantiate(weapon, transform.position, Quaternion.identity);
-                lootList.RemoveWeapon(weapon, WeaponRarity.EPIC);
+                WeaponPair weaponPair = lootList.GetRandomWeapon(WeaponRarity.EPIC);
+                weaponPair.pickupScript.dropped = false;
+                Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
+
+                lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+
+                lootList.RemoveWeapon(weaponPair, WeaponRarity.EPIC);
             } else {
                 Debug.Log("Would've spawned an EPIC weapon but there are none!");
             }
         }
         else {
             if (lootList.legendaryWeapons.Count != 0) {
-                var weapon = lootList.GetRandomWeapon(WeaponRarity.LEGENDARY);
-                Instantiate(weapon, transform.position, Quaternion.identity);
-                lootList.RemoveWeapon(weapon, WeaponRarity.LEGENDARY);
+                WeaponPair weaponPair = lootList.GetRandomWeapon(WeaponRarity.LEGENDARY);
+                weaponPair.pickupScript.dropped = false;
+                Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
+
+                lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+
+                lootList.RemoveWeapon(weaponPair, WeaponRarity.LEGENDARY);
             } else {
                 Debug.Log("Would've spawned a LEGENDARY weapon but there are none!");
             }
-        } */
+        }
     }
 }
