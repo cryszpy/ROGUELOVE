@@ -56,7 +56,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float damage, Vector2 direction) {
         Health -= damage;
-        Debug.Log("Took this amount of damage: " + damage);
+        //Debug.Log("Took this amount of damage: " + damage);
 
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
@@ -71,7 +71,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeFireDamage(float damage, Vector2 direction) {
         Health -= damage;
-        Debug.Log("Took this amount of damage: " + damage);
+        //Debug.Log("Took this amount of damage: " + damage);
 
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
@@ -89,17 +89,17 @@ public class EnemyHealth : MonoBehaviour
     public IEnumerator FireDamage(float damage) {
         takingFireDamage = true;
         Health -= damage;
-        Debug.Log("Took this amount of FIRE damage: " + damage);
+        //Debug.Log("Took this amount of FIRE damage: " + damage);
 
         yield return new WaitForSeconds(1f);
 
         Health -= damage;
-        Debug.Log("Took this amount of FIRE damage: " + damage);
+        //Debug.Log("Took this amount of FIRE damage: " + damage);
 
         yield return new WaitForSeconds(1f);
 
         Health -= damage;
-        Debug.Log("Took this amount of FIRE damage: " + damage);
+        //Debug.Log("Took this amount of FIRE damage: " + damage);
 
         takingFireDamage = false;
     }

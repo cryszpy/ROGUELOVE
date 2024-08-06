@@ -44,21 +44,50 @@ public class WeaponPickup : MonoBehaviour
 
         if (!playerFound) {
             return;
-        } else if (Input.GetKeyDown(KeyCode.E) && playerFound && player.heldWeapons.Count < 2 && playerInRadius) {
+        } 
+        // Pickup weapon
+        else if (Input.GetKeyDown(KeyCode.E) && playerFound && player.heldWeapons.Count < 2 && playerInRadius) {
 
-            if (dropped) {
-                weaponObject.transform.position = player.weaponPivot.transform.position;
-                weaponObject.transform.parent = player.weaponPivot.transform;
-                player.heldWeapons.Add(weaponObject);
-                UpdateWeapon(weaponObject);
-            } else {
-                GameObject weapon = Instantiate(weaponObject, player.weaponPivot.transform.position, Quaternion.identity, player.weaponPivot.transform);
-                player.heldWeapons.Add(weapon);
-                UpdateWeapon(weapon);
-            }
-            
+            PickupWeapon(false);
+
             player.StartWeaponSwitch(player.heldWeapons.Count - 1 - PlayerController.CurrentWeaponIndex, PlayerController.CurrentWeaponIndex);
             RemoveObject();
+        } 
+        // Replace weapons
+        else if (Input.GetKeyDown(KeyCode.E) && playerFound && player.heldWeapons.Count == 2 && player.heldWeapons[PlayerController.CurrentWeaponIndex] != null 
+        && playerInRadius) {
+            if (player.heldWeapons[PlayerController.CurrentWeaponIndex].TryGetComponent<Weapon>(out var script)) {
+                player.DropWeapon(script, true);
+                PickupWeapon(true);
+                player.StartWeaponSwitch(PlayerController.CurrentWeaponIndex, player.heldWeapons.Count - 1 - PlayerController.CurrentWeaponIndex);
+                RemoveObject();
+            }
+        }
+    }
+
+    public void PickupWeapon(bool replace) {
+
+        if (dropped) {
+            weaponObject.transform.position = player.weaponPivot.transform.position;
+            weaponObject.transform.parent = player.weaponPivot.transform;
+
+            if (replace) {
+                player.heldWeapons[PlayerController.CurrentWeaponIndex] = weaponObject;
+            } else {
+                player.heldWeapons.Add(weaponObject);
+            }
+
+            UpdateWeapon(weaponObject);
+        } else {
+            GameObject weapon = Instantiate(weaponObject, player.weaponPivot.transform.position, Quaternion.identity, player.weaponPivot.transform);
+
+            if (replace) {
+                player.heldWeapons[PlayerController.CurrentWeaponIndex] = weapon;
+            } else {
+                player.heldWeapons.Add(weapon);
+            }
+
+            UpdateWeapon(weapon);
         }
     }
 

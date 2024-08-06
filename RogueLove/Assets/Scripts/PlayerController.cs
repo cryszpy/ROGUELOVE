@@ -293,6 +293,11 @@ public class PlayerController : MonoBehaviour
 
         coinsUI.SetCoins(Coins);
 
+        AddSavedWeapons();
+    }
+
+    public void AddSavedWeapons() {
+
         // Add Thornbloom if ID matches and player is not currently holding weapons
         if (PrimaryWeaponID == 1 && heldWeapons.Count == 0) {
             GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
@@ -300,9 +305,6 @@ public class PlayerController : MonoBehaviour
         }
         // Add specified ID-matched weapon as primary weapon
         else if (PrimaryWeaponID != 1 && PrimaryWeaponID != 0) {
-
-            Debug.Log(PrimaryWeaponID);
-            Debug.Log(PrimaryWeaponRarity);
 
             WeaponPair pair;
             GameObject weaponObject;
@@ -339,9 +341,6 @@ public class PlayerController : MonoBehaviour
 
         // Add saved secondary weapon
         if (SecondaryWeaponID != 0) {
-
-            Debug.Log(SecondaryWeaponID);
-            Debug.Log(SecondaryWeaponRarity);
 
             WeaponPair pair;
             GameObject weaponObject;
@@ -387,13 +386,11 @@ public class PlayerController : MonoBehaviour
             if (heldWeapons[0].TryGetComponent<Weapon>(out var primary)) {
                 primary.currentAmmo = PrimaryWeaponCurrentAmmo;
                 primary.ammoMax *= AmmoMaxMultiplier;
-                Debug.Log(PrimaryWeaponCurrentAmmo);
             }
 
             if (heldWeapons[1].TryGetComponent<Weapon>(out var secondary)) {
                 secondary.currentAmmo = SecondaryWeaponCurrentAmmo;
                 secondary.ammoMax *= AmmoMaxMultiplier;
-                Debug.Log(SecondaryWeaponCurrentAmmo);
             }
         } else if (heldWeapons.Count > 0) {
             if (heldWeapons[0].TryGetComponent<Weapon>(out var primary)) {
@@ -480,70 +477,100 @@ public class PlayerController : MonoBehaviour
 
         // Drop selected weapon
         if (Input.GetKeyDown(KeyCode.Q) && weapon != null) {
+            DropWeapon(weapon, false);
+        }
+    }
 
-            // Put currently selected weapon's pickup object into temporary variable
-            GameObject dropped = Instantiate(weapon.weaponPickup, transform.position, Quaternion.identity);
+    public void DropWeapon(Weapon dropping, bool replace) {
 
-            // If script is obtainable, set this weapon to the pickup object's weaponObject (to be parented to player on pickup)
-            if (dropped.TryGetComponent<WeaponPickup>(out var script)) {
+        // Put currently selected weapon's pickup object into temporary variable
+        GameObject dropped = Instantiate(dropping.weaponPickup, transform.position, Quaternion.identity);
 
-                // Set weapon pickup to "dropped" setting
-                script.dropped = true;
+        // If script is obtainable, set this weapon to the pickup object's weaponObject (to be parented to player on pickup)
+        if (dropped.TryGetComponent<WeaponPickup>(out var script)) {
 
-                Debug.Log(CurrentWeaponIndex);
+            // Set weapon pickup to "dropped" setting
+            script.dropped = true;
 
-                // Drop a new pickup weapon
-                script.weaponObject = heldWeapons[CurrentWeaponIndex];
+            Debug.Log(CurrentWeaponIndex);
 
-                // Delete dropped weapon
-                if (heldWeapons.Count == 2) {
-                    int queuedForDeletion = CurrentWeaponIndex;
+            // Drop a new pickup weapon
+            script.weaponObject = heldWeapons[CurrentWeaponIndex];
+
+            // Delete dropped weapon
+            if (heldWeapons.Count == 2) {
+                int queuedForDeletion = CurrentWeaponIndex;
+
+                // If not replacing an existing weapon—
+                if (!replace) {
 
                     // Switch to other weapon before deleting
                     StartWeaponSwitch(heldWeapons.Count - 1 - CurrentWeaponIndex, CurrentWeaponIndex);
 
+                    // Unparent and disable dropped weapon
                     heldWeapons[queuedForDeletion].transform.parent = null;
                     heldWeapons[queuedForDeletion].SetActive(false);
 
+                    // Remove dropped weapon from held weapons
                     heldWeapons.Remove(heldWeapons[queuedForDeletion]);
-                } else {
-                    int queuedForDeletion = CurrentWeaponIndex;
+                } 
+                // If replacing an existing weapon—
+                else {
 
+                    // Unparent and disable dropped weapon
                     heldWeapons[queuedForDeletion].transform.parent = null;
                     heldWeapons[queuedForDeletion].SetActive(false);
-
-                    heldWeapons.Remove(heldWeapons[queuedForDeletion]);
-                    weapon = null;
                 }
+
             } else {
-                Debug.LogWarning("Could not find WeaponPickup component on weapon being dropped!");
+                int queuedForDeletion = CurrentWeaponIndex;
+
+                // Unparent and disable dropped weapon
+                heldWeapons[queuedForDeletion].transform.parent = null;
+                heldWeapons[queuedForDeletion].SetActive(false);
+
+                // Remove dropped weapon from held weapons
+                heldWeapons.Remove(heldWeapons[queuedForDeletion]);
+                dropping = null;
             }
+        } else {
+            Debug.LogWarning("Could not find WeaponPickup component on weapon being dropped!");
+        }
 
-            switch (heldWeapons.Count) {
+        switch (heldWeapons.Count) {
 
-                // If no weapons are held, set everything to null and disable ammo UI bar
-                case 0:
-                    ammoBar.gameObject.SetActive(false);
+            // If no weapons are held, set everything to null and disable ammo UI bar
+            case 0:
+                ammoBar.gameObject.SetActive(false);
 
-                    CurrentWeaponIndex = 0;
+                CurrentWeaponIndex = 0;
 
-                    PrimaryWeaponID = 0;
-                    PrimaryWeaponRarity = WeaponRarity.COMMON;
+                PrimaryWeaponID = 0;
+                PrimaryWeaponRarity = WeaponRarity.COMMON;
 
-                    SecondaryWeaponID = 0;
-                    SecondaryWeaponRarity = WeaponRarity.COMMON;
-                    break;
-                // If one held weapon left after dropping, set primary vars to that weapon, and null secondary vars
-                case 1:
-                    CurrentWeaponIndex = 0;
+                SecondaryWeaponID = 0;
+                SecondaryWeaponRarity = WeaponRarity.COMMON;
+                break;
+            // If one held weapon left after dropping, set primary vars to that weapon, and null secondary vars
+            case 1:
+                CurrentWeaponIndex = 0;
 
-                    PrimaryWeaponID = weapon.id;
-                    PrimaryWeaponRarity = weapon.rarity;
+                PrimaryWeaponID = weapon.id;
+                PrimaryWeaponRarity = weapon.rarity;
 
-                    SecondaryWeaponID = 0;
-                    SecondaryWeaponRarity = WeaponRarity.COMMON;
-                    break;
-            }
+                SecondaryWeaponID = 0;
+                SecondaryWeaponRarity = WeaponRarity.COMMON;
+                break;
+            case 2:
+                if (heldWeapons[0].TryGetComponent<Weapon>(out var primary)) {
+                    PrimaryWeaponID = primary.id;
+                    PrimaryWeaponRarity = primary.rarity;
+                }
+                if (heldWeapons[1].TryGetComponent<Weapon>(out var secondary)) {
+                    SecondaryWeaponID = secondary.id;
+                    SecondaryWeaponRarity = secondary.rarity;
+                }
+                break;
         }
     }
 
@@ -746,7 +773,6 @@ public class PlayerController : MonoBehaviour
             StartCoroutine(hurtShake.Shake(hurtShakeDuration, hurtShakeAmplitude, hurtShakeFrequency));
             Health -= damage;
             healthBar.SetHealth(currentHealth);
-            Debug.Log("Player took damage!");
 
             animator.SetBool("Hurt", true);
         }

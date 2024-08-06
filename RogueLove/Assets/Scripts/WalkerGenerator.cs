@@ -465,12 +465,10 @@ public class WalkerGenerator : MonoBehaviour
                 oTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grassTop);
                 gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created top border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.borderTop);
                 gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created top border tile");
             }
 
             // Create border along bottom of map
@@ -481,12 +479,10 @@ public class WalkerGenerator : MonoBehaviour
 
                 gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created bottom border tile");
             } else {
                 wallsTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.borderDown);
                 gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
-                Debug.Log("Created bottom border tile");
             }
 
         }
@@ -716,7 +712,6 @@ public class WalkerGenerator : MonoBehaviour
         // TODO: If level number is the last level in area, then disregard everything except Boss spawning
         if (!IsArrayEmpty(bosses)) {
             bossLevel = true;
-            Debug.Log(bosses);
         }
 
         // Miniboss spawning
@@ -758,8 +753,6 @@ public class WalkerGenerator : MonoBehaviour
                         if (spawnChance > enemy.maxSpawnChance) {
                             spawnChance = enemy.maxSpawnChance;
                         }
-
-                        Debug.Log(minibosses[m] + ": " + spawnChance);
 
                         // If enemy spawn roll is a success, spawn enemy 
                         if (spawnValue <= spawnChance) {
@@ -806,7 +799,7 @@ public class WalkerGenerator : MonoBehaviour
                                 }
                             }
                         } else {
-                            Debug.Log(minibosses[m] + " failed the spawn roll!");
+                            Debug.Log(minibosses[m] + " failed the spawn roll! " + spawnChance);
                         }
 
                     } else {
@@ -851,8 +844,6 @@ public class WalkerGenerator : MonoBehaviour
                         if (spawnChance > enemy.maxSpawnChance) {
                             spawnChance = enemy.maxSpawnChance;
                         }
-
-                        Debug.Log(stationEnemies[st] + ": " + spawnChance);
 
                         // If enemy spawn roll is a success, spawn enemy 
                         if (spawnValue <= spawnChance) {
@@ -975,7 +966,7 @@ public class WalkerGenerator : MonoBehaviour
                             }
 
                         } else {
-                            Debug.Log(stationEnemies[st] + " failed the spawn roll!");
+                            Debug.Log(stationEnemies[st] + " failed the spawn roll! " + spawnChance);
                         }
 
                     } else {
@@ -1020,8 +1011,6 @@ public class WalkerGenerator : MonoBehaviour
                             spawnChance = enemy.maxSpawnChance;
                         }
 
-                        Debug.Log(rareEnemies[r] + ": " + spawnChance);
-
                         // If enemy spawn roll is a success, spawn enemy 
                         if (spawnValue <= spawnChance) {
 
@@ -1062,7 +1051,7 @@ public class WalkerGenerator : MonoBehaviour
                             }
 
                         } else {
-                            Debug.Log(rareEnemies[r] + " failed the spawn roll!");
+                            Debug.Log(rareEnemies[r] + " failed the spawn roll! " + spawnChance);
                         }
 
                     } else {
@@ -1106,8 +1095,6 @@ public class WalkerGenerator : MonoBehaviour
                             spawnChance = enemy.maxSpawnChance;
                         }
 
-                        Debug.Log(commonEnemies[c] + ": " + spawnChance);
-
                         // If enemy spawn roll is a success, spawn enemy 
                         if (spawnValue <= spawnChance) {
 
@@ -1148,7 +1135,7 @@ public class WalkerGenerator : MonoBehaviour
                             }
                             
                         } else {
-                            Debug.Log(commonEnemies[c] + " failed the spawn roll!");
+                            Debug.Log(commonEnemies[c] + " failed the spawn roll! " + spawnChance);
                         }
 
                     } else {
