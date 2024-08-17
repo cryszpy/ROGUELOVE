@@ -60,6 +60,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   scene:
   - Scenes/MainMenu
+  - Scenes/Home
   - Scenes/EmptyLevel
   - Scenes/EmptyLevel_2
 --- !u!114 &6653023602489195133
@@ -80,5 +81,6 @@ MonoBehaviour:
   animator: {fileID: 0}
   dialogueList: {fileID: 11400000, guid: bc6e93211537a4eeba2a8eb6207a3304, type: 2}
   continueButton: {fileID: 0}
+  currentDialogue: {fileID: 0}
   textCPS: 0.03
   previousGameState: 0

@@ -121,7 +121,7 @@ public class PlayerController : MonoBehaviour
     public static int currentHealth;
 
     // Player movement speed
-    private static float moveSpeed = 1.0f;
+    private static float moveSpeed = 3.2f;
     public static float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
     public static void ChangeMoveSpeed(float speed) {
         MoveSpeed += speed;
@@ -201,7 +201,7 @@ public class PlayerController : MonoBehaviour
     }
 
     // Start is called before the first frame update
-    void PlayerStart()
+    public void PlayerStart(bool home)
     {
 
         // Ignores any collisions with enemies (layer 9)
@@ -219,10 +219,6 @@ public class PlayerController : MonoBehaviour
             contactColl = GetComponentInChildren<CapsuleCollider2D>();
             Debug.Log("Collider2D contactColl is null! Reassigned.");
         }
-        if (weapon == null) {
-            weapon = GetComponentInChildren<Weapon>();
-            Debug.Log("WeaponFireMethod is null! Reassigned.");
-        }
         if (volumeProfile == null) {
             volumeProfile = FindAnyObjectByType<Volume>().sharedProfile;
             Debug.Log("VolumeProfile volumeProfile is null! Reassigned.");
@@ -232,68 +228,82 @@ public class PlayerController : MonoBehaviour
             Debug.Log("CameraShake camShake is null! Reassigned.");
         }
 
-        // Set health bar and energy bar references on each stage load
-        healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
-        energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
-        ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
         coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
-
+            
         iFrame = false;
 
+        // Load player
         string pathPlayer = Application.persistentDataPath + "/player.franny";
 
-        // Load player info from saved game
-        if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            LoadPlayer();
-        } 
-        // Save data exists but player did not click load save --> most likely a NextLevel() call
-        else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            Debug.Log("PLAYER SAVE DATA NEXT LEVEL CALL!");
-        } 
-        // Save data does not exist, and player clicked load save somehow
-        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            GameStateManager.SetSave(false);
-            Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
-        } 
-        // Save data does not exist and player did not click load save --> most likely started new game
-        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+        if (!home) {
 
-            // SET DEFAULT STATS
-            MaxHealth = 4;
-            Health = MaxHealth;
-            MaxEnergy = 20;
-            Experience = 0;
-            MoveSpeed = 3.2f;
-            Coins = 0;
-
-            CurrentWeaponIndex = 0;
-            PrimaryWeaponID = 1;
-            PrimaryWeaponRarity = WeaponRarity.COMMON;
-            SecondaryWeaponID = 0;
-            SecondaryWeaponRarity = WeaponRarity.COMMON;
-
-            AmmoMaxMultiplier = 1;
-
-            GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
-            heldWeapons.Add(weaponObject);
-
-            if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
-                PrimaryWeaponCurrentAmmo = script.ammoMax * AmmoMaxMultiplier;
-                script.currentAmmo = PrimaryWeaponCurrentAmmo;
+            if (weapon == null) {
+                weapon = GetComponentInChildren<Weapon>();
+                Debug.Log("WeaponFireMethod is null! Reassigned.");
             }
+
+            // Set health, energy, and ammo bar references on each stage load
+            healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
+            energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
+            ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
+
+            // Load player info from saved game
+            if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+                LoadPlayer();
+            } 
+            // Save data exists but player did not click load save --> most likely a NextLevel() call
+            else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+                Debug.Log("PLAYER SAVE DATA NEXT LEVEL CALL!");
+            } 
+            // Save data does not exist, and player clicked load save somehow
+            else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+                GameStateManager.SetSave(false);
+                Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
+            } 
+            // Save data does not exist and player did not click load save --> most likely started new game
+            else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+
+                // SET DEFAULT STATS
+                MaxHealth = 4;
+                Health = MaxHealth;
+                MaxEnergy = 20;
+                Experience = 0;
+                MoveSpeed = 3.2f;
+                Coins = 0;
+
+                CurrentWeaponIndex = 0;
+                PrimaryWeaponID = 1;
+                PrimaryWeaponRarity = WeaponRarity.COMMON;
+                SecondaryWeaponID = 0;
+                SecondaryWeaponRarity = WeaponRarity.COMMON;
+
+                AmmoMaxMultiplier = 1;
+
+                GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                heldWeapons.Add(weaponObject);
+
+                if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
+                    PrimaryWeaponCurrentAmmo = script.ammoMax * AmmoMaxMultiplier;
+                    script.currentAmmo = PrimaryWeaponCurrentAmmo;
+                }
+            }
+
+            // Set UI stat objects
+            healthBar.SetMaxHealth(MaxHealth);
+            healthBar.SetHealth(Health);
+            energyBar.SetMaxEnergy(MaxEnergy);
+            energyBar.SetEnergy(Experience);
+
+            AddSavedWeapons();
+
+        } else {
+
+            // Load coin stats for in home
+            
         }
 
-        // Set UI stat objects
-        
-        healthBar.SetMaxHealth(MaxHealth);
-        healthBar.SetHealth(Health);
-
-        energyBar.SetMaxEnergy(MaxEnergy);
-        energyBar.SetEnergy(Experience);
-
         coinsUI.SetCoins(Coins);
-
-        AddSavedWeapons();
+        
     }
 
     public void AddSavedWeapons() {
@@ -439,7 +449,7 @@ public class PlayerController : MonoBehaviour
 
         if (savePressed) {
             savePressed = false;
-            PlayerStart();
+            PlayerStart(false);
             SavePlayer();
             GameStateManager.SetSave(false);
         }
