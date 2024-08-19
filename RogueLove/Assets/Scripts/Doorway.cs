@@ -5,13 +5,11 @@ using UnityEngine;
 
 public class Doorway : MonoBehaviour
 {
-    [SerializeField]
-    private CinemachineVirtualCamera cam;
+    [SerializeField] private CinemachineVirtualCamera cam;
     
     public Transform cameraLookAt;
 
-    [SerializeField]
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     // Start is called before the first frame update
     void Start()
