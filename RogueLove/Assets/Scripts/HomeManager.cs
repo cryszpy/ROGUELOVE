@@ -36,7 +36,7 @@ public class HomeManager : MonoBehaviour
     }
 
     public void SaveHome () {
-        SaveSystem.SaveHome(this);
+        SaveSystem.SaveHome(this, playerCont.saveIcon);
         Debug.Log("SAVE HOME CALLED");
     }
 

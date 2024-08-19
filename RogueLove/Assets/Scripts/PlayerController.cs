@@ -54,6 +54,8 @@ public class PlayerController : MonoBehaviour
 
     public CameraShake hurtShake;
 
+    public GameObject saveIcon;
+
     [Header("STATS")]
 
     public List<GameObject> heldWeapons = new();
@@ -226,6 +228,10 @@ public class PlayerController : MonoBehaviour
         if (hurtShake == null) {
             hurtShake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
             Debug.Log("CameraShake camShake is null! Reassigned.");
+        }
+        if (saveIcon == null) {
+            saveIcon = GameObject.FindGameObjectWithTag("SaveIcon");
+            Debug.Log("Save icon is null! Reassigned.");
         }
             
         iFrame = false;
@@ -796,7 +802,7 @@ public class PlayerController : MonoBehaviour
     }
 
     public void SavePlayer () {
-        SaveSystem.SavePlayer(this, weapon);
+        SaveSystem.SavePlayer(this, weapon, saveIcon);
         Debug.Log("SAVE PLAYER CALLED");
     }
 

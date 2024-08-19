@@ -7119,6 +7119,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 948787822}
     - target: {fileID: 3089232633083351462, guid: efe8a495167c84412aee81ca9f820ab2, type: 3}
+      propertyPath: saveIcon
+      value: 
+      objectReference: {fileID: 1342780337}
+    - target: {fileID: 3089232633083351462, guid: efe8a495167c84412aee81ca9f820ab2, type: 3}
       propertyPath: cameraLookAt
       value: 
       objectReference: {fileID: 80201727}
@@ -7404,6 +7408,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c10b9e49afafc43ddad7fd75629c45f2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1342780337 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7564037064515530790, guid: 0cbaa71b31c4f4293a0770c492b393fe, type: 3}
+  m_PrefabInstance: {fileID: 1342780335}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &1408090783
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -8705,6 +8714,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Dialogue
       objectReference: {fileID: 0}
+    - target: {fileID: 3445701864985900919, guid: fe5dc26d6f55e4ac391ac915425336b7, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 5435914256767342696, guid: fe5dc26d6f55e4ac391ac915425336b7, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -9111,6 +9124,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4365122181230883474, guid: 1e66841b19e244033ac3caa2eaab406c, type: 3}
+      propertyPath: saveIcon
+      value: 
+      objectReference: {fileID: 1342780337}
     - target: {fileID: 8974962771436559868, guid: 1e66841b19e244033ac3caa2eaab406c, type: 3}
       propertyPath: m_Name
       value: Player

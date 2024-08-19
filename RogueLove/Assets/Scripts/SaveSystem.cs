@@ -4,7 +4,10 @@ using System.Runtime.Serialization.Formatters.Binary;
 
 public static class SaveSystem
 {
-    public static void SaveMap (WalkerGenerator map) {
+    public static void SaveMap (WalkerGenerator map, GameObject saveIcon) {
+
+        saveIcon.SetActive(true);
+
         BinaryFormatter formatter = new();
 
         string pathMap = Application.persistentDataPath + "/map.chris";
@@ -14,6 +17,8 @@ public static class SaveSystem
 
         formatter.Serialize(stream, dataMap);
         stream.Close();
+
+        saveIcon.SetActive(false);
         Debug.Log("SAVED MAP");
     }
 
@@ -36,7 +41,10 @@ public static class SaveSystem
         }
     }
 
-    public static void SavePlayer (PlayerController player, Weapon weapon) {
+    public static void SavePlayer (PlayerController player, Weapon weapon, GameObject saveIcon) {
+
+        saveIcon.SetActive(true);
+
         BinaryFormatter formatter = new();
 
         string pathPlayer = Application.persistentDataPath + "/player.franny";
@@ -46,6 +54,8 @@ public static class SaveSystem
 
         formatter.Serialize(stream, dataPlayer);
         stream.Close();
+
+        saveIcon.SetActive(false);
         Debug.Log("SAVED PLAYER");
     }
 
@@ -68,7 +78,10 @@ public static class SaveSystem
         }
     }
 
-    public static void SaveHome (HomeManager manager) {
+    public static void SaveHome (HomeManager manager, GameObject saveIcon) {
+
+        saveIcon.SetActive(true);
+
         BinaryFormatter formatter = new();
 
         string pathHome = Application.persistentDataPath + "/home.soni";
@@ -78,6 +91,8 @@ public static class SaveSystem
 
         formatter.Serialize(stream, dataHome);
         stream.Close();
+
+        saveIcon.SetActive(false);
         Debug.Log("SAVED HOME");
     }
 

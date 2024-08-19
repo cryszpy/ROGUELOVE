@@ -145,6 +145,8 @@ public class WalkerGenerator : MonoBehaviour
 
     public static bool doneWithLevel = false;
 
+    [SerializeField] private GameObject saveIcon;
+
     // Initializes grid to be generated (size)
     void Awake() {
         doneWithLevel = false;
@@ -1199,7 +1201,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     public void SaveMap () {
-        SaveSystem.SaveMap(this);
+        SaveSystem.SaveMap(this, saveIcon);
     }
 
     public void LoadMap () {
