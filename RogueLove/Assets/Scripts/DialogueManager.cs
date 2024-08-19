@@ -10,35 +10,29 @@ public class DialogueManager : MonoBehaviour
 
     [Header("SCRIPT REFERENCES")]
 
-    [SerializeField]
-    private Image dialogueSprite;
+    [SerializeField] private Image dialogueSprite;
 
-    [SerializeField]
-    private TMP_Text nameText;
+    [SerializeField] private TMP_Text nameText;
 
-    [SerializeField]
-    private TMP_Text dialogueText;
+    [SerializeField] private TMP_Text dialogueText;
 
-    [SerializeField]
-    private Animator animator;
+    [SerializeField] private Animator animator;
 
     private Queue<string> sentences;
 
     public DialogueList dialogueList;
 
-    [SerializeField]
-    private GameObject continueButton;
+    [SerializeField] private GameObject continueButton;
 
-    [SerializeField]
-    private Dialogue currentDialogue;
+    [SerializeField] private Dialogue currentDialogue;
+
+    [SerializeField] private List<Animator> uiElements;
 
     [Header("VARIABLES")]
 
-    [SerializeField]
-    private float textCPS;
+    [SerializeField] private float textCPS;
 
-    [SerializeField]
-    private GAMESTATE previousGameState;
+    [SerializeField] private GAMESTATE previousGameState;
 
     /* private static bool playDialogue = false;
     public static bool PlayDialogue { get => playDialogue; set => playDialogue = value; } */
@@ -75,11 +69,35 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue (Dialogue dialogue) {
-        Debug.Log("Started conversation with + " + dialogue.characterName);
-        currentDialogue = dialogue;
+    private void FindReferences() {
 
-        dialogueList.priority.Remove(dialogue);
+        // UI ANIMATOR REFERENCES
+
+        if (GameObject.FindGameObjectWithTag("EnergyBar").TryGetComponent<Animator>(out var energybar)) {
+            uiElements.Add(energybar);
+        } else {
+            Debug.LogError("Could not find energy bar script!");
+        }
+
+        if (GameObject.FindGameObjectWithTag("PlayerHealth").TryGetComponent<Animator>(out var healthbar)) {
+            uiElements.Add(healthbar);
+        } else {
+            Debug.LogError("Could not find health bar script!");
+        }
+
+        if (GameObject.FindGameObjectWithTag("CoinsUI").TryGetComponent<Animator>(out var coins)) {
+            uiElements.Add(coins);
+        } else {
+            Debug.LogError("Could not find coins UI script!");
+        }
+
+        if (GameObject.FindGameObjectWithTag("AmmoBar").TryGetComponent<Animator>(out var ammobar)) {
+            uiElements.Add(ammobar);
+        } else {
+            Debug.LogError("Could not find ammo bar script!");
+        }
+
+        // DIALOGUE UI REFERENCES
 
         if (continueButton == null) {
             continueButton = GameObject.FindGameObjectWithTag("ContinueButton");
@@ -106,6 +124,22 @@ public class DialogueManager : MonoBehaviour
             dialogueSprite = GameObject.FindGameObjectWithTag("DialogueSprite").GetComponent<Image>();
             Debug.Log("DialogueManager dialogueSprite is null! Reassigned.");
         }
+    }
+
+    public void StartDialogue (Dialogue dialogue) {
+        Debug.Log("Started conversation with + " + dialogue.characterName);
+
+        FindReferences();
+
+        if (uiElements.Count != 0) {
+            foreach (Animator element in uiElements) {
+                element.SetTrigger("Out");
+            }
+        }
+
+        currentDialogue = dialogue;
+
+        dialogueList.priority.Remove(dialogue);
 
         animator.SetBool("IsOpen", true);
 
@@ -164,6 +198,12 @@ public class DialogueManager : MonoBehaviour
     }
 
     void EndDialogue() {
+
+        if (uiElements.Count != 0) {
+            foreach (Animator element in uiElements) {
+                element.SetTrigger("In");
+            }
+        }
 
         // Disables the continue button
         if (continueButton.activeSelf) {

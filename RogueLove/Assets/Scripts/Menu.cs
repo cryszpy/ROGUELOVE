@@ -42,18 +42,25 @@ public class MainMenu : MonoBehaviour
     public void PlayButton() {
         string pathMap = Application.persistentDataPath + "/map.chris";
         string pathPlayer = Application.persistentDataPath + "/player.franny";
+        string pathHome = Application.persistentDataPath + "/home.soni";
 
         // Set up SAVED GAME
         if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
             saveSlots.SetActive(true);
         } 
-        // START NEW GAME
+        // NO SAVED RUN, GO HOME
+        else if (File.Exists(pathHome)) {
+            GameStateManager.SetSave(false);
+
+            TransitionManager.StartLeaf(1);
+            Debug.Log("WENT TO SAVED HOME");
+        }
+        // START NEW GAME + TUTORIAL
         else {
             GameStateManager.SetSave(false);
-            GameStateManager.SetLevel(1);
-            GameStateManager.SetStage(1);
-            // Load level
+
             TransitionManager.StartLeaf(1);
+            Debug.Log("TUTORIAL");
         }
     }
 
@@ -67,7 +74,7 @@ public class MainMenu : MonoBehaviour
         GameStateManager.SetSave(true);
 
         // Load level
-        TransitionManager.StartLeaf(GameStateManager.GetStage());
+        TransitionManager.StartLeaf(GameStateManager.GetStage() + 1);
     }
 
     public void QuitButton() {

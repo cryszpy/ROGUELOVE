@@ -49,7 +49,7 @@ public static class SaveSystem
         Debug.Log("SAVED PLAYER");
     }
 
-    public static PlayerData LoadPlayer () {
+    public static PlayerData LoadPlayer() {
 
         string pathPlayer = Application.persistentDataPath + "/player.franny";
 
@@ -64,6 +64,36 @@ public static class SaveSystem
 
         } else {
             Debug.LogError("Player save file not found in " + pathPlayer);
+            return null;
+        }
+    }
+
+    public static void SaveHome (HomeManager manager) {
+        BinaryFormatter formatter = new();
+
+        string pathHome = Application.persistentDataPath + "/home.soni";
+        FileStream stream = new(pathHome, FileMode.Create);
+
+        HomeData dataHome = new(manager);
+
+        formatter.Serialize(stream, dataHome);
+        stream.Close();
+        Debug.Log("SAVED HOME");
+    }
+
+    public static HomeData LoadHome() {
+        string pathHome = Application.persistentDataPath + "/home.soni";
+
+        if (File.Exists(pathHome)) {
+            BinaryFormatter formatter = new();
+            FileStream stream = new(pathHome, FileMode.Open);
+
+            HomeData dataHome = formatter.Deserialize(stream) as HomeData;
+            stream.Close();
+            Debug.Log("LOADED HOME");
+            return dataHome;
+        } else {
+            Debug.LogError("Home save file not found in " + pathHome);
             return null;
         }
     }

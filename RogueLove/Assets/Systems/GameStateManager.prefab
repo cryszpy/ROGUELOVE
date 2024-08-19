@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8162904416319405166}
   - component: {fileID: 1304198974309830220}
   - component: {fileID: 1649054577632431320}
-  - component: {fileID: 6653023602489195133}
+  - component: {fileID: 2804473715840246968}
   m_Layer: 0
   m_Name: GameStateManager
   m_TagString: GameStateManager
@@ -63,7 +63,7 @@ MonoBehaviour:
   - Scenes/Home
   - Scenes/EmptyLevel
   - Scenes/EmptyLevel_2
---- !u!114 &6653023602489195133
+--- !u!114 &2804473715840246968
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -82,5 +82,6 @@ MonoBehaviour:
   dialogueList: {fileID: 11400000, guid: bc6e93211537a4eeba2a8eb6207a3304, type: 2}
   continueButton: {fileID: 0}
   currentDialogue: {fileID: 0}
+  uiElements: []
   textCPS: 0.03
   previousGameState: 0

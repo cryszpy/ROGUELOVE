@@ -59,7 +59,7 @@ public class EnemyBreakWall : MonoBehaviour
 
             Vector3Int vec = new(cellPos.x, cellPos.y);
 
-            if (cellPos.x + 1 <= parent.map.mapWidth || cellPos.y + 1 <= parent.map.mapHeight) {
+            if (cellPos.x + 1 <= parent.map.mapWidth - 1 || cellPos.y + 1 <= parent.map.mapHeight - 1) {
                 if (parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.WALLS || parent.map.gridHandler[cellPos.x, cellPos.y] == TileType.OBSTACLES) {
                     parent.map.wallsTilemap.SetTile(new Vector3Int(cellPos.x, cellPos.y), parent.map.tiles.empty);
                 } 

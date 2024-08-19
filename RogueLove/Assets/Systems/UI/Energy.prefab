@@ -147,6 +147,7 @@ GameObject:
   - component: {fileID: 5755473989305086460}
   - component: {fileID: 7517445386652037722}
   - component: {fileID: 3661356403077713867}
+  - component: {fileID: 1690708343167399338}
   m_Layer: 5
   m_Name: Energy
   m_TagString: EnergyBar
@@ -244,6 +245,28 @@ MonoBehaviour:
   fill: {fileID: 6818326014946433969}
   currentEnergyText: {fileID: 8311164987296507952}
   maxEnergyText: {fileID: 1893723867646262117}
+--- !u!95 &1690708343167399338
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4360691485757262346}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ba0ce40d4af1b4c1b84516340be8884d, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!1 &4616976270398369750
 GameObject:
   m_ObjectHideFlags: 0

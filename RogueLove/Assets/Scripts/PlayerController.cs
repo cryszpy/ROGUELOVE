@@ -189,9 +189,9 @@ public class PlayerController : MonoBehaviour
         set {
             currentHealth = value;
             if(currentHealth <= 0) {
-                DeathAnim();
                 currentHealth = 0;
                 lootList.ResetAllWeapons();
+                StartCoroutine(PlayerDeath());
             }
         }
 
@@ -227,8 +227,6 @@ public class PlayerController : MonoBehaviour
             hurtShake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
             Debug.Log("CameraShake camShake is null! Reassigned.");
         }
-
-        coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
             
         iFrame = false;
 
@@ -242,10 +240,11 @@ public class PlayerController : MonoBehaviour
                 Debug.Log("WeaponFireMethod is null! Reassigned.");
             }
 
-            // Set health, energy, and ammo bar references on each stage load
+            // Set health, energy, ammo, and coins UI references on each stage load
             healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
             energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
             ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
+            coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
 
             // Load player info from saved game
             if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
@@ -293,16 +292,11 @@ public class PlayerController : MonoBehaviour
             healthBar.SetHealth(Health);
             energyBar.SetMaxEnergy(MaxEnergy);
             energyBar.SetEnergy(Experience);
+            coinsUI.SetCoins(Coins);
 
             AddSavedWeapons();
 
-        } else {
-
-            // Load coin stats for in home
-            
         }
-
-        coinsUI.SetCoins(Coins);
         
     }
 
@@ -847,8 +841,56 @@ public class PlayerController : MonoBehaviour
         Debug.Log("LOADED PLAYER");
     }
 
-    public void DeathAnim() {
+    public IEnumerator PlayerDeath() {
         animator.SetBool("Death", true);
         FindFirstObjectByType<AudioManager>().Play("PlayerDeath");
+
+        yield return new WaitForSeconds(2f);
+
+        string pathHome = Application.persistentDataPath + "/home.soni";
+        string pathMap = Application.persistentDataPath + "/map.chris";
+        string pathPlayer = Application.persistentDataPath + "/player.franny";
+
+        if (File.Exists(pathHome)) {
+            GameStateManager.SetLevel(0);
+            GameStateManager.SetStage(0);
+
+            if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
+                File.Delete(pathMap);
+                File.Delete(pathPlayer);
+                RefreshEditorWindow();
+            } else {
+                Debug.LogWarning("Either player or map save data file not found!");
+            }
+
+            Debug.Log("DIED AND WENT HOME");
+
+            TransitionManager.StartLeaf(1);
+        } else {
+            GameStateManager.SetLevel(0);
+            GameStateManager.SetStage(0);
+
+            if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
+                File.Delete(pathMap);
+                File.Delete(pathPlayer);
+                RefreshEditorWindow();
+            } else {
+                Debug.LogWarning("Either player or map save data file not found!");
+            }
+
+            Debug.LogWarning("DIED AND COULD NOT FIND HOME SAVE FILE");
+
+            TransitionManager.StartLeaf(0);
+        }
+
+        
+    }
+
+    private void RefreshEditorWindow() {
+
+        #if UNITY_EDITOR
+		UnityEditor.AssetDatabase.Refresh();
+		#endif
+
     }
 }

@@ -112,14 +112,14 @@ public class GameStateManager : MonoBehaviour
                 SetStage(GetStage() + 1);
                 SetLevel(1);
                 // Load level
-                TransitionManager.StartLeaf(GetStage());
+                TransitionManager.StartLeaf(GetStage() + 1);
             } 
             // Else, increment level and generate new level
             else {
                 IncrementLevel(1);
                 Debug.Log("INCREMENTED");
                 // Load level
-                TransitionManager.StartLeaf(GetStage());
+                TransitionManager.StartLeaf(GetStage() + 1);
             }
         } 
         // All other stages have 6 randomly-generated levels
@@ -129,14 +129,14 @@ public class GameStateManager : MonoBehaviour
                 SetStage(GetStage() + 1);
                 SetLevel(1);
                 // Load level
-                TransitionManager.StartLeaf(GetStage());
+                TransitionManager.StartLeaf(GetStage() + 1);
             } 
             // Else, increment level and generate new level
             else {
                 IncrementLevel(1);
                 Debug.Log("INCREMENTED");
                 // Load level
-                TransitionManager.StartLeaf(GetStage());
+                TransitionManager.StartLeaf(GetStage() + 1);
             }
         }
     }

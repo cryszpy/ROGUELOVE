@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 6022304179803576977}
   - component: {fileID: 6517921934799575164}
   - component: {fileID: 1334569729837979274}
+  - component: {fileID: 5770314990081538109}
   m_Layer: 0
   m_Name: Upstairs
   m_TagString: Untagged
@@ -176,3 +177,17 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: -0.73}
   m_Size: {x: 1, y: 0.71}
   m_Direction: 1
+--- !u!114 &5770314990081538109
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 36495656397953444}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a295a00b12211433f80ce051a298de12, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  inRadius: 0
+  areaIndex: -3
