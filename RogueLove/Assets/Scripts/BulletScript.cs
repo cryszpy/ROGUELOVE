@@ -33,6 +33,8 @@ public class BulletScript : MonoBehaviour
 
     public float damage;
 
+    public float knockback;
+
     [Tooltip("Lower values are more accurate— 0 fires in a straight line.")]
     [SerializeField]
     protected float accuracy;
@@ -108,7 +110,7 @@ public class BulletScript : MonoBehaviour
                     enemy.TakeFireDamage(damage, direction);
                 }
                 else {
-                    enemy.TakeDamage(damage, direction);
+                    enemy.TakeDamage(damage, direction, knockback);
                 }
             }
             else {

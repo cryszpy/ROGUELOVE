@@ -25,6 +25,8 @@ public class EnemyBulletScript : MonoBehaviour
 
     [SerializeField] private int damage = 2;
 
+    [SerializeField] private float knockback;
+
     [SerializeField] private bool reflected = false;
 
     // Start is called before the first frame update
@@ -100,7 +102,7 @@ public class EnemyBulletScript : MonoBehaviour
         
         if (other.CompareTag("Enemy") && reflected) {
             if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
-                enemy.TakeDamage(damage, rb.velocity);
+                enemy.TakeDamage(damage, rb.velocity, knockback);
             }
 
             // Destroy bullet on contact with enemy after reflection

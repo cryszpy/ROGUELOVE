@@ -66,9 +66,8 @@ public class WeaponSingleShotFire : MonoBehaviour
 
     // Firing logic
     public virtual void Fire() {
-        canFire = false;
-
         
+        canFire = false;
 
         // Play firing sound
         if (!string.IsNullOrWhiteSpace(parent.fireSound)) {

@@ -151,7 +151,8 @@ public class PlayerController : MonoBehaviour
                     // Play battery full animation here!!
                     Debug.Log("Battery full!");
 
-                    GameStateManager.dialogueManager.AddRandomDialogueOfType(DialogueType.NOREQ);
+                    // Replace later with probabilities for different types of calls
+                    GameStateManager.dialogueManager.AddRandomNoReqDialogue(GameStateManager.dialogueManager.callDialogueList);
 
                     // Experience carries over to the next level (still need to make exponentially higher max energy reqs)
                     experience -= maxEnergy;
@@ -241,11 +242,6 @@ public class PlayerController : MonoBehaviour
 
         if (!home) {
 
-            if (weapon == null) {
-                weapon = GetComponentInChildren<Weapon>();
-                Debug.Log("WeaponFireMethod is null! Reassigned.");
-            }
-
             // Set health, energy, ammo, and coins UI references on each stage load
             healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
             energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
@@ -301,6 +297,11 @@ public class PlayerController : MonoBehaviour
             coinsUI.SetCoins(Coins);
 
             AddSavedWeapons();
+
+            if (weapon == null) {
+                weapon = GetComponentInChildren<Weapon>();
+                Debug.Log("WeaponFireMethod is null! Reassigned.");
+            }
 
         }
         

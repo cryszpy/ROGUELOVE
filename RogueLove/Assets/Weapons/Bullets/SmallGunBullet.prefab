@@ -78,7 +78,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1049480431
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: bae13b4396fd04ab3ad32dfe360d6e26, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -109,6 +109,7 @@ MonoBehaviour:
   weapon: {fileID: 0}
   force: 35
   damage: 4
+  knockback: 2
   accuracy: 0.5
   isFire: 0
 --- !u!50 &6018900055118431996

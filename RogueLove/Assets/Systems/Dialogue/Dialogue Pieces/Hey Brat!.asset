@@ -12,9 +12,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2375cc55695de471ca0957b5411488b6, type: 3}
   m_Name: Hey Brat!
   m_EditorClassIdentifier: 
-  id: player_0
+  id: fallow_0
   characterSprite: {fileID: 21300000, guid: 7abc80531db9c48e1bf4c82cd3633eda, type: 3}
-  characterName: YOU
+  characterName: FALLOW
   seenBefore: 0
   storyline: 0
   storylineScene: 0

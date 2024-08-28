@@ -21,7 +21,7 @@ public class EnemyHealth : MonoBehaviour
     // Enemy maximum health
     public float maxHealth;
 
-    [SerializeField] private float knockback;
+    [SerializeField] private float knockbackResistance;
 
     public bool takingFireDamage;
 
@@ -54,7 +54,7 @@ public class EnemyHealth : MonoBehaviour
         animator.SetBool("Hurt", false);
     }
 
-    public void TakeDamage(float damage, Vector2 direction) {
+    public void TakeDamage(float damage, Vector2 direction, float knockback) {
         Health -= damage;
         //Debug.Log("Took this amount of damage: " + damage);
 
@@ -62,10 +62,10 @@ public class EnemyHealth : MonoBehaviour
         parent.kbEd = true;
         if (Health <= 0) {
             StopAllCoroutines();
-            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized));
+            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized, knockback));
         } else {
             StopAllCoroutines();
-            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized));
+            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized, knockback));
         }
     }
 
@@ -77,10 +77,10 @@ public class EnemyHealth : MonoBehaviour
         parent.kbEd = true;
         if (Health <= 0) {
             StopAllCoroutines();
-            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized));
+            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized, 0));
         } else {
             StopAllCoroutines();
-            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized));
+            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized, 0));
         }
         animator.SetBool("FireHurt", true);
         StartCoroutine(FireDamage(2));
@@ -113,10 +113,10 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    IEnumerator EnemyKnockback(Rigidbody2D rigidBody, Vector2 dir) {
+    IEnumerator EnemyKnockback(Rigidbody2D rigidBody, Vector2 dir, float kb) {
         parent.kbEd = true;
         rigidBody.velocity = Vector2.zero;
-        rigidBody.AddForce(dir * knockback, ForceMode2D.Impulse);
+        rigidBody.AddForce(dir * (kb * (1 - knockbackResistance)), ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.15f);
 
@@ -127,10 +127,10 @@ public class EnemyHealth : MonoBehaviour
         parent.kbEd = false;
     }
 
-    IEnumerator EnemyDeathKnockback(Rigidbody2D rigidBody, Vector2 dir) {
+    IEnumerator EnemyDeathKnockback(Rigidbody2D rigidBody, Vector2 dir, float kb) {
         parent.kbEd = true;
         rigidBody.velocity = Vector2.zero;
-        rigidBody.AddForce(dir * (knockback * 2), ForceMode2D.Impulse);
+        rigidBody.AddForce(dir * (kb * (1 - knockbackResistance) * 2), ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.5f);
 

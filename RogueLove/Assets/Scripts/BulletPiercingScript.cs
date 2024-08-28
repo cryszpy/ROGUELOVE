@@ -23,7 +23,7 @@ public class BulletPiercingScript : BulletScript
                     enemy.TakeFireDamage(damage, direction);
                 }
                 else {
-                    enemy.TakeDamage(damage, direction);
+                    enemy.TakeDamage(damage, direction, knockback);
                 }
             }
             else {

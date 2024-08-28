@@ -10,22 +10,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4767aa5d77bd94b61bc18afb01f413d7, type: 3}
-  m_Name: DialogueList
+  m_Name: List_BarnGates
   m_EditorClassIdentifier: 
-  movedDialogue: 0
-  priority: []
+  id_prefix: barngates
   noRequirements:
-  - {fileID: 11400000, guid: 10f201a5eb2ce4784bf33f943fafbca4, type: 2}
+  - {fileID: 11400000, guid: 1392fcf24c7324352903382652965317, type: 2}
   seenNoRequirements: []
   requirements: []
   seenRequirements: []
-  questCalls: []
-  seenQuestCalls: []
-  supportCalls: []
-  seenSupportCalls: []
-  shopCalls: []
-  seenShopCalls: []
-  tradeCalls: []
-  seenTradeCalls: []
-  storyline: []
-  seenStoryline: []

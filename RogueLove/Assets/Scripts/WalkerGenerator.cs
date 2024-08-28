@@ -216,7 +216,7 @@ public class WalkerGenerator : MonoBehaviour
         stg = GameStateManager.GetStage();
 
         // Reset movedDialogue boolean to make sure starting dialogue plays after dialogue is queued
-        GameStateManager.dialogueManager.dialogueList.movedDialogue = false;
+        GameStateManager.dialogueManager.movedDialogue = false;
 
         Debug.Log("Attempting to initialize grid");
         InitializeGrid();
@@ -227,6 +227,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     void Update() {
+
         if (EnemyTotal != 0) {
             if (EnemyTotal == GetDeadEnemies() && GameStateManager.GetLevelClear() == false) {
                 GameStateManager.SetLevelClear(true);
@@ -234,14 +235,21 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
 
-        if (doneWithLevel && GameStateManager.dialogueManager.dialogueList.priority != null && GameStateManager.dialogueManager.dialogueList.movedDialogue) {
+        // Play any dialogue that needs to be played after the level is cleared
+        if (doneWithLevel && GameStateManager.dialogueManager.priority != null && GameStateManager.dialogueManager.movedDialogue) {
 
             doneWithLevel = false;
 
-            Debug.Log("Triggered Dialogue");
+            Debug.Log("Triggered end-of-level dialogue!");
             
-            // Plays the first dialogue in the priority queue (last entry in the list)
-            GameStateManager.dialogueManager.StartDialogue(GameStateManager.dialogueManager.dialogueList.priority[^1]);
+            // Create new priority list only for this dialogue source (e.g. only Fallow dialogue)
+            List<Dialogue> sourceList = new()
+            {
+                GameStateManager.dialogueManager.priority.Find(x => x.id.Contains(GameStateManager.dialogueManager.callDialogueList.id_prefix.ToString()) == true)
+            };
+            sourceList.Sort();
+
+            GameStateManager.dialogueManager.StartDialogue(sourceList[0]);
         }
     }
     void InitializeGrid() {
@@ -1138,6 +1146,72 @@ public class WalkerGenerator : MonoBehaviour
                             
                         } else {
                             Debug.Log(commonEnemies[c] + " failed the spawn roll! " + spawnChance);
+                        }
+
+                    } else {
+                        Debug.Log("Could not find Enemy script component on this enemy!");
+                    }
+                }
+            }
+        }
+
+        // IF LEVEL HAS SOMEHOW SPAWNED ZERO ENEMIES
+        if (enemyTotal == 0) {
+
+            Debug.LogWarning("No enemies were spawned on generation! Repopulating.");
+
+            if (!IsArrayEmpty(commonEnemies) && !bossLevel) {
+
+                // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+                int commonRange = UnityEngine.Random.Range(4, 5);
+
+                // For every enemy that needs to be generated
+                for (int r = 0; r < commonRange; r++) {
+
+                    // Generate random index to pick enemies from list
+                    int commonIndex = UnityEngine.Random.Range(0, commonEnemies.Length);
+
+                    // If able to get script—
+                    if (commonEnemies[commonIndex].TryGetComponent<Enemy>(out var enemy) || commonEnemies[commonIndex].GetComponentInChildren<Enemy>()) {
+
+                        if (enemy == null) {
+                            enemy = commonEnemies[commonIndex].GetComponentInChildren<Enemy>();
+                        }
+                        
+                        // Generates random number to pick Enemy spawnpoint
+                        int rand = GetRandomTile();
+
+                        // For as many floor tiles as there are in the tilemap:
+                        for (int i = 0; i < tileListX.Count; i++) {
+
+                            // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
+                            if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
+
+                                Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[rand], tileListY[rand]));
+
+                                if (genPos.x <= player.transform.position.x + spawnRadiusX 
+                                && genPos.x >= player.transform.position.x - spawnRadiusX
+                                && genPos.y <= player.transform.position.y + spawnRadiusY 
+                                && genPos.y >= player.transform.position.y - spawnRadiusY) {
+                                    rand = GetRandomTile();
+                                } else {
+                                    
+                                    // Spawns Enemy
+                                    if (commonEnemies[commonIndex].GetComponentInChildren<Enemy>()) {
+                                        commonEnemies[commonIndex].GetComponentInChildren<Enemy>().Create(commonEnemies[commonIndex], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
+                                        enemyTotal++;
+                                        break;
+                                    } else {
+                                        enemy.Create(commonEnemies[commonIndex], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                        enemyTotal++;
+                                        break;
+                                    }
+                                }
+                            } else {
+                                
+                                // Generates random number to pick Enemy spawnpoint
+                                rand = GetRandomTile();
+                            }
                         }
 
                     } else {

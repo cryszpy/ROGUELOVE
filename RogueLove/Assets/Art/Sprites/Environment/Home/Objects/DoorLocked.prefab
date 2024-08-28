@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 8094304940018619601}
   - component: {fileID: 3815975596682347141}
   - component: {fileID: 6502053842102480139}
-  - component: {fileID: 2711217130718836790}
+  - component: {fileID: 7271603616461583086}
   m_Layer: 0
   m_Name: DoorLocked
   m_TagString: Untagged
@@ -177,7 +177,7 @@ PolygonCollider2D:
       - {x: -0.5, y: -0.75}
       - {x: 0.5, y: -0.75}
   m_UseDelaunayMesh: 0
---- !u!114 &2711217130718836790
+--- !u!114 &7271603616461583086
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -186,8 +186,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1605900958218996621}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a295a00b12211433f80ce051a298de12, type: 3}
+  m_Script: {fileID: 11500000, guid: ce9ebe3b8b3cf4cbfacf98e48ee49d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  dialogueList: {fileID: 11400000, guid: 2ec10d1308b824b2a81491f96b993292, type: 2}
+  dialogueManager: {fileID: 0}
   inRadius: 0
-  areaIndex: -2

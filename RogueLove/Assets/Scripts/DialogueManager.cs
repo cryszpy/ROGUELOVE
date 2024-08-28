@@ -20,7 +20,7 @@ public class DialogueManager : MonoBehaviour
 
     private Queue<string> sentences;
 
-    public DialogueList dialogueList;
+    public DialogueList callDialogueList;
 
     [SerializeField] private GameObject continueButton;
 
@@ -30,12 +30,15 @@ public class DialogueManager : MonoBehaviour
 
     [Header("VARIABLES")]
 
+    public List<Dialogue> priority;
+
     [SerializeField] private float textCPS;
 
     [SerializeField] private GAMESTATE previousGameState;
 
-    /* private static bool playDialogue = false;
-    public static bool PlayDialogue { get => playDialogue; set => playDialogue = value; } */
+    public bool movedDialogue = false;
+
+    public bool playingDialogue = false;
 
     // Start is called before the first frame update
     void Start()
@@ -43,29 +46,54 @@ public class DialogueManager : MonoBehaviour
         sentences = new Queue<string>();
     }
 
-    public void AddRandomDialogueOfType(DialogueType type) {
-
-        // Checks if the added dialogue type has run out of available options, and resets if so
-        CheckEmpty(type);
-
-        // Gets a random piece of dialogue of a specific type
-        int rand = UnityEngine.Random.Range(0, dialogueList.GetDialogue(type).Count - 1);
-
-        // Adds that piece of dialogue to the end of the priority queue (highest priority) and removes it from available pool
-        dialogueList.DiscardDialogue(dialogueList.GetDialogue(type)[rand], type);
-
-        Debug.Log("Added random dialogue of type: " + type);
-    }
-
-    private void CheckEmpty(DialogueType type) {
+    public void CheckIfEmpty(List<Dialogue> list, List<Dialogue> seenList) {
 
         // If dialogue type list has run out of available dialogue, then—
-        if (dialogueList.GetDialogue(type).Count == 0 && dialogueList.GetSeenDialogue(type).Count != 0) {
+        if (list.Count == 0 && seenList.Count != 0) {
 
             // Reset dialogue and reshuffle
-            dialogueList.ResetDialogue(dialogueList.GetSeenDialogue(type), dialogueList.GetDialogue(type));
+            ResetDialogue(seenList, list);
 
-            Debug.Log("All dialogues of type: " + type + " have been exhausted! Reshuffled.");
+            Debug.Log("All dialogues of type: " + list + " have been exhausted! Reshuffled.");
+        }
+    }
+
+    public void AddRandomNoReqDialogue(DialogueList dialogueList) {
+        
+        CheckIfEmpty(dialogueList.noRequirements, dialogueList.seenNoRequirements);
+
+        // Gets a random piece of dialogue of a specific type
+        int rand = UnityEngine.Random.Range(0, dialogueList.noRequirements.Count - 1);
+
+        // Adds that piece of dialogue to the priority list
+        priority.Add(dialogueList.noRequirements[rand]);
+
+        // Removes it from available pool
+        DiscardDialogue(dialogueList.noRequirements[rand], dialogueList.noRequirements, dialogueList.seenNoRequirements);
+
+        Debug.Log("Added random no requirements dialogue!");
+    }
+
+    public void DiscardDialogue(Dialogue dialogue, List<Dialogue> dialogues, List<Dialogue> seenDialogues) {
+
+        seenDialogues.Add(dialogue);
+        dialogues.Remove(dialogue);
+        movedDialogue = true;
+    }
+
+    public void ResetDialogue(List<Dialogue> swapFrom, List<Dialogue> swapTo) {
+        foreach (Dialogue dialogue in swapFrom.ToArray()) {
+            swapTo.Add(dialogue);
+            swapFrom.Remove(dialogue);
+        }
+        ShuffleList(swapTo);
+    }
+
+    public void ShuffleList(List<Dialogue> list) {
+
+        for(int i = list.Count - 1; i > 0; i--) {
+            int j = UnityEngine.Random.Range(0, i + 1);
+            (list[j], list[i]) = (list[i], list[j]);
         }
     }
 
@@ -73,30 +101,33 @@ public class DialogueManager : MonoBehaviour
 
         // UI ANIMATOR REFERENCES
 
-        if (GameObject.FindGameObjectWithTag("EnergyBar").TryGetComponent<Animator>(out var energybar)) {
-            uiElements.Add(energybar);
-        } else {
-            Debug.LogError("Could not find energy bar script!");
-        }
+        if (GameStateManager.GetStage() != 0) {
 
-        if (GameObject.FindGameObjectWithTag("PlayerHealth").TryGetComponent<Animator>(out var healthbar)) {
-            uiElements.Add(healthbar);
-        } else {
-            Debug.LogError("Could not find health bar script!");
-        }
+            if (GameObject.FindGameObjectWithTag("EnergyBar").TryGetComponent<Animator>(out var energybar)) {
+                uiElements.Add(energybar);
+            } else {
+                Debug.LogError("Could not find energy bar script!");
+            }
 
-        if (GameObject.FindGameObjectWithTag("CoinsUI").TryGetComponent<Animator>(out var coins)) {
-            uiElements.Add(coins);
-        } else {
-            Debug.LogError("Could not find coins UI script!");
-        }
+            if (GameObject.FindGameObjectWithTag("PlayerHealth").TryGetComponent<Animator>(out var healthbar)) {
+                uiElements.Add(healthbar);
+            } else {
+                Debug.LogError("Could not find health bar script!");
+            }
 
-        if (GameObject.FindGameObjectWithTag("AmmoBar").TryGetComponent<Animator>(out var ammobar)) {
-            uiElements.Add(ammobar);
-        } else {
-            Debug.LogError("Could not find ammo bar script!");
-        }
+            if (GameObject.FindGameObjectWithTag("CoinsUI").TryGetComponent<Animator>(out var coins)) {
+                uiElements.Add(coins);
+            } else {
+                Debug.LogError("Could not find coins UI script!");
+            }
 
+            if (GameObject.FindGameObjectWithTag("AmmoBar").TryGetComponent<Animator>(out var ammobar)) {
+                uiElements.Add(ammobar);
+            } else {
+                Debug.LogError("Could not find ammo bar script!");
+            }
+        }
+    
         // DIALOGUE UI REFERENCES
 
         if (continueButton == null) {
@@ -128,8 +159,14 @@ public class DialogueManager : MonoBehaviour
 
     public void StartDialogue (Dialogue dialogue) {
         Debug.Log("Started conversation with + " + dialogue.characterName);
+        playingDialogue = true;
 
         FindReferences();
+
+        // Enables the continue button
+        if (!continueButton.activeSelf) {
+            continueButton.SetActive(true);
+        }
 
         if (uiElements.Count != 0) {
             foreach (Animator element in uiElements) {
@@ -139,7 +176,7 @@ public class DialogueManager : MonoBehaviour
 
         currentDialogue = dialogue;
 
-        dialogueList.priority.Remove(dialogue);
+        priority.Remove(dialogue);
 
         animator.SetBool("IsOpen", true);
 
@@ -211,13 +248,15 @@ public class DialogueManager : MonoBehaviour
         }
 
         // Clears the priority list of any queued dialogue
-        dialogueList.priority.Clear();
+        priority.Clear();
 
         // Plays closing dialogue box animation
         animator.SetBool("IsOpen", false);
 
         // Resets game state to previous state
         GameStateManager.SetState(previousGameState);
+
+        playingDialogue = false;
 
         Debug.Log("End of conversation.");
     }
