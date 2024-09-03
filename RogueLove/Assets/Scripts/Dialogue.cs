@@ -20,9 +20,7 @@ public class Dialogue : ScriptableObject, IComparable
 
     public bool requirementMet;
 
-    public int storyline;
-
-    public int storylineScene;
+    public CallDialogueType callDialogueType;
 
     public bool question;
 
@@ -76,4 +74,8 @@ public enum DialogueRequirementType {
     HAS_DIED, 
     HAS_NOT_OPENED_CHEST, 
     IS_ON_FIRE
+}
+
+public enum CallDialogueType {
+    NONE, DEFAULT, SUPPORT, QUEST, SHOP, TRADE
 }

@@ -75,6 +75,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7f9aa0da60fde4522a7e9486770a5ab6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   dialogueSprite: {fileID: 0}
   nameText: {fileID: 0}
   dialogueText: {fileID: 0}
@@ -86,4 +87,10 @@ MonoBehaviour:
   priority: []
   textCPS: 0.03
   previousGameState: 0
+  callChances:
+  - 0.25
+  - 0.5
+  - 0.75
+  - 1
   movedDialogue: 0
+  playingDialogue: 0

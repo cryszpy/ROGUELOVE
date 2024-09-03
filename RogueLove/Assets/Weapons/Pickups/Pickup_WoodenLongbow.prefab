@@ -75,7 +75,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1049480431
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
   m_Sprite: {fileID: 21300000, guid: 8a549412976f744dd9044ff8e3dec4a7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2b5381f312e4208bfd1d95b5829191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  weaponObject: {fileID: 4603566924701312467, guid: d8068fad8f1594103bdeec90c03cf537, type: 3}
-  weaponID: 13
+  objectToSpawn: {fileID: 4603566924701312467, guid: d8068fad8f1594103bdeec90c03cf537, type: 3}
   dropped: 1
   weaponObjectRarity: 0
+  weaponID: 13

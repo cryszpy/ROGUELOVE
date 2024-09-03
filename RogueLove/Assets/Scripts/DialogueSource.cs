@@ -60,6 +60,7 @@ public class DialogueSource : MonoBehaviour
         }
     }
 
+    // Check if dialogue with requirements can be added, and if not, then add a noReq dialogue
     public virtual void AddDialogue() {
 
         int counter = 0;
@@ -75,7 +76,7 @@ public class DialogueSource : MonoBehaviour
             for (int i = 0; i < dialogue.requirements.Count; i++) {
 
                 // Check the requirements
-                if (CheckRequirements(dialogue.requirements[i])) {
+                if (dialogueManager.CheckRequirements(dialogue.requirements[i], player)) {
 
                     // Add it to the priority list if all requirements have been fulfilled
                     dialogueManager.priority.Add(dialogue);
@@ -91,44 +92,7 @@ public class DialogueSource : MonoBehaviour
         if (counter == 0) {
 
             // Add a random no requirements dialogue
-            dialogueManager.AddRandomNoReqDialogue(dialogueList);
-        }
-    }
-
-    public virtual bool CheckRequirements(DialogueRequirement requirement) {
-
-        switch (requirement.reqType) {
-
-            case DialogueRequirementType.IS_HOLDING:
-                if (player.heldWeapons[PlayerController.CurrentWeaponIndex] == requirement.objectToFind) {
-                    return true;
-                } else {
-                    return false;
-                }
-            case DialogueRequirementType.IS_CARRYING:
-                return true;
-            case DialogueRequirementType.HAS_TALKED_TO:
-                return true;
-            case DialogueRequirementType.HAS_KILLED:
-                return true;
-            case DialogueRequirementType.STAGE_NUM:
-                return true;
-            case DialogueRequirementType.LEVEL_NUM:
-                return true;
-            case DialogueRequirementType.ENERGY_NUM:
-                return true;
-            case DialogueRequirementType.HEALTH_NUM:
-                return true;
-            case DialogueRequirementType.SPEED_NUM:
-                return true;
-            case DialogueRequirementType.HAS_DIED:
-                return true;
-            case DialogueRequirementType.HAS_NOT_OPENED_CHEST:
-                return true;
-            case DialogueRequirementType.IS_ON_FIRE:
-                return true;
-            default:
-                return false;
+            dialogueManager.AddRandomNoReqDialogue(dialogueList.noRequirements, dialogueList.seenNoRequirements);
         }
     }
 

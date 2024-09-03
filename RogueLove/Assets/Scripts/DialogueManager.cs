@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using TMPro;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -9,6 +10,8 @@ public class DialogueManager : MonoBehaviour
 {
 
     [Header("SCRIPT REFERENCES")]
+
+    public PlayerController player;
 
     [SerializeField] private Image dialogueSprite;
 
@@ -36,6 +39,9 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private GAMESTATE previousGameState;
 
+    [Tooltip("Index 1 -> Support calls, Index 2 -> Quest calls, Index 3 -> Shop calls, Index 4 -> Trade calls")]
+    [SerializeField] private float[] callChances;
+
     public bool movedDialogue = false;
 
     public bool playingDialogue = false;
@@ -58,20 +64,163 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void AddRandomNoReqDialogue(DialogueList dialogueList) {
+    public void AddRandomNoReqDialogue(List<Dialogue> list, List<Dialogue> seenList) {
         
-        CheckIfEmpty(dialogueList.noRequirements, dialogueList.seenNoRequirements);
+        CheckIfEmpty(list, seenList);
 
         // Gets a random piece of dialogue of a specific type
-        int rand = UnityEngine.Random.Range(0, dialogueList.noRequirements.Count - 1);
+        int rand = UnityEngine.Random.Range(0, list.Count - 1);
 
         // Adds that piece of dialogue to the priority list
-        priority.Add(dialogueList.noRequirements[rand]);
+        priority.Add(list[rand]);
 
         // Removes it from available pool
-        DiscardDialogue(dialogueList.noRequirements[rand], dialogueList.noRequirements, dialogueList.seenNoRequirements);
+        DiscardDialogue(list[rand], list, seenList);
 
-        Debug.Log("Added random no requirements dialogue!");
+        Debug.Log("Added random no requirements dialogue from list: " + list);
+    }
+
+    public void AddCallDialogue(DialogueList dialogueList, PlayerController player) {
+
+        int counter = 0;
+
+        // REQUIREMENTS DIALOGUE is prioritized first
+
+        CheckIfEmpty(dialogueList.requirements, dialogueList.seenRequirements);
+
+        // For every dialogue with a requirement—
+        foreach (Dialogue dialogue in dialogueList.requirements) {
+
+            // For every requirement that piece of dialogue has—
+            for (int i = 0; i < dialogue.requirements.Count; i++) {
+
+                // Check the requirements
+                if (CheckRequirements(dialogue.requirements[i], player)) {
+
+                    // Add it to the priority list if all requirements have been fulfilled
+                    priority.Add(dialogue);
+                    counter++;
+                    Debug.Log("Added a fulfilled CALL requirement dialogue!");
+                }
+            }
+        }
+
+        // If no call requirements dialogue is fulfilled, then roll for special call type / normal type
+
+        if (counter == 0) {
+
+            // Randomly generates what type of call to play upon energy bar filled
+            float rand = UnityEngine.Random.value;
+
+            // If a special type of call is activated, play that
+            if (rand <= (1/6)) {
+                SelectCallType(dialogueList, player);
+            } 
+            // Else, play a random Fallow call dialogue
+            else {
+                AddRandomNoReqDialogue(dialogueList.noRequirements, dialogueList.seenNoRequirements);
+            }
+        }
+    }
+
+    private void SelectCallType(DialogueList dialogueList, PlayerController player) {
+
+        CheckIfEmpty(dialogueList.noRequirements, dialogueList.seenNoRequirements);
+
+        float rand = Random.value;
+
+        // Support calls
+        if (rand <= callChances[0]) {
+            //SelectCallDialogue(dialogueList, CallDialogueType.SUPPORT);
+            Debug.Log("WOULD'VE PLAYED A SUPPORT CALL!");
+        } 
+        // Quest calls
+        else if (rand <= callChances[1]) {
+            //SelectCallDialogue(dialogueList, CallDialogueType.QUEST);
+            Debug.Log("WOULD'VE PLAYED A QUEST CALL!");
+        }
+        // Shop calls 
+        else if (rand <= callChances[2]) {
+            //SelectCallDialogue(dialogueList, CallDialogueType.SHOP);
+            Debug.Log("WOULD'VE PLAYED A SHOP CALL!");
+        } 
+        // Trade calls
+        else if (rand <= callChances[3]) {
+            //SelectCallDialogue(dialogueList, CallDialogueType.TRADE);
+            Debug.Log("WOULD'VE PLAYED A TRADE CALL!");
+        }
+    }
+
+    private void SelectCallDialogue(DialogueList dialogueList, CallDialogueType callType) {
+
+        // Create new list only for this call type (e.g. only Support Call dialogue)
+        List<Dialogue> sourceList = new()
+        {
+            dialogueList.noRequirements.Find(x => x.callDialogueType == callType)
+        };
+        
+        // Randomly pick one dialogue of call type to play
+        int rand = Random.Range(0, sourceList.Count - 1);
+
+        // Add this to the priority list
+        if (sourceList.Count != 0) {
+            priority.Add(sourceList[rand]);
+        } else {
+            Debug.LogWarning("There are no dialogues of type: " + callType);
+        }
+    }
+
+    public void PlayCallDialogue(DialogueList dialogueList) {
+
+        // Create new priority list only for this dialogue source (e.g. only Fallow dialogue)
+        List<Dialogue> sourceList = new()
+        {
+            priority.Find(x => x.callDialogueType != CallDialogueType.NONE)
+        };
+        sourceList.Sort();
+
+        if (sourceList.Count != 0) {
+            GameStateManager.dialogueManager.StartDialogue(sourceList[0]);
+        } else {
+            Debug.LogWarning("There is nothing in the priority dialogue queue!");
+        }
+    }
+
+    public bool CheckRequirements(DialogueRequirement requirement, PlayerController player) {
+
+        switch (requirement.reqType) {
+
+            case DialogueRequirementType.IS_HOLDING:
+                if (player.heldWeapons[PlayerController.CurrentWeaponIndex] == requirement.objectToFind) {
+                    return true;
+                } else {
+                    return false;
+                }
+            case DialogueRequirementType.IS_CARRYING:
+                return true;
+            case DialogueRequirementType.HAS_TALKED_TO:
+                return true;
+            case DialogueRequirementType.HAS_KILLED:
+                return true;
+            case DialogueRequirementType.STAGE_NUM:
+                return true;
+            case DialogueRequirementType.LEVEL_NUM:
+                return true;
+            case DialogueRequirementType.ENERGY_NUM:
+                return true;
+            case DialogueRequirementType.HEALTH_NUM:
+                return true;
+            case DialogueRequirementType.SPEED_NUM:
+                return true;
+            case DialogueRequirementType.HAS_DIED:
+                return true;
+            case DialogueRequirementType.HAS_NOT_OPENED_CHEST:
+                return true;
+            case DialogueRequirementType.IS_ON_FIRE:
+                return true;
+            default:
+                return false;
+        }
     }
 
     public void DiscardDialogue(Dialogue dialogue, List<Dialogue> dialogues, List<Dialogue> seenDialogues) {
@@ -248,7 +397,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         // Clears the priority list of any queued dialogue
-        priority.Clear();
+        //priority.Clear();
 
         // Plays closing dialogue box animation
         animator.SetBool("IsOpen", false);

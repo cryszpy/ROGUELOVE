@@ -2,45 +2,21 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class WeaponPickup : MonoBehaviour
+[System.Serializable]
+public class WeaponPair {
+    public GameObject pickupObject;
+    public WeaponPickup pickupScript;
+    public float dropChance;
+}
+
+public class WeaponPickup : BasePickup
 {
-    public GameObject weaponObject;
-
-    public int weaponID;
-
-    private PlayerController player;
-    
-    private bool playerFound;
-
-    private bool playerInRadius;
-
-    public bool dropped = false;
 
     [SerializeField] private WeaponRarity weaponObjectRarity;
 
-    private void Awake() {
-        playerFound = false;
-    }
+    public int weaponID;
 
-    private void OnTriggerEnter2D(Collider2D collider) {
-        if (collider.CompareTag("Player")) {
-
-            playerInRadius = true;
-
-            if (collider.gameObject.TryGetComponent<PlayerController>(out var controller)) {
-                player = controller;
-                playerFound = true;
-            }
-        }
-    }
-
-    private void OnTriggerExit2D(Collider2D collider) {
-        if (collider.CompareTag("Player")) {
-            playerInRadius = false;
-        }
-    }
-
-    private void Update() {
+    public override void Update() {
 
         if (!playerFound) {
             return;
@@ -68,18 +44,18 @@ public class WeaponPickup : MonoBehaviour
     public void PickupWeapon(bool replace) {
 
         if (dropped) {
-            weaponObject.transform.position = player.weaponPivot.transform.position;
-            weaponObject.transform.parent = player.weaponPivot.transform;
+            objectToSpawn.transform.position = player.weaponPivot.transform.position;
+            objectToSpawn.transform.parent = player.weaponPivot.transform;
 
             if (replace) {
-                player.heldWeapons[PlayerController.CurrentWeaponIndex] = weaponObject;
+                player.heldWeapons[PlayerController.CurrentWeaponIndex] = objectToSpawn;
             } else {
-                player.heldWeapons.Add(weaponObject);
+                player.heldWeapons.Add(objectToSpawn);
             }
 
-            UpdateWeapon(weaponObject);
+            UpdateWeapon(objectToSpawn);
         } else {
-            GameObject weapon = Instantiate(weaponObject, player.weaponPivot.transform.position, Quaternion.identity, player.weaponPivot.transform);
+            GameObject weapon = Instantiate(objectToSpawn, player.weaponPivot.transform.position, Quaternion.identity, player.weaponPivot.transform);
 
             if (replace) {
                 player.heldWeapons[PlayerController.CurrentWeaponIndex] = weapon;
@@ -119,9 +95,5 @@ public class WeaponPickup : MonoBehaviour
                 player.ammoBar.weaponSprite.sprite = secondary.sprite.sprite;
             }
         }
-    }
-
-    private void RemoveObject() {
-        Destroy(gameObject);
     }
 }

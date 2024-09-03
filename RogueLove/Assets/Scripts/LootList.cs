@@ -8,12 +8,6 @@ public enum WeaponRarity {
 }
 
 [Serializable]
-public class WeaponPair {
-    public GameObject pickupObject;
-    public WeaponPickup pickupScript;
-}
-
-[Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/LootList")]
 public class LootList : ScriptableObject
 {

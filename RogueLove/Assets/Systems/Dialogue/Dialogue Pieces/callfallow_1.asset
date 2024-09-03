@@ -10,18 +10,22 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 2375cc55695de471ca0957b5411488b6, type: 3}
-  m_Name: Hey Brat!
+  m_Name: callfallow_1
   m_EditorClassIdentifier: 
-  id: fallow_0
+  id: callfallow_1
   characterSprite: {fileID: 21300000, guid: 7abc80531db9c48e1bf4c82cd3633eda, type: 3}
   characterName: FALLOW
-  seenBefore: 0
-  storyline: 0
-  storylineScene: 0
+  priority: 0
+  requirements:
+  - reqType: 1
+    objectToFind: {fileID: 4603566924701312467, guid: 8c41b0dbd69f14b17bd2657dcd08582e, type: 3}
+    statReqToCheck: 
+  requirementMet: 0
+  callDialogueType: 1
   question: 0
   choice: 0
   choices: []
+  followUp: []
   sentences:
-  - Test dialogue one.
-  - Test dialogue two!
-  - Test dialogue three?
+  - YOOOOOOO I can tell from over the phone that you have a sick gun!
+  - 'Very swag :tm:'

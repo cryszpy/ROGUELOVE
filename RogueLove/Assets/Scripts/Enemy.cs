@@ -59,8 +59,11 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("Time it takes for the enemy to charge a shot.")]
     public float chargeTime;
 
-    [Tooltip("List of this enemy's possible loot drops (excluding coins and energy).")]
-    [SerializeField] private List<GameObject> dropsList;
+    [Tooltip("List of this enemy's possible weapon drops.")]
+    [SerializeField] private List<WeaponPair> weaponDropsList;
+
+    [Tooltip("List of this enemy's possible weapon drops.")]
+    [SerializeField] private List<ItemPair> itemDropsList;
 
     [Tooltip("A reference to the bronze coin prefab for spawning.")]
     [SerializeField] private GameObject coinBronze;
@@ -370,7 +373,7 @@ public abstract class Enemy : MonoBehaviour
         float tileY = UnityEngine.Random.Range(this.transform.position.y - followCollider.radius, 
             this.transform.position.y + followCollider.radius);
 
-        Vector3 tile = new Vector3(tileX, tileY);
+        Vector3 tile = new(tileX, tileY);
 
         if (map.CheckGroundTile(tile)) {
             return tile;
@@ -409,7 +412,44 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    // ENCLOSING FUNCTION FOR ENEMY DROPS
     public virtual void SpawnDrops() {
+
+        DropCoins();
+
+        DropItems();
+    }
+
+    // Enemy's item drops
+    public virtual void DropItems() {
+
+        // WEAPONS
+        foreach (var weaponDrop in weaponDropsList) {
+
+            float rand = UnityEngine.Random.value;
+
+            if (rand <= weaponDrop.dropChance) {
+
+                // PUT DROP CODE HERE
+                Debug.Log("Created pickup drop!");
+            }
+        }
+
+        // ITEMS
+        foreach (var itemDrop in itemDropsList) {
+
+            float rand = UnityEngine.Random.value;
+
+            if (rand <= itemDrop.dropChance) {
+
+                // PUT DROP CODE HERE
+                Debug.Log("Created pickup drop!");
+            }
+        }
+    }
+
+    // Enemy's coin drops
+    public virtual void DropCoins() {
 
         int rand = UnityEngine.Random.Range(minCoins, maxCoins);
 
@@ -465,15 +505,6 @@ public abstract class Enemy : MonoBehaviour
             // Drop bronze coins
             for (int b = 0; b < rand; b++) {
                 Create(coinBronze, this.transform.position, Quaternion.identity, this.map);
-            }
-        }
-
-        foreach (var drop in dropsList) {
-
-            int rando = UnityEngine.Random.Range(0, 11);
-
-            if (rando == 1) {
-                Debug.Log("Created pickup drop!");
             }
         }
     }

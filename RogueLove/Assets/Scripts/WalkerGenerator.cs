@@ -168,12 +168,10 @@ public class WalkerGenerator : MonoBehaviour
         if (oTilemap == null) {
             oTilemap = GameObject.Find("Obstacles").GetComponent<Tilemap>();
         }
-        if (tiles == null) {
-            tiles = GameObject.FindGameObjectWithTag("AreaTiles").GetComponent<AreaTiles>();
-        }
         if (player == null) {
             player = GameObject.FindGameObjectWithTag("Player");
             playerCont = player.GetComponent<PlayerController>();
+            GameStateManager.dialogueManager.player = playerCont;
         }
         if (cameraLookAt == null) {
             cameraLookAt = GameObject.FindGameObjectWithTag("CameraLookAt");
@@ -242,14 +240,7 @@ public class WalkerGenerator : MonoBehaviour
 
             Debug.Log("Triggered end-of-level dialogue!");
             
-            // Create new priority list only for this dialogue source (e.g. only Fallow dialogue)
-            List<Dialogue> sourceList = new()
-            {
-                GameStateManager.dialogueManager.priority.Find(x => x.id.Contains(GameStateManager.dialogueManager.callDialogueList.id_prefix.ToString()) == true)
-            };
-            sourceList.Sort();
-
-            GameStateManager.dialogueManager.StartDialogue(sourceList[0]);
+            GameStateManager.dialogueManager.PlayCallDialogue(GameStateManager.dialogueManager.callDialogueList);
         }
     }
     void InitializeGrid() {

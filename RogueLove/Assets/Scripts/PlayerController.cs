@@ -8,6 +8,7 @@ using System;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
+using NUnit.Framework.Internal;
 
 public class PlayerController : MonoBehaviour
 {
@@ -151,8 +152,8 @@ public class PlayerController : MonoBehaviour
                     // Play battery full animation here!!
                     Debug.Log("Battery full!");
 
-                    // Replace later with probabilities for different types of calls
-                    GameStateManager.dialogueManager.AddRandomNoReqDialogue(GameStateManager.dialogueManager.callDialogueList);
+                    // Add a call dialogue piece
+                    GameStateManager.dialogueManager.AddCallDialogue(GameStateManager.dialogueManager.callDialogueList, GameStateManager.dialogueManager.player);
 
                     // Experience carries over to the next level (still need to make exponentially higher max energy reqs)
                     experience -= maxEnergy;
@@ -193,7 +194,6 @@ public class PlayerController : MonoBehaviour
             currentHealth = value;
             if(currentHealth <= 0) {
                 currentHealth = 0;
-                lootList.ResetAllWeapons();
                 StartCoroutine(PlayerDeath());
             }
         }
@@ -280,7 +280,7 @@ public class PlayerController : MonoBehaviour
 
                 AmmoMaxMultiplier = 1;
 
-                GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                 heldWeapons.Add(weaponObject);
 
                 if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
@@ -311,9 +311,10 @@ public class PlayerController : MonoBehaviour
 
         // Add Thornbloom if ID matches and player is not currently holding weapons
         if (PrimaryWeaponID == 1 && heldWeapons.Count == 0) {
-            GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+            GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
             heldWeapons.Add(weaponObject);
         }
+
         // Add specified ID-matched weapon as primary weapon
         else if (PrimaryWeaponID != 1 && PrimaryWeaponID != 0) {
 
@@ -324,27 +325,27 @@ public class PlayerController : MonoBehaviour
 
                 case WeaponRarity.COMMON:
                     pair = lootList.seenCommonWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
-                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                     heldWeapons.Add(weaponObject);
                     break;
                 case WeaponRarity.UNCOMMON:
                     pair = lootList.seenUncommonWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
-                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                     heldWeapons.Add(weaponObject);
                     break;
                 case WeaponRarity.RARE:
                     pair = lootList.seenRareWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
-                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                     heldWeapons.Add(weaponObject);
                     break;
                 case WeaponRarity.EPIC:
                     pair = lootList.seenEpicWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
-                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                     heldWeapons.Add(weaponObject);
                     break;
                 case WeaponRarity.LEGENDARY:
                     pair = lootList.seenLegendaryWeapons.Find(x => x.pickupScript.weaponID == PrimaryWeaponID);
-                    weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                    weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                     heldWeapons.Add(weaponObject);
                     break;
             }
@@ -358,34 +359,36 @@ public class PlayerController : MonoBehaviour
 
             if (SecondaryWeaponID == 1) {
                 pair = defaultWeapon;
-                weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                 heldWeapons.Add(weaponObject);
             } else {
                 switch (SecondaryWeaponRarity) {
 
                     case WeaponRarity.COMMON:
                         pair = lootList.seenCommonWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
-                        weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                        Debug.Log(pair);
+                        Debug.Log(pair.pickupScript.objectToSpawn);
+                        weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                         heldWeapons.Add(weaponObject);
                         break;
                     case WeaponRarity.UNCOMMON:
                         pair = lootList.seenUncommonWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
-                        weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                        weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                         heldWeapons.Add(weaponObject);
                         break;
                     case WeaponRarity.RARE:
                         pair = lootList.seenRareWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
-                        weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                        weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                         heldWeapons.Add(weaponObject);
                         break;
                     case WeaponRarity.EPIC:
                         pair = lootList.seenEpicWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
-                        weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                        weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                         heldWeapons.Add(weaponObject);
                         break;
                     case WeaponRarity.LEGENDARY:
                         pair = lootList.seenLegendaryWeapons.Find(x => x.pickupScript.weaponID == SecondaryWeaponID);
-                        weaponObject = Instantiate(pair.pickupScript.weaponObject, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                        weaponObject = Instantiate(pair.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                         heldWeapons.Add(weaponObject);
                         break;
                 }
@@ -506,7 +509,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log(CurrentWeaponIndex);
 
             // Drop a new pickup weapon
-            script.weaponObject = heldWeapons[CurrentWeaponIndex];
+            script.objectToSpawn = heldWeapons[CurrentWeaponIndex];
 
             // Delete dropped weapon
             if (heldWeapons.Count == 2) {
@@ -858,6 +861,7 @@ public class PlayerController : MonoBehaviour
         string pathMap = Application.persistentDataPath + "/map.chris";
         string pathPlayer = Application.persistentDataPath + "/player.franny";
 
+        lootList.ResetAllWeapons();
         if (File.Exists(pathHome)) {
             GameStateManager.SetLevel(0);
             GameStateManager.SetStage(0);
