@@ -61,12 +61,12 @@ public class TransitionManager : MonoBehaviour
 
     public void EndLoad() {
         SetLoadingBar(false);
-        animator.SetTrigger("LeafEnd");
+        animator.SetTrigger("LightLeakEnd");
     }
 
     IEnumerator LoadLevel(int index) {
         Time.timeScale = 1f;
-        animator.SetTrigger("LeafStart");
+        animator.SetTrigger("LightLeakStart");
 
         yield return new WaitForSeconds(loadTime);
 
@@ -84,7 +84,7 @@ public class TransitionManager : MonoBehaviour
         }*/
 
         if (index == 0) {
-            animator.SetTrigger("LeafEnd");
+            animator.SetTrigger("LightLeakEnd");
             SetLoadingBar(false);
             yield return null;
         }

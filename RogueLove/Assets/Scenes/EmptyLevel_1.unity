@@ -7233,7 +7233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: orthographic size
-      value: 4.796875
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -8713,10 +8713,6 @@ PrefabInstance:
     - target: {fileID: 3445701864985900919, guid: fe5dc26d6f55e4ac391ac915425336b7, type: 3}
       propertyPath: m_Name
       value: Dialogue
-      objectReference: {fileID: 0}
-    - target: {fileID: 3445701864985900919, guid: fe5dc26d6f55e4ac391ac915425336b7, type: 3}
-      propertyPath: m_IsActive
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5435914256767342696, guid: fe5dc26d6f55e4ac391ac915425336b7, type: 3}
       propertyPath: m_Pivot.x
