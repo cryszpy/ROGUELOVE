@@ -367,7 +367,7 @@ SortingGroup:
   m_GameObject: {fileID: 8974962771436559868}
   m_Enabled: 1
   m_SortingLayerID: 1049480431
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_SortAtRoot: 0
 --- !u!114 &6062100777377402982
@@ -480,6 +480,7 @@ MonoBehaviour:
   defaultWeapon:
     pickupObject: {fileID: 8481469185648990204, guid: ccda4bad0b9a44e79857fd05cc61bb67, type: 3}
     pickupScript: {fileID: 5054346420906217912, guid: ccda4bad0b9a44e79857fd05cc61bb67, type: 3}
+    dropChance: 0
   movementFilter:
     useTriggers: 0
     useLayerMask: 0
@@ -506,6 +507,7 @@ MonoBehaviour:
   ammoBar: {fileID: 0}
   dashColl: {fileID: 3295279771889110724}
   hurtShake: {fileID: 0}
+  saveIcon: {fileID: 0}
   heldWeapons: []
   canSwitchWeapons: 1
   iFrame: 0

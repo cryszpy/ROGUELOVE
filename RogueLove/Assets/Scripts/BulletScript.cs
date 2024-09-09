@@ -28,8 +28,14 @@ public class BulletScript : MonoBehaviour
     [Space(10)]
     [Header("STATS")]
 
-    [SerializeField]
-    protected float force;
+    public IgnoredCollisionsList ignoredCollisions;
+
+    protected Vector3 previousPosition;
+
+    [Tooltip("The speed at which this type of bullet fires at.")]
+    [SerializeField] protected float force;
+
+    protected Vector2 error;
 
     public float damage;
 
@@ -44,6 +50,8 @@ public class BulletScript : MonoBehaviour
     // Start is called before the first frame update
     public virtual void Start()
     {
+
+        previousPosition = transform.position;
 
         coll.enabled = true;
 
@@ -61,19 +69,56 @@ public class BulletScript : MonoBehaviour
         // DIRECTION OF THE BULLET
 
         direction = mousePos - weapon.transform.position;
+        Debug.Log(direction);
 
         if (direction == Vector3.zero) {
             direction = weapon.spawnPos.transform.position - weapon.transform.position;
         }
        
-        Vector3 rotation =  transform.position - mousePos;
+        Vector3 rotation = transform.position - mousePos;
 
-        Vector2 error = UnityEngine.Random.insideUnitCircle * accuracy;
+        // Determines the accuracy of the bullet (so bullets don't just fire in a straight line every time)
+        error = UnityEngine.Random.insideUnitCircle * accuracy;
 
+        // Sets the velocity and direction of the bullet which is acted on every frame from now on (this determines how the bullet moves)
         rb.velocity = new Vector2(direction.x, direction.y).normalized * force + new Vector2(error.x, error.y);
+
         // Rotation of the bullet (which way it is facing, NOT which direction its moving in)
         float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+    }
+
+    public void FixedUpdate() {
+
+        // Sets the previous location of the bullet in FixedUpdate for more accurate (longer) raycasting
+        previousPosition = transform.position;
+    }
+
+    public virtual void Update() {
+
+        //Debug.Log("Previous Position: " + previousPosition + "Current Position: " + rb.position);
+        Debug.DrawLine(rb.position, previousPosition, Color.yellow, 0.1f);
+        //rb.AddForce(direction.normalized * force * Time.fixedDeltaTime);
+        //transform.Translate(0, error.y + force * Time.deltaTime, 0);
+        //rb.MovePosition(transform.position + force * Time.deltaTime * direction);
+
+        // Raycasts for any missed collisions between frames
+        RaycastHit2D[] hits = Physics2D.RaycastAll(previousPosition, ((Vector3)rb.position - previousPosition).normalized, ((Vector3)rb.position - previousPosition).magnitude);
+
+        // For all objects detected in the raycast—
+        for (int i = 0; i < hits.Length; i++) {
+
+            Debug.Log(hits[i].collider.gameObject.layer + " " + hits[i].collider.transform.root.name);
+
+            // If the object hit isn't supposed to be ignored, then try to deal damage and then destroy the bullet
+            if (!ignoredCollisions.ignoredCollisions.Contains(hits[i].collider.gameObject.layer)) {
+                RegisterDamage(hits[i].collider.gameObject);
+                coll.enabled = false;
+                rb.velocity = (Vector2)direction.normalized * 0;
+                animator.SetTrigger("Destroy");
+            }
+            
+        }
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, Weapon weapon, Camera cam) {
@@ -94,16 +139,27 @@ public class BulletScript : MonoBehaviour
         }
     }
 
-    // Damage enemies or destroy self when hitting obstacles
+    // Damage enemies or destroy self when hitting obstacles that aren't meant to be ignored
     public virtual void OnTriggerEnter2D(Collider2D other) {
-        
-        direction = mousePos - transform.position;
+
+        if (!ignoredCollisions.ignoredCollisions.Contains(other.gameObject.layer)) {
+            RegisterDamage(other.gameObject);
+            Debug.Log("BRUHHHHH");
+            coll.enabled = false;
+            rb.velocity = (Vector2)direction.normalized * 0;
+            animator.SetTrigger("Destroy");
+        }
+    }
+
+    public virtual void RegisterDamage(GameObject target) {
+
+        //direction = mousePos - transform.position;
 
         // Checks whether collided object is an enemy
-        if (other.CompareTag("Enemy")) {
+        if (target.CompareTag("Enemy")) {
 
             // Tries to get the EnemyHealth component of collided enemy
-            if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
+            if (target.TryGetComponent<EnemyHealth>(out var enemy)) {
 
                 // If bullet is a flame bullet, deal fire damage
                 if (isFire && !enemy.immuneToFire) {
@@ -116,13 +172,6 @@ public class BulletScript : MonoBehaviour
             else {
                 Debug.LogError("Could not get collided enemy's EnemyHealth component!");
             }
-        }
-
-        // If collided object layer is not player (3), weapon (12), or breakables (10)
-        if (other.gameObject.layer != 3  && other.gameObject.layer != 12 && other.gameObject.layer != 10 && other.gameObject.tag != "Projectile") {
-            coll.enabled = false;
-            rb.velocity = (Vector2)direction.normalized * 0;
-            animator.SetTrigger("Destroy");
         }
     }
 

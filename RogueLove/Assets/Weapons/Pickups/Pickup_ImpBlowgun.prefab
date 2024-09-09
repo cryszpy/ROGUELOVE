@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7664968669742215844}
   - component: {fileID: 2975088654449525875}
   - component: {fileID: 5054346420906217912}
-  m_Layer: 0
+  m_Layer: 12
   m_Name: Pickup_ImpBlowgun
   m_TagString: Untagged
   m_Icon: {fileID: 0}
