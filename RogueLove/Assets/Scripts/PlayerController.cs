@@ -862,6 +862,7 @@ public class PlayerController : MonoBehaviour
         string pathPlayer = Application.persistentDataPath + "/player.franny";
 
         lootList.ResetAllWeapons();
+        
         if (File.Exists(pathHome)) {
             GameStateManager.SetLevel(0);
             GameStateManager.SetStage(0);

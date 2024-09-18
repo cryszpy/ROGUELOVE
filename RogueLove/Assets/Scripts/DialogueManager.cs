@@ -31,6 +31,8 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private List<Animator> uiElements;
 
+    public SceneInfo sceneInfo;
+
     [Header("VARIABLES")]
 
     public List<Dialogue> priority;
@@ -84,6 +86,8 @@ public class DialogueManager : MonoBehaviour
 
         int counter = 0;
 
+        List<Dialogue> fulfilledReqs = new();
+
         // REQUIREMENTS DIALOGUE is prioritized first
 
         CheckIfEmpty(dialogueList.requirements, dialogueList.seenRequirements);
@@ -99,11 +103,19 @@ public class DialogueManager : MonoBehaviour
 
                     // Add it to the priority list if all requirements have been fulfilled
                     priority.Add(dialogue);
+                    fulfilledReqs.Add(dialogue);
                     counter++;
                     Debug.Log("Added a fulfilled CALL requirement dialogue!");
                 }
             }
         }
+
+        // After requirement dialogues have been added to the priority list, remove them from the possible dialogues list
+        foreach (Dialogue dialogue in fulfilledReqs) {
+            DiscardDialogue(dialogue, dialogueList.requirements, dialogueList.seenRequirements);
+        }
+
+        fulfilledReqs.Clear();
 
         // If no call requirements dialogue is fulfilled, then roll for special call type / normal type
 
@@ -191,9 +203,12 @@ public class DialogueManager : MonoBehaviour
         switch (requirement.reqType) {
 
             case DialogueRequirementType.IS_HOLDING:
-                if (player.heldWeapons[PlayerController.CurrentWeaponIndex] == requirement.objectToFind) {
-                    return true;
+                if (player.heldWeapons[PlayerController.CurrentWeaponIndex].TryGetComponent<Weapon>(out var weapon)) {
+                    Debug.Log(requirement.targetObjectID);
+                    Debug.Log(weapon.id);
+                    return weapon.id == requirement.targetObjectID;
                 } else {
+                    Debug.LogError("Could not find component Weapon on held weapon " + player.heldWeapons[PlayerController.CurrentWeaponIndex]);
                     return false;
                 }
             case DialogueRequirementType.IS_CARRYING:
@@ -251,6 +266,7 @@ public class DialogueManager : MonoBehaviour
         // UI ANIMATOR REFERENCES
 
         if (GameStateManager.GetStage() != 0) {
+            uiElements.Clear();
 
             if (GameObject.FindGameObjectWithTag("EnergyBar").TryGetComponent<Animator>(out var energybar)) {
                 uiElements.Add(energybar);

@@ -30,3 +30,5 @@ MonoBehaviour:
   doorwayObject: {fileID: 600595444076492859, guid: 5f4696210434b47c9aabda4fe42d5233, type: 3}
   breakables:
   - {fileID: 370015407570139740, guid: 2ee1f97e3845b40499272d07022ba644, type: 3}
+  bossSceneIndexes: 02000000
+  sceneOffset: 2

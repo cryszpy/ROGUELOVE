@@ -47,6 +47,8 @@ public class BulletScript : MonoBehaviour
 
     [SerializeField] protected bool isFire;
 
+    protected bool madeContact;
+
     // Start is called before the first frame update
     public virtual void Start()
     {
@@ -54,6 +56,8 @@ public class BulletScript : MonoBehaviour
         previousPosition = transform.position;
 
         coll.enabled = true;
+
+        madeContact = false;
 
         if (animator == null) {
             Debug.Log("BulletScript animator is null! Reassigned.");
@@ -96,28 +100,31 @@ public class BulletScript : MonoBehaviour
 
     public virtual void Update() {
 
-        //Debug.Log("Previous Position: " + previousPosition + "Current Position: " + rb.position);
-        Debug.DrawLine(rb.position, previousPosition, Color.yellow, 0.1f);
-        //rb.AddForce(direction.normalized * force * Time.fixedDeltaTime);
-        //transform.Translate(0, error.y + force * Time.deltaTime, 0);
-        //rb.MovePosition(transform.position + force * Time.deltaTime * direction);
+        if (!madeContact) {
+            //Debug.Log("Previous Position: " + previousPosition + "Current Position: " + rb.position);
+            Debug.DrawLine(rb.position, previousPosition, Color.yellow, 0.1f);
+            //rb.AddForce(direction.normalized * force * Time.fixedDeltaTime);
+            //transform.Translate(0, error.y + force * Time.deltaTime, 0);
+            //rb.MovePosition(transform.position + force * Time.deltaTime * direction);
 
-        // Raycasts for any missed collisions between frames
-        RaycastHit2D[] hits = Physics2D.RaycastAll(previousPosition, ((Vector3)rb.position - previousPosition).normalized, ((Vector3)rb.position - previousPosition).magnitude);
+            // Raycasts for any missed collisions between frames
+            RaycastHit2D[] hits = Physics2D.RaycastAll(previousPosition, ((Vector3)rb.position - previousPosition).normalized, ((Vector3)rb.position - previousPosition).magnitude);
 
-        // For all objects detected in the raycast—
-        for (int i = 0; i < hits.Length; i++) {
+            // For all objects detected in the raycast—
+            for (int i = 0; i < hits.Length; i++) {
 
-            Debug.Log(hits[i].collider.gameObject.layer + " " + hits[i].collider.transform.root.name);
+                Debug.Log(hits[i].collider.gameObject.layer + " " + hits[i].collider.transform.root.name);
 
-            // If the object hit isn't supposed to be ignored, then try to deal damage and then destroy the bullet
-            if (!ignoredCollisions.ignoredCollisions.Contains(hits[i].collider.gameObject.layer)) {
-                RegisterDamage(hits[i].collider.gameObject);
-                coll.enabled = false;
-                rb.velocity = (Vector2)direction.normalized * 0;
-                animator.SetTrigger("Destroy");
+                // If the object hit isn't supposed to be ignored, then try to deal damage and then destroy the bullet
+                if (!ignoredCollisions.ignoredCollisions.Contains(hits[i].collider.gameObject.layer)) {
+                    madeContact = true;
+                    RegisterDamage(hits[i].collider.gameObject);
+                    coll.enabled = false;
+                    rb.velocity = (Vector2)direction.normalized * 0;
+                    animator.SetTrigger("Destroy");
+                }
+                
             }
-            
         }
     }
 
@@ -142,13 +149,17 @@ public class BulletScript : MonoBehaviour
     // Damage enemies or destroy self when hitting obstacles that aren't meant to be ignored
     public virtual void OnTriggerEnter2D(Collider2D other) {
 
-        if (!ignoredCollisions.ignoredCollisions.Contains(other.gameObject.layer)) {
-            RegisterDamage(other.gameObject);
-            Debug.Log("BRUHHHHH");
-            coll.enabled = false;
-            rb.velocity = (Vector2)direction.normalized * 0;
-            animator.SetTrigger("Destroy");
+        if (!madeContact) {
+            if (!ignoredCollisions.ignoredCollisions.Contains(other.gameObject.layer)) {
+                madeContact = true;
+                RegisterDamage(other.gameObject);
+                Debug.Log("BRUHHHHH");
+                coll.enabled = false;
+                rb.velocity = (Vector2)direction.normalized * 0;
+                animator.SetTrigger("Destroy");
+            }
         }
+       
     }
 
     public virtual void RegisterDamage(GameObject target) {

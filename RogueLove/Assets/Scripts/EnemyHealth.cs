@@ -27,6 +27,8 @@ public class EnemyHealth : MonoBehaviour
 
     public bool immuneToFire;
 
+    public bool wasPierceHit;
+
     public float Health {
         set {
             currentHealth = value;
@@ -51,6 +53,7 @@ public class EnemyHealth : MonoBehaviour
     }
 
     public void HurtCheck() {
+        wasPierceHit = false;
         animator.SetBool("Hurt", false);
     }
 

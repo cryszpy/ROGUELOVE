@@ -18,7 +18,7 @@ MonoBehaviour:
   priority: 0
   requirements:
   - reqType: 1
-    objectToFind: {fileID: 4603566924701312467, guid: 8c41b0dbd69f14b17bd2657dcd08582e, type: 3}
+    targetObjectID: 17
     statReqToCheck: 
   requirementMet: 0
   callDialogueType: 1

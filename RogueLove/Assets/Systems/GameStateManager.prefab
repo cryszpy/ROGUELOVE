@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8162904416319405166}
   - component: {fileID: 1304198974309830220}
-  - component: {fileID: 1649054577632431320}
   - component: {fileID: 2804473715840246968}
   m_Layer: 0
   m_Name: GameStateManager
@@ -46,23 +45,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 60c7bbb1fe7534323af07ece6a8c0363, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1649054577632431320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7135090300805884794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6447b37746c6b47c6a6c6fe2ab348ee3, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  scene:
-  - Scenes/MainMenu
-  - Scenes/Home
-  - Scenes/EmptyLevel
-  - Scenes/EmptyLevel_2
 --- !u!114 &2804473715840246968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -84,6 +66,7 @@ MonoBehaviour:
   continueButton: {fileID: 0}
   currentDialogue: {fileID: 0}
   uiElements: []
+  sceneInfo: {fileID: 11400000, guid: 79b5a47eab3644e14a8ba799bbaac43d, type: 2}
   priority: []
   textCPS: 0.03
   previousGameState: 0

@@ -14,6 +14,8 @@ public class MainMenu : MonoBehaviour
     [SerializeField]
     private GameObject pauseMenu;
 
+    [SerializeField] private SceneInfo sceneInfo;
+
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null) {
             TogglePauseMenu();
@@ -74,7 +76,7 @@ public class MainMenu : MonoBehaviour
         GameStateManager.SetSave(true);
 
         // Load level
-        TransitionManager.StartLeaf(GameStateManager.GetStage() + 1);
+        TransitionManager.StartLeaf(GameStateManager.GetStage() + sceneInfo.sceneOffset);
     }
 
     public void QuitButton() {

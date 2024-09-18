@@ -11792,11 +11792,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
-      value: 0.16145834
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: m_NormalizedViewPortRect.width
-      value: 0.6770834
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -12253,7 +12253,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &1468987815
 MonoBehaviour:
   m_ObjectHideFlags: 0

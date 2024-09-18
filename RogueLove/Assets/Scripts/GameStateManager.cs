@@ -66,8 +66,6 @@ public class GameStateManager : MonoBehaviour
         return currentStage;
     }
 
-    public static SceneList sceneList;
-
     public static bool levelClear = false;
     public static void SetLevelClear(bool condition) {
         levelClear = condition;
@@ -91,8 +89,6 @@ public class GameStateManager : MonoBehaviour
         } else {
             SetState(GAMESTATE.PLAYING);
         }
-        
-        sceneList = this.gameObject.GetComponent<SceneList>();
 
         //Debug.Log("previous scene: " + GameStateManager.PreviousScene);  // use this in any level to get the last level.
     }
@@ -107,36 +103,55 @@ public class GameStateManager : MonoBehaviour
 
         // Stages 1, 2, 5, 7, and 8 have 5 randomly-generated levels
         if (GetStage() is 1 or 2 or 5 or 7 or 8) {
-            // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
-            if (GetLevel() == 5) {
+            
+            // If level is right before boss level, load the boss level
+            if (GetLevel() == 4) {
+                IncrementLevel(1);
+
+                // Load appropriate boss level
+                TransitionManager.StartLeaf(dialogueManager.sceneInfo.bossSceneIndexes[GetStage() - 1]);
+            } 
+            // Else if last level in the stage has been reached, increment stage and set level to 1, then generate new level
+            else if (GetLevel() == 5) {
                 SetStage(GetStage() + 1);
                 SetLevel(1);
+
                 // Load level
-                TransitionManager.StartLeaf(GetStage() + 1);
+                TransitionManager.StartLeaf(GetStage() + dialogueManager.sceneInfo.sceneOffset);
             } 
             // Else, increment level and generate new level
             else {
                 IncrementLevel(1);
                 Debug.Log("INCREMENTED");
+
                 // Load level
-                TransitionManager.StartLeaf(GetStage() + 1);
+                TransitionManager.StartLeaf(GetStage() + dialogueManager.sceneInfo.sceneOffset);
             }
         } 
         // All other stages have 6 randomly-generated levels
         else {
-            // If last level in the stage has been reached, increment stage and set level to 1, then generate new level
+
+            // If level is right before boss level, load the boss level
+            if (GetLevel() == 5) {
+                IncrementLevel(1);
+                
+                // Load appropriate boss level
+                TransitionManager.StartLeaf(dialogueManager.sceneInfo.bossSceneIndexes[GetStage() - 1]);
+            } 
+            // Else if last level in the stage has been reached, increment stage and set level to 1, then generate new level
             if (GetLevel() == 6) {
                 SetStage(GetStage() + 1);
                 SetLevel(1);
+
                 // Load level
-                TransitionManager.StartLeaf(GetStage() + 1);
+                TransitionManager.StartLeaf(GetStage() + dialogueManager.sceneInfo.sceneOffset);
             } 
             // Else, increment level and generate new level
             else {
                 IncrementLevel(1);
                 Debug.Log("INCREMENTED");
                 // Load level
-                TransitionManager.StartLeaf(GetStage() + 1);
+                TransitionManager.StartLeaf(GetStage() + dialogueManager.sceneInfo.sceneOffset);
             }
         }
     }

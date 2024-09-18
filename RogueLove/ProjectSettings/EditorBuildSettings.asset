@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Home.unity
     guid: e279a8acdbd5847fdb08f3760fdd0e5b
   - enabled: 1
+    path: Assets/Scenes/EmptyBossLevel_1.unity
+    guid: 9e7f0ee7c009e48a8b222c65b094a8b1
+  - enabled: 1
     path: Assets/Scenes/EmptyLevel_1.unity
     guid: be60108e00ad1451183eee042d30d7af
   - enabled: 1

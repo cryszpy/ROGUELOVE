@@ -41,4 +41,8 @@ public class AreaTiles : ScriptableObject
     public GameObject doorwayObject;
 
     public GameObject[] breakables;
+
+    public List<int> bossSceneIndexes;
+
+    public int sceneOffset;
 }

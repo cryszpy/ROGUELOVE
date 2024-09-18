@@ -23,14 +23,28 @@ public class BulletPiercingScript : BulletScript
 
             // If the piercing bullet hits an enemy, don't destroy the bullet
             if (hits[i].collider.gameObject.layer == 9) {
-                RegisterDamage(hits[i].collider.gameObject);
+
+                if (hits[i].collider.gameObject.TryGetComponent<EnemyHealth>(out var healthScript)) {
+
+                    if (!healthScript.wasPierceHit) {
+                        healthScript.wasPierceHit = true;
+                        RegisterPierceDamage(hits[i].collider.gameObject, healthScript);
+                    }
+
+                } else {
+                    Debug.LogError("Could not get collided enemy's EnemyHealth component!");
+                }
+                
             }
             // If the object hit isn't supposed to be ignored, then try to deal damage and then destroy the bullet
             else if (!ignoredCollisions.ignoredCollisions.Contains(hits[i].collider.gameObject.layer) && hits[i].collider.gameObject.layer != 9) {
-                RegisterDamage(hits[i].collider.gameObject);
-                coll.enabled = false;
-                rb.velocity = (Vector2)direction.normalized * 0;
-                animator.SetTrigger("Destroy");
+                if (!madeContact) {
+                    madeContact = true;
+                    RegisterDamage(hits[i].collider.gameObject);
+                    coll.enabled = false;
+                    rb.velocity = (Vector2)direction.normalized * 0;
+                    animator.SetTrigger("Destroy");
+                }
             }
             
         }
@@ -38,17 +52,51 @@ public class BulletPiercingScript : BulletScript
 
     public override void OnTriggerEnter2D(Collider2D other)
     {
-        // If the piercing bullet hits an enemy, don't destroy the bullet
-        if (other.gameObject.layer == 9) {
-            RegisterDamage(other.gameObject);
+        if (!madeContact) {
+
+            // If the piercing bullet hits an enemy, don't destroy the bullet
+            if (other.gameObject.layer == 9) {
+
+                if (other.gameObject.TryGetComponent<EnemyHealth>(out var healthScript)) {
+
+                    if (!healthScript.wasPierceHit) {
+                        healthScript.wasPierceHit = true;
+                        RegisterPierceDamage(other.gameObject, healthScript);
+                    }
+
+                } else {
+                    Debug.LogError("Could not get collided enemy's EnemyHealth component!");
+                }
+            }
+            // If the object hit isn't supposed to be ignored, then try to deal damage and then destroy the bullet
+            else if (!ignoredCollisions.ignoredCollisions.Contains(other.gameObject.layer) && other.gameObject.layer != 9) {
+                if (!madeContact) {
+                    madeContact = true;
+                    RegisterDamage(other.gameObject);
+                    Debug.Log("BRUHHHHH");
+                    coll.enabled = false;
+                    rb.velocity = (Vector2)direction.normalized * 0;
+                    animator.SetTrigger("Destroy");
+                }
+            }
         }
-        // If the object hit isn't supposed to be ignored, then try to deal damage and then destroy the bullet
-        else if (!ignoredCollisions.ignoredCollisions.Contains(other.gameObject.layer) && other.gameObject.layer != 9) {
-            RegisterDamage(other.gameObject);
-            Debug.Log("BRUHHHHH");
-            coll.enabled = false;
-            rb.velocity = (Vector2)direction.normalized * 0;
-            animator.SetTrigger("Destroy");
+    }
+
+    public void RegisterPierceDamage(GameObject target, EnemyHealth enemy) {
+
+        //direction = mousePos - transform.position;
+
+        // Checks whether collided object is an enemy
+        if (target.CompareTag("Enemy")) {
+
+            // If bullet is a flame bullet, deal fire damage
+            if (isFire && !enemy.immuneToFire) {
+                enemy.TakeFireDamage(damage, direction);
+            }
+            else {
+                enemy.TakeDamage(damage, direction, knockback);
+            }
+            
         }
     }
 }

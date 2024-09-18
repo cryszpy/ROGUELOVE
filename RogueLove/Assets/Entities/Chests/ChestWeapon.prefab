@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 534431606961867723}
   - component: {fileID: 1254696647288241081}
   - component: {fileID: 2931893211283821017}
-  m_Layer: 0
+  m_Layer: 8
   m_Name: ChestWeapon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -174,7 +174,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7356738714035837602}
   - component: {fileID: 7268802473283087447}
-  m_Layer: 10
+  m_Layer: 8
   m_Name: Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}

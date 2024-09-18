@@ -55,7 +55,7 @@ public struct DialogueRequirement {
 
     public DialogueRequirementType reqType;
 
-    public GameObject objectToFind;
+    public int targetObjectID;
 
     public string statReqToCheck;
 }

@@ -43,6 +43,8 @@ public class WalkerGenerator : MonoBehaviour
 
     [SerializeField] private ChestList chestList;
 
+    [SerializeField] private GameObject bossSpawnPoint;
+
     [Space(10)]
     [Header("MAP SETTINGS")]
 
@@ -139,7 +141,7 @@ public class WalkerGenerator : MonoBehaviour
         }
     }
 
-    [SerializeField] private bool bossLevel = false;
+    [SerializeField] private bool bossLevel;
 
     [SerializeField] private bool minibossSpawned = false;
 
@@ -219,7 +221,7 @@ public class WalkerGenerator : MonoBehaviour
         Debug.Log("Attempting to initialize grid");
         InitializeGrid();
 
-        if (loadFromSave == true) {
+        if (loadFromSave) {
             LoadMap();
         }
     }
@@ -249,37 +251,46 @@ public class WalkerGenerator : MonoBehaviour
         gridHandler = new TileType[mapWidth, mapHeight];
         tileCount = 0;
 
-        // Loops through grid size and sets every tile to EMPTY tile
-        for (int x = 0; x < gridHandler.GetLength(0); x++) {
-            for (int y = 0; y < gridHandler.GetLength(1); y++) {
-                gridHandler[x,y] = TileType.EMPTY;
-            }
+        if (bossLevel && !loadFromSave) {
+            FillBossLevel();
+            CreateBorders();
+            CreateObstacles();
+            CreateBreakables();
         }
+        else {
 
-        // New instance of the WalkerObject list
-        walkers = new List<WalkerObject>();
+            // Loops through grid size and sets every tile to EMPTY tile
+            for (int x = 0; x < gridHandler.GetLength(0); x++) {
+                for (int y = 0; y < gridHandler.GetLength(1); y++) {
+                    gridHandler[x,y] = TileType.EMPTY;
+                }
+            }
 
-        // Creates reference of the exact centerpiece of the tilemap
-        Vector3Int tileCenter = new(0, 0, 0);
+            // New instance of the WalkerObject list
+            walkers = new List<WalkerObject>();
 
-        // Creates a new walker, and sets initial values
-        WalkerObject currWalker = new WalkerObject(new Vector2(tileCenter.x, tileCenter.y), GetDirection(), 0.5f);
+            // Creates reference of the exact centerpiece of the tilemap
+            Vector3Int tileCenter = new(0, 0, 0);
 
-        // Sets current grid location to floor
-        gridHandler[tileCenter.x, tileCenter.y] = TileType.FLOOR;
-        floorTilemap.SetTile(tileCenter, tiles.floor);
+            // Creates a new walker, and sets initial values
+            WalkerObject currWalker = new WalkerObject(new Vector2(tileCenter.x, tileCenter.y), GetDirection(), 0.5f);
 
-        // Adds current walker to Walker list
-        walkers.Add(currWalker);
+            // Sets current grid location to floor
+            gridHandler[tileCenter.x, tileCenter.y] = TileType.FLOOR;
+            floorTilemap.SetTile(tileCenter, tiles.floor);
 
-        // Increases total tile count
-        tileCount++;
+            // Adds current walker to Walker list
+            walkers.Add(currWalker);
 
-        if (loadFromSave != true) {
-            Debug.Log("CREATED NEW MAP");
+            // Increases total tile count
+            tileCount++;
 
-            // Handles walker rules
-            CreateFloors();
+            if (!loadFromSave) {
+                Debug.Log("CREATED NEW MAP");
+
+                // Handles walker rules
+                CreateFloors();
+            }
         }
     }
 
@@ -407,9 +418,7 @@ public class WalkerGenerator : MonoBehaviour
         CreateWalls();
         FillFloors();
         CreateBorders();
-        if (!bossLevel) {
-            CreateObstacles();
-        }
+        CreateObstacles();
         CreateBreakables();
     }
 
@@ -449,6 +458,23 @@ public class WalkerGenerator : MonoBehaviour
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.floor);
                     tileListX.Add(x);
                     tileListY.Add(y);
+                    tileCount++;
+                }
+            }
+        }
+    }
+
+    private void FillBossLevel() {
+
+        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
+
+            for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
+
+                if (wallsTilemap.GetTile(new Vector3Int(x, y)) == tiles.walls) {
+                    gridHandler[x, y] = TileType.WALLS;
+                    tileCount++;
+                } else {
+                    gridHandler[x, y] = TileType.FLOOR;
                     tileCount++;
                 }
             }
@@ -585,7 +611,9 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
         SpawnRandomPlayer();
-        SpawnChests();
+        if (!bossLevel) {
+            SpawnChests();
+        }
         StartCoroutine(SpawnStuff());
     }
 
@@ -641,23 +669,27 @@ public class WalkerGenerator : MonoBehaviour
     public void SpawnRandomPlayer() {
 
         // Generates random number to pick Player spawnpoint
-        int randP = GetRandomTile();
+        int randP = GetRandomGridYTile();
 
         // For as many floor tiles as there are in the tilemap:
-        for (int i = 0; i < tileListX.Count; i++) {
+        for (int i = 0; i < gridHandler.GetLength(0) - 1; i++) {
 
             // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-            if (gridHandler[tileListX[i], tileListY[randP]] == TileType.FLOOR 
-                && oTilemap.GetTile(new Vector3Int(tileListX[i], tileListY[randP])) != tiles.obstacles) {
+            if (gridHandler[i, randP] == TileType.FLOOR 
+                && oTilemap.GetTile(new Vector3Int(i, randP)) != tiles.obstacles) {
 
                 // Spawns Player
                 //player.SetActive(true);
-                player.transform.position = new Vector2((tileListX[i] * mapGrid.cellSize.x) + 0.08f, (tileListY[randP] * mapGrid.cellSize.y) + 0.02f);
+                Debug.Log(i + ":" + randP);
+                //player.transform.position = new Vector2((i * mapGrid.cellSize.x) + 0.08f, (randP * mapGrid.cellSize.y) + 0.02f);
+                Vector2 worldPos = mapGrid.CellToWorld(new Vector3Int(i, randP));
+                Debug.Log(worldPos);
+                player.transform.position = worldPos;
                 break;
 
             } else {
                 // Generates random number to pick Player spawnpoint
-                randP = UnityEngine.Random.Range(0, tileListX.Count);
+                randP = GetRandomGridYTile();
             }
         }
     }
@@ -710,9 +742,27 @@ public class WalkerGenerator : MonoBehaviour
     // SPAWN ENEMIES
     private void SpawnRandomEnemies() {
 
-        // TODO: If level number is the last level in area, then disregard everything except Boss spawning
+        // If level number is the last level in area, then disregard everything except Boss spawning
         if (!IsArrayEmpty(bosses)) {
-            bossLevel = true;
+            
+            // Chooses a random boss out of the possible bosses for this stage
+            int chosenBoss = UnityEngine.Random.Range(0, bosses.Length);
+
+            if (bossSpawnPoint != null) {
+
+                // Spawns Enemy
+                if (bosses[chosenBoss].GetComponentInChildren<Enemy>()) {
+                    bosses[chosenBoss].GetComponentInChildren<Enemy>().Create(bosses[chosenBoss], bossSpawnPoint.transform.position, Quaternion.identity, this);
+                    enemyTotal++;
+                } else if (bosses[chosenBoss].TryGetComponent<Enemy>(out var enemy)) {
+                    enemy.Create(bosses[chosenBoss], bossSpawnPoint.transform.position, Quaternion.identity, this);   
+                    enemyTotal++;
+                } else {
+                    Debug.LogWarning("Could not find Enemy component in boss!");
+                }
+            } else {
+                Debug.LogWarning("Boss Spawnpoint is null!");
+            }
         }
 
         // Miniboss spawning
@@ -1229,7 +1279,7 @@ public class WalkerGenerator : MonoBehaviour
 
     public int GetRandomTile() {
         return UnityEngine.Random.Range(0, tileListY.Count);
-     }
+    }
 
     public int GetRandomXTile() {
         return UnityEngine.Random.Range(0, tileListX.Count);
@@ -1333,14 +1383,18 @@ public class WalkerGenerator : MonoBehaviour
         tileCount--;
         gridHandler[0, 0] = TileType.EMPTY;
 
-        // Create walls around map
-        CreateWalls();
-        FillFloors();
-        CreateBorders();
-        /* if (!bossLevel) {
+        if (bossLevel) {
+            FillBossLevel();
+            CreateBorders();
             CreateObstacles();
-        } */
-        CreateBreakables();
+            CreateBreakables();
+        } else {
+            // Create walls around map
+            CreateWalls();
+            FillFloors();
+            CreateBorders();
+            CreateBreakables();
+        }
     }
 
 }
