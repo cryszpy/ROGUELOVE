@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7626497242740964482}
   - component: {fileID: 164230574282869635}
   - component: {fileID: 5875939324330161573}
-  - component: {fileID: 8937903469385972808}
+  - component: {fileID: 944568721832130506}
   - component: {fileID: 6787036634362172547}
   m_Layer: 9
   m_Name: Weapon
@@ -101,8 +101,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
   ammo: {fileID: 5001664913613443686, guid: 3c18aea30c50847148d1d43d8fa191ac, type: 3}
+  sprite: {fileID: 164230574282869635}
+  spawnPos: {fileID: 7127760726768429096}
+  weaponPickup: {fileID: 0}
+  type: 0
+  rarity: 0
+  id: 0
   ammoMax: 100
   ammoPerClick: 0
   currentAmmo: 100
@@ -110,12 +115,10 @@ MonoBehaviour:
   timeBetweenFiring: 0
   coinValue: 0
   flavorText: 
-  sprite: {fileID: 164230574282869635}
   fireSound: 
   chargeSound: 
-  spawnPos: {fileID: 7127760726768429096}
   distance: {x: 0, y: 0}
---- !u!114 &8937903469385972808
+--- !u!114 &944568721832130506
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -124,18 +127,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 2337100247536706055}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8903bce5b52d9410cba247aa10026cd1, type: 3}
+  m_Script: {fileID: 11500000, guid: e7978777f2a9344afba0eb9e64436906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 5875939324330161573}
+  enemy: {fileID: 688565378050225313}
+  charging: 0
   player: {fileID: 0}
   shake: {fileID: 0}
+  attackChance: 1
+  attackType: 0
   canFire: 1
+  timeBetweenBulletBurst: 0
+  numberOfBurstShots: 1
   shakeDuration: 0
   shakeAmplitude: 0
   shakeFrequency: 0
-  enemy: {fileID: 688565378050225313}
-  charging: 0
 --- !u!114 &6787036634362172547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -233,7 +240,7 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1049480431
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 0
   m_Sprite: {fileID: 3947920218503190883, guid: 1f7728df4281d4a668635d05be93a7c7, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
@@ -421,7 +428,8 @@ MonoBehaviour:
   lineSpriteRenderer: {fileID: 0}
   lineRenderer: {fileID: 0}
   chargeTime: 0
-  dropsList: []
+  weaponDropsList: []
+  itemDropsList: []
   coinBronze: {fileID: 2496777416409024874, guid: 44001b0e4c30b486f976a6e0a757e593, type: 3}
   coinSilver: {fileID: 2496777416409024874, guid: 9292fe08327f744ebb8035d2067f4b45, type: 3}
   coinGold: {fileID: 2496777416409024874, guid: 6c3b24f246f6d4df4bbbe459e39c6da9, type: 3}
@@ -430,6 +438,8 @@ MonoBehaviour:
   expOrb: {fileID: 2496777416409024874, guid: c277ee52a28e84f81881014f10b695ab, type: 3}
   minExp: 1
   maxExp: 4
+  attacksList:
+  - {fileID: 944568721832130506}
   spawnChanceVertAmp: 0.6
   spawnChanceMultiplier: 0.1
   spawnChanceXTransform: -0.3
@@ -448,6 +458,7 @@ MonoBehaviour:
   seen: 0
   kbEd: 0
   hitPlayer: 0
+  inContactColl: 0
 --- !u!114 &5977564517870532234
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -464,9 +475,10 @@ MonoBehaviour:
   parent: {fileID: 688565378050225313}
   currentHealth: 0
   maxHealth: 10
-  knockback: 6
+  knockbackResistance: 0
   takingFireDamage: 0
   immuneToFire: 0
+  wasPierceHit: 0
 --- !u!1 &5826619376852643059
 GameObject:
   m_ObjectHideFlags: 0

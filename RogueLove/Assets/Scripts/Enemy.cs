@@ -38,8 +38,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private Seeker seeker;
 
     [Tooltip("This enemy's follow collider, responsible for how far away it will follow a target.")]
-    [SerializeField]
-    protected CircleCollider2D followCollider;
+    [SerializeField] protected CircleCollider2D followCollider;
 
     [Tooltip("This enemy's contact collider, responsible for how far contact enemies can attack from (NOT EQUAL TO HITBOX). Should only be set for Contact enemies.")]
     public Collider2D contactColl;
@@ -87,6 +86,9 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private int minExp;
     [SerializeField] private int maxExp;
 
+    [Tooltip("All possible attacks this enemy has—SUM OF THESE attackChance VARIABLES MUST BE EQUAL TO 1.")]
+    [SerializeField] protected List<EnemyAttackRangedBurst> attacksList;
+
     [Space(10)]
     [Header("ENEMY STATS")]
 
@@ -125,6 +127,8 @@ public abstract class Enemy : MonoBehaviour
     // Boolean to determine whether attack animation is playing
     protected bool attackAnim;
 
+    public bool canFire;
+
     [Space(10)]
     [Header("PATHFINDING")]
 
@@ -141,6 +145,8 @@ public abstract class Enemy : MonoBehaviour
 
     [SerializeField]
     protected bool canWander;
+
+    protected float attackTimer;
     protected float wanderTimer = 0;
     protected float moveTime;
     protected float waitTime;
@@ -158,6 +164,8 @@ public abstract class Enemy : MonoBehaviour
     protected bool coinSpawn;
 
     public bool hitPlayer = false;
+
+    public bool inContactColl;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -181,6 +189,7 @@ public abstract class Enemy : MonoBehaviour
             seen = false;
             expSpawn = false;
             coinSpawn = false;
+            canFire = false;
 
             if (enemyType != EnemyType.STATIONARY) {
                 if (seeker == null) {
@@ -202,6 +211,19 @@ public abstract class Enemy : MonoBehaviour
     void UpdatePath() {
         if (seeker.IsDone()) {
             seeker.StartPath(rb.position, target, OnPathComplete);
+        }
+    }
+
+    // Attack cooldown timer
+    public virtual void Cooldown()
+    {
+        if (!canFire) {
+            attackTimer += Time.fixedDeltaTime;
+
+            if (attackTimer > attackCooldown) {
+                canFire = true;
+                attackTimer = 0;
+            }
         }
     }
 
@@ -238,6 +260,58 @@ public abstract class Enemy : MonoBehaviour
                 Pathfinder();
 
                 DirectionFacing();
+
+                // If the enemy has ranged attacks—
+                if (attacksList.Count > 0) {
+
+                    // If either: 
+                    // 1. the enemy also has a contact attack, and only if the player is not currently in range of contact, or—
+                    // 2. the enemy only has ranged attacks—
+                    if ((contactColl != null && !inContactColl) || contactColl == null) {
+
+                        // Start a ranged attack
+                        RollAttacks();
+                    }
+                }
+            }
+        }
+    }
+
+    public virtual void RollAttacks() {
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU 
+            && enemyType != EnemyType.DEAD) {
+
+            // Attack cooldown
+            Cooldown();
+            
+            // If the enemy can fire, sees the player, and is not charging a shot—
+            if (canFire && inFollowRadius && hitPlayer && seen) {
+
+                // Fire a ranged attack
+                DistanceAttack();
+            }
+        }
+    }
+
+    public virtual void DistanceAttack() {
+
+        float roll = UnityEngine.Random.value;
+
+        // For every possible attack this enemy has—
+        foreach (var attack in attacksList) {
+
+            // If the attack is ranged—
+            if (attack.attackType == EnemyAttackType.DISTANCE) {
+
+                // If the attack's success roll is successful—
+                if (roll <= attack.attackChance) {
+
+                    // Use the attack
+                    attack.FiringMethod();
+
+                    // Don't use any other attack
+                    break;
+                }
             }
         }
     }
@@ -267,29 +341,6 @@ public abstract class Enemy : MonoBehaviour
 
         if (distance < nextWaypointDistance) {
             currentWaypoint++;
-        }
-    }
-
-    // Sprite direction facing
-    public virtual void DirectionFacing() {
-
-        if (!kbEd) {
-
-            if (rb.velocity.x >= 0.001f) {
-
-                this.transform.localScale = new Vector3(1f, 1f, 1f);
-                animator.SetBool("IsMoving", true);
-
-            } else if (rb.velocity.x <= -0.001f) {
-
-                this.transform.localScale = new Vector3(-1f, 1f, 1f);
-                animator.SetBool("IsMoving", true);
-
-            } else if (rb.velocity.y <= -0.001 || rb.velocity.y >= 0.001) {
-                animator.SetBool("IsMoving", true);
-            } else {
-                animator.SetBool("IsMoving", false);
-            }
         }
     }
 
@@ -340,6 +391,29 @@ public abstract class Enemy : MonoBehaviour
     // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
     public void StopAttackAnim() {
         animator.SetBool("Attack", false);
+    }
+
+    // Sprite direction facing
+    public virtual void DirectionFacing() {
+
+        if (!kbEd) {
+
+            if (rb.velocity.x >= 0.001f) {
+
+                this.transform.localScale = new Vector3(1f, 1f, 1f);
+                animator.SetBool("IsMoving", true);
+
+            } else if (rb.velocity.x <= -0.001f) {
+
+                this.transform.localScale = new Vector3(-1f, 1f, 1f);
+                animator.SetBool("IsMoving", true);
+
+            } else if (rb.velocity.y <= -0.001 || rb.velocity.y >= 0.001) {
+                animator.SetBool("IsMoving", true);
+            } else {
+                animator.SetBool("IsMoving", false);
+            }
+        }
     }
 
     void OnPathComplete(Pathfinding.Path p) {

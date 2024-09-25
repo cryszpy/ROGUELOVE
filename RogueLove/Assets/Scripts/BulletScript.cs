@@ -73,7 +73,7 @@ public class BulletScript : MonoBehaviour
         // DIRECTION OF THE BULLET
 
         direction = mousePos - weapon.transform.position;
-        Debug.Log(direction);
+        //Debug.Log(direction);
 
         if (direction == Vector3.zero) {
             direction = weapon.spawnPos.transform.position - weapon.transform.position;
@@ -113,7 +113,7 @@ public class BulletScript : MonoBehaviour
             // For all objects detected in the raycast—
             for (int i = 0; i < hits.Length; i++) {
 
-                Debug.Log(hits[i].collider.gameObject.layer + " " + hits[i].collider.transform.root.name);
+                //Debug.Log(hits[i].collider.gameObject.layer + " " + hits[i].collider.transform.root.name);
 
                 // If the object hit isn't supposed to be ignored, then try to deal damage and then destroy the bullet
                 if (!ignoredCollisions.ignoredCollisions.Contains(hits[i].collider.gameObject.layer)) {

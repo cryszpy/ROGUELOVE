@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5717211340883309011}
   - component: {fileID: 8757874228822253330}
   - component: {fileID: 5280903974753059358}
-  - component: {fileID: 5391249807630986660}
+  - component: {fileID: 586608477338833631}
   - component: {fileID: 8482575662759113938}
   m_Layer: 9
   m_Name: Weapon
@@ -118,7 +118,7 @@ MonoBehaviour:
   fireSound: 
   chargeSound: 
   distance: {x: 0, y: 0}
---- !u!114 &5391249807630986660
+--- !u!114 &586608477338833631
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -127,18 +127,22 @@ MonoBehaviour:
   m_GameObject: {fileID: 964310844064472419}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8903bce5b52d9410cba247aa10026cd1, type: 3}
+  m_Script: {fileID: 11500000, guid: e7978777f2a9344afba0eb9e64436906, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 5280903974753059358}
+  enemy: {fileID: 7320282791248086331}
+  charging: 0
   player: {fileID: 0}
   shake: {fileID: 0}
+  attackChance: 1
+  attackType: 0
   canFire: 1
+  timeBetweenBulletBurst: 0
+  numberOfBurstShots: 1
   shakeDuration: 0
   shakeAmplitude: 0
   shakeFrequency: 0
-  enemy: {fileID: 7320282791248086331}
-  charging: 0
 --- !u!114 &8482575662759113938
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -603,7 +607,8 @@ MonoBehaviour:
   lineSpriteRenderer: {fileID: 1232581607278071763}
   lineRenderer: {fileID: 8896287817164861507}
   chargeTime: 2
-  dropsList: []
+  weaponDropsList: []
+  itemDropsList: []
   coinBronze: {fileID: 2496777416409024874, guid: 44001b0e4c30b486f976a6e0a757e593, type: 3}
   coinSilver: {fileID: 2496777416409024874, guid: 9292fe08327f744ebb8035d2067f4b45, type: 3}
   coinGold: {fileID: 2496777416409024874, guid: 6c3b24f246f6d4df4bbbe459e39c6da9, type: 3}
@@ -612,6 +617,8 @@ MonoBehaviour:
   expOrb: {fileID: 2496777416409024874, guid: c277ee52a28e84f81881014f10b695ab, type: 3}
   minExp: 2
   maxExp: 6
+  attacksList:
+  - {fileID: 586608477338833631}
   spawnChanceVertAmp: 1.4
   spawnChanceMultiplier: 0.6
   spawnChanceXTransform: 2
@@ -630,6 +637,7 @@ MonoBehaviour:
   seen: 0
   kbEd: 0
   hitPlayer: 0
+  inContactColl: 0
 --- !u!114 &4099431728299032146
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -646,10 +654,10 @@ MonoBehaviour:
   parent: {fileID: 7320282791248086331}
   currentHealth: 0
   maxHealth: 8
-  knockback: 6
   knockbackResistance: 0
   takingFireDamage: 0
   immuneToFire: 0
+  wasPierceHit: 0
 --- !u!1 &8882462099627407686
 GameObject:
   m_ObjectHideFlags: 0

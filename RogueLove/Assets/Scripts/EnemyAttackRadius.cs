@@ -9,7 +9,7 @@ public class EnemyAttackRadius : MonoBehaviour
     [SerializeField]
     protected Enemy parent;
     
-    public virtual void OnTriggerEnter2D(Collider2D collider) {
+    public virtual void OnTriggerEnter2D (Collider2D collider) {
 
         // If collided with the player, start attack sequence
         if (collider.CompareTag("Player")) {
@@ -17,8 +17,22 @@ public class EnemyAttackRadius : MonoBehaviour
             // Disable collider and animation trigger to prevent looping
             parent.contactColl.enabled = false;
 
+            // Tell parent script that player has been hit with a melee attack (inside contact collider)
+            parent.inContactColl = true;
+
             // Damage entity
             StartCoroutine(AttackEntity(collider));
+
+        } 
+    }
+
+    public virtual void OnTriggerExit2D (Collider2D collider) {
+
+        // If collided with the player, tell parent script that player has left contact collider
+        if (collider.CompareTag("Player")) {
+
+            // Tell parent enemy that player has been hit with a melee attack (inside contact collider)
+            parent.inContactColl = false;
 
         } 
     }

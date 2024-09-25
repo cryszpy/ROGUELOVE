@@ -28,6 +28,7 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
 
                 // If enemy needs to charge shot, then charge
                 if (enemy.lineRenderer != null) {
+                    
                     // Starts drawing the line of fire in FixedUpdate()
                     charging = true;
                     StartCoroutine(ChargeShot());
@@ -40,14 +41,17 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
 
             // If enemy is charging a shot—
             if (charging) {
+
                 // Enable the line renderer if it isn't already
                 if (enemy.lineSpriteRenderer.enabled == false && enemy.lineSpriteRenderer != null) {
                     enemy.lineSpriteRenderer.enabled = true;
                 }
 
                 // Draw the line of fire
-                enemy.lineRenderer.PointA = enemy.transform.position;
-                enemy.lineRenderer.PointB = enemy.player.transform.position;
+                if (enemy.lineRenderer != null) {
+                    enemy.lineRenderer.PointA = enemy.transform.position;
+                    enemy.lineRenderer.PointB = enemy.player.transform.position;
+                }
             }
         }
     }
