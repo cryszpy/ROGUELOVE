@@ -207,8 +207,8 @@ public class PlayerController : MonoBehaviour
     public void PlayerStart(bool home)
     {
 
-        // Ignores any collisions with enemies (layer 9)
-        movementFilter.SetLayerMask(~(1 << 9));
+        // Ignores any collisions with enemies or bulletignore (layer 9 & 8)
+        movementFilter.SetLayerMask(~(1 << 9 | 1 << 8));
         
         if (rb == null) {
             rb = GetComponent<Rigidbody2D>();

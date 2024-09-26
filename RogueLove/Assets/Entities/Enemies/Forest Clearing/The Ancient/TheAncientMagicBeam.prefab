@@ -48,7 +48,7 @@ MonoBehaviour:
   m_LightType: 3
   m_BlendStyleIndex: 0
   m_FalloffIntensity: 0.8
-  m_Color: {r: 1, g: 0.915058, b: 0.7688679, a: 1}
+  m_Color: {r: 0.74472624, g: 1, b: 0.7028302, a: 1}
   m_Intensity: 2.5
   m_LightVolumeIntensity: 1
   m_LightVolumeEnabled: 0
@@ -73,7 +73,7 @@ MonoBehaviour:
   m_PointLightInnerAngle: 360
   m_PointLightOuterAngle: 360
   m_PointLightInnerRadius: 0
-  m_PointLightOuterRadius: 0.44
+  m_PointLightOuterRadius: 0.76
   m_ShapeLightParametricSides: 5
   m_ShapeLightParametricAngleOffset: 0
   m_ShapeLightParametricRadius: 1
@@ -97,7 +97,7 @@ GameObject:
   - component: {fileID: 2505346848409617241}
   - component: {fileID: 6018900055118431996}
   - component: {fileID: 5490067005516740771}
-  - component: {fileID: 2920130361219395360}
+  - component: {fileID: 4501149755664874175}
   m_Layer: 8
   m_Name: TheAncientMagicBeam
   m_TagString: Untagged
@@ -143,7 +143,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: b878eee5263d84c9b962d17d1a9ab2f0, type: 2}
+  - {fileID: 2100000, guid: 7fd140dc2ebbf44d7875b714d001688c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -162,9 +162,9 @@ SpriteRenderer:
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 1049480431
-  m_SortingLayer: 1
+  m_SortingLayer: 2
   m_SortingOrder: 1
-  m_Sprite: {fileID: 3264929006969654993, guid: 6ffb6a133d7fe4c11a00d0c54fbe083c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 4f2e5b38c46af4115afbf16ba105b1cd, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -188,10 +188,11 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6018900055118431996}
-  animator: {fileID: 2920130361219395360}
+  animator: {fileID: 0}
   coll: {fileID: 5490067005516740771}
-  force: 4
+  force: 5
   damage: 1
+  knockback: 0
   reflected: 0
 --- !u!50 &6018900055118431996
 Rigidbody2D:
@@ -254,19 +255,19 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: -0.02}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
-    oldSize: {x: 0.5, y: 0.5}
+    oldSize: {x: 0.5, y: 1}
     newSize: {x: 0.25, y: 0.2}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.24, y: 0.28}
+  m_Size: {x: 0.45, y: 1.01}
   m_EdgeRadius: 0
---- !u!95 &2920130361219395360
+--- !u!95 &4501149755664874175
 Animator:
   serializedVersion: 7
   m_ObjectHideFlags: 0
@@ -276,7 +277,7 @@ Animator:
   m_GameObject: {fileID: 5001664913613443686}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: de3b19e085f1b470fbcab7b36e3a04db, type: 2}
+  m_Controller: {fileID: 9100000, guid: ea6c5e09f91d0447fb693175eda9a6e6, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0

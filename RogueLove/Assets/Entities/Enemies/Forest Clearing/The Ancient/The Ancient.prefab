@@ -731,7 +731,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: 2e57be75894714088842f71df58c7a6c, type: 3}
+  ammo: {fileID: 5001664913613443686, guid: 6df33a4b1e485439b899808c2fc4d681, type: 3}
   sprite: {fileID: 163189661128954202}
   spawnPos: {fileID: 4337055667690004690}
   weaponPickup: {fileID: 0}
@@ -968,7 +968,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff690363546b544edaf3898aac8ed1ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  parent: {fileID: 0}
+  parent: {fileID: 4897255179998494822}
 --- !u!1001 &923596922019481717
 PrefabInstance:
   m_ObjectHideFlags: 0
