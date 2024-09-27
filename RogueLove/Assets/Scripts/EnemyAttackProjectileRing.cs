@@ -2,54 +2,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public enum EnemyAttackType {
-    DISTANCE, CLOSE, SPECIAL
-}
-
-public class EnemyAttackRangedBurst : MonoBehaviour
+public class EnemyAttackProjectileRing : EnemyBulletSpawner
 {
 
-    [Header("SCRIPT REFERENCES")]
-
-    public Weapon parent;
-
-    [SerializeField] private Enemy enemy;
-
-    [SerializeField] protected bool charging;
-
-    [SerializeField] protected PlayerController player;
-
-    [SerializeField] protected CameraShake shake;
-
-    [Header("STATS")]
-
-    public float attackChance;
-
-    public EnemyAttackType attackType;
-
-    [SerializeField] protected float timeBetweenBulletBurst;
-
-    [SerializeField] protected float numberOfBurstShots;
-
-    protected bool bursting = false;
-
-    [SerializeField] private float shakeDuration;
-    [SerializeField] private float shakeAmplitude;
-    [SerializeField] private float shakeFrequency;
+    public float rotationSpeed;
 
     // Start is called before the first frame update
-    void Start()
+    public override void Start()
     {
         charging = false;
     }
 
-    /* // Update is called once per frame
-    public virtual void FixedUpdate()
-    {
-        FiringMethod();
-    } */
+    public virtual void Update() {
+        transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + rotationSpeed);
+    }
 
-    public virtual void FiringMethod() {
+    public override void FiringMethod() {
         if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU 
             && enemy.enemyType != EnemyType.DEAD) {
             
@@ -87,7 +55,7 @@ public class EnemyAttackRangedBurst : MonoBehaviour
     }
 
     // Initiate the charging of a shot
-    public virtual IEnumerator ChargeShot() {
+    public override IEnumerator ChargeShot() {
 
         // Waits for the charging time
         yield return new WaitForSeconds(enemy.chargeTime);
@@ -103,7 +71,7 @@ public class EnemyAttackRangedBurst : MonoBehaviour
     }
 
     // Firing logic
-    public virtual IEnumerator BurstFire()
+    public override IEnumerator BurstFire()
     {
         if (enemy.enemyType != EnemyType.DEAD) {
 
@@ -119,11 +87,16 @@ public class EnemyAttackRangedBurst : MonoBehaviour
                     FireSound();
                 }
 
+                // Spawns bullet
                 GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
                 StartCoroutine(BulletDestroy(2, instantBullet));
+                if (instantBullet.TryGetComponent<EnemyBulletScript>(out var bullet)) {
+                    bullet.transform.rotation = transform.rotation;
+                }
 
                 yield return new WaitForSeconds(timeBetweenBulletBurst);
             }
+
 
             // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
             if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
@@ -133,17 +106,5 @@ public class EnemyAttackRangedBurst : MonoBehaviour
             bursting = false;
         }
         
-    }
-
-    public virtual void FireSound() {
-        FindFirstObjectByType<AudioManager>().Play(parent.fireSound);
-    }
-
-    // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time
-    public virtual IEnumerator BulletDestroy(float waitTime, GameObject obj) {
-        while (true) {
-            yield return new WaitForSeconds(waitTime);
-            DestroyImmediate(obj, true);
-        }
     }
 }

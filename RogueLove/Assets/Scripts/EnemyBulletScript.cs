@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class EnemyBulletScript : MonoBehaviour
@@ -9,29 +10,40 @@ public class EnemyBulletScript : MonoBehaviour
 
     [Header("SCRIPT REFERENCES")]
 
-    private Vector3 target;
+    protected Vector3 target;
 
     public Rigidbody2D rb;
 
-    [SerializeField] private Animator animator;
+    [SerializeField] protected Animator animator;
 
-    private Vector3 direction;
+    public Vector3 direction;
 
-    [SerializeField] private Collider2D coll;
+    [SerializeField] protected Collider2D coll;
 
     [Header("STATS")]
 
-    [SerializeField] private float force;
+    [SerializeField] protected Vector2 spawnPoint;
 
-    [SerializeField] private int damage = 2;
+    [SerializeField] protected float speed;
 
-    [SerializeField] private float knockback;
+    [SerializeField] protected int damage = 2;
 
-    [SerializeField] private bool reflected = false;
+    [SerializeField] protected float knockback;
+
+    [SerializeField] protected bool reflected = false;
+
+    protected float timer = 0f;
+
+    protected Vector2 error;
+
+    [Tooltip("Lower values are more accurate— 0 fires in a straight line.")]
+    [SerializeField] protected float accuracy;
 
     // Start is called before the first frame update
-    void Start()
+    public virtual void Start()
     {
+
+        spawnPoint = new Vector2(transform.position.x, transform.position.y);
 
         coll.enabled = true;
 
@@ -46,16 +58,34 @@ public class EnemyBulletScript : MonoBehaviour
         }
 
         target = GameObject.FindGameObjectWithTag("Player").transform.position;
-        direction = target - transform.position;
-        Vector3 rotation =  transform.position - target;
 
-        rb.velocity = new Vector2(direction.x, direction.y).normalized * force;
+        //direction = target - transform.position;
+
+        Vector3 rotation = transform.position - target;
+
+        // Determines the accuracy of the bullet (so bullets don't just fire in a straight line every time)
+        error = UnityEngine.Random.insideUnitCircle * accuracy;
+
+        // Sets the velocity and direction of the bullet which is acted on every frame from now on (this determines how the bullet moves)
+        rb.velocity = new Vector2(transform.right.x, transform.right.y) * speed + new Vector2(error.x, error.y);
+
         float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
     }
 
+    /* public virtual void Update() {
+        timer += Time.deltaTime;
+        //transform.position = Movement(timer);
+    }
+
+    public virtual Vector2 Movement(float timer) {
+        float x = timer * speed * transform.up.x;
+        float y = timer * speed * transform.up.y;
+        return new Vector2(x + spawnPoint.x + error.x, y + spawnPoint.y + error.y);
+    } */
+
     // Damage player or destroy self when hitting obstacles
-    private void OnTriggerEnter2D(Collider2D other) {
+    public virtual void OnTriggerEnter2D(Collider2D other) {
         
         direction = target - transform.position;
 
@@ -112,7 +142,7 @@ public class EnemyBulletScript : MonoBehaviour
         }
     }
 
-    public void DestroyBullet() {
+    public virtual void DestroyBullet() {
         Destroy(gameObject);
     }
 }

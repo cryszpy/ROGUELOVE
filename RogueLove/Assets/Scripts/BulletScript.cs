@@ -42,8 +42,7 @@ public class BulletScript : MonoBehaviour
     public float knockback;
 
     [Tooltip("Lower values are more accurate— 0 fires in a straight line.")]
-    [SerializeField]
-    protected float accuracy;
+    [SerializeField] protected float accuracy;
 
     [SerializeField] protected bool isFire;
 

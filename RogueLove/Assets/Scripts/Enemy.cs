@@ -87,7 +87,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private int maxExp;
 
     [Tooltip("All possible attacks this enemy has—SUM OF THESE attackChance VARIABLES MUST BE EQUAL TO 1.")]
-    [SerializeField] protected List<EnemyAttackRangedBurst> attacksList;
+    [SerializeField] protected List<EnemyBulletSpawner> attacksList;
 
     [Space(10)]
     [Header("ENEMY STATS")]

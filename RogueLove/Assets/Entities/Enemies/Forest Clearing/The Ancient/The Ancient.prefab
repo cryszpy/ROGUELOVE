@@ -285,7 +285,7 @@ MonoBehaviour:
   minExp: 20
   maxExp: 45
   attacksList:
-  - {fileID: 7874481841652174735}
+  - {fileID: 4337496282947585320}
   - {fileID: 5650005142565248593}
   spawnChanceVertAmp: 1
   spawnChanceMultiplier: 1
@@ -402,7 +402,7 @@ GameObject:
   - component: {fileID: 5112030372781941968}
   - component: {fileID: 7907224285343803163}
   - component: {fileID: 1575676842266984882}
-  - component: {fileID: 7874481841652174735}
+  - component: {fileID: 4337496282947585320}
   - component: {fileID: 6610068232510643037}
   m_Layer: 9
   m_Name: AcornRing
@@ -492,7 +492,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: 3c18aea30c50847148d1d43d8fa191ac, type: 3}
+  ammo: {fileID: 5001664913613443686, guid: 1af2773b5dd964410a3511499463670b, type: 3}
   sprite: {fileID: 163189661128954202}
   spawnPos: {fileID: 2918801732731569437}
   weaponPickup: {fileID: 0}
@@ -509,7 +509,7 @@ MonoBehaviour:
   fireSound: 
   chargeSound: 
   distance: {x: 0, y: 0}
---- !u!114 &7874481841652174735
+--- !u!114 &4337496282947585320
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -518,21 +518,17 @@ MonoBehaviour:
   m_GameObject: {fileID: 5131599993440310423}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7978777f2a9344afba0eb9e64436906, type: 3}
+  m_Script: {fileID: 11500000, guid: 1fe365853133c4a679c6d8017aaf4f08, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 1575676842266984882}
   enemy: {fileID: 4897255179998494822}
   charging: 0
-  player: {fileID: 0}
-  shake: {fileID: 0}
   attackChance: 1
   attackType: 1
   timeBetweenBulletBurst: 0
-  numberOfBurstShots: 1
-  shakeDuration: 0
-  shakeAmplitude: 0
-  shakeFrequency: 0
+  numberOfBurstShots: 16
+  rotationSpeed: 20
 --- !u!114 &6610068232510643037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -763,15 +759,10 @@ MonoBehaviour:
   parent: {fileID: 7406477726408885776}
   enemy: {fileID: 4897255179998494822}
   charging: 0
-  player: {fileID: 0}
-  shake: {fileID: 0}
   attackChance: 1
   attackType: 0
   timeBetweenBulletBurst: 0.2
   numberOfBurstShots: 3
-  shakeDuration: 0
-  shakeAmplitude: 0
-  shakeFrequency: 0
 --- !u!114 &5989315534253875083
 MonoBehaviour:
   m_ObjectHideFlags: 0
