@@ -269,11 +269,11 @@ public class WalkerGenerator : MonoBehaviour
             // New instance of the WalkerObject list
             walkers = new List<WalkerObject>();
 
-            // Creates reference of the exact centerpiece of the tilemap
-            Vector3Int tileCenter = new(0, 0, 0);
+            // Creates reference of the walker starting position
+            Vector3Int tileCenter = new(Mathf.RoundToInt(mapWidth / 3), Mathf.RoundToInt(mapHeight / 3), 0);
 
             // Creates a new walker, and sets initial values
-            WalkerObject currWalker = new WalkerObject(new Vector2(tileCenter.x, tileCenter.y), GetDirection(), 0.5f);
+            WalkerObject currWalker = new(new Vector2(tileCenter.x, tileCenter.y), GetDirection(), 0.5f);
 
             // Sets current grid location to floor
             gridHandler[tileCenter.x, tileCenter.y] = TileType.FLOOR;
@@ -485,18 +485,14 @@ public class WalkerGenerator : MonoBehaviour
     private void CreateBorders() {
 
         // For the length of the grid (x)
-        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
+        for (int x = 0; x < gridHandler.GetLength(0); x++) {
 
             // Create border along top of map
-            if (wallsTilemap.GetTile(new Vector3Int(x, gridHandler.GetLength(1) - 2, 0)) == tiles.walls) {
-                oTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grass);
-                gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
-                tileCount++;
-            } else {
-                wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grass);
-                gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
-                tileCount++;
-            }
+            wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.walls);
+            wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1), 0), tiles.grass);
+            oTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1), 0), tiles.grass);
+            gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
+            tileCount++;
 
             // Create border along bottom of map
             if (wallsTilemap.GetTile(new Vector3Int(x, 1, 0)) == tiles.walls) {
@@ -508,6 +504,7 @@ public class WalkerGenerator : MonoBehaviour
                 tileCount++;
             } else {
                 wallsTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.borderDown);
+                oTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
                 gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
             }
@@ -517,7 +514,7 @@ public class WalkerGenerator : MonoBehaviour
         }
 
         // For the height of the grid (y)
-        for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
+        for (int y = 0; y < gridHandler.GetLength(1); y++) {
 
             // Create border along left of map
             if (wallsTilemap.GetTile(new Vector3Int(1, y, 0)) == tiles.walls) {
@@ -529,6 +526,7 @@ public class WalkerGenerator : MonoBehaviour
                 tileCount++;
             } else {
                 wallsTilemap.SetTile(new Vector3Int(0, y, 0), tiles.borderLeft);
+                oTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
                 gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
             }
@@ -536,17 +534,11 @@ public class WalkerGenerator : MonoBehaviour
             gridHandler[0, y] = TileType.BORDER;
 
             // Create border along right of map
-            if (wallsTilemap.GetTile(new Vector3Int(gridHandler.GetLength(1) - 2, y, 0)) == tiles.walls) {
-
-                oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(1) - 1, y, 0), tiles.grass);
-                gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
-                tileCount++;
-            } else {
-                wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(1) - 1, y, 0), tiles.borderRight);
-                gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
-                tileCount++;
-
-            }
+            wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, y, 0), tiles.walls);
+            wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), y, 0), tiles.grass);
+            oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), y, 0), tiles.grass);
+            gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
+            tileCount++;
         }
 
         // Set bottom left corner
@@ -560,7 +552,7 @@ public class WalkerGenerator : MonoBehaviour
         gridHandler[gridHandler.GetLength(0) - 1, 0] = TileType.BORDER;
 
         // Set top right corner
-        oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, gridHandler.GetLength(1) - 1, 0), tiles.grass);
+        oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), gridHandler.GetLength(1), 0), tiles.grass);
         gridHandler[gridHandler.GetLength(0) - 1, gridHandler.GetLength(1) - 1] = TileType.BORDER;
     }
 

@@ -187,16 +187,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42c0f4f67457a4c769ab07dc2212cace, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  pattern: 0
   rb: {fileID: 6018900055118431996}
   animator: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   coll: {fileID: 5490067005516740771}
+  spawnPoint: {x: 0, y: 0}
   speed: 7
   damage: 1
   knockback: 0
   reflected: 0
-  accuracy: 0
+  accuracy: 5
 --- !u!50 &6018900055118431996
 Rigidbody2D:
   serializedVersion: 4
