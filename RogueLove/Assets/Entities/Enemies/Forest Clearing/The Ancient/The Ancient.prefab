@@ -296,9 +296,9 @@ MonoBehaviour:
   damage: 1
   chaseSpeed: 200
   wanderSpeed: 0
-  rangedAttackCooldownMin: 5
-  rangedAttackCooldownMax: 5
-  attackCooldown: 5
+  rangedAttackCooldownMin: 3
+  rangedAttackCooldownMax: 3
+  attackCooldown: 3
   canFire: 0
   nextWaypointDistance: 1
   inFollowRadius: 0

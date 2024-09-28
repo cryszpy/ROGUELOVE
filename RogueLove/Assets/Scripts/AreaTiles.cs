@@ -24,19 +24,12 @@ public class AreaTiles : ScriptableObject
     public Tile grassTop;
 
     public Tile borderTop;
+    
     public Tile borderDown;
 
     public Tile borderLeft;
 
     public Tile borderRight;
-
-    public Sprite wallUp;
-
-    public Sprite wallDown;
-
-    public Sprite wallLeft;
-
-    public Sprite wallRight;
 
     public GameObject doorwayObject;
 

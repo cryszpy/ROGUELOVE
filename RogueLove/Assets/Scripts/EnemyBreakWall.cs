@@ -82,7 +82,9 @@ public class EnemyBreakWall : MonoBehaviour
                 Debug.LogWarning("Tried to break wall out of map bounds!");
             }
         }
-        AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
-        Debug.Log("Updated graph bounds because of broken block!");
+        if (parent.inFollowRadius) {
+            AstarPath.active.UpdateGraphs(parent.map.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
+            Debug.Log("Updated graph bounds because of broken block!");
+        }
     }
 }

@@ -361,6 +361,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     private void CreateFloors() {
+
         // Compares tile count as a float to the total size of the grid, and will continue looping as long as it is
         // less than the fillPercentage value set earlier
         while ((float)tileCount / (float)gridHandler.Length < fillPercentage) {
@@ -430,7 +431,7 @@ public class WalkerGenerator : MonoBehaviour
             // For the height of the grid (y)
             for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
 
-                // Checks each x and y value of the grid to see if they are floors
+                // Checks each x and y value of the grid to see if they are not floors
                 if (gridHandler[x, y] == TileType.EMPTY) {
                     //bool hasCreatedDecor = false;
 
@@ -452,7 +453,7 @@ public class WalkerGenerator : MonoBehaviour
             // For the height of the grid (y)
             for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
 
-                // Checks each x and y value of the grid to see if they are floors
+                // Checks each x and y value of the grid to see if they are not floors
                 if (gridHandler[x, y] == TileType.WALLS) {
 
                     floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.floor);
@@ -488,12 +489,11 @@ public class WalkerGenerator : MonoBehaviour
 
             // Create border along top of map
             if (wallsTilemap.GetTile(new Vector3Int(x, gridHandler.GetLength(1) - 2, 0)) == tiles.walls) {
-
-                oTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grassTop);
+                oTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grass);
                 gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
                 tileCount++;
             } else {
-                wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.borderTop);
+                wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grass);
                 gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
                 tileCount++;
             }
@@ -511,6 +511,8 @@ public class WalkerGenerator : MonoBehaviour
                 gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
             }
+
+            gridHandler[x, 0] = TileType.BORDER;
 
         }
 
@@ -530,6 +532,8 @@ public class WalkerGenerator : MonoBehaviour
                 gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
             }
+
+            gridHandler[0, y] = TileType.BORDER;
 
             // Create border along right of map
             if (wallsTilemap.GetTile(new Vector3Int(gridHandler.GetLength(1) - 2, y, 0)) == tiles.walls) {
@@ -554,6 +558,10 @@ public class WalkerGenerator : MonoBehaviour
         wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, 0, 0), tiles.grass);
         //oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, 0, 0), tiles.grass);
         gridHandler[gridHandler.GetLength(0) - 1, 0] = TileType.BORDER;
+
+        // Set top right corner
+        oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, gridHandler.GetLength(1) - 1, 0), tiles.grass);
+        gridHandler[gridHandler.GetLength(0) - 1, gridHandler.GetLength(1) - 1] = TileType.BORDER;
     }
 
     // CREATES OBSTACLES
@@ -641,8 +649,9 @@ public class WalkerGenerator : MonoBehaviour
                     && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
                         rand = GetRandomTile();
                     } else {
+                        Debug.Log(tileListX[rand] + "::" + tileListY[rand]);
 
-                        Instantiate(chestList.weaponChest, new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity);
+                        Instantiate(chestList.weaponChest, new Vector2(tileListX[rand] * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tileListY[rand] * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity);
                         break;
                     }
 
@@ -676,14 +685,14 @@ public class WalkerGenerator : MonoBehaviour
 
             // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
             if (gridHandler[i, randP] == TileType.FLOOR 
-                && oTilemap.GetTile(new Vector3Int(i, randP)) != tiles.obstacles) {
+                && oTilemap.GetTile(new Vector3Int(i, randP)) != tiles.obstacles 
+                && wallsTilemap.GetTile(new Vector3Int(i, randP)) == null) {
 
                 // Spawns Player
                 //player.SetActive(true);
                 Debug.Log(i + ":" + randP);
-                //player.transform.position = new Vector2((i * mapGrid.cellSize.x) + 0.08f, (randP * mapGrid.cellSize.y) + 0.02f);
                 Vector2 worldPos = mapGrid.CellToWorld(new Vector3Int(i, randP));
-                Debug.Log(worldPos);
+                worldPos = new Vector2(worldPos.x + (mapGrid.cellSize.x / 2), worldPos.y + (mapGrid.cellSize.y / 3));
                 player.transform.position = worldPos;
                 break;
 
