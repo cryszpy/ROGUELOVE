@@ -12,6 +12,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 74297b47a40fd4f82807fa2d79814a74, type: 3}
   m_Name: LootList
   m_EditorClassIdentifier: 
+  areaRarities:
+  - area:
+    - 0.35
+    - 0.61
+    - 0.81
+    - 0.95
+  - area:
+    - 0.2
+    - 0.51
+    - 0.81
+    - 0.95
+  - area:
+    - 0.16
+    - 0.43
+    - 0.78
+    - 0.94
+  - area:
+    - 0.08
+    - 0.35
+    - 0.76
+    - 0.94
+  - area:
+    - 0.06
+    - 0.29
+    - 0.7
+    - 0.92
+  - area:
+    - 0.02
+    - 0.18
+    - 0.63
+    - 0.9
+  - area:
+    - -0.1
+    - 0.1
+    - 0.53
+    - 0.88
+  - area:
+    - -0.1
+    - 0.09
+    - 0.45
+    - 0.85
   areaOne:
   - 0.35
   - 0.61
@@ -92,6 +133,6 @@ MonoBehaviour:
   seenEpicWeapons: []
   legendaryWeapons: []
   seenLegendaryWeapons: []
-  items: []
-  seenItems: []
+  specialWeapons: []
+  seenSpecialWeapons: []
   drawnWeaponID: 2

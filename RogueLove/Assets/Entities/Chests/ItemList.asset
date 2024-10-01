@@ -1,0 +1,71 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 871478001fa864f67a36071e028c98be, type: 3}
+  m_Name: ItemList
+  m_EditorClassIdentifier: 
+  areaRarities:
+  - area:
+    - -0.1
+    - -0.1
+    - -0.1
+    - -0.1
+  - area:
+    - 0.2
+    - 0.51
+    - 0.81
+    - 0.95
+  - area:
+    - 0.16
+    - 0.43
+    - 0.78
+    - 0.94
+  - area:
+    - 0.08
+    - 0.35
+    - 0.76
+    - 0.94
+  - area:
+    - 0.06
+    - 0.29
+    - 0.7
+    - 0.92
+  - area:
+    - 0.02
+    - 0.18
+    - 0.63
+    - 0.9
+  - area:
+    - -0.1
+    - 0.1
+    - 0.53
+    - 0.88
+  - area:
+    - -0.1
+    - 0.09
+    - 0.45
+    - 0.85
+  commonItems: []
+  seenCommonItems: []
+  uncommonItems: []
+  seenUncommonItems: []
+  rareItems: []
+  seenRareItems: []
+  epicItems: []
+  seenEpicItems: []
+  legendaryItems:
+  - {fileID: 1322858441821458975, guid: 016f3f7e81cfe4fe5a4906ff9d320530, type: 3}
+  seenLegendaryItems: []
+  specialItems: []
+  seenSpecialItems: []
+  flowerItems: []
+  seenFlowerItems: []
+  drawnItemID: 10

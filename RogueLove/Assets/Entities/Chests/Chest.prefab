@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 1254696647288241081}
   - component: {fileID: 2931893211283821017}
   m_Layer: 8
-  m_Name: ChestWeapon
+  m_Name: Chest
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -160,10 +160,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b985125f97f244a7b8d38dbb1fb8b956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  type: 0
+  itemChance: 1
   coll: {fileID: 534431606961867723}
   animator: {fileID: 1254696647288241081}
   lootList: {fileID: 11400000, guid: 2504b60e808b24eb88270a566affbfd0, type: 2}
+  itemList: {fileID: 11400000, guid: 0ea0359c88aff471da534ab97e4ce0b0, type: 2}
 --- !u!1 &6690233720377124046
 GameObject:
   m_ObjectHideFlags: 0

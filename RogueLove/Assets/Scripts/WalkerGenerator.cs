@@ -41,7 +41,7 @@ public class WalkerGenerator : MonoBehaviour
 
     public Tilemap oTilemap;
 
-    [SerializeField] private ChestList chestList;
+    [SerializeField] private GameObject chest;
 
     [SerializeField] private GameObject bossSpawnPoint;
 
@@ -643,7 +643,7 @@ public class WalkerGenerator : MonoBehaviour
                     } else {
                         Debug.Log(tileListX[rand] + "::" + tileListY[rand]);
 
-                        Instantiate(chestList.weaponChest, new Vector2(tileListX[rand] * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tileListY[rand] * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity);
+                        Instantiate(chest, new Vector2(tileListX[rand] * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tileListY[rand] * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity);
                         break;
                     }
 

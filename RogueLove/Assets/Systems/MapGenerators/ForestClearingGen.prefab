@@ -52,7 +52,8 @@ MonoBehaviour:
   floorTilemap: {fileID: 0}
   wallsTilemap: {fileID: 0}
   oTilemap: {fileID: 0}
-  chestList: {fileID: 11400000, guid: b97536aee7b664d8c82798d2d10e0de4, type: 2}
+  chest: {fileID: 5468405295723552563, guid: 4743bc2f8205d4081ad0bb21168f1cfc, type: 3}
+  bossSpawnPoint: {fileID: 0}
   mapWidth: 40
   mapHeight: 40
   maxWalkers: 8

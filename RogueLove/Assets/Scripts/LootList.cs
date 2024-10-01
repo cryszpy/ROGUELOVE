@@ -7,19 +7,17 @@ public enum WeaponRarity {
     COMMON, UNCOMMON, RARE, EPIC, LEGENDARY
 }
 
+[System.Serializable]
+public struct ChestAreaRarities {
+
+    public float[] area;
+}
+
 [Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/LootList")]
 public class LootList : ScriptableObject
 {
-
-    public float[] areaOne;
-    public float[] areaTwo;
-    public float[] areaThree;
-    public float[] areaFour;
-    public float[] areaFive;
-    public float[] areaSix;
-    public float[] areaSeven;
-    public float[] areaEight;
+    public ChestAreaRarities[] areaRarities;
     
     [Tooltip("List of all common weapon *pickup* objects.")]
     public List<WeaponPair> commonWeapons;
@@ -41,8 +39,9 @@ public class LootList : ScriptableObject
     public List<WeaponPair> legendaryWeapons;
     public List<WeaponPair> seenLegendaryWeapons;
 
-    public List<GameObject> items;
-    public List<GameObject> seenItems;
+    [Tooltip("List of all special weapon *pickup* objects.")]
+    public List<WeaponPair> specialWeapons;
+    public List<WeaponPair> seenSpecialWeapons;
 
     public int drawnWeaponID;
 
@@ -112,22 +111,5 @@ public class LootList : ScriptableObject
         ResetWeapons(seenRareWeapons, rareWeapons);
         ResetWeapons(seenEpicWeapons, epicWeapons);
         ResetWeapons(seenLegendaryWeapons, legendaryWeapons);
-    }
-
-    public GameObject GetRandomItem() {
-        int rand = UnityEngine.Random.Range(0, items.Count - 1);
-        return items[rand];
-    }
-
-    public void RemoveItem(GameObject item) {
-        seenItems.Add(item);
-        items.Remove(item);
-    }
-
-    public void ResetItems(List<GameObject> swapFrom, List<GameObject> swapTo) {
-        foreach (GameObject item in swapFrom.ToArray()) {
-            swapTo.Add(item);
-            swapFrom.Remove(item);
-        }
     }
 }

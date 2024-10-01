@@ -477,6 +477,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   lootList: {fileID: 11400000, guid: 2504b60e808b24eb88270a566affbfd0, type: 2}
+  itemList: {fileID: 11400000, guid: 0ea0359c88aff471da534ab97e4ce0b0, type: 2}
   defaultWeapon:
     pickupObject: {fileID: 8481469185648990204, guid: ccda4bad0b9a44e79857fd05cc61bb67, type: 3}
     pickupScript: {fileID: 5054346420906217912, guid: ccda4bad0b9a44e79857fd05cc61bb67, type: 3}
@@ -510,6 +511,7 @@ MonoBehaviour:
   saveIcon: {fileID: 0}
   heldWeapons: []
   canSwitchWeapons: 1
+  heldItems: []
   iFrame: 0
   currentDirection: {x: 0, y: 0}
   isDashing: 0

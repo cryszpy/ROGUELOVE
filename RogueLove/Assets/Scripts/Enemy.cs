@@ -62,7 +62,7 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private List<WeaponPair> weaponDropsList;
 
     [Tooltip("List of this enemy's possible weapon drops.")]
-    [SerializeField] private List<ItemPair> itemDropsList;
+    [SerializeField] private List<ItemPickup> itemDropsList;
 
     [Tooltip("A reference to the bronze coin prefab for spawning.")]
     [SerializeField] private GameObject coinBronze;

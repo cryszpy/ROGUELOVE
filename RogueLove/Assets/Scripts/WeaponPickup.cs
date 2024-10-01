@@ -9,8 +9,10 @@ public class WeaponPair {
     public float dropChance;
 }
 
-public class WeaponPickup : BasePickup
+public class WeaponPickup : BasePickup, IPickupable
 {
+    public delegate void WeaponPickupVoidHandler();
+    public static WeaponPickupVoidHandler OnPickup;
 
     [SerializeField] private WeaponRarity weaponObjectRarity;
 
@@ -24,8 +26,7 @@ public class WeaponPickup : BasePickup
         // Pickup weapon
         else if (Input.GetKeyDown(KeyCode.E) && playerFound && player.heldWeapons.Count < 2 && playerInRadius) {
 
-            PickupWeapon(false);
-
+            Pickup(false);
             player.StartWeaponSwitch(player.heldWeapons.Count - 1 - PlayerController.CurrentWeaponIndex, PlayerController.CurrentWeaponIndex);
             RemoveObject();
         } 
@@ -34,14 +35,14 @@ public class WeaponPickup : BasePickup
         && playerInRadius) {
             if (player.heldWeapons[PlayerController.CurrentWeaponIndex].TryGetComponent<Weapon>(out var script)) {
                 player.DropWeapon(script, true);
-                PickupWeapon(true);
+                Pickup(true);
                 player.StartWeaponSwitch(PlayerController.CurrentWeaponIndex, player.heldWeapons.Count - 1 - PlayerController.CurrentWeaponIndex);
                 RemoveObject();
             }
         }
     }
 
-    public void PickupWeapon(bool replace) {
+    public void Pickup(bool replace) {
 
         if (dropped) {
             objectToSpawn.transform.position = player.weaponPivot.transform.position;
@@ -65,6 +66,8 @@ public class WeaponPickup : BasePickup
 
             UpdateWeapon(weapon);
         }
+
+        OnPickup?.Invoke();
     }
 
     private void UpdateWeapon(GameObject weapon) {

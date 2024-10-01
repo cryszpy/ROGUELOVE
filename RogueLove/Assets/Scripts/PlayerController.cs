@@ -9,13 +9,22 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 using NUnit.Framework.Internal;
+using System.Linq;
 
 public class PlayerController : MonoBehaviour
 {
+    public delegate void PlayerVoidHandler();
+    public static PlayerVoidHandler EOnDamaged;
+    public static PlayerVoidHandler EOnDodged;
+    public static PlayerVoidHandler EOnMoving;
+    public static PlayerVoidHandler EOnEnergyFull;
+    public delegate IEnumerator PlayerCoroutineHandler();
+    public static PlayerVoidHandler EOnDeath;
 
     [Header("SCRIPT REFERENCES")]
 
     public LootList lootList;
+    public ItemList itemList;
 
     [SerializeField] private WeaponPair defaultWeapon;
 
@@ -88,6 +97,19 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private bool canSwitchWeapons = true;
 
+    [Tooltip("List of all items that the player has picked up.")]
+    public List<ItemPickup> heldItems = new();
+
+    private static List<int> heldItemsID = new();
+    public static List<int> HeldItemsID = new();
+
+    private static List<ItemRarity> heldItemsRarity = new();
+    public static List<ItemRarity> HeldItemsRarity = new();
+
+    [Tooltip("Total number of items that the player is holding.")]
+    private static int heldItemsCount;
+    public static int HeldItemsCount { get => heldItemsCount; set => heldItemsCount = value; }
+
     public bool iFrame;
     
     private Vector2 movementInput;
@@ -130,6 +152,10 @@ public class PlayerController : MonoBehaviour
         MoveSpeed += speed;
     }
 
+    [Tooltip("Chance to dodge incoming attacks.")]
+    private static float dodgeChance;
+    public static float DodgeChance { get => dodgeChance; set => dodgeChance = value;}
+
     // Player max energy
     private static float maxEnergy;
     public static float MaxEnergy { get => maxEnergy; set => maxEnergy = value; }
@@ -151,6 +177,7 @@ public class PlayerController : MonoBehaviour
 
                     // Play battery full animation here!!
                     Debug.Log("Battery full!");
+                    EOnEnergyFull?.Invoke();
 
                     // Add a call dialogue piece
                     GameStateManager.dialogueManager.AddCallDialogue(GameStateManager.dialogueManager.callDialogueList, GameStateManager.dialogueManager.player);
@@ -194,13 +221,26 @@ public class PlayerController : MonoBehaviour
             currentHealth = value;
             if(currentHealth <= 0) {
                 currentHealth = 0;
-                StartCoroutine(PlayerDeath());
+                EOnDeath?.Invoke(); // Triggers the OnDeath event
             }
         }
 
         get {
             return currentHealth;
         }
+    }
+
+    private void OnEnable() {
+        EOnDeath += StartDeath; // Subscribes wrapper function StartDeath to event OnDeath
+    }
+
+    // Unsubscribes all events on player being disabled
+    private void OnDisable() {
+        EOnDeath -= StartDeath;
+        EOnDodged = null;
+        EOnDamaged = null;
+        EOnEnergyFull = null;
+        EOnMoving = null;
     }
 
     // Start is called before the first frame update
@@ -271,6 +311,7 @@ public class PlayerController : MonoBehaviour
                 Experience = 0;
                 MoveSpeed = 3.2f;
                 Coins = 0;
+                DodgeChance = 0;
 
                 CurrentWeaponIndex = 0;
                 PrimaryWeaponID = 1;
@@ -282,6 +323,8 @@ public class PlayerController : MonoBehaviour
 
                 GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                 heldWeapons.Add(weaponObject);
+
+                HeldItemsCount = 0;
 
                 if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
                     PrimaryWeaponCurrentAmmo = script.ammoMax * AmmoMaxMultiplier;
@@ -297,6 +340,7 @@ public class PlayerController : MonoBehaviour
             coinsUI.SetCoins(Coins);
 
             AddSavedWeapons();
+            AddSavedItems();
 
             if (weapon == null) {
                 weapon = GetComponentInChildren<Weapon>();
@@ -445,6 +489,82 @@ public class PlayerController : MonoBehaviour
                 ammoBar.SetMaxAmmo(weaponScript.ammoMax * AmmoMaxMultiplier);
                 ammoBar.SetAmmo(SecondaryWeaponCurrentAmmo, weaponScript);
                 ammoBar.weaponSprite.sprite = weaponScript.sprite.sprite;
+            }
+        }
+    }
+
+    public void AddSavedItems() {
+
+        for (int i = 0; i < HeldItemsCount; i++) {
+
+            ItemPickup item;
+            GameObject itemObject;
+            
+            switch (HeldItemsRarity[i]) {
+                case ItemRarity.COMMON:
+                    item = itemList.seenCommonItems.Find(x => x.itemID == HeldItemsID[i]);
+                    itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                    itemObject.SetActive(false);
+                    heldItems.Add(itemObject.GetComponent<ItemPickup>());
+                    if (heldItems[i].type == ItemType.ABILITY) {
+                        item.effect.OnPickup();
+                    }
+                    break;
+                case ItemRarity.UNCOMMON:
+                    item = itemList.seenUncommonItems.Find(x => x.itemID == HeldItemsID[i]);
+                    itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                    itemObject.SetActive(false);
+                    heldItems.Add(itemObject.GetComponent<ItemPickup>());
+                    if (heldItems[i].type == ItemType.ABILITY) {
+                        item.effect.OnPickup();
+                    }
+                    break;
+                case ItemRarity.RARE:
+                    item = itemList.seenRareItems.Find(x => x.itemID == HeldItemsID[i]);
+                    itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                    itemObject.SetActive(false);
+                    heldItems.Add(itemObject.GetComponent<ItemPickup>());
+                    if (heldItems[i].type == ItemType.ABILITY) {
+                        item.effect.OnPickup();
+                    }
+                    break;
+                case ItemRarity.EPIC:
+                    item = itemList.seenEpicItems.Find(x => x.itemID == HeldItemsID[i]);
+                    itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                    itemObject.SetActive(false);
+                    heldItems.Add(itemObject.GetComponent<ItemPickup>());
+                    if (heldItems[i].type == ItemType.ABILITY) {
+                        item.effect.OnPickup();
+                    }
+                    break;
+                case ItemRarity.LEGENDARY:
+                    item = itemList.seenLegendaryItems.Find(x => x.itemID == HeldItemsID[i]);
+                    itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                    Debug.Log(item.gameObject);
+                    itemObject.SetActive(false);
+                    heldItems.Add(itemObject.GetComponent<ItemPickup>());
+                    if (heldItems[i].type == ItemType.ABILITY) {
+                        item.effect.OnPickup();
+                    }
+                    break;
+                case ItemRarity.SPECIAL:
+                    item = itemList.seenSpecialItems.Find(x => x.itemID == HeldItemsID[i]);
+                    itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                    itemObject.SetActive(false);
+                    heldItems.Add(itemObject.GetComponent<ItemPickup>());
+                    if (heldItems[i].type == ItemType.ABILITY) {
+                        item.effect.OnPickup();
+                    }
+                    break;
+                case ItemRarity.FLOWER:
+                    item = itemList.seenFlowerItems.Find(x => x.itemID == HeldItemsID[i]);
+                    itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
+                    itemObject.SetActive(false);
+                    heldItems.Add(itemObject.GetComponent<ItemPickup>());
+                    if (heldItems[i].type == ItemType.ABILITY) {
+                        item.effect.OnPickup();
+                    }
+                    break;
             }
         }
     }
@@ -758,6 +878,7 @@ public class PlayerController : MonoBehaviour
             int count = rb.Cast(direction, movementFilter, castCollisions, MoveSpeed * Time.fixedDeltaTime + collisionOffset);
         
             if(count == 0) {
+                EOnMoving?.Invoke();
                 rb.MovePosition(rb.position + direction * MoveSpeed * Time.fixedDeltaTime);
                 return true;
             } else {
@@ -782,14 +903,32 @@ public class PlayerController : MonoBehaviour
     public void TakeDamage(int damage) {
 
         if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && iFrame == false) {
-            iFrame = true;
-            StartCoroutine(SetHurtFlash(true));
-            StartCoroutine(hurtShake.Shake(hurtShakeDuration, hurtShakeAmplitude, hurtShakeFrequency));
-            Health -= damage;
-            healthBar.SetHealth(currentHealth);
 
-            animator.SetBool("Hurt", true);
+            if (DodgeChance != 0) {
+                float rand = UnityEngine.Random.value;
+
+                if (rand <= DodgeChance) {
+                    EOnDodged?.Invoke();
+                } else {
+                    Damage(damage);
+                }
+
+            } else {
+                Damage(damage);
+            }
         }
+    }
+
+    public void Damage(int damage) {
+        EOnDamaged?.Invoke(); // Triggers the OnDamaged event
+
+        iFrame = true;
+        StartCoroutine(SetHurtFlash(true));
+        StartCoroutine(hurtShake.Shake(hurtShakeDuration, hurtShakeAmplitude, hurtShakeFrequency));
+        Health -= damage;
+        healthBar.SetHealth(currentHealth);
+
+        animator.SetBool("Hurt", true);
     }
 
     private IEnumerator SetHurtFlash(bool condition) {
@@ -848,7 +987,16 @@ public class PlayerController : MonoBehaviour
         PrimaryWeaponCurrentAmmo = data.primaryWeaponCurrentAmmo;
         SecondaryWeaponCurrentAmmo = data.secondaryWeaponCurrentAmmo;
 
+        // Load items
+        HeldItemsCount = data.heldItemsCount;
+        HeldItemsID = new(data.heldItemsID);
+        HeldItemsRarity = new(data.heldItemsRarities);
+
         Debug.Log("LOADED PLAYER");
+    }
+
+    public void StartDeath() {
+        StartCoroutine(PlayerDeath());
     }
 
     public IEnumerator PlayerDeath() {
@@ -862,6 +1010,11 @@ public class PlayerController : MonoBehaviour
         string pathPlayer = Application.persistentDataPath + "/player.franny";
 
         lootList.ResetAllWeapons();
+        itemList.ResetAllItems();
+        heldItems.Clear();
+        heldItemsID.Clear();
+        heldItemsRarity.Clear();
+        HeldItemsCount = 0;
         
         if (File.Exists(pathHome)) {
             GameStateManager.SetLevel(0);

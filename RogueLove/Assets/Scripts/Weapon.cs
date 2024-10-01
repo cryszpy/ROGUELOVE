@@ -13,7 +13,7 @@ public class Weapon : MonoBehaviour
     [Tooltip("The object reference for this weapon's projectile object.")]
     public GameObject ammo;
 
-    // Weapon sprite
+    [Tooltip("Weapon sprite.")]
     public SpriteRenderer sprite;
 
     // Bullet Spawn Point
@@ -57,7 +57,5 @@ public class Weapon : MonoBehaviour
 
     // Weapon charge sound
     public string chargeSound;
-
-    public Vector2 distance;
 
 }

@@ -7233,7 +7233,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: orthographic size
-      value: 4.78125
+      value: 4.296875
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7752,6 +7752,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   saveSlots: {fileID: 0}
   pauseMenu: {fileID: 881619190}
+  sceneInfo: {fileID: 0}
 --- !u!114 &1468987820
 MonoBehaviour:
   m_ObjectHideFlags: 0

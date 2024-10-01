@@ -32,6 +32,10 @@ public class PlayerData
     public float primaryWeaponCurrentAmmo;
     public float secondaryWeaponCurrentAmmo;
 
+    public int heldItemsCount;
+    public int[] heldItemsID;
+    public ItemRarity[] heldItemsRarities;
+
     public PlayerData (PlayerController player, Weapon weapon) {
 
         playerDamageModifier = player.damageModifier;
@@ -55,6 +59,13 @@ public class PlayerData
         ammoMaxMultiplier = PlayerController.AmmoMaxMultiplier;
         primaryWeaponCurrentAmmo = PlayerController.PrimaryWeaponCurrentAmmo;
         secondaryWeaponCurrentAmmo = PlayerController.SecondaryWeaponCurrentAmmo;
-        
+
+        heldItemsCount = PlayerController.HeldItemsCount;
+        heldItemsID = new int[heldItemsCount];
+        heldItemsRarities = new ItemRarity[heldItemsCount];
+        for (int i = 0; i < heldItemsCount; i++) {
+            heldItemsID[i] = PlayerController.HeldItemsID[i];
+            heldItemsRarities[i] = PlayerController.HeldItemsRarity[i];
+        }
     }
 }

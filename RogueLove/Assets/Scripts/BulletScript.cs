@@ -152,7 +152,6 @@ public class BulletScript : MonoBehaviour
             if (!ignoredCollisions.ignoredCollisions.Contains(other.gameObject.layer)) {
                 madeContact = true;
                 RegisterDamage(other.gameObject);
-                Debug.Log("BRUHHHHH");
                 coll.enabled = false;
                 rb.velocity = (Vector2)direction.normalized * 0;
                 animator.SetTrigger("Destroy");
