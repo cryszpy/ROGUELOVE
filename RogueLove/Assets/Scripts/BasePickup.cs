@@ -4,6 +4,8 @@ public class BasePickup : MonoBehaviour
 {
     public GameObject objectToSpawn;
 
+    public GameObject pickupTooltip;
+
     protected PlayerController player;
     
     protected bool playerFound;
@@ -20,6 +22,9 @@ public class BasePickup : MonoBehaviour
         if (collider.CompareTag("Player")) {
 
             playerInRadius = true;
+            if (pickupTooltip) {
+                pickupTooltip.SetActive(true);
+            }
 
             if (collider.gameObject.TryGetComponent<PlayerController>(out var controller)) {
                 player = controller;
@@ -31,6 +36,9 @@ public class BasePickup : MonoBehaviour
     public virtual void OnTriggerExit2D(Collider2D collider) {
         if (collider.CompareTag("Player")) {
             playerInRadius = false;
+            if (pickupTooltip) {
+                pickupTooltip.SetActive(false);
+            }
         }
     }
 

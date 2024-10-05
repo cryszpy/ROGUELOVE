@@ -156,6 +156,10 @@ public class PlayerController : MonoBehaviour
     private static float dodgeChance;
     public static float DodgeChance { get => dodgeChance; set => dodgeChance = value;}
 
+    [Tooltip("Enemy damage reduction multiplier.")]
+    private static float takenDamageMult;
+    public static float TakenDamageMult { get => takenDamageMult; set => takenDamageMult = value;}
+
     // Player max energy
     private static float maxEnergy;
     public static float MaxEnergy { get => maxEnergy; set => maxEnergy = value; }
@@ -312,6 +316,7 @@ public class PlayerController : MonoBehaviour
                 MoveSpeed = 3.2f;
                 Coins = 0;
                 DodgeChance = 0;
+                takenDamageMult = 1;
 
                 CurrentWeaponIndex = 0;
                 PrimaryWeaponID = 1;
@@ -925,7 +930,7 @@ public class PlayerController : MonoBehaviour
         iFrame = true;
         StartCoroutine(SetHurtFlash(true));
         StartCoroutine(hurtShake.Shake(hurtShakeDuration, hurtShakeAmplitude, hurtShakeFrequency));
-        Health -= damage;
+        Health -= Mathf.RoundToInt(damage * takenDamageMult);
         healthBar.SetHealth(currentHealth);
 
         animator.SetBool("Hurt", true);
@@ -991,6 +996,9 @@ public class PlayerController : MonoBehaviour
         HeldItemsCount = data.heldItemsCount;
         HeldItemsID = new(data.heldItemsID);
         HeldItemsRarity = new(data.heldItemsRarities);
+
+        DodgeChance = data.dodgeChance;
+        takenDamageMult = data.takenDamageMult;
 
         Debug.Log("LOADED PLAYER");
     }

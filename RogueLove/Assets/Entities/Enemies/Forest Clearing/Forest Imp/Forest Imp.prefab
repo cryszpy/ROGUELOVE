@@ -117,7 +117,6 @@ MonoBehaviour:
   flavorText: 
   fireSound: 
   chargeSound: 
-  distance: {x: 0, y: 0}
 --- !u!114 &944568721832130506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -133,16 +132,10 @@ MonoBehaviour:
   parent: {fileID: 5875939324330161573}
   enemy: {fileID: 688565378050225313}
   charging: 0
-  player: {fileID: 0}
-  shake: {fileID: 0}
   attackChance: 1
   attackType: 0
-  canFire: 1
   timeBetweenBulletBurst: 0
   numberOfBurstShots: 1
-  shakeDuration: 0
-  shakeAmplitude: 0
-  shakeFrequency: 0
 --- !u!114 &6787036634362172547
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -452,6 +445,7 @@ MonoBehaviour:
   rangedAttackCooldownMin: 2
   rangedAttackCooldownMax: 3
   attackCooldown: 1
+  canFire: 0
   nextWaypointDistance: 1
   inFollowRadius: 0
   canWander: 0

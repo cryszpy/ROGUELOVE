@@ -44,7 +44,7 @@ public class Chest : MonoBehaviour
         if (playerInRadius && Input.GetKeyDown(KeyCode.E)) {
 
             float rand = UnityEngine.Random.value;
-            
+            Debug.Log(rand);
             coll.enabled = false;
             if (rand <= itemChance) {
                 OpenItemChest();

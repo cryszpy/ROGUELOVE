@@ -36,6 +36,9 @@ public class PlayerData
     public int[] heldItemsID;
     public ItemRarity[] heldItemsRarities;
 
+    public float dodgeChance;
+    public float takenDamageMult;
+
     public PlayerData (PlayerController player, Weapon weapon) {
 
         playerDamageModifier = player.damageModifier;
@@ -67,5 +70,8 @@ public class PlayerData
             heldItemsID[i] = PlayerController.HeldItemsID[i];
             heldItemsRarities[i] = PlayerController.HeldItemsRarity[i];
         }
+
+        dodgeChance = PlayerController.DodgeChance;
+        takenDamageMult = PlayerController.TakenDamageMult;
     }
 }
