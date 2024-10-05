@@ -398,17 +398,17 @@ public abstract class Enemy : MonoBehaviour
 
         if (!kbEd) {
 
-            if (rb.velocity.x >= 0.001f) {
+            if (rb.linearVelocity.x >= 0.001f) {
 
                 this.transform.localScale = new Vector3(1f, 1f, 1f);
                 animator.SetBool("IsMoving", true);
 
-            } else if (rb.velocity.x <= -0.001f) {
+            } else if (rb.linearVelocity.x <= -0.001f) {
 
                 this.transform.localScale = new Vector3(-1f, 1f, 1f);
                 animator.SetBool("IsMoving", true);
 
-            } else if (rb.velocity.y <= -0.001 || rb.velocity.y >= 0.001) {
+            } else if (rb.linearVelocity.y <= -0.001 || rb.linearVelocity.y >= 0.001) {
                 animator.SetBool("IsMoving", true);
             } else {
                 animator.SetBool("IsMoving", false);

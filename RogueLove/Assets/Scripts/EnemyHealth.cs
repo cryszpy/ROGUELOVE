@@ -118,12 +118,12 @@ public class EnemyHealth : MonoBehaviour
 
     IEnumerator EnemyKnockback(Rigidbody2D rigidBody, Vector2 dir, float kb) {
         parent.kbEd = true;
-        rigidBody.velocity = Vector2.zero;
+        rigidBody.linearVelocity = Vector2.zero;
         rigidBody.AddForce(dir * (kb * (1 - knockbackResistance)), ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.15f);
 
-        rigidBody.velocity = Vector2.zero;
+        rigidBody.linearVelocity = Vector2.zero;
 
         yield return new WaitForSeconds(0.35f);
 
@@ -132,12 +132,12 @@ public class EnemyHealth : MonoBehaviour
 
     IEnumerator EnemyDeathKnockback(Rigidbody2D rigidBody, Vector2 dir, float kb) {
         parent.kbEd = true;
-        rigidBody.velocity = Vector2.zero;
+        rigidBody.linearVelocity = Vector2.zero;
         rigidBody.AddForce(dir * (kb * (1 - knockbackResistance) * 2), ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.5f);
 
-        rigidBody.velocity = Vector2.zero;
+        rigidBody.linearVelocity = Vector2.zero;
 
         yield return new WaitForSeconds(0.35f);
 

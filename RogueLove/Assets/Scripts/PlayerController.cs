@@ -782,7 +782,7 @@ public class PlayerController : MonoBehaviour
             dashColl.gameObject.SetActive(true);
 
             // Reset velocity to zero before dashing
-            rb.velocity = Vector2.zero;
+            rb.linearVelocity = Vector2.zero;
             TryDash(currentDirection);
             
             // Dash duration timer
@@ -800,7 +800,7 @@ public class PlayerController : MonoBehaviour
                 animator.SetBool("Dash", false);
 
                 // Reser velocity to zero after dashing
-                rb.velocity = Vector2.zero;
+                rb.linearVelocity = Vector2.zero;
 
                 // Reset dash duration timer
                 dashTimer = 0;

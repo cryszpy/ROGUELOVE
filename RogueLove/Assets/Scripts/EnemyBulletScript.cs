@@ -67,7 +67,7 @@ public class EnemyBulletScript : MonoBehaviour
         error = UnityEngine.Random.insideUnitCircle * accuracy;
 
         // Sets the velocity and direction of the bullet which is acted on every frame from now on (this determines how the bullet moves)
-        rb.velocity = new Vector2(transform.right.x, transform.right.y) * speed + new Vector2(error.x, error.y);
+        rb.linearVelocity = new Vector2(transform.right.x, transform.right.y) * speed + new Vector2(error.x, error.y);
 
         float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rot + 90);
@@ -104,7 +104,7 @@ public class EnemyBulletScript : MonoBehaviour
 
                     // Destroy bullet on contact with player
                     coll.enabled = false;
-                    rb.velocity = (Vector2)direction.normalized * 0;
+                    rb.linearVelocity = (Vector2)direction.normalized * 0;
                     animator.SetTrigger("Destroy");
                 }
                 else {
@@ -115,9 +115,9 @@ public class EnemyBulletScript : MonoBehaviour
             else {
 
                 // Reflect bullet
-                Vector2 temp = rb.velocity;
-                rb.velocity = Vector2.zero;
-                rb.velocity = new Vector2(temp.x * -1, temp.y * -1);
+                Vector2 temp = rb.linearVelocity;
+                rb.linearVelocity = Vector2.zero;
+                rb.linearVelocity = new Vector2(temp.x * -1, temp.y * -1);
                 reflected = true;
             }
             
@@ -126,18 +126,18 @@ public class EnemyBulletScript : MonoBehaviour
         // then destroy bullet
         else if (!other.CompareTag("Enemy")) {
             coll.enabled = false;
-            rb.velocity = (Vector2)direction.normalized * 0;
+            rb.linearVelocity = (Vector2)direction.normalized * 0;
             animator.SetTrigger("Destroy");
         }
         
         if (other.CompareTag("Enemy") && reflected) {
             if (other.TryGetComponent<EnemyHealth>(out var enemy)) {
-                enemy.TakeDamage(damage, rb.velocity, knockback);
+                enemy.TakeDamage(damage, rb.linearVelocity, knockback);
             }
 
             // Destroy bullet on contact with enemy after reflection
             coll.enabled = false;
-            rb.velocity = (Vector2)direction.normalized * 0;
+            rb.linearVelocity = (Vector2)direction.normalized * 0;
             animator.SetTrigger("Destroy");
         }
     }

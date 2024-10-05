@@ -84,7 +84,7 @@ public class BulletScript : MonoBehaviour
         error = UnityEngine.Random.insideUnitCircle * accuracy;
 
         // Sets the velocity and direction of the bullet which is acted on every frame from now on (this determines how the bullet moves)
-        rb.velocity = new Vector2(direction.x, direction.y).normalized * force + new Vector2(error.x, error.y);
+        rb.linearVelocity = new Vector2(direction.x, direction.y).normalized * force + new Vector2(error.x, error.y);
 
         // Rotation of the bullet (which way it is facing, NOT which direction its moving in)
         float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
@@ -119,7 +119,7 @@ public class BulletScript : MonoBehaviour
                     madeContact = true;
                     RegisterDamage(hits[i].collider.gameObject);
                     coll.enabled = false;
-                    rb.velocity = (Vector2)direction.normalized * 0;
+                    rb.linearVelocity = (Vector2)direction.normalized * 0;
                     animator.SetTrigger("Destroy");
                 }
                 
@@ -153,7 +153,7 @@ public class BulletScript : MonoBehaviour
                 madeContact = true;
                 RegisterDamage(other.gameObject);
                 coll.enabled = false;
-                rb.velocity = (Vector2)direction.normalized * 0;
+                rb.linearVelocity = (Vector2)direction.normalized * 0;
                 animator.SetTrigger("Destroy");
             }
         }

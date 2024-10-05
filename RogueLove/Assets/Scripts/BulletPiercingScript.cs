@@ -42,7 +42,7 @@ public class BulletPiercingScript : BulletScript
                     madeContact = true;
                     RegisterDamage(hits[i].collider.gameObject);
                     coll.enabled = false;
-                    rb.velocity = (Vector2)direction.normalized * 0;
+                    rb.linearVelocity = (Vector2)direction.normalized * 0;
                     animator.SetTrigger("Destroy");
                 }
             }
@@ -75,7 +75,7 @@ public class BulletPiercingScript : BulletScript
                     RegisterDamage(other.gameObject);
                     Debug.Log("BRUHHHHH");
                     coll.enabled = false;
-                    rb.velocity = (Vector2)direction.normalized * 0;
+                    rb.linearVelocity = (Vector2)direction.normalized * 0;
                     animator.SetTrigger("Destroy");
                 }
             }
