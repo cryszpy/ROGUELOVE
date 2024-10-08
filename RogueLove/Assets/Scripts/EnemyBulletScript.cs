@@ -16,6 +16,8 @@ public class EnemyBulletScript : MonoBehaviour
 
     [SerializeField] protected Animator animator;
 
+    [SerializeField] protected SpriteRenderer spriteRenderer;
+
     public Vector3 direction;
 
     [SerializeField] protected Collider2D coll;
@@ -59,18 +61,26 @@ public class EnemyBulletScript : MonoBehaviour
 
         target = GameObject.FindGameObjectWithTag("Player").transform.position;
 
-        //direction = target - transform.position;
-
-        Vector3 rotation = transform.position - target;
+        direction = target - transform.position;
 
         // Determines the accuracy of the bullet (so bullets don't just fire in a straight line every time)
         error = UnityEngine.Random.insideUnitCircle * accuracy;
 
         // Sets the velocity and direction of the bullet which is acted on every frame from now on (this determines how the bullet moves)
-        rb.linearVelocity = new Vector2(transform.right.x, transform.right.y) * speed + new Vector2(error.x, error.y);
+        rb.linearVelocity = new Vector2(direction.x, direction.y).normalized * speed + new Vector2(error.x, error.y);
 
-        float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+        // Rotation of the bullet (which way it is facing, NOT which direction its moving in)
+        Vector2 rot = rb.linearVelocity;
+        if (rb.linearVelocity.x < 0) {
+            spriteRenderer.flipX = false;
+            spriteRenderer.flipY = true;
+            
+        } else {
+            spriteRenderer.flipX = false;
+            spriteRenderer.flipY = false;
+        }
+        float angle = Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     /* public virtual void Update() {

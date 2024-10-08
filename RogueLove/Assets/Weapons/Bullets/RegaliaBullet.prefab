@@ -56,6 +56,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -105,6 +106,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6018900055118431996}
   animator: {fileID: 2920130361219395360}
+  spriteRenderer: {fileID: 8741305754039510082}
   coll: {fileID: 5490067005516740771}
   weapon: {fileID: 0}
   ignoredCollisions: {fileID: 11400000, guid: dd17515d71c9c4fdcaeba33a7b86d612, type: 2}
@@ -115,7 +117,7 @@ MonoBehaviour:
   isFire: 0
 --- !u!50 &6018900055118431996
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -126,8 +128,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 1
-  m_LinearDrag: 0
-  m_AngularDrag: 0.05
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
   m_GravityScale: 1
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -174,17 +176,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0.11, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.4675, y: 0.345}
+    pivot: {x: 0.28, y: 0.525}
     oldSize: {x: 0.5, y: 0.5}
     newSize: {x: 0.15, y: 0.15}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.22, y: 0.4}
+  m_Size: {x: 0.31, y: 0.22}
   m_EdgeRadius: 0
 --- !u!95 &2920130361219395360
 Animator:

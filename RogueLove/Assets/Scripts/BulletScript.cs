@@ -17,6 +17,8 @@ public class BulletScript : MonoBehaviour
 
     public Animator animator;
 
+    [SerializeField] protected SpriteRenderer spriteRenderer;
+
     protected Vector3 direction;
 
     [SerializeField]
@@ -77,18 +79,25 @@ public class BulletScript : MonoBehaviour
         if (direction == Vector3.zero) {
             direction = weapon.spawnPos.transform.position - weapon.transform.position;
         }
-       
-        Vector3 rotation = transform.position - mousePos;
 
         // Determines the accuracy of the bullet (so bullets don't just fire in a straight line every time)
         error = UnityEngine.Random.insideUnitCircle * accuracy;
 
         // Sets the velocity and direction of the bullet which is acted on every frame from now on (this determines how the bullet moves)
         rb.linearVelocity = new Vector2(direction.x, direction.y).normalized * force + new Vector2(error.x, error.y);
-
+        
         // Rotation of the bullet (which way it is facing, NOT which direction its moving in)
-        float rot = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-        transform.rotation = Quaternion.Euler(0, 0, rot + 90);
+        Vector2 rot = rb.linearVelocity;
+        if (rb.linearVelocity.x < 0) {
+            spriteRenderer.flipX = false;
+            spriteRenderer.flipY = true;
+            
+        } else {
+            spriteRenderer.flipX = false;
+            spriteRenderer.flipY = false;
+        }
+        float angle = Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg;
+        transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
     public void FixedUpdate() {
@@ -98,6 +107,8 @@ public class BulletScript : MonoBehaviour
     }
 
     public virtual void Update() {
+
+        //transform.rotation.SetLookRotation(rb.linearVelocity);
 
         if (!madeContact) {
             //Debug.Log("Previous Position: " + previousPosition + "Current Position: " + rb.position);

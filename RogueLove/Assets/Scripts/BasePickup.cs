@@ -29,9 +29,9 @@ public class BasePickup : MonoBehaviour
                 animator.SetBool("Selected", true);
             }
 
-            if (pickupTooltip) {
+            /* if (pickupTooltip) {
                 pickupTooltip.SetActive(true);
-            }
+            } */
 
             if (collider.gameObject.TryGetComponent<PlayerController>(out var controller)) {
                 player = controller;
@@ -48,9 +48,9 @@ public class BasePickup : MonoBehaviour
                 animator.SetBool("Selected", false);
             }
 
-            if (pickupTooltip) {
+            /* if (pickupTooltip) {
                 pickupTooltip.SetActive(false);
-            }
+            } */
         }
     }
 
