@@ -402,6 +402,7 @@ GameObject:
   - component: {fileID: 267672357322451602}
   - component: {fileID: 7664968669742215844}
   - component: {fileID: 2975088654449525875}
+  - component: {fileID: 8728518230535728221}
   - component: {fileID: 5054346420906217912}
   m_Layer: 12
   m_Name: Pickup_Regalia
@@ -445,6 +446,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -517,6 +519,28 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 1.32, y: 1.21}
   m_Direction: 1
+--- !u!95 &8728518230535728221
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8481469185648990204}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: bf8c8d722d2674872894646e5d52ab62, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &5054346420906217912
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -532,6 +556,7 @@ MonoBehaviour:
   objectToSpawn: {fileID: 4603566924701312467, guid: 50e9f9bdb9acd401f8a48ec3f644ed2a, type: 3}
   pickupTooltip: {fileID: 4130169127531399758}
   dropped: 0
+  animator: {fileID: 8728518230535728221}
   weaponObjectRarity: 3
   weaponID: 16
 --- !u!1 &8766067151017831704

@@ -14,6 +14,8 @@ public class BasePickup : MonoBehaviour
 
     public bool dropped = false;
 
+    [SerializeField] private Animator animator;
+
     public virtual void Awake() {
         playerFound = false;
     }
@@ -22,6 +24,11 @@ public class BasePickup : MonoBehaviour
         if (collider.CompareTag("Player")) {
 
             playerInRadius = true;
+
+            if (animator) {
+                animator.SetBool("Selected", true);
+            }
+
             if (pickupTooltip) {
                 pickupTooltip.SetActive(true);
             }
@@ -36,6 +43,11 @@ public class BasePickup : MonoBehaviour
     public virtual void OnTriggerExit2D(Collider2D collider) {
         if (collider.CompareTag("Player")) {
             playerInRadius = false;
+
+            if (animator) {
+                animator.SetBool("Selected", false);
+            }
+
             if (pickupTooltip) {
                 pickupTooltip.SetActive(false);
             }

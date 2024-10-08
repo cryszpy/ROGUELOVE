@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 2322068278722900609}
   - component: {fileID: 3616705738183862418}
   - component: {fileID: 63637635597718448}
+  - component: {fileID: 6124201542363425417}
   - component: {fileID: 1322858441821458975}
   m_Layer: 13
   m_Name: Calamaza's Cuff
@@ -53,6 +54,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -125,6 +127,28 @@ CapsuleCollider2D:
   m_Offset: {x: 0, y: 0}
   m_Size: {x: 0.62, y: 0.62}
   m_Direction: 0
+--- !u!95 &6124201542363425417
+Animator:
+  serializedVersion: 7
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7355701597898931950}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: 1b76dd600ba8e4917bb7741a96dfbbf0, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_StabilizeFeet: 0
+  m_AnimatePhysics: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
+  m_KeepAnimatorStateOnDisable: 0
+  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &1322858441821458975
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,7 +162,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   objectToSpawn: {fileID: 0}
+  pickupTooltip: {fileID: 0}
   dropped: 0
+  animator: {fileID: 6124201542363425417}
   itemID: 10
   dropChance: 0
   effect: {fileID: 11400000, guid: 71a5e43df90964cd7b14d99f0b16d306, type: 2}
