@@ -67,8 +67,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Name
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 88cb69c46a8da447db6e8064149e1bb6, type: 2}
-  m_sharedMaterial: {fileID: -7634247150088712189, guid: 88cb69c46a8da447db6e8064149e1bb6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a6292399c161c4aaa901a3ddc0f8c4e2, type: 2}
+  m_sharedMaterial: {fileID: 8356853062967917036, guid: a6292399c161c4aaa901a3ddc0f8c4e2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -278,8 +278,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: New Text
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 88cb69c46a8da447db6e8064149e1bb6, type: 2}
-  m_sharedMaterial: {fileID: -7634247150088712189, guid: 88cb69c46a8da447db6e8064149e1bb6, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: a6292399c161c4aaa901a3ddc0f8c4e2, type: 2}
+  m_sharedMaterial: {fileID: 8356853062967917036, guid: a6292399c161c4aaa901a3ddc0f8c4e2, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -437,7 +437,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_Navigation:
-    m_Mode: 3
+    m_Mode: 0
     m_WrapAround: 0
     m_SelectOnUp: {fileID: 0}
     m_SelectOnDown: {fileID: 0}
@@ -815,9 +815,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce9ebe3b8b3cf4cbfacf98e48ee49d20, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  player: {fileID: 0}
   dialogueList: {fileID: 11400000, guid: bc6e93211537a4eeba2a8eb6207a3304, type: 2}
-  dialogue: {fileID: 11400000, guid: 10f201a5eb2ce4784bf33f943fafbca4, type: 2}
-  continueButton: {fileID: 1732831478857364186}
+  dialogueManager: {fileID: 0}
+  inRadius: 0
 --- !u!1 &4311687113508109056
 GameObject:
   m_ObjectHideFlags: 0

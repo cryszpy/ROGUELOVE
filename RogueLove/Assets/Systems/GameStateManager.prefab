@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 8162904416319405166}
   - component: {fileID: 1304198974309830220}
   - component: {fileID: 2804473715840246968}
+  - component: {fileID: 893565884414087022}
+  - component: {fileID: 1975629337793439861}
   m_Layer: 0
   m_Name: GameStateManager
   m_TagString: GameStateManager
@@ -77,3 +79,34 @@ MonoBehaviour:
   - 1
   movedDialogue: 0
   playingDialogue: 0
+--- !u!114 &893565884414087022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7135090300805884794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0d125081ef6004b4cbc6d1a8e361bc2d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  player: {fileID: 0}
+  animator: {fileID: 0}
+  sprite: {fileID: 0}
+  nameText: {fileID: 0}
+  flavorText: {fileID: 0}
+  holdTime: 2
+--- !u!114 &1975629337793439861
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7135090300805884794}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9f1df6a49a1a34feea372eea382d1085, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerCont: {fileID: 0}

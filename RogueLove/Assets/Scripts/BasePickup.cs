@@ -2,6 +2,8 @@ using UnityEngine;
 
 public class BasePickup : MonoBehaviour
 {
+    public string pickupName;
+    
     public GameObject objectToSpawn;
 
     public GameObject pickupTooltip;

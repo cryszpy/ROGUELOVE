@@ -6,13 +6,29 @@ public class CameraLookAt : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private Camera mainCamera;
-    [Range(2, 100)] [SerializeField] private float cameraTargetDivider;
+
+    [SerializeField] private float viewRangeTracker;
+
+    private void Start() {
+        if (!playerTransform) {
+            playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+            Debug.Log("Player transform is null! Reassigned.");
+        }
+        if (!mainCamera) {
+            mainCamera = Camera.main;
+            Debug.Log("Main camera is null! Reassigned.");
+        }
+    }
  
     private void Update()
     {
         if (GameStateManager.GetState() != GAMESTATE.MENU) {
             var mousePosition = mainCamera.ScreenToWorldPoint(Input.mousePosition);
-            var cameraTargetPosition = (mousePosition + (cameraTargetDivider - 1) * playerTransform.position) / cameraTargetDivider;
+
+            float viewRange = Mathf.Clamp(PlayerController.ViewRangeBase * PlayerController.ViewRangeMultiplier, 2, 100);
+            viewRangeTracker = viewRange;
+
+            var cameraTargetPosition = (mousePosition + (viewRange - 1) * playerTransform.position) / viewRange;
             transform.position = cameraTargetPosition;
         }
     }

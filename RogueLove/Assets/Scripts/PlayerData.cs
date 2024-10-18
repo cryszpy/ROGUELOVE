@@ -16,6 +16,7 @@ public class PlayerData
     public int playerMaxHealth;
 
     public float playerMoveSpeed;
+    public float moveSpeedMult;
 
     public float experienceLevel;
     public float maxExperienceLevel;
@@ -38,6 +39,8 @@ public class PlayerData
 
     public float dodgeChance;
     public float takenDamageMult;
+    public float viewRangeBase;
+    public float viewRangeMult;
 
     public PlayerData (PlayerController player, Weapon weapon) {
 
@@ -48,7 +51,10 @@ public class PlayerData
 
         playerHealth = player.Health;
         playerMaxHealth = PlayerController.MaxHealth;
+
         playerMoveSpeed = PlayerController.MoveSpeed;
+        moveSpeedMult = PlayerController.MoveSpeedMultiplier;
+
         playerFireRateModifier = player.fireRateModifier;
 
         playerCoins = PlayerController.Coins;
@@ -73,5 +79,7 @@ public class PlayerData
 
         dodgeChance = PlayerController.DodgeChance;
         takenDamageMult = PlayerController.TakenDamageMult;
+        viewRangeMult = PlayerController.ViewRangeMultiplier;
+        viewRangeBase = PlayerController.ViewRangeBase;
     }
 }

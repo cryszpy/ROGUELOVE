@@ -46,6 +46,13 @@ public class MainMenu : MonoBehaviour
         string pathPlayer = Application.persistentDataPath + "/player.franny";
         string pathHome = Application.persistentDataPath + "/home.soni";
 
+        // Reset saved profile stats if there is no profile
+        if (!File.Exists(pathHome)) {
+            HomeManager.SeenItems.Clear();
+            HomeManager.SeenItemsCount = 0;
+            HomeManager.PlayerDeaths = 0;
+        }
+
         // Set up SAVED GAME
         if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
             saveSlots.SetActive(true);

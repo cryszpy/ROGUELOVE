@@ -20,6 +20,9 @@ public class PlayerController : MonoBehaviour
     public static PlayerVoidHandler EOnEnergyFull;
     public delegate IEnumerator PlayerCoroutineHandler();
     public static PlayerVoidHandler EOnDeath;
+    public static PlayerVoidHandler EOnNewPickup;
+    public static PlayerVoidHandler EOnItemPickup;
+    public static PlayerVoidHandler EOnWeaponPickup;
 
     [Header("SCRIPT REFERENCES")]
 
@@ -66,49 +69,38 @@ public class PlayerController : MonoBehaviour
 
     public GameObject saveIcon;
 
+    [SerializeField] CameraLookAt cameraLookAt;
+
     [Header("STATS")]
 
     public List<GameObject> heldWeapons = new();
 
-    private static int currentWeaponIndex;
-    public static int CurrentWeaponIndex { get => currentWeaponIndex; set => currentWeaponIndex = value; }
+    public static int CurrentWeaponIndex;
 
-    private static WeaponRarity primaryWeaponRarity;
-    public static WeaponRarity PrimaryWeaponRarity { get => primaryWeaponRarity; set => primaryWeaponRarity = value; }
+    public static WeaponRarity PrimaryWeaponRarity;
 
-    private static float primaryWeaponCurrentAmmo;
-    public static float PrimaryWeaponCurrentAmmo { get => primaryWeaponCurrentAmmo; set => primaryWeaponCurrentAmmo = value; }
+    public static float PrimaryWeaponCurrentAmmo;
 
-    private static WeaponRarity secondaryWeaponRarity;
-    public static WeaponRarity SecondaryWeaponRarity { get => secondaryWeaponRarity; set => secondaryWeaponRarity = value; }
+    public static WeaponRarity SecondaryWeaponRarity;
 
-    private static float secondaryWeaponCurrentAmmo;
-    public static float SecondaryWeaponCurrentAmmo { get => secondaryWeaponCurrentAmmo; set => secondaryWeaponCurrentAmmo = value; }
+    public static float SecondaryWeaponCurrentAmmo;
 
-    private static int primaryWeaponID;
-    public static int PrimaryWeaponID { get => primaryWeaponID; set => primaryWeaponID = value; }
+    public static int PrimaryWeaponID;
 
-    private static int secondaryWeaponID;
-    public static int SecondaryWeaponID { get => secondaryWeaponID; set => secondaryWeaponID = value; }
+    public static int SecondaryWeaponID;
 
     [Tooltip("A multiplier that increases or decreases the maximum ammo capacity of the player's weapons.")]
-    private static float ammoMaxMultiplier;
-    public static float AmmoMaxMultiplier { get => ammoMaxMultiplier; set => ammoMaxMultiplier = value; }
+    public static float AmmoMaxMultiplier;
 
     [SerializeField] private bool canSwitchWeapons = true;
 
     [Tooltip("List of all items that the player has picked up.")]
     public List<ItemPickup> heldItems = new();
-
-    private static List<int> heldItemsID = new();
     public static List<int> HeldItemsID = new();
-
-    private static List<ItemRarity> heldItemsRarity = new();
     public static List<ItemRarity> HeldItemsRarity = new();
 
     [Tooltip("Total number of items that the player is holding.")]
-    private static int heldItemsCount;
-    public static int HeldItemsCount { get => heldItemsCount; set => heldItemsCount = value; }
+    public static int HeldItemsCount;
 
     public bool iFrame;
     
@@ -147,10 +139,13 @@ public class PlayerController : MonoBehaviour
 
     // Player movement speed
     private static float moveSpeed = 3.2f;
-    public static float MoveSpeed { get => moveSpeed; set => moveSpeed = value; }
+    public static float MoveSpeed { get => moveSpeed; set => moveSpeed = value * MoveSpeedMultiplier; }
     public static void ChangeMoveSpeed(float speed) {
         MoveSpeed += speed;
     }
+
+    private static float moveSpeedMultiplier = 1;
+    public static float MoveSpeedMultiplier { get => moveSpeedMultiplier; set => moveSpeedMultiplier = value; }
 
     [Tooltip("Chance to dodge incoming attacks.")]
     private static float dodgeChance;
@@ -207,6 +202,11 @@ public class PlayerController : MonoBehaviour
     public static void AddCoins(int value) {
         Coins += value;
     }
+
+    public static float viewRangeBase;
+    public static float ViewRangeBase { get => viewRangeBase; set => viewRangeBase = value; }
+    private static float viewRangeMultiplier;
+    public static float ViewRangeMultiplier { get => viewRangeMultiplier; set => viewRangeMultiplier = value;}
 
     public float damageModifier;
 
@@ -278,11 +278,16 @@ public class PlayerController : MonoBehaviour
             saveIcon = GameObject.FindGameObjectWithTag("SaveIcon");
             Debug.Log("Save icon is null! Reassigned.");
         }
+        if (cameraLookAt == null) {
+            cameraLookAt = GameObject.FindGameObjectWithTag("CameraLookAt").GetComponent<CameraLookAt>();
+            Debug.Log("Camera look at component is null! Reassigned.");
+        }
             
         iFrame = false;
 
         // Load player
         string pathPlayer = Application.persistentDataPath + "/player.franny";
+        string pathHome = Application.persistentDataPath + "/home.soni";
 
         if (!home) {
 
@@ -313,11 +318,20 @@ public class PlayerController : MonoBehaviour
                 Health = MaxHealth;
                 MaxEnergy = 20;
                 Experience = 0;
+
+                // Set speed
                 MoveSpeed = 3.2f;
+                MoveSpeedMultiplier = 1;
+
                 Coins = 0;
                 DodgeChance = 0;
                 takenDamageMult = 1;
 
+                // Set view range
+                ViewRangeBase = 5;
+                ViewRangeMultiplier = 1;
+
+                // Reset saved weapons
                 CurrentWeaponIndex = 0;
                 PrimaryWeaponID = 1;
                 PrimaryWeaponRarity = WeaponRarity.COMMON;
@@ -351,10 +365,10 @@ public class PlayerController : MonoBehaviour
                 weapon = GetComponentInChildren<Weapon>();
                 Debug.Log("WeaponFireMethod is null! Reassigned.");
             }
-
         }
-        
     }
+
+    public static void SetViewRange(float mult) {}
 
     public void AddSavedWeapons() {
 
@@ -602,7 +616,7 @@ public class PlayerController : MonoBehaviour
         && heldWeapons.Count == 2) {
 
             if (!heldWeapons[0].activeInHierarchy) {
-                StartWeaponSwitch(0, currentWeaponIndex);
+                StartWeaponSwitch(0, CurrentWeaponIndex);
             }
         }
         // Switch to second weapon
@@ -610,7 +624,7 @@ public class PlayerController : MonoBehaviour
         && heldWeapons.Count == 2) {
 
             if (!heldWeapons[1].activeInHierarchy) {
-                StartWeaponSwitch(1, currentWeaponIndex);
+                StartWeaponSwitch(1, CurrentWeaponIndex);
             }
         }
 
@@ -976,6 +990,7 @@ public class PlayerController : MonoBehaviour
 
         // Set speeds
         MoveSpeed = data.playerMoveSpeed;
+        MoveSpeedMultiplier = data.moveSpeedMult;
         fireRateModifier = data.playerFireRateModifier;
 
         // Load coins
@@ -997,8 +1012,13 @@ public class PlayerController : MonoBehaviour
         HeldItemsID = new(data.heldItemsID);
         HeldItemsRarity = new(data.heldItemsRarities);
 
+        // Load dodge chance
         DodgeChance = data.dodgeChance;
         takenDamageMult = data.takenDamageMult;
+
+        // Load view range
+        ViewRangeBase = data.viewRangeBase;
+        ViewRangeMultiplier = data.viewRangeMult;
 
         Debug.Log("LOADED PLAYER");
     }
@@ -1008,6 +1028,8 @@ public class PlayerController : MonoBehaviour
     }
 
     public IEnumerator PlayerDeath() {
+        GameStateManager.SetState(GAMESTATE.GAMEOVER);
+        
         animator.SetBool("Death", true);
         FindFirstObjectByType<AudioManager>().Play("PlayerDeath");
 
@@ -1020,9 +1042,11 @@ public class PlayerController : MonoBehaviour
         lootList.ResetAllWeapons();
         itemList.ResetAllItems();
         heldItems.Clear();
-        heldItemsID.Clear();
-        heldItemsRarity.Clear();
+        HeldItemsID.Clear();
+        HeldItemsRarity.Clear();
         HeldItemsCount = 0;
+
+        HomeManager.PlayerDeaths++;
         
         if (File.Exists(pathHome)) {
             GameStateManager.SetLevel(0);

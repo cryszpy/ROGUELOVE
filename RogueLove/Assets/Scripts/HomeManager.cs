@@ -5,47 +5,43 @@ using UnityEngine;
 public class HomeManager : MonoBehaviour
 {
 
-    // SAVE FILE PATH
-    private string pathHome;
-
-    [SerializeField] private PlayerController playerCont;
+    public PlayerController playerCont;
 
     // Player max health
-    private static int something;
-    public static int Something { get => something; set => something = value; }
+    public static int PlayerDeaths;
+    public int playerDeathsTracker;
 
-    public static void ChangeSomething(int num) {
-        Something += num;
+    public static List<int> SeenItems = new();
+    public static int SeenItemsCount;
+
+    private void Update() {
+        playerDeathsTracker = PlayerDeaths;
     }
 
-    public static int GetSomething() {
-        return Something;
-    }
-
-    void Awake()
-    {
-        GameStateManager.SetState(GAMESTATE.PLAYING);
-
-        pathHome = Application.persistentDataPath + "/home.soni";
-
-        playerCont.PlayerStart(true);
-
-        SaveHome();
-
-        TransitionManager.EndLeaf(true);
+    private void FindReferences() {
+        if (playerCont == null) {
+            playerCont = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+            Debug.Log("Player controller was null! Reassigned.");
+        }
     }
 
     public void SaveHome () {
-        SaveSystem.SaveHome(this, playerCont.saveIcon);
+        FindReferences();
+        SaveSystem.SaveHome(playerCont.saveIcon);
         Debug.Log("SAVE HOME CALLED");
     }
 
     public void LoadHome() {
+
+        FindReferences();
         
         // Load save data
         HomeData data = SaveSystem.LoadHome();
 
-        Something = data.something;
+        PlayerDeaths = data.playerDeaths;
+
+        SeenItemsCount = data.seenItemsCount;
+        SeenItems = new(data.seenItemsID);
 
         Debug.Log("LOADED HOME");
     }

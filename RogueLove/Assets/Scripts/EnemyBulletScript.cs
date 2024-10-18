@@ -83,11 +83,13 @@ public class EnemyBulletScript : MonoBehaviour
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
     }
 
-    /* public virtual void Update() {
-        timer += Time.deltaTime;
-        //transform.position = Movement(timer);
+    public virtual void Update() {
+        if (GameStateManager.GetState() == GAMESTATE.GAMEOVER) {
+            DestroyBullet();
+        }
     }
 
+    /*
     public virtual Vector2 Movement(float timer) {
         float x = timer * speed * transform.up.x;
         float y = timer * speed * transform.up.y;

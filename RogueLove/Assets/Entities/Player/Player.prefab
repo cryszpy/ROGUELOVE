@@ -152,6 +152,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -402,7 +403,7 @@ MonoBehaviour:
   m_Camera: {fileID: 0}
 --- !u!50 &2057914311772842495
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -413,8 +414,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 2
-  m_LinearDrag: 5
-  m_AngularDrag: 5
+  m_LinearDamping: 5
+  m_AngularDamping: 5
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -509,6 +510,7 @@ MonoBehaviour:
   dashColl: {fileID: 3295279771889110724}
   hurtShake: {fileID: 0}
   saveIcon: {fileID: 0}
+  cameraLookAt: {fileID: 0}
   heldWeapons: []
   canSwitchWeapons: 1
   heldItems: []

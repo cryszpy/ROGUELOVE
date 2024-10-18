@@ -16,7 +16,7 @@ MonoBehaviour:
   - area:
     - -0.1
     - -0.1
-    - -0.1
+    - 1
     - -0.1
   - area:
     - 0.2
@@ -53,11 +53,15 @@ MonoBehaviour:
     - 0.09
     - 0.45
     - 0.85
-  commonItems: []
+  commonItems:
+  - {fileID: 1322858441821458975, guid: d8d78aaa9dc7841eea3502fc94a63e97, type: 3}
+  - {fileID: 1322858441821458975, guid: 46e886cf6998f40d1862386c673813b9, type: 3}
+  - {fileID: 1322858441821458975, guid: 0898edbd5ea0d42ecac32efbf296dbff, type: 3}
   seenCommonItems: []
   uncommonItems: []
   seenUncommonItems: []
-  rareItems: []
+  rareItems:
+  - {fileID: 1322858441821458975, guid: 248618f97287b44e78ba2cad63e7d9f9, type: 3}
   seenRareItems: []
   epicItems: []
   seenEpicItems: []
@@ -68,4 +72,4 @@ MonoBehaviour:
   seenSpecialItems: []
   flowerItems: []
   seenFlowerItems: []
-  drawnItemID: 10
+  drawnItemID: 8

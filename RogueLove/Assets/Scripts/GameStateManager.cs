@@ -19,6 +19,8 @@ public class GameStateManager : MonoBehaviour
     // Dialogue Manager attached to this GameObject
     public static DialogueManager dialogueManager;
 
+    public static PickupManager pickupManager;
+
     // Methods to check the state of the game
     private static GAMESTATE state;
     public static GAMESTATE GetState() {
@@ -66,6 +68,8 @@ public class GameStateManager : MonoBehaviour
         return currentStage;
     }
 
+    public int stageTracker;
+
     public static bool levelClear = false;
     public static void SetLevelClear(bool condition) {
         levelClear = condition;
@@ -80,7 +84,8 @@ public class GameStateManager : MonoBehaviour
             Destroy(gameObject);
         } else {
             instance = this;
-            dialogueManager = this.GetComponent<DialogueManager>();
+            dialogueManager = GetComponent<DialogueManager>();
+            pickupManager = GetComponent<PickupManager>();
             DontDestroyOnLoad(gameObject);
         }
 
@@ -93,11 +98,9 @@ public class GameStateManager : MonoBehaviour
         //Debug.Log("previous scene: " + GameStateManager.PreviousScene);  // use this in any level to get the last level.
     }
 
-    /* void Update() {
-        if (state != GAMESTATE.PAUSED && state != GAMESTATE.GAMEOVER) {
-            Time.timeScale = 1;
-        }
-    } */
+    void Update() {
+        stageTracker = GetStage();
+    } 
 
     public static void NextLevel() {
 

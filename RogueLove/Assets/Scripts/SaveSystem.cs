@@ -78,7 +78,7 @@ public static class SaveSystem
         }
     }
 
-    public static void SaveHome (HomeManager manager, GameObject saveIcon) {
+    public static void SaveHome (GameObject saveIcon) {
 
         saveIcon.SetActive(true);
 
@@ -87,7 +87,7 @@ public static class SaveSystem
         string pathHome = Application.persistentDataPath + "/home.soni";
         FileStream stream = new(pathHome, FileMode.Create);
 
-        HomeData dataHome = new(manager);
+        HomeData dataHome = new();
 
         formatter.Serialize(stream, dataHome);
         stream.Close();

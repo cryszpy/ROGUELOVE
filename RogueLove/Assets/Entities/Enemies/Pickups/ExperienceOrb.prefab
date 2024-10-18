@@ -145,6 +145,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -247,7 +248,7 @@ MonoBehaviour:
   randomStep: 10
 --- !u!50 &1923873099500596009
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -258,8 +259,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 2
-  m_LinearDrag: 5
-  m_AngularDrag: 5
+  m_LinearDamping: 5
+  m_AngularDamping: 5
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -355,7 +356,8 @@ MonoBehaviour:
   lineSpriteRenderer: {fileID: 0}
   lineRenderer: {fileID: 0}
   chargeTime: 0
-  dropsList: []
+  weaponDropsList: []
+  itemDropsList: []
   coinBronze: {fileID: 0}
   coinSilver: {fileID: 0}
   coinGold: {fileID: 0}
@@ -364,6 +366,7 @@ MonoBehaviour:
   expOrb: {fileID: 0}
   minExp: 0
   maxExp: 0
+  attacksList: []
   spawnChanceVertAmp: 1
   spawnChanceMultiplier: 1
   spawnChanceXTransform: 1
@@ -376,12 +379,14 @@ MonoBehaviour:
   rangedAttackCooldownMin: 0
   rangedAttackCooldownMax: 0
   attackCooldown: 0
+  canFire: 0
   nextWaypointDistance: 3
   inFollowRadius: 0
   canWander: 0
   seen: 0
   kbEd: 0
   hitPlayer: 0
+  inContactColl: 0
 --- !u!1 &5826619376852643059
 GameObject:
   m_ObjectHideFlags: 0

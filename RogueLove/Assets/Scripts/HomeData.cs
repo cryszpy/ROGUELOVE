@@ -9,11 +9,20 @@ using UnityEngine.Tilemaps;
 public class HomeData
 {
 
-    public int something;
+    public int playerDeaths;
 
-    public HomeData (HomeManager manager) {
+    public int seenItemsCount;
+    public int[] seenItemsID;
 
-        something = HomeManager.GetSomething();
+    public HomeData () {
+
+        playerDeaths = HomeManager.PlayerDeaths;
+
+        seenItemsCount = HomeManager.SeenItemsCount;
+        seenItemsID = new int[seenItemsCount];
+        for (int i = 0; i < seenItemsCount; i++) {
+            seenItemsID[i] = HomeManager.SeenItems[i];
+        }
         
     }
 }

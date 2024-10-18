@@ -190,6 +190,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rb: {fileID: 6018900055118431996}
   animator: {fileID: 0}
+  spriteRenderer: {fileID: 0}
   direction: {x: 0, y: 0, z: 0}
   coll: {fileID: 5490067005516740771}
   spawnPoint: {x: 0, y: 0}

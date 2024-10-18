@@ -12,4 +12,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 42304e1cffc434c1e8ff0edfba083891, type: 3}
   m_Name: Calamaza's Cuff
   m_EditorClassIdentifier: 
-  dodgeChance: 0.65
+  dodgeChance: 0.25
