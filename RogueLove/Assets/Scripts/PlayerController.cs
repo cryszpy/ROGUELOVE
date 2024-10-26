@@ -208,7 +208,8 @@ public class PlayerController : MonoBehaviour
     private static float viewRangeMultiplier;
     public static float ViewRangeMultiplier { get => viewRangeMultiplier; set => viewRangeMultiplier = value;}
 
-    public float damageModifier;
+    public static float DamageModifier;
+    public float damageModifierTracker;
 
     public float fireRateModifier;
 
@@ -289,67 +290,71 @@ public class PlayerController : MonoBehaviour
         string pathPlayer = Application.persistentDataPath + "/player.franny";
         string pathHome = Application.persistentDataPath + "/home.soni";
 
-        if (!home) {
+        // Load player info from saved game
+        if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+            LoadPlayer();
+        } 
+        // Save data exists but player did not click load save --> most likely a NextLevel() call
+        else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+            Debug.Log("PLAYER SAVE DATA NEXT LEVEL CALL!");
+        } 
+        // Save data does not exist, and player clicked load save somehow
+        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+            GameStateManager.SetSave(false);
+            Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
+        } 
+        // Save data does not exist and player did not click load save --> most likely started new game
+        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
 
-            // Set health, energy, ammo, and coins UI references on each stage load
-            healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
-            energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
-            ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
-            coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
+            // SET DEFAULT STATS
+            MaxHealth = 4;
+            Health = MaxHealth;
+            MaxEnergy = 20;
+            Experience = 0;
 
-            // Load player info from saved game
-            if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-                LoadPlayer();
-            } 
-            // Save data exists but player did not click load save --> most likely a NextLevel() call
-            else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-                Debug.Log("PLAYER SAVE DATA NEXT LEVEL CALL!");
-            } 
-            // Save data does not exist, and player clicked load save somehow
-            else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-                GameStateManager.SetSave(false);
-                Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
-            } 
-            // Save data does not exist and player did not click load save --> most likely started new game
-            else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+            // Set speed
+            MoveSpeed = 3.2f;
+            MoveSpeedMultiplier = 1;
 
-                // SET DEFAULT STATS
-                MaxHealth = 4;
-                Health = MaxHealth;
-                MaxEnergy = 20;
-                Experience = 0;
+            Coins = 0;
+            DodgeChance = 0;
+            takenDamageMult = 1;
 
-                // Set speed
-                MoveSpeed = 3.2f;
-                MoveSpeedMultiplier = 1;
+            DamageModifier = 1;
 
-                Coins = 0;
-                DodgeChance = 0;
-                takenDamageMult = 1;
+            // Set view range
+            ViewRangeBase = 5;
+            ViewRangeMultiplier = 1;
 
-                // Set view range
-                ViewRangeBase = 5;
-                ViewRangeMultiplier = 1;
+            // Reset saved weapons
+            CurrentWeaponIndex = 0;
+            PrimaryWeaponID = 1;
+            PrimaryWeaponRarity = WeaponRarity.COMMON;
+            SecondaryWeaponID = 0;
+            SecondaryWeaponRarity = WeaponRarity.COMMON;
 
-                // Reset saved weapons
-                CurrentWeaponIndex = 0;
-                PrimaryWeaponID = 1;
-                PrimaryWeaponRarity = WeaponRarity.COMMON;
-                SecondaryWeaponID = 0;
-                SecondaryWeaponRarity = WeaponRarity.COMMON;
+            AmmoMaxMultiplier = 1;
 
-                AmmoMaxMultiplier = 1;
+            HeldItemsCount = 0;
 
+            if (!home) {
                 GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
                 heldWeapons.Add(weaponObject);
-
-                HeldItemsCount = 0;
 
                 if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
                     PrimaryWeaponCurrentAmmo = script.ammoMax * AmmoMaxMultiplier;
                     script.currentAmmo = PrimaryWeaponCurrentAmmo;
                 }
             }
+        }
+
+        if (!home) {
+            
+            // Set health, energy, ammo, and coins UI references on each stage load
+            healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
+            energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
+            ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
+            coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
 
             // Set UI stat objects
             healthBar.SetMaxHealth(MaxHealth);
@@ -589,6 +594,8 @@ public class PlayerController : MonoBehaviour
     }
 
     private void Update() {
+
+        damageModifierTracker = DamageModifier;
 
         if (savePressed) {
             savePressed = false;
@@ -980,7 +987,7 @@ public class PlayerController : MonoBehaviour
         healthBar.SetHealth(Health);
 
         // Load damage modifier
-        damageModifier = data.playerDamageModifier;
+        DamageModifier = data.playerDamageModifier;
 
         // Load experience level
         MaxEnergy = data.maxExperienceLevel;

@@ -44,7 +44,7 @@ public class PlayerData
 
     public PlayerData (PlayerController player, Weapon weapon) {
 
-        playerDamageModifier = player.damageModifier;
+        playerDamageModifier = PlayerController.DamageModifier;
 
         experienceLevel = PlayerController.Experience;
         maxExperienceLevel = PlayerController.MaxEnergy;

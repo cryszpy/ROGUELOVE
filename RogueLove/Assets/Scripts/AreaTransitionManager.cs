@@ -27,7 +27,7 @@ public class AreaTransitionManager : MonoBehaviour
     }
 
     private IEnumerator TransitionToArea() {
-        Debug.LogWarning("PLAYING AREA TRANSITION");
+        Debug.Log("PLAYING AREA TRANSITION");
 
         areaTransitionAnimator.SetTrigger("Open");
         areaTransitionTextAnimator.SetTrigger("FadeIn");

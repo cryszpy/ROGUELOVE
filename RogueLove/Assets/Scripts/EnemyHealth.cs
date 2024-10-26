@@ -59,7 +59,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeDamage(float damage, Vector2 direction, float knockback) {
         Health -= damage;
-        //Debug.Log("Took this amount of damage: " + damage);
+        Debug.Log("Took this amount of damage: " + damage);
 
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
@@ -74,7 +74,7 @@ public class EnemyHealth : MonoBehaviour
 
     public void TakeFireDamage(float damage, Vector2 direction) {
         Health -= damage;
-        //Debug.Log("Took this amount of damage: " + damage);
+        Debug.Log("Took this amount of damage: " + damage);
 
         animator.SetBool("Hurt", true);
         parent.kbEd = true;

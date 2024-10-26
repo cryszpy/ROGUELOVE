@@ -85,7 +85,6 @@ public class WeaponSingleShotFire : MonoBehaviour
 
         // Spawn bullet and add player damage modifier
         if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
-            bullet.damage *= player.damageModifier;
             GameObject instantBullet = bullet.Create(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity, parent, mainCam) as GameObject;
 
             // Play muzzle flash animation

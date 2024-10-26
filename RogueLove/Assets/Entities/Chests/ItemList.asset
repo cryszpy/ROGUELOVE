@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   areaRarities:
   - area:
-    - -0.1
-    - -0.1
     - 1
+    - -0.1
+    - -0.1
     - -0.1
   - area:
     - 0.2
@@ -57,6 +57,7 @@ MonoBehaviour:
   - {fileID: 1322858441821458975, guid: d8d78aaa9dc7841eea3502fc94a63e97, type: 3}
   - {fileID: 1322858441821458975, guid: 46e886cf6998f40d1862386c673813b9, type: 3}
   - {fileID: 1322858441821458975, guid: 0898edbd5ea0d42ecac32efbf296dbff, type: 3}
+  - {fileID: 1322858441821458975, guid: eeee1cc4b87224db9b1173c75ff4bf53, type: 3}
   seenCommonItems: []
   uncommonItems: []
   seenUncommonItems: []
