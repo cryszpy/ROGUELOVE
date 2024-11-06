@@ -209,7 +209,6 @@ public class PlayerController : MonoBehaviour
     public static float ViewRangeMultiplier { get => viewRangeMultiplier; set => viewRangeMultiplier = value;}
 
     public static float DamageModifier;
-    public float damageModifierTracker;
 
     public float fireRateModifier;
 
@@ -220,6 +219,11 @@ public class PlayerController : MonoBehaviour
     [SerializeField] private float hurtShakeFrequency;
 
     public bool savePressed = false;
+
+    public float damageModifierTracker;
+    public float speedTracker;
+    public float dodgeChanceTracker;
+    public float moveSpeedMultTracker;
 
     public int Health {
         set {
@@ -313,8 +317,8 @@ public class PlayerController : MonoBehaviour
             Experience = 0;
 
             // Set speed
-            MoveSpeed = 3.2f;
             MoveSpeedMultiplier = 1;
+            MoveSpeed = 3.2f;
 
             Coins = 0;
             DodgeChance = 0;
@@ -372,8 +376,6 @@ public class PlayerController : MonoBehaviour
             }
         }
     }
-
-    public static void SetViewRange(float mult) {}
 
     public void AddSavedWeapons() {
 
@@ -596,6 +598,9 @@ public class PlayerController : MonoBehaviour
     private void Update() {
 
         damageModifierTracker = DamageModifier;
+        speedTracker = MoveSpeed;
+        dodgeChanceTracker = DodgeChance;
+        moveSpeedMultTracker = MoveSpeedMultiplier;
 
         if (savePressed) {
             savePressed = false;

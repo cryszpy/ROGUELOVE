@@ -14,7 +14,7 @@ public class MoveSpeedEffect : ItemEffect
 
     public override void OnPickup()
     {
-        PlayerController.ChangeMoveSpeed(moveSpeedAdditive);
         PlayerController.MoveSpeedMultiplier *= moveSpeedMultiplicative;
+        PlayerController.ChangeMoveSpeed(moveSpeedAdditive);
     }
 }

@@ -41,6 +41,8 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private GAMESTATE previousGameState;
 
+    [SerializeField] private float callDialogueChance;
+
     [Tooltip("Index 1 -> Support calls, Index 2 -> Quest calls, Index 3 -> Shop calls, Index 4 -> Trade calls")]
     [SerializeField] private float[] callChances;
 
@@ -120,12 +122,13 @@ public class DialogueManager : MonoBehaviour
         // If no call requirements dialogue is fulfilled, then roll for special call type / normal type
 
         if (counter == 0) {
+            Debug.Log("No requirements dialogue were generated!");
 
             // Randomly generates what type of call to play upon energy bar filled
             float rand = UnityEngine.Random.value;
 
             // If a special type of call is activated, play that
-            if (rand <= (1/6)) {
+            if (rand <= callDialogueChance) {
                 SelectCallType(dialogueList, player);
             } 
             // Else, play a random Fallow call dialogue
