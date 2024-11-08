@@ -727,6 +727,7 @@ GameObject:
   m_Component:
   - component: {fileID: 746016090}
   - component: {fileID: 746016091}
+  - component: {fileID: 746016092}
   m_Layer: 5
   m_Name: MainMenu
   m_TagString: Untagged
@@ -771,6 +772,18 @@ MonoBehaviour:
   saveSlots: {fileID: 1265890999}
   pauseMenu: {fileID: 0}
   sceneInfo: {fileID: 11400000, guid: 79b5a47eab3644e14a8ba799bbaac43d, type: 2}
+--- !u!114 &746016092
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 746016089}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e2cd38456a6424126a2770777cf5bd31, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &796057070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1476,7 +1489,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: orthographic size
-      value: 3.034375
+      value: 3.375
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

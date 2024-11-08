@@ -228,7 +228,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    void FixedUpdate()
+    private void FixedUpdate()
     {
         if (GameStateManager.GetState() != GAMESTATE.GAMEOVER 
         && GameStateManager.GetState() != GAMESTATE.PAUSED) {

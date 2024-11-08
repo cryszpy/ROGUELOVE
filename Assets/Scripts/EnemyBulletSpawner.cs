@@ -122,6 +122,13 @@ public class EnemyBulletSpawner : MonoBehaviour
                 if (instantBullet.TryGetComponent<EnemyBulletScript>(out var bullet)) {
                     bullet.transform.rotation = transform.rotation;
                 }
+                /* if (parent.ammo.TryGetComponent<EnemyBulletScript>(out var bullet)) {
+                    GameObject projectile = (GameObject)bullet.Create(parent.ammo, transform.position, Quaternion.identity, gameObject);
+                    StartCoroutine(BulletDestroy(2, projectile));
+                    projectile.transform.rotation = transform.rotation;
+                } else {
+                    Debug.LogError("Could not find EnemyBulletScript component on this object!");
+                } */
 
                 yield return new WaitForSeconds(timeBetweenBulletBurst);
             }

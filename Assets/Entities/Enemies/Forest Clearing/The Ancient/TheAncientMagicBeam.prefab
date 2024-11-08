@@ -189,11 +189,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   rb: {fileID: 6018900055118431996}
-  animator: {fileID: 0}
-  spriteRenderer: {fileID: 0}
+  animator: {fileID: 4501149755664874175}
+  spriteRenderer: {fileID: 8741305754039510082}
   direction: {x: 0, y: 0, z: 0}
   coll: {fileID: 5490067005516740771}
   spawnPoint: {x: 0, y: 0}
+  weaponPivot: {fileID: 0}
   speed: 7
   damage: 1
   knockback: 0

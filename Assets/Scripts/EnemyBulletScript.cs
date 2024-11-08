@@ -25,6 +25,7 @@ public class EnemyBulletScript : MonoBehaviour
     [Header("STATS")]
 
     [SerializeField] protected Vector2 spawnPoint;
+    [SerializeField] protected GameObject weaponPivot;
 
     [SerializeField] protected float speed;
 
@@ -60,17 +61,18 @@ public class EnemyBulletScript : MonoBehaviour
         }
 
         target = GameObject.FindGameObjectWithTag("Player").transform.position;
-
-        direction = target - transform.position;
+        
+        //direction = target - transform.position;
 
         // Determines the accuracy of the bullet (so bullets don't just fire in a straight line every time)
         error = UnityEngine.Random.insideUnitCircle * accuracy;
 
         // Sets the velocity and direction of the bullet which is acted on every frame from now on (this determines how the bullet moves)
-        rb.linearVelocity = new Vector2(direction.x, direction.y).normalized * speed + new Vector2(error.x, error.y);
+        rb.linearVelocity = new Vector2(transform.right.x, transform.right.y).normalized * speed + new Vector2(error.x, error.y);
 
         // Rotation of the bullet (which way it is facing, NOT which direction its moving in)
         Vector2 rot = rb.linearVelocity;
+
         if (rb.linearVelocity.x < 0) {
             spriteRenderer.flipX = false;
             spriteRenderer.flipY = true;
@@ -86,6 +88,24 @@ public class EnemyBulletScript : MonoBehaviour
     public virtual void Update() {
         if (GameStateManager.GetState() == GAMESTATE.GAMEOVER) {
             DestroyBullet();
+        }
+    }
+
+    public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject spawnPosition) {
+        Debug.Log(spawnPosition);
+        GameObject bullet = Instantiate(original, position, rotation) as GameObject;
+        
+        if (bullet.TryGetComponent<EnemyBulletScript>(out var script)) {
+            script.weaponPivot = spawnPosition;
+            //BulletStart(spawnPosition);
+            return bullet;
+        } else if (bullet.GetComponentInChildren<EnemyBulletScript>()) {
+            bullet.GetComponentInChildren<EnemyBulletScript>().weaponPivot = spawnPosition;
+            //BulletStart(spawnPosition);
+            return bullet;
+        } else {
+            Debug.LogError("Could not find EnemyBulletScript script or extension of such on this Object.");
+            return null;
         }
     }
 

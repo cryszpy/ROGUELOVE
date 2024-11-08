@@ -64,6 +64,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -166,7 +167,7 @@ MonoBehaviour:
   randomStep: 10
 --- !u!50 &1923873099500596009
 Rigidbody2D:
-  serializedVersion: 4
+  serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
@@ -177,8 +178,8 @@ Rigidbody2D:
   m_UseFullKinematicContacts: 0
   m_UseAutoMass: 0
   m_Mass: 2
-  m_LinearDrag: 5
-  m_AngularDrag: 5
+  m_LinearDamping: 5
+  m_AngularDamping: 5
   m_GravityScale: 0
   m_Material: {fileID: 0}
   m_IncludeLayers:
@@ -445,6 +446,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -503,12 +505,11 @@ MonoBehaviour:
   ammoPerClick: 0
   currentAmmo: 100
   infiniteAmmo: 1
-  timeBetweenFiring: 0
+  timeBetweenFiring: 0.01
   coinValue: 0
   flavorText: 
   fireSound: 
   chargeSound: 
-  distance: {x: 0, y: 0}
 --- !u!114 &4337496282947585320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -680,6 +681,7 @@ SpriteRenderer:
   m_RayTraceProcedural: 0
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
+  m_SmallMeshCulling: 1
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -743,7 +745,6 @@ MonoBehaviour:
   flavorText: 
   fireSound: 
   chargeSound: 
-  distance: {x: 0, y: 0}
 --- !u!114 &5650005142565248593
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -161,7 +161,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b985125f97f244a7b8d38dbb1fb8b956, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemChance: 1
+  itemChance: 0.35
   coll: {fileID: 534431606961867723}
   animator: {fileID: 1254696647288241081}
   lootList: {fileID: 11400000, guid: 2504b60e808b24eb88270a566affbfd0, type: 2}
