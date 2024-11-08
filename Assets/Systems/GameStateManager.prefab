@@ -68,12 +68,15 @@ MonoBehaviour:
   callDialogueList: {fileID: 11400000, guid: bc6e93211537a4eeba2a8eb6207a3304, type: 2}
   continueButton: {fileID: 0}
   currentDialogue: {fileID: 0}
+  choicesBar: {fileID: 0}
+  choicePrefab: {fileID: 7495876816993698091, guid: 878038968cc9a463db09ec941a1fe36c, type: 3}
+  choiceButtonsList: []
   uiElements: []
   sceneInfo: {fileID: 11400000, guid: 79b5a47eab3644e14a8ba799bbaac43d, type: 2}
   priority: []
   textCPS: 0.03
   previousGameState: 0
-  callDialogueChance: 1
+  callDialogueChance: 0
   callChances:
   - 0.25
   - 0.5
@@ -81,6 +84,7 @@ MonoBehaviour:
   - 1
   movedDialogue: 0
   playingDialogue: 0
+  playingChoices: 0
 --- !u!114 &893565884414087022
 MonoBehaviour:
   m_ObjectHideFlags: 0

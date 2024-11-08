@@ -18,17 +18,9 @@ public class Dialogue : ScriptableObject, IComparable
 
     public List<DialogueRequirement> requirements;
 
-    public bool requirementMet;
-
     public CallDialogueType callDialogueType;
 
-    public bool question;
-
-    public bool choice;
-
-    public Dialogue[] choices;
-
-    public Dialogue[] followUp;
+    public DialogueChoice[] choices;
 
     [TextArea(3, 10)]
     public string[] sentences;

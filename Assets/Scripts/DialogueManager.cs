@@ -29,6 +29,10 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private Dialogue currentDialogue;
 
+    [SerializeField] private GameObject choicesBar;
+    [SerializeField] private GameObject choicePrefab;
+    [SerializeField] private List<GameObject> choiceButtonsList;
+
     [SerializeField] private List<Animator> uiElements;
 
     public SceneInfo sceneInfo;
@@ -49,6 +53,7 @@ public class DialogueManager : MonoBehaviour
     public bool movedDialogue = false;
 
     public bool playingDialogue = false;
+    public bool playingChoices = false;
 
     // Start is called before the first frame update
     void Start()
@@ -323,6 +328,10 @@ public class DialogueManager : MonoBehaviour
             dialogueSprite = GameObject.FindGameObjectWithTag("DialogueSprite").GetComponent<Image>();
             Debug.Log("DialogueManager dialogueSprite is null! Reassigned.");
         }
+        if (choicesBar == null) {
+            choicesBar = GameObject.FindGameObjectWithTag("ChoicesBar");
+            Debug.Log("Choices bar was null! Reassigned.");
+        }
     }
 
     public void StartDialogue (Dialogue dialogue) {
@@ -336,20 +345,24 @@ public class DialogueManager : MonoBehaviour
             continueButton.SetActive(true);
         }
 
-        if (uiElements.Count != 0) {
+        if (uiElements.Count > 0) {
             foreach (Animator element in uiElements) {
-                element.SetTrigger("Out");
+                element.SetBool("Hide", true);
             }
         }
 
         currentDialogue = dialogue;
 
-        priority.Remove(dialogue);
+        if (priority.Contains(dialogue)) {
+            priority.Remove(dialogue);
+        }
 
         animator.SetBool("IsOpen", true);
 
         // Save previous game state and set current game state to MENU (disables input and enemies)
-        previousGameState = GameStateManager.GetState();
+        if (GameStateManager.GetState() != GAMESTATE.MENU) {
+            previousGameState = GameStateManager.GetState();
+        }
         GameStateManager.SetState(GAMESTATE.MENU);
 
         // Sets the character's sprite for this piece of dialogue
@@ -361,6 +374,14 @@ public class DialogueManager : MonoBehaviour
         // Clears the sentences list (just in case lol)
         sentences.Clear();
 
+        // Remove existing buttons
+        if (choiceButtonsList.Count > 0) {
+            foreach (GameObject button in choiceButtonsList) {
+                Destroy(button);
+            }
+            choiceButtonsList.Clear();
+        }
+
         foreach (string sentence in dialogue.sentences) {
             sentences.Enqueue(sentence);
         }
@@ -370,14 +391,18 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence() {
 
-        // If dialogue has ended and it is not a choice / question dialogue then end and return
-        if (sentences.Count == 0 && currentDialogue.choices.Length == 0) {
-            EndDialogue();
+        // Display choices
+        if (sentences.Count == 0 && currentDialogue.choices.Length > 0) {
+
+            playingChoices = true;
+
+            ShowChoices();
+            
             return;
-        } 
-        // If dialogue has ended and it is a choice / question dialogue then display choices
-        else if (sentences.Count == 0 && currentDialogue.choices.Length != 0) {
-            Debug.Log("DISPLAY CHOICES");
+        }
+        // End dialogue if no choices and nothing else to say
+        else if (sentences.Count == 0 && currentDialogue.choices.Length <= 0) {
+            EndDialogue();
             return;
         }
 
@@ -391,7 +416,53 @@ public class DialogueManager : MonoBehaviour
         StartCoroutine(TypeSentence(sentence));
     }
 
+    public void ShowChoices() {
+
+        // Remove existing buttons
+        if (choiceButtonsList.Count > 0) {
+            foreach (GameObject button in choiceButtonsList) {
+                Destroy(button);
+            }
+            choiceButtonsList.Clear();
+        }
+
+        //animator.SetBool("IsOpen", false);
+
+        choicesBar.SetActive(true);
+
+        // If there are choices to be displayed—
+        if (currentDialogue) {
+
+            foreach (DialogueChoice choice in currentDialogue.choices) {
+
+                // Create button in UI
+                TMP_Text choiceText = Instantiate(choicePrefab, choicesBar.transform).GetComponentInChildren<TMP_Text>();
+
+                // Set UI button text to the choice text
+                choiceText.text = choice.choiceText;
+
+                // Add button object to a list for future destruction
+                choiceButtonsList.Add(choiceText.transform.parent.gameObject);
+
+                // Add on-click button action (triggers certain dialogue)
+                if (choiceText.transform.parent.TryGetComponent<Button>(out var button)) {
+                    button.onClick.AddListener(() => AssignChoiceFollowUp(choice));
+                }
+            }
+        }
+    }
+
+    public void AssignChoiceFollowUp(DialogueChoice choice) {
+        playingChoices = false;
+
+        // If choice response exists, play it
+        if (choice.nextDialogue != null) {
+            StartDialogue(choice.nextDialogue);
+        }
+    }
+
     private IEnumerator TypeSentence (string sentence) {
+        Debug.Log(sentence);
         dialogueText.text = "";
 
         foreach (char letter in sentence.ToCharArray()) {
@@ -406,7 +477,7 @@ public class DialogueManager : MonoBehaviour
 
         if (uiElements.Count != 0) {
             foreach (Animator element in uiElements) {
-                element.SetTrigger("In");
+                element.SetBool("Hide", false);
             }
         }
 

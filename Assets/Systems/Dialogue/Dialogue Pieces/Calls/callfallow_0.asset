@@ -17,12 +17,10 @@ MonoBehaviour:
   characterName: FALLOW
   priority: 0
   requirements: []
-  requirementMet: 0
   callDialogueType: 1
-  question: 0
-  choice: 0
-  choices: []
-  followUp: []
+  choices:
+  - {fileID: 11400000, guid: 6fb88486031294eb89dfee0442154346, type: 2}
+  - {fileID: 11400000, guid: 1b890d74ed68246fdaa281cf92177caa, type: 2}
   sentences:
   - What's up!
   - This is the first call dialogue!
