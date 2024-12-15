@@ -7,9 +7,16 @@ using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
+    [SerializeField] private PlayerController player;
 
-    [SerializeField]
-    private GameObject pauseMenu;
+    [SerializeField] private GameObject pauseMenu;
+
+    private void Start() {
+        if (!player) {
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+            Debug.LogWarning("PlayerController component was null! Reassigned.");
+        }
+    }
 
     void Update() {
         if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null) {
@@ -30,5 +37,17 @@ public class Menu : MonoBehaviour
             GameStateManager.SetState(GAMESTATE.PAUSED);
             pauseMenu.SetActive(true);
         }
+    }
+
+    public void AbandonRun() {
+        GameStateManager.SetState(GAMESTATE.GAMEOVER);
+        
+        player.ResetRun();
+    }
+
+    public void LoadMainMenu() {
+        GameStateManager.SetState(GAMESTATE.PAUSED);
+        
+        player.ResetRun();
     }
 }

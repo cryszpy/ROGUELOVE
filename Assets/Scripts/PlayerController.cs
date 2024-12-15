@@ -1048,6 +1048,11 @@ public class PlayerController : MonoBehaviour
 
         yield return new WaitForSeconds(2f);
 
+        ResetRun();
+    }
+
+    public void ResetRun() {
+
         string pathHome = Application.persistentDataPath + "/home.soni";
         string pathMap = Application.persistentDataPath + "/map.chris";
         string pathPlayer = Application.persistentDataPath + "/player.franny";

@@ -41,17 +41,12 @@ public class MainMenu : MonoBehaviour
         GameStateManager.SetState(GAMESTATE.PLAYING);
 
         if (playerCont != null) {
-            Debug.Log("plyayy");
             playerCont.PlayerStart(true);
         }
 
         PlayerController.EOnNewPickup += GameStateManager.homeManager.SaveHome;
 
         GameStateManager.homeManager.SaveHome();
-    }
-
-    public void LoadMainMenu() {
-        TransitionManager.StartLeaf(0);
     }
 
     public void PlayButton() {
