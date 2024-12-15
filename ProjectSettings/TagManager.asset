@@ -33,6 +33,7 @@ TagManager:
   - PickupInfoName
   - PickupInfoType
   - ChoicesBar
+  - TransitionManager
   layers:
   - Default
   - TransparentFX

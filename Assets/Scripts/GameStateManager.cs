@@ -1,12 +1,8 @@
-using System.Collections;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 // State of the game
 public enum GAMESTATE {
-    MENU, PLAYING, PAUSED, GAMEOVER
+    MAINMENU, MENU, PLAYING, PAUSED, GAMEOVER
 }
 
 public class GameStateManager : MonoBehaviour
@@ -21,6 +17,10 @@ public class GameStateManager : MonoBehaviour
 
     public static PickupManager pickupManager;
 
+    public static TransitionManager transitionManager;
+
+    public static HomeManager homeManager;
+
     // Methods to check the state of the game
     private static GAMESTATE state;
     public static GAMESTATE GetState() {
@@ -30,6 +30,7 @@ public class GameStateManager : MonoBehaviour
         state = newState;
         Time.timeScale = state switch
         {
+            GAMESTATE.MAINMENU => 1,
             GAMESTATE.MENU => 1,
             GAMESTATE.GAMEOVER => 1,
             GAMESTATE.PAUSED => 0,
@@ -78,7 +79,9 @@ public class GameStateManager : MonoBehaviour
         return levelClear;
     }
 
-    void Start() {
+    public GAMESTATE gameStateTracker;
+
+    void Awake() {
 
         if (instance != null) {
             Destroy(gameObject);
@@ -86,12 +89,12 @@ public class GameStateManager : MonoBehaviour
             instance = this;
             dialogueManager = GetComponent<DialogueManager>();
             pickupManager = GetComponent<PickupManager>();
+            transitionManager = GameObject.FindGameObjectWithTag("TransitionManager").GetComponent<TransitionManager>();
+            homeManager = GetComponent<HomeManager>();
             DontDestroyOnLoad(gameObject);
         }
 
-        if (GetState() == 0) {
-            SetState(GAMESTATE.MENU);
-        } else {
+        if (GetStage() != 0) {
             SetState(GAMESTATE.PLAYING);
         }
 
@@ -100,6 +103,7 @@ public class GameStateManager : MonoBehaviour
 
     void Update() {
         stageTracker = GetStage();
+        gameStateTracker = GetState();
     } 
 
     public static void NextLevel() {

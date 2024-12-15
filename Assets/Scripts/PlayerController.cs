@@ -796,7 +796,7 @@ public class PlayerController : MonoBehaviour
     private void FixedUpdate() {
 
         // If in a menu, then do not take any input
-        if (GameStateManager.GetState() == GAMESTATE.MENU) {
+        if (GameStateManager.GetState() != GAMESTATE.PLAYING) {
             animator.SetBool("IsMoving", false);
             return;
         }
@@ -836,7 +836,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Movement system if you're not dead lol
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
 
             // Dash cooldown timer
             if (!isDashing && !canDash) {
@@ -933,7 +933,8 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage) {
 
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && iFrame == false) {
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER || GameStateManager.GetState() != GAMESTATE.MAINMENU && !iFrame) {
+            iFrame = true;
 
             if (DodgeChance != 0) {
                 float rand = UnityEngine.Random.value;
@@ -1060,10 +1061,14 @@ public class PlayerController : MonoBehaviour
 
         HomeManager.PlayerDeaths++;
         
+        // If home save file is found—
         if (File.Exists(pathHome)) {
+
+            // Reset run progress stats
             GameStateManager.SetLevel(0);
             GameStateManager.SetStage(0);
 
+            // Deletes current run stat files
             if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
                 File.Delete(pathMap);
                 File.Delete(pathPlayer);
@@ -1074,11 +1079,17 @@ public class PlayerController : MonoBehaviour
 
             Debug.Log("DIED AND WENT HOME");
 
-            TransitionManager.StartLeaf(1);
-        } else {
+            // Loads Home scene
+            TransitionManager.StartLeaf(0);
+        } 
+        // If home save file is NOT found—
+        else {
+
+            // Reset run progress stats
             GameStateManager.SetLevel(0);
             GameStateManager.SetStage(0);
 
+            // Deletes current run stat files
             if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
                 File.Delete(pathMap);
                 File.Delete(pathPlayer);
@@ -1089,10 +1100,9 @@ public class PlayerController : MonoBehaviour
 
             Debug.LogWarning("DIED AND COULD NOT FIND HOME SAVE FILE");
 
+            // Loads Home scene
             TransitionManager.StartLeaf(0);
         }
-
-        
     }
 
     private void RefreshEditorWindow() {

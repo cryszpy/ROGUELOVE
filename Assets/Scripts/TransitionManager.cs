@@ -64,7 +64,7 @@ public class TransitionManager : MonoBehaviour
         animator.SetTrigger("LightLeakEnd");
     }
 
-    IEnumerator LoadLevel(int index) {
+    public IEnumerator LoadLevel(int index) {
         Time.timeScale = 1f;
         animator.SetTrigger("LightLeakStart");
         if (GameStateManager.dialogueManager.player) {

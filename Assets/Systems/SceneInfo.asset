@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 40632d0dd972b43039dcd1e8ba9ec7e3, type: 3}
   m_Name: SceneInfo
   m_EditorClassIdentifier: 
-  bossSceneIndexes: 02000000
-  sceneOffset: 2
+  bossSceneIndexes: 01000000
+  sceneOffset: 1
