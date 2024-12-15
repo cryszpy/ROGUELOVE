@@ -14,6 +14,8 @@ public class HomeLookAt : MonoBehaviour
 
     public bool room3;
 
+    public bool room4;
+
     private void Start() {
         room2 = true;
     }
@@ -31,7 +33,10 @@ public class HomeLookAt : MonoBehaviour
             } else if (room3) {
                 var cameraTargetPosition = (playerTransform.position + (cameraTargetDivider - 1) * points[2].transform.position) / cameraTargetDivider;
                 transform.position = cameraTargetPosition; 
-            }            
+            } else if (room4) {
+                var cameraTargetPosition = (playerTransform.position + (cameraTargetDivider - 1) * points[3].transform.position) / cameraTargetDivider;
+                transform.position = cameraTargetPosition; 
+            }     
         }
     }
 }

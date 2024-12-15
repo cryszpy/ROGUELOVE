@@ -26,6 +26,9 @@ public class HomeRoomRadius : MonoBehaviour
                         case 3:
                             lookAt.room3 = true;
                             break;
+                        case 4:
+                            lookAt.room4 = true;
+                            break;
                     }
                 }
             }
@@ -46,6 +49,9 @@ public class HomeRoomRadius : MonoBehaviour
                             break;
                         case 3:
                             lookAt.room3 = false;
+                            break;
+                        case 4:
+                            lookAt.room4 = false;
                             break;
                     }
                 }

@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 9d6beaebb14c240d8bffa6cad26d4c44
+guid: b555ce8ba0e8743cc936086a3ec57f58
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8879189594618013017
-    second: home_kitchen_0
+      213: -6772437197880749577
+    second: home_bed_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -84,7 +84,7 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
-    buildTarget: Standalone
+    buildTarget: Win64
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -109,17 +109,43 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Linux64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Standalone
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
   spriteSheet:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: home_kitchen_0
+      name: home_bed_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 0
-        width: 128
-        height: 70
+        y: 8
+        width: 31
+        height: 52
       alignment: 0
       pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 7aad27f8b18c6c480800000000000000
-      internalID: -8879189594618013017
+      spriteID: 7f11dac10487302a0800000000000000
+      internalID: -6772437197880749577
       vertices: []
       indices: 
       edges: []
@@ -137,16 +163,10 @@ TextureImporter:
     outline: []
     customData: 
     physicsShape:
-    - - {x: 64, y: 24}
-      - {x: -32, y: 24}
-      - {x: -32, y: 0}
-      - {x: 45, y: 0}
-      - {x: 45, y: -27}
-      - {x: -48, y: -27}
-      - {x: -48, y: 13}
-      - {x: -64, y: 13}
-      - {x: -64, y: -40}
-      - {x: 64, y: -40}
+    - - {x: 14, y: 27}
+      - {x: -16, y: 27}
+      - {x: -16, y: -22}
+      - {x: 14, y: -22}
     bones: []
     spriteID: 5e97eb03825dee720800000000000000
     internalID: 1537655665
@@ -158,7 +178,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      home_kitchen_0: -8879189594618013017
+      home_bed_0: -6772437197880749577
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
