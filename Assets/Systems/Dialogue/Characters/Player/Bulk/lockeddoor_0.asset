@@ -13,17 +13,17 @@ MonoBehaviour:
   m_Name: lockeddoor_0
   m_EditorClassIdentifier: 
   id: lockeddoor_0
-  characterSprite: {fileID: 21300000, guid: 7abc80531db9c48e1bf4c82cd3633eda, type: 3}
-  characterName: YOU
+  owner: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+  lines:
+  - sentence: ...
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+  - sentence: ...I'm not quite ready for that yet.
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+  nextDialogue: {fileID: 0}
   priority: 0
   requirements: []
-  requirementMet: 0
-  storyline: 0
-  storylineScene: 0
-  question: 0
-  choice: 0
+  callDialogueType: 0
+  firstNameUsage: 0
   choices: []
-  followUp: []
-  sentences:
-  - ayo bruv
-  - nuh uh.

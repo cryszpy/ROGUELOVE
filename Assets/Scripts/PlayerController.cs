@@ -610,7 +610,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // If in a menu, then do not take any input
-        if (GameStateManager.GetState() == GAMESTATE.MENU) {
+        if (GameStateManager.GetState() != GAMESTATE.PLAYING) {
             return;
         }
 

@@ -13,20 +13,23 @@ MonoBehaviour:
   m_Name: fallow_0
   m_EditorClassIdentifier: 
   id: fallow_0
-  characterSprite: {fileID: 21300000, guid: 7abc80531db9c48e1bf4c82cd3633eda, type: 3}
-  characterName: FALLOW
+  owner: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+  lines:
+  - sentence: Hey!
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+  - sentence: This is the first in-person dialogue we've had.
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+  - sentence: Crazy right?
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+  nextDialogue: {fileID: 0}
   priority: 0
   requirements:
   - reqType: 0
     targetObjectID: 0
     statReqToCheck: 
-  requirementMet: 0
   callDialogueType: 0
-  question: 0
-  choice: 0
+  firstNameUsage: 0
   choices: []
-  followUp: []
-  sentences:
-  - Hey!
-  - This is the first in-person dialogue we've had.
-  - Crazy right?

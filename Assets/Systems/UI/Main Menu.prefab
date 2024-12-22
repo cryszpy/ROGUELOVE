@@ -1301,10 +1301,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e2cd38456a6424126a2770777cf5bd31, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  cameraState: 1
   playerCont: {fileID: 0}
   saveSlots: {fileID: 5345452771205781}
   sceneInfo: {fileID: 11400000, guid: 79b5a47eab3644e14a8ba799bbaac43d, type: 2}
   mainMenuScreen: {fileID: 779570814736934579}
+  homeLookAt: {fileID: 0}
+  virtualCamera: {fileID: 0}
+  bedroomCamOrtho: 1.71
+  bedroomPixelPerf: {fileID: 0}
 --- !u!1 &9195781114735559847
 GameObject:
   m_ObjectHideFlags: 0

@@ -194,6 +194,7 @@ MonoBehaviour:
   direction: {x: 0, y: 0, z: 0}
   coll: {fileID: 5490067005516740771}
   spawnPoint: {x: 0, y: 0}
+  weaponPivot: {fileID: 0}
   speed: 5
   damage: 1
   knockback: 0

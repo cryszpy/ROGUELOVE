@@ -10,17 +10,17 @@ public class DialogueList : ScriptableObject
     public string id_prefix;
 
     // List of all available dialogue without prerequisites in the game.
-    public List<Dialogue> noRequirements;
+    public List<DialoguePiece> noRequirements;
 
     // List of all unavailable dialogue without prerequisites in the game.
-    public List<Dialogue> seenNoRequirements;
+    public List<DialoguePiece> seenNoRequirements;
 
 
 
     // List of all available casual dialogue with prerequisites in the game.
-    public List<Dialogue> requirements;
+    public List<DialoguePiece> requirements;
 
     // List of all unavailable casual dialogue with prerequisites in the game.
-    public List<Dialogue> seenRequirements;
+    public List<DialoguePiece> seenRequirements;
 
 }

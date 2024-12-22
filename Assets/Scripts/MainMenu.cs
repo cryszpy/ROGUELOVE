@@ -4,9 +4,22 @@ using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
 using UnityEngine.SceneManagement;
+using Cinemachine;
+using UnityEngine.Rendering.Universal;
+
+public enum CameraState {
+    DEFAULT, BEDROOM
+}
+
+public enum SaveType {
+    NEWGAME, SAVEDHOME, ACTIVERUN
+}
 
 public class MainMenu : MonoBehaviour
 {
+
+    public CameraState cameraState;
+
     [SerializeField] private PlayerController playerCont;
 
     [SerializeField] private GameObject saveSlots;
@@ -15,13 +28,62 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject mainMenuScreen;
 
+    [SerializeField] private HomeLookAt homeLookAt;
+
+    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+
+    [SerializeField] private PixelPerfectCamera pixelPerfectCamera;
+
+    [Header("BEDROOM STATS")]
+
+    [SerializeField] private float bedroomCamOrtho;
+    [SerializeField] private CinemachinePixelPerfect bedroomPixelPerf;
+
     private void Awake() {
-        Debug.Log(GameStateManager.GetState());
+
+        string pathMap = Application.persistentDataPath + "/map.chris";
+        string pathPlayer = Application.persistentDataPath + "/player.franny";
+        string pathHome = Application.persistentDataPath + "/home.soni";
+
+        // NEWGAME
+        if (!File.Exists(pathHome)) {
+            GameStateManager.currentSaveType = SaveType.NEWGAME;
+        } else {
+
+            // ACTIVE RUN
+            if (File.Exists(pathPlayer) && File.Exists(pathMap)) {
+                GameStateManager.currentSaveType = SaveType.ACTIVERUN;
+            } 
+            // SAVED HOME — NO ACTIVE RUN
+            else {
+                GameStateManager.currentSaveType = SaveType.SAVEDHOME;
+            }
+        }
+
+        if (!virtualCamera) {
+            GameObject camObject = GameObject.FindGameObjectWithTag("VirtualCamera");
+            virtualCamera = camObject.GetComponent<CinemachineVirtualCamera>();
+
+            if (!bedroomPixelPerf) {
+                bedroomPixelPerf = camObject.GetComponent<CinemachinePixelPerfect>();
+                Debug.LogWarning("CinemachinePixelPerfect component null! Reassigned.");
+            }
+
+            Debug.LogWarning("VirtualCamera component null! Reassigned.");
+        }
+
+        if (!pixelPerfectCamera) {
+            pixelPerfectCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PixelPerfectCamera>();
+            Debug.LogWarning("PixelPerfectCamera component null! Reassigned.");
+        }
 
         // If the HOME scene is loaded after a player death, don't show the main menu
         if (GameStateManager.GetState() == GAMESTATE.GAMEOVER) {
             mainMenuScreen.SetActive(false);
             TransitionManager.EndLeaf(true);
+
+            SetupCamera(false);
+
             StartHome();
         } 
         // Otherwise, show main menu
@@ -30,35 +92,95 @@ public class MainMenu : MonoBehaviour
             GameStateManager.SetStage(0);
             GameStateManager.SetLevel(0);
             GameStateManager.SetState(GAMESTATE.MAINMENU);
-            Cursor.visible = true;
+
+            SetupCamera(true);
         }
+    }
+
+    private void SetupCamera(bool bedroom) {
+
+        switch (bedroom) {
+
+            // Setup camera for bedroom zoom-out transition
+            case true:
+                cameraState = CameraState.BEDROOM;
+
+                homeLookAt.bedroom = true;
+
+                bedroomPixelPerf.enabled = false;
+                pixelPerfectCamera.enabled = false;
+
+                virtualCamera.m_Lens.OrthographicSize = bedroomCamOrtho;
+
+                break;
+            // Setup camera for player death respawn
+            case false:
+                cameraState = CameraState.DEFAULT;
+
+                homeLookAt.bedroom = false;
+                homeLookAt.room4 = true;
+
+                bedroomPixelPerf.enabled = false;
+                pixelPerfectCamera.enabled = false;
+
+                virtualCamera.m_Lens.OrthographicSize = 3.2f;
+
+                bedroomPixelPerf.enabled = true;
+                pixelPerfectCamera.enabled = true;
+
+                break;
+        }
+    }
+
+    private IEnumerator BedroomTransition() {
+
+        float ortho = virtualCamera.m_Lens.OrthographicSize;
+
+        bedroomPixelPerf.enabled = false;
+        pixelPerfectCamera.enabled = false;
+
+        homeLookAt.bedroom = false;
+        homeLookAt.room4 = true;
+
+        while (ortho < 3.2f) {
+            ortho += 0.025f;
+            virtualCamera.m_Lens.OrthographicSize = ortho;
+            yield return new WaitForSeconds(0.01f);
+        }
+
+        bedroomPixelPerf.enabled = true;
+        pixelPerfectCamera.enabled = true;
+
+        mainMenuScreen.SetActive(false);
+
+        StartHome();
     }
 
     // Called AFTER scene is loaded and main menu visibility checks have completed
     public void StartHome() {
+
+        // Hides the cursor
         Cursor.visible = false;
 
+        // Updates gamestate to PLAYING
         GameStateManager.SetState(GAMESTATE.PLAYING);
 
+        // Enables player functions if not null
         if (playerCont != null) {
             playerCont.PlayerStart(true);
         }
 
+        // Subscribes the SaveHome() function to the OnNewPickup event
         PlayerController.EOnNewPickup += GameStateManager.homeManager.SaveHome;
 
+        // Saves the home
         GameStateManager.homeManager.SaveHome();
     }
 
     public void PlayButton() {
 
-        string pathHome = Application.persistentDataPath + "/home.soni";
-
-        // Player has an existing save slot
-        if (File.Exists(pathHome)) {
-            saveSlots.SetActive(true);
-        }
         // Player does NOT have an existing save slot (START NEW GAME + TUTORIAL)
-        else {
+        if (GameStateManager.currentSaveType == SaveType.NEWGAME) {
 
             // Reset saved profile stats if there is no profile
             HomeManager.SeenItems.Clear();
@@ -70,15 +192,16 @@ public class MainMenu : MonoBehaviour
             MainMenuTransition(true);
             Debug.Log("TUTORIAL");
         }
+        // Player has an existing save slot
+        else {
+            saveSlots.SetActive(true);
+        }
     }
 
     public void SaveSlotButton() {
 
-        string pathMap = Application.persistentDataPath + "/map.chris";
-        string pathPlayer = Application.persistentDataPath + "/player.franny";
-
         // Player has an active run in progress
-        if (File.Exists(pathMap) && File.Exists(pathPlayer)) {
+        if (GameStateManager.currentSaveType == SaveType.ACTIVERUN) {
 
             // Load save data to get level number
             MapData data = SaveSystem.LoadMap();
@@ -107,21 +230,26 @@ public class MainMenu : MonoBehaviour
                 Debug.Log("Started tutorial transition!");
                 // TODO: Implement beginning cutscene
 
-                mainMenuScreen.SetActive(false);
+                StartCoroutine(BedroomTransition());
+
                 break;
             case false:
                 Debug.Log("Started main menu transition!");
+
+                virtualCamera.m_Lens.OrthographicSize = 3.2f;
+                homeLookAt.bedroom = false;
+                homeLookAt.room4 = true;
+                pixelPerfectCamera.enabled = true;
+                bedroomPixelPerf.enabled = true;
+                
                 mainMenuScreen.SetActive(false);
+                StartHome();
                 break;
         }
-
-        StartHome();
     }
 
     public void QuitButton() {
         Debug.Log("QUIT!");
         Application.Quit();
     }
-
-
 }

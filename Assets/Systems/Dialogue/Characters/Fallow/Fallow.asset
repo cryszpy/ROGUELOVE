@@ -9,8 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 6763edd3fca7f40a0991254006d88127, type: 3}
-  m_Name: callfallow_choice_1
+  m_Script: {fileID: 11500000, guid: 648ef3326691c4b91898cadba447832d, type: 3}
+  m_Name: Fallow
   m_EditorClassIdentifier: 
-  choiceText: choice 2
-  nextDialogue: {fileID: 11400000, guid: 9a569807db3454104a40e6c251d6d11b, type: 2}
+  expressions:
+  - emotion: 0
+    expressionSprite: {fileID: 21300000, guid: 78a70a7139ef94b03acd0d3bf05c3a9f, type: 3}
+  characterName: FALLOW
+  characterNameHidden: ???
+  nameRevealed: 0

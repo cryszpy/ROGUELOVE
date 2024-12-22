@@ -16,6 +16,5 @@ MonoBehaviour:
   noRequirements:
   - {fileID: 11400000, guid: 3de240bd1aa2a4777b310f280ed8d4a5, type: 2}
   seenNoRequirements: []
-  requirements:
-  - {fileID: 11400000, guid: 089b53873b3204201a864c71caf211ce, type: 2}
+  requirements: []
   seenRequirements: []

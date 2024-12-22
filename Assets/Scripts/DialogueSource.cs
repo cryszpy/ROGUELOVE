@@ -49,7 +49,7 @@ public class DialogueSource : MonoBehaviour
             AddDialogue();
 
             // Create new priority list only for this dialogue source (e.g. only Fallow dialogue)
-            List<Dialogue> sourceList = new()
+            List<DialoguePiece> sourceList = new()
             {
                 dialogueManager.priority.Find(x => x.id.Contains(dialogueList.id_prefix.ToString()) == true)
             };
@@ -70,7 +70,7 @@ public class DialogueSource : MonoBehaviour
         dialogueManager.CheckIfEmpty(dialogueList.requirements, dialogueList.seenRequirements);
 
         // For every dialogue with a requirement—
-        foreach (Dialogue dialogue in dialogueList.requirements) {
+        foreach (DialoguePiece dialogue in dialogueList.requirements) {
 
             // For every requirement that piece of dialogue has—
             for (int i = 0; i < dialogue.requirements.Count; i++) {

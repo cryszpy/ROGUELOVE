@@ -21,6 +21,8 @@ public class GameStateManager : MonoBehaviour
 
     public static HomeManager homeManager;
 
+    public static SaveType currentSaveType;
+
     // Methods to check the state of the game
     private static GAMESTATE state;
     public static GAMESTATE GetState() {
@@ -36,6 +38,16 @@ public class GameStateManager : MonoBehaviour
             GAMESTATE.PAUSED => 0,
             GAMESTATE.PLAYING => 1,
             _ => (float)1,
+        };
+
+        Cursor.visible = newState switch
+        {
+            GAMESTATE.MAINMENU => true,
+            GAMESTATE.MENU => true,
+            GAMESTATE.PLAYING => false,
+            GAMESTATE.PAUSED => true,
+            GAMESTATE.GAMEOVER => false,
+            _ => false,
         };
     }
 

@@ -21,13 +21,9 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
-    private Queue<string> sentences;
-
     public DialogueList callDialogueList;
 
     [SerializeField] private GameObject continueButton;
-
-    [SerializeField] private Dialogue currentDialogue;
 
     [SerializeField] private GameObject choicesBar;
     [SerializeField] private GameObject choicePrefab;
@@ -39,7 +35,16 @@ public class DialogueManager : MonoBehaviour
 
     [Header("VARIABLES")]
 
-    public List<Dialogue> priority;
+    public List<DialoguePiece> priority;
+
+    [SerializeField] private DialoguePiece currentDialogue;
+    [SerializeField] private DialogueLine preChoiceLine;
+    [SerializeField] private DialogueLine currentLine;
+
+    [Tooltip("Queued list of all sentences to say from current dialogue piece.")]
+    private Queue<DialogueLine> lines = new();
+
+    private Queue<DialogueLine> choiceLines = new();
 
     [SerializeField] private float textCPS;
 
@@ -55,13 +60,29 @@ public class DialogueManager : MonoBehaviour
     public bool playingDialogue = false;
     public bool playingChoices = false;
 
-    // Start is called before the first frame update
-    void Start()
-    {
-        sentences = new Queue<string>();
+    [Tooltip("Boolean flag; Checks if a sentence is being typed out.")]
+    public bool typingSentence = false;
+
+    private bool waitForSkip = false;
+
+    public void ContinueButton() {
+
+        if (GameStateManager.GetState() == GAMESTATE.MENU && playingDialogue) {
+
+            // Skip typing on click
+            if (currentLine.sentence != null && typingSentence) {
+                dialogueText.maxVisibleCharacters = dialogueText.text.Length;
+                typingSentence = false;
+            } 
+            // If sentence is typed out, play next sentence on click
+            else if (waitForSkip) {
+                waitForSkip = false;
+                DisplayNextSentence();
+            }
+        }
     }
 
-    public void CheckIfEmpty(List<Dialogue> list, List<Dialogue> seenList) {
+    public void CheckIfEmpty(List<DialoguePiece> list, List<DialoguePiece> seenList) {
 
         // If dialogue type list has run out of available dialogue, then—
         if (list.Count == 0 && seenList.Count != 0) {
@@ -73,7 +94,7 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void AddRandomNoReqDialogue(List<Dialogue> list, List<Dialogue> seenList) {
+    public void AddRandomNoReqDialogue(List<DialoguePiece> list, List<DialoguePiece> seenList) {
         
         CheckIfEmpty(list, seenList);
 
@@ -93,14 +114,14 @@ public class DialogueManager : MonoBehaviour
 
         int counter = 0;
 
-        List<Dialogue> fulfilledReqs = new();
+        List<DialoguePiece> fulfilledReqs = new();
 
         // REQUIREMENTS DIALOGUE is prioritized first
 
         CheckIfEmpty(dialogueList.requirements, dialogueList.seenRequirements);
 
         // For every dialogue with a requirement—
-        foreach (Dialogue dialogue in dialogueList.requirements) {
+        foreach (DialoguePiece dialogue in dialogueList.requirements) {
 
             // For every requirement that piece of dialogue has—
             for (int i = 0; i < dialogue.requirements.Count; i++) {
@@ -118,7 +139,7 @@ public class DialogueManager : MonoBehaviour
         }
 
         // After requirement dialogues have been added to the priority list, remove them from the possible dialogues list
-        foreach (Dialogue dialogue in fulfilledReqs) {
+        foreach (DialoguePiece dialogue in fulfilledReqs) {
             DiscardDialogue(dialogue, dialogueList.requirements, dialogueList.seenRequirements);
         }
 
@@ -174,7 +195,7 @@ public class DialogueManager : MonoBehaviour
     private void SelectCallDialogue(DialogueList dialogueList, CallDialogueType callType) {
 
         // Create new list only for this call type (e.g. only Support Call dialogue)
-        List<Dialogue> sourceList = new()
+        List<DialoguePiece> sourceList = new()
         {
             dialogueList.noRequirements.Find(x => x.callDialogueType == callType)
         };
@@ -193,7 +214,7 @@ public class DialogueManager : MonoBehaviour
     public void PlayCallDialogue(DialogueList dialogueList) {
 
         // Create new priority list only for this dialogue source (e.g. only Fallow dialogue)
-        List<Dialogue> sourceList = new()
+        List<DialoguePiece> sourceList = new()
         {
             priority.Find(x => x.callDialogueType != CallDialogueType.NONE)
         };
@@ -246,22 +267,22 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void DiscardDialogue(Dialogue dialogue, List<Dialogue> dialogues, List<Dialogue> seenDialogues) {
+    public void DiscardDialogue(DialoguePiece dialogue, List<DialoguePiece> dialogues, List<DialoguePiece> seenDialogues) {
 
         seenDialogues.Add(dialogue);
         dialogues.Remove(dialogue);
         movedDialogue = true;
     }
 
-    public void ResetDialogue(List<Dialogue> swapFrom, List<Dialogue> swapTo) {
-        foreach (Dialogue dialogue in swapFrom.ToArray()) {
+    public void ResetDialogue(List<DialoguePiece> swapFrom, List<DialoguePiece> swapTo) {
+        foreach (DialoguePiece dialogue in swapFrom.ToArray()) {
             swapTo.Add(dialogue);
             swapFrom.Remove(dialogue);
         }
         ShuffleList(swapTo);
     }
 
-    public void ShuffleList(List<Dialogue> list) {
+    public void ShuffleList(List<DialoguePiece> list) {
 
         for(int i = list.Count - 1; i > 0; i--) {
             int j = UnityEngine.Random.Range(0, i + 1);
@@ -306,7 +327,7 @@ public class DialogueManager : MonoBehaviour
         if (continueButton == null) {
             continueButton = GameObject.FindGameObjectWithTag("ContinueButton");
             if (continueButton.TryGetComponent<Button>(out var button)) {
-                button.onClick.AddListener(DisplayNextSentence);
+                button.onClick.AddListener(ContinueButton);
                 Debug.Log("Assigned continueButton onClick event!");
             }
             //continueButton.SetActive(false);
@@ -334,8 +355,19 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue (Dialogue dialogue) {
-        Debug.Log("Started conversation with + " + dialogue.characterName);
+    private void RemoveButtons() {
+        
+        // Remove existing buttons, if any
+        if (choiceButtonsList.Count > 0) {
+            foreach (GameObject button in choiceButtonsList) {
+                Destroy(button);
+            }
+            choiceButtonsList.Clear();
+        }
+    }
+
+    public void StartDialogue (DialoguePiece dialogue) {
+        Debug.Log("Started conversation with + " + dialogue.owner.characterName);
         playingDialogue = true;
 
         FindReferences();
@@ -365,25 +397,14 @@ public class DialogueManager : MonoBehaviour
         }
         GameStateManager.SetState(GAMESTATE.MENU);
 
-        // Sets the character's sprite for this piece of dialogue
-        dialogueSprite.sprite = dialogue.characterSprite;
-
-        // Sets the character's name for this piece of dialogue
-        nameText.text = dialogue.characterName;
-
         // Clears the sentences list (just in case lol)
-        sentences.Clear();
+        lines.Clear();
 
-        // Remove existing buttons
-        if (choiceButtonsList.Count > 0) {
-            foreach (GameObject button in choiceButtonsList) {
-                Destroy(button);
-            }
-            choiceButtonsList.Clear();
-        }
+        // Remove existing buttons, if any
+        RemoveButtons();
 
-        foreach (string sentence in dialogue.sentences) {
-            sentences.Enqueue(sentence);
+        foreach (DialogueLine line in dialogue.lines) {
+            lines.Enqueue(line);
         }
 
         DisplayNextSentence();
@@ -391,40 +412,55 @@ public class DialogueManager : MonoBehaviour
 
     public void DisplayNextSentence() {
 
-        // Display choices
-        if (sentences.Count == 0 && currentDialogue.choices.Length > 0) {
+        RemoveButtons();
 
-            playingChoices = true;
+        // If there are queued choice lines, play those instead
+        if (choiceLines.Count() > 0) {
 
-            ShowChoices();
-            
+            // Removes current choice line from the queue of choice lines to be displayed
+            DialogueLine choiceLine = choiceLines.Dequeue();
+
+            // Stops any currently displaying sentences if player clicks continue mid-way through
+            StopAllCoroutines();
+
+            // Types the currently queued choice line
+            StartCoroutine(TypeSentence(choiceLine));
+
             return;
         }
-        // End dialogue if no choices and nothing else to say
-        else if (sentences.Count == 0 && currentDialogue.choices.Length <= 0) {
+        // If the line leading to choices has already been said and there are choices to be made—
+        else if (currentLine.choices.Length > 0) {
+
+            // Set boolean flag to signal choices being played
+            playingChoices = true;
+
+            // Show choices
+            ShowChoices();
+
+            return;
+        }
+
+        // If there aren't any sentences to display (reached the end of this dialogue piece)
+        if (lines.Count == 0) {
+
             EndDialogue();
             return;
         }
 
         // Removes current sentence from the queue of sentences to be displayed
-        string sentence = sentences.Dequeue();
+        DialogueLine line = lines.Dequeue();
 
         // Stops any currently displaying sentences if player clicks continue mid-way through
         StopAllCoroutines();
 
         // Types the currently queued sentence
-        StartCoroutine(TypeSentence(sentence));
+        StartCoroutine(TypeSentence(line));
     }
 
     public void ShowChoices() {
 
         // Remove existing buttons
-        if (choiceButtonsList.Count > 0) {
-            foreach (GameObject button in choiceButtonsList) {
-                Destroy(button);
-            }
-            choiceButtonsList.Clear();
-        }
+        RemoveButtons();
 
         //animator.SetBool("IsOpen", false);
 
@@ -433,7 +469,7 @@ public class DialogueManager : MonoBehaviour
         // If there are choices to be displayed—
         if (currentDialogue) {
 
-            foreach (DialogueChoice choice in currentDialogue.choices) {
+            foreach (DialogueChoice choice in currentLine.choices) {
 
                 // Create button in UI
                 TMP_Text choiceText = Instantiate(choicePrefab, choicesBar.transform).GetComponentInChildren<TMP_Text>();
@@ -453,24 +489,80 @@ public class DialogueManager : MonoBehaviour
     }
 
     public void AssignChoiceFollowUp(DialogueChoice choice) {
+
         playingChoices = false;
 
-        // If choice response exists, play it
-        if (choice.nextDialogue != null) {
-            StartDialogue(choice.nextDialogue);
+        // Disables the choices bar
+        choicesBar.SetActive(false);
+
+        // Enables continue button
+        continueButton.SetActive(true);
+
+        // If choice response exists, queue it up
+        if (choice.lines.Length > 0) {
+
+            foreach (var line in choice.lines) {
+                choiceLines.Enqueue(line);
+            }
+
+            DisplayNextSentence();
+        } 
+        // Else, resume original dialogue
+        else {
+            DisplayNextSentence();
         }
     }
 
-    private IEnumerator TypeSentence (string sentence) {
-        Debug.Log(sentence);
-        dialogueText.text = "";
+    private IEnumerator TypeSentence (DialogueLine line) {
 
-        foreach (char letter in sentence.ToCharArray()) {
+        // Sets the current line
+        currentLine = line;
 
-            dialogueText.text += letter;
+        // Sets the character's sprite for this line of dialogue
+        CharacterExpression target = currentLine.character.expressions.Find(x => x.emotion == line.emotion);
+        dialogueSprite.sprite = target.expressionSprite;
 
-            yield return new WaitForSeconds(textCPS);
+        // Reveal name if character says name
+        if (currentDialogue.firstNameUsage && !currentLine.character.nameRevealed) {
+            nameText.text = currentLine.character.characterName;
+            currentLine.character.nameRevealed = true;
+        } else if (!currentLine.character.nameRevealed) {
+            nameText.text = currentLine.character.characterNameHidden;
         }
+
+        // Show revealed name status in transcript log
+        if (currentLine.character.nameRevealed) {
+            Debug.Log(currentLine.character.characterName + ": " + line.sentence);
+        } else {
+            Debug.Log(currentLine.character.characterNameHidden + ": " + line.sentence);
+        }
+
+        // Set text, but hide all characters
+        dialogueText.maxVisibleCharacters = 0;
+        dialogueText.text = line.sentence;
+
+        // Sets boolean flag signaling a sentence is being typed out
+        typingSentence = true;
+
+        foreach (char letter in line.sentence.ToCharArray()) {
+
+            if (typingSentence) {
+
+                // Shows the character visually
+                dialogueText.maxVisibleCharacters++;
+
+                // Waits for the typing speed time
+                yield return new WaitForSeconds(textCPS);
+
+            } else {
+                Debug.Log("Skipped typing!");
+                break;
+            }
+        }
+
+        typingSentence = false;
+
+        waitForSkip = true;
     }
 
     void EndDialogue() {
@@ -497,6 +589,9 @@ public class DialogueManager : MonoBehaviour
 
         playingDialogue = false;
 
-        Debug.Log("End of conversation.");
+        // Clear current dialogue
+        currentDialogue = null;
+
+        Debug.Log("--End of conversation--");
     }
 }

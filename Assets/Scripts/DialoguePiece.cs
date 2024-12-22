@@ -1,18 +1,41 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
+public struct DialogueLine {
+
+    [TextArea(3, 10)] public string sentence;
+
+    public Character character;
+
+    public CharacterEmotion emotion;
+
+    public DialogueChoice[] choices;
+}
+
+[System.Serializable]
+public struct DialogueChoice {
+
+    [TextArea(2, 5)] public string choiceText;
+
+    public DialogueLine[] lines;
+}
+
+[System.Serializable]
 [CreateAssetMenu(menuName = "ScriptableObjects/Dialogue")]
-public class Dialogue : ScriptableObject, IComparable
+public class DialoguePiece : ScriptableObject, System.IComparable
 {
 
     public string id;
 
-    public Sprite characterSprite;
+    public Character owner;
 
-    public string characterName;
+    [Tooltip("This dialogue piece's total sentences.")]
+    public DialogueLine[] lines;
+
+    [Tooltip("The next dialogue piece to play after this piece.")]
+    public DialoguePiece nextDialogue;
 
     public int priority;
 
@@ -20,14 +43,12 @@ public class Dialogue : ScriptableObject, IComparable
 
     public CallDialogueType callDialogueType;
 
-    public DialogueChoice[] choices;
-
-    [TextArea(3, 10)]
-    public string[] sentences;
+    [Tooltip("Boolean flag; Whether this dialogue piece contains the first mention of the passenger's name.")]
+    public bool firstNameUsage = false;
 
     public int CompareTo(object obj) {
         var a = this;
-        var b = obj as Dialogue;
+        var b = obj as DialoguePiece;
 
         if (a.priority > b.priority) {
             return -1;
@@ -42,7 +63,7 @@ public class Dialogue : ScriptableObject, IComparable
 
 }
 
-[Serializable]
+[System.Serializable]
 public struct DialogueRequirement {
 
     public DialogueRequirementType reqType;
