@@ -196,8 +196,9 @@ MonoBehaviour:
   timeBetweenFiring: 0.25
   coinValue: 0
   flavorText: 
-  fireSound: PlayerBullet
+  fireSound: smallGun_fire
   chargeSound: 
+  bulletHitSound: smallGun_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

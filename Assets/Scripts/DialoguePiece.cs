@@ -11,7 +11,7 @@ public struct DialogueLine {
 
     public CharacterEmotion emotion;
 
-    public DialogueChoice[] choices;
+    public List<DialogueChoice> choices;
 }
 
 [System.Serializable]

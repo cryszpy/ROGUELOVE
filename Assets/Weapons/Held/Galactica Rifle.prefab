@@ -150,8 +150,9 @@ MonoBehaviour:
   timeBetweenFiring: 0.25
   coinValue: 53
   flavorText: Utter doom.
-  fireSound: PlayerBullet
+  fireSound: galacticaRifle_fire
   chargeSound: 
+  bulletHitSound: galacticaRifle_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0

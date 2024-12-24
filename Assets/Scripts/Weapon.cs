@@ -16,9 +16,10 @@ public class Weapon : MonoBehaviour
     [Tooltip("Weapon sprite.")]
     public SpriteRenderer sprite;
 
-    // Bullet Spawn Point
+    [Tooltip("Spawn position of the bullet.")]
     public GameObject spawnPos;
 
+    [Tooltip("This weapon's pickup item variant.")]
     public GameObject weaponPickup;
 
     [Header("STATS")]
@@ -29,21 +30,22 @@ public class Weapon : MonoBehaviour
     [Tooltip("The weapon's rarity.")]
     public WeaponRarity rarity;
 
+    [Tooltip("This weapon's ID number (found in spreadsheet).")]
     public int id;
 
     [Tooltip("The maximum ammo capacity of this weapon.")]
     public float ammoMax;
 
-    // Used ammo per click
+    [Tooltip("The amount of ammo this weapon uses per click.")]
     public float ammoPerClick;
 
-    // Current amount of ammo
+    [Tooltip("The current ammo count of this weapon.")]
     public float currentAmmo;
 
-    // Infinite ammo boolean
+    [Tooltip("Whether this weapon has infinite ammo or not.")]
     public bool infiniteAmmo;
 
-    // Fire rate / cooldown
+    [Tooltip("The cooldown time between firing bullets.")]
     public float timeBetweenFiring;
 
     [Tooltip("The worth of this weapon when sold, in coins.")]
@@ -52,10 +54,13 @@ public class Weapon : MonoBehaviour
     [Tooltip("Flavor text that appears on screen when a weapon is picked up for the first time.")]
     public string flavorText;
 
-    // Weapon fire sound
+    [Tooltip("The sound this weapon makes when firing.")]
     public string fireSound;
 
-    // Weapon charge sound
+    [Tooltip("The sound this weapon makes when charging.")]
     public string chargeSound;
+
+    [Tooltip("The sound this weapon's bullets make when hitting something.")]
+    public string bulletHitSound;
 
 }

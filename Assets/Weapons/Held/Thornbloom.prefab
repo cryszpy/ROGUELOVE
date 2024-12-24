@@ -196,8 +196,9 @@ MonoBehaviour:
   timeBetweenFiring: 0.3
   coinValue: 0
   flavorText: 
-  fireSound: PlayerBullet
+  fireSound: thornbloom_fire
   chargeSound: 
+  bulletHitSound: thornbloom_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

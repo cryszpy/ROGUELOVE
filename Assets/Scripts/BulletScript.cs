@@ -12,8 +12,7 @@ public class BulletScript : MonoBehaviour
     protected Vector3 mousePos;
     protected Camera mainCam;
 
-    [SerializeField]
-    protected Rigidbody2D rb;
+    [SerializeField] protected Rigidbody2D rb;
 
     public Animator animator;
 
@@ -21,11 +20,9 @@ public class BulletScript : MonoBehaviour
 
     protected Vector3 direction;
 
-    [SerializeField]
-    protected Collider2D coll;
+    [SerializeField] protected Collider2D coll;
 
-    [SerializeField]
-    protected Weapon weapon;
+    [SerializeField] protected Weapon weapon;
 
     [Space(10)]
     [Header("STATS")]

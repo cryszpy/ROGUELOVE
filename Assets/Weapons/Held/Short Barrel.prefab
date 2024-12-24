@@ -151,8 +151,9 @@ MonoBehaviour:
   coinValue: 37
   flavorText: The small barrel of this gun allows its bullets to spread out more
     . . . right?
-  fireSound: PlayerBullet
+  fireSound: shortBarrel_fire
   chargeSound: 
+  bulletHitSound: shortBarrel_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -196,8 +196,9 @@ MonoBehaviour:
   timeBetweenFiring: 0.4
   coinValue: 167
   flavorText: A gift fit for royalty.
-  fireSound: PlayerBullet
+  fireSound: regalia_fire
   chargeSound: 
+  bulletHitSound: regalia_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

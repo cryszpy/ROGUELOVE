@@ -44,16 +44,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b76b1e8988c354684b3a0197f18cf259, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  mainMixer: {fileID: 24100000, guid: 585eaa9af36934a698748f98ff905ede, type: 2}
+  sfxPrefab: {fileID: 2116120511630792949, guid: 0a202aa9bcd744673b53b87c671d57da, type: 3}
   sounds:
-  - name: PlayerDeath
-    clip: {fileID: 8300000, guid: 1f9ef3ec075a147c087b736564a7fea0, type: 3}
+  - type: 0
+    name: player_death
+    location: {fileID: 0}
+    clips:
+    - {fileID: 8300000, guid: 1f9ef3ec075a147c087b736564a7fea0, type: 3}
+    mixerGroup: {fileID: 5824288306242497005, guid: 585eaa9af36934a698748f98ff905ede, type: 2}
     volume: 0.5
     pitch: 1
-    source: {fileID: 0}
+    stereoPan: 0
+    spatialBlend: 0
+    playOnAwake: 0
     loop: 0
-  - name: PlayerBullet
-    clip: {fileID: 8300000, guid: cd1682098eef945abbbdd42a91c93c9b, type: 3}
+  - type: 1
+    name: thornbloom_fire
+    location: {fileID: 0}
+    clips:
+    - {fileID: 8300000, guid: 1ec6fe26fe2fb45ee920fb78364ba786, type: 3}
+    - {fileID: 8300000, guid: de858eab452f84db6a45bc385e87a32c, type: 3}
+    - {fileID: 8300000, guid: 85aee2811e3464714b320c98574e1452, type: 3}
+    mixerGroup: {fileID: -7633086361258266128, guid: 585eaa9af36934a698748f98ff905ede, type: 2}
     volume: 0.5
     pitch: 1
-    source: {fileID: 0}
+    stereoPan: 0
+    spatialBlend: 0
+    playOnAwake: 0
     loop: 0

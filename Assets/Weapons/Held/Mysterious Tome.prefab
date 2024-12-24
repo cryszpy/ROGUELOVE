@@ -151,8 +151,9 @@ MonoBehaviour:
   coinValue: 24
   flavorText: An old book someone must have left behind . . . how careless can you
     be?
-  fireSound: PlayerBullet
+  fireSound: mysteriousTome_fire
   chargeSound: 
+  bulletHitSound: mysteriousTome_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0

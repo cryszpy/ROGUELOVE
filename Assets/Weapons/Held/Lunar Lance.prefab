@@ -196,8 +196,9 @@ MonoBehaviour:
   timeBetweenFiring: 1
   coinValue: 0
   flavorText: 
-  fireSound: PlayerBullet
+  fireSound: lunarLance_fire
   chargeSound: 
+  bulletHitSound: lunarLance_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

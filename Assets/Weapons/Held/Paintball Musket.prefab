@@ -196,8 +196,9 @@ MonoBehaviour:
   timeBetweenFiring: 0.3
   coinValue: 23
   flavorText: 
-  fireSound: PlayerBullet
+  fireSound: paintballMusket_fire
   chargeSound: 
+  bulletHitSound: paintballMusket_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

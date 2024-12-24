@@ -140,11 +140,10 @@ public class EnemyBulletSpawner : MonoBehaviour
         
             bursting = false;
         }
-        
     }
 
     public virtual void FireSound() {
-        FindFirstObjectByType<AudioManager>().Play(parent.fireSound);
+        AudioManager.instance.PlaySoundByName(parent.fireSound, parent.spawnPos.transform);
     }
 
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time

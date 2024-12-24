@@ -100,7 +100,7 @@ public class WeaponSingleShotFire : MonoBehaviour
     }
 
     public virtual void FireSound() {
-        FindFirstObjectByType<AudioManager>().Play(parent.fireSound);
+        AudioManager.instance.PlaySoundByName(parent.fireSound, parent.spawnPos.transform);
     }
 
     public virtual void UseAmmo() {

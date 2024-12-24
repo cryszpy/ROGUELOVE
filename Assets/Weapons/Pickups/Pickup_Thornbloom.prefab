@@ -688,6 +688,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fa2b5381f312e4208bfd1d95b5829191, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupName: 
   objectToSpawn: {fileID: 4603566924701312467, guid: 6be8b9f66066c42fda39961ee3a912b3, type: 3}
   pickupTooltip: {fileID: 3189644667762737329}
   dropped: 0

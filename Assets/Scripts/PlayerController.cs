@@ -1044,7 +1044,7 @@ public class PlayerController : MonoBehaviour
         GameStateManager.SetState(GAMESTATE.GAMEOVER);
         
         animator.SetBool("Death", true);
-        FindFirstObjectByType<AudioManager>().Play("PlayerDeath");
+        AudioManager.instance.PlaySoundByName("player_death", gameObject.transform);
 
         yield return new WaitForSeconds(2f);
 

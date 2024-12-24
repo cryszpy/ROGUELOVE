@@ -429,7 +429,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         // If the line leading to choices has already been said and there are choices to be made—
-        else if (currentLine.choices.Length > 0) {
+        else if (currentLine.choices != null && currentLine.choices.Count > 0) {
 
             // Set boolean flag to signal choices being played
             playingChoices = true;
@@ -591,6 +591,12 @@ public class DialogueManager : MonoBehaviour
 
         // Clear current dialogue
         currentDialogue = null;
+
+        // Clear current line
+        currentLine.sentence = null;
+        currentLine.emotion = CharacterEmotion.DEFAULT;
+        currentLine.character = null;
+        currentLine.choices = null;
 
         Debug.Log("--End of conversation--");
     }
