@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 13312, guid: 0000000000000000e000000000000000, type: 0}
-  m_Name: fc_border_top
+  m_Name: tutorial_grass
   m_EditorClassIdentifier: 
-  m_Sprite: {fileID: 2072398105, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
+  m_Sprite: {fileID: -46342210289943269, guid: 067e7bcb057974157bc7c069aac7687c, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_Transform:
     e00: 1

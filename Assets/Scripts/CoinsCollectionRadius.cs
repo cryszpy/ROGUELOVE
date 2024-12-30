@@ -26,7 +26,7 @@ public class CoinsCollectionRadius : MonoBehaviour
             && parent.transform.position.y <= parent.map.mainCam.ScreenToWorldPoint(cont.coinsUI.transform.position).y + 0.3f
             && parent.transform.position.y >= parent.map.mainCam.ScreenToWorldPoint(cont.coinsUI.transform.position).y - 0.3f) {
 
-                parent.RemoveEnemy();
+                parent.PostEnemyDeath();
 
                 switch (parent.coinType) {
                     case CoinType.BRONZE:

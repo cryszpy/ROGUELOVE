@@ -118,6 +118,7 @@ MonoBehaviour:
   flavorText: 
   fireSound: 
   chargeSound: 
+  bulletHitSound: 
 --- !u!114 &586608477338833631
 MonoBehaviour:
   m_ObjectHideFlags: 0

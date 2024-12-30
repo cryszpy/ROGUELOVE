@@ -34,9 +34,6 @@ public class DialoguePiece : ScriptableObject, System.IComparable
     [Tooltip("This dialogue piece's total sentences.")]
     public DialogueLine[] lines;
 
-    [Tooltip("The next dialogue piece to play after this piece.")]
-    public DialoguePiece nextDialogue;
-
     public int priority;
 
     public List<DialogueRequirement> requirements;

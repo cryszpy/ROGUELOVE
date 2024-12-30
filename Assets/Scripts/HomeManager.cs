@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
 
 public class HomeManager : MonoBehaviour
@@ -14,8 +15,12 @@ public class HomeManager : MonoBehaviour
     public static List<int> SeenItems = new();
     public static int SeenItemsCount;
 
+    public static bool TutorialDone;
+    public bool tutorialTracker;
+
     private void Update() {
         playerDeathsTracker = PlayerDeaths;
+        tutorialTracker = TutorialDone;
     }
 
     private void FindReferences() {
@@ -28,7 +33,21 @@ public class HomeManager : MonoBehaviour
     public void SaveHome () {
         FindReferences();
         SaveSystem.SaveHome(playerCont.saveIcon);
-        Debug.Log("SAVE HOME CALLED");
+        Debug.LogWarning("SAVED HOME");
+    }
+
+    public void ResetHome() {
+
+        FindReferences();
+
+        PlayerDeaths = 0;
+
+        SeenItemsCount = 0;
+        SeenItems.Clear();
+
+        TutorialDone = false;
+
+        Debug.LogWarning("RESET HOME");
     }
 
     public void LoadHome() {
@@ -43,7 +62,8 @@ public class HomeManager : MonoBehaviour
         SeenItemsCount = data.seenItemsCount;
         SeenItems = new(data.seenItemsID);
 
-        Debug.Log("LOADED HOME");
-    }
+        TutorialDone = data.tutorialDone;
 
+        Debug.LogWarning("LOADED HOME");
+    }
 }

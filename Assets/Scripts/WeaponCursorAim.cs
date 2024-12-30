@@ -14,12 +14,16 @@ public class WeaponCursorAim : MonoBehaviour
     }
 
     public virtual void FixedUpdate() {
-        mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
-        Vector3 rotation = mousePos - transform.position;
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
+            
+            mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
 
-        float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+            Vector3 rotation = mousePos - transform.position;
 
-        transform.rotation = Quaternion.Euler(0, 0, rotZ);
+            float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+
+            transform.rotation = Quaternion.Euler(0, 0, rotZ);
+        }
     }
 }

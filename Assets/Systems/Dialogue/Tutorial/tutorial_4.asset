@@ -1,0 +1,35 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2375cc55695de471ca0957b5411488b6, type: 3}
+  m_Name: tutorial_4
+  m_EditorClassIdentifier: 
+  id: tutorial_4
+  owner: {fileID: 11400000, guid: 03f204bb1312448ef9cf159172162ba3, type: 2}
+  lines:
+  - sentence: You can carry as many items as you want, but be careful!
+    character: {fileID: 11400000, guid: 03f204bb1312448ef9cf159172162ba3, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: I doubt you can carry more than <b>two</b> weapons with...that. <i>*gestures
+      at you*</i>
+    character: {fileID: 11400000, guid: 03f204bb1312448ef9cf159172162ba3, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: Now try switching weapons by using either <b>1</b> or <b>2</b>, <i>or</i>
+      <b>RIGHT CLICK</b>.
+    character: {fileID: 11400000, guid: 03f204bb1312448ef9cf159172162ba3, type: 2}
+    emotion: 0
+    choices: []
+  priority: 0
+  requirements: []
+  callDialogueType: 1
+  firstNameUsage: 0

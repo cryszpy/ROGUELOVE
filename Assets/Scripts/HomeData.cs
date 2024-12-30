@@ -9,12 +9,16 @@ using UnityEngine.Tilemaps;
 public class HomeData
 {
 
+    public bool tutorialDone;
+
     public int playerDeaths;
 
     public int seenItemsCount;
     public int[] seenItemsID;
 
     public HomeData () {
+
+        tutorialDone = HomeManager.TutorialDone;
 
         playerDeaths = HomeManager.PlayerDeaths;
 

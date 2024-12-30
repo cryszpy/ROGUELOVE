@@ -242,8 +242,8 @@ MonoBehaviour:
   player: {fileID: 0}
   shake: {fileID: 0}
   canFire: 1
-  shakeDuration: 0.1
-  shakeAmplitude: 0.2
+  shakeDuration: 0.075
+  shakeAmplitude: 1
   shakeFrequency: 1
 --- !u!1 &6924588348523518064
 GameObject:

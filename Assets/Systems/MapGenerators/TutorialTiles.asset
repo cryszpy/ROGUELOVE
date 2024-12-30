@@ -1,0 +1,24 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bbc9f81db5154f67bdb1e8662d7ab42, type: 3}
+  m_Name: TutorialTiles
+  m_EditorClassIdentifier: 
+  floor: {fileID: 11400000, guid: ad6ab7d01cdfe4540b06bacd3e541d40, type: 2}
+  ground: {fileID: 1828385713, guid: 60a65f8967a884f1db2a722f6eea0f52, type: 3}
+  obstacles: {fileID: 11400000, guid: 9a4202bb60da84934802a13b054cccc0, type: 2}
+  walls: {fileID: 11400000, guid: 0d7b5d8d33b9248638eab3c168f49a24, type: 2}
+  empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
+  grass: {fileID: 11400000, guid: 8d06dc7e0d8114c7f884afcdc01c83d3, type: 2}
+  borderDown: {fileID: 11400000, guid: 3681fde4c677b4698983b7220a817b6a, type: 2}
+  borderLeft: {fileID: 11400000, guid: 0779a567f384c47a9bdc7a28f6a301cb, type: 2}
+  doorwayObject: {fileID: 600595444076492859, guid: 6c5f1cf5d160a4a5d9d0484b636e54a4, type: 3}
+  breakables: []

@@ -11,6 +11,8 @@ public class Doorway : MonoBehaviour
 
     [SerializeField] private Animator animator;
 
+    [SerializeField] private SceneInfo sceneInfo;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -19,9 +21,19 @@ public class Doorway : MonoBehaviour
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
+
         // If collided with the player, start next level
         if (collider.CompareTag("Player")) {
-            GameStateManager.NextLevel();
+
+            // Start first level if coming out of tutorial
+            if (GameStateManager.tutorialEnabled) {
+                GameStateManager.tutorialEnabled = false;
+                TransitionManager.StartLeaf(1 + sceneInfo.sceneOffset);
+            } 
+            // Next level
+            else {
+                GameStateManager.NextLevel();
+            }
         } 
     }
 
@@ -32,9 +44,13 @@ public class Doorway : MonoBehaviour
 
         yield return new WaitForSeconds(3.5f);
         
-        cam.Follow = cameraLookAt;
+        if (!GameStateManager.tutorialEnabled) {
+            cam.Follow = cameraLookAt;
+        }
         WalkerGenerator.doneWithLevel = true;
         GameStateManager.SetState(gameState);
+
+        GameStateManager.EOnDoorwaySpawn?.Invoke();
     }
 
     public void TriggerAnimOpen() {

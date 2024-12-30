@@ -12,7 +12,7 @@ public class AreaTransitionManager : MonoBehaviour
     public void StartAreaTransition() {
 
         // If entering a new area (level is 1)—
-        if (GameStateManager.GetLevel() == 1) {
+        if (GameStateManager.GetLevel() == 1 && !GameStateManager.tutorialEnabled) {
 
             // Check to make sure animation objects aren't unassigned
             if (areaTransitionAnimator != null && areaTransition != null && areaTransitionTextAnimator != null) {

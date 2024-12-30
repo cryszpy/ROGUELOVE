@@ -93,7 +93,6 @@ public static class SaveSystem
         stream.Close();
 
         saveIcon.SetActive(false);
-        Debug.Log("SAVED HOME");
     }
 
     public static HomeData LoadHome() {
@@ -105,7 +104,6 @@ public static class SaveSystem
 
             HomeData dataHome = formatter.Deserialize(stream) as HomeData;
             stream.Close();
-            Debug.Log("LOADED HOME");
             return dataHome;
         } else {
             Debug.LogError("Home save file not found in " + pathHome);

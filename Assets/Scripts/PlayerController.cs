@@ -18,7 +18,6 @@ public class PlayerController : MonoBehaviour
     public static PlayerVoidHandler EOnDodged;
     public static PlayerVoidHandler EOnMoving;
     public static PlayerVoidHandler EOnEnergyFull;
-    public delegate IEnumerator PlayerCoroutineHandler();
     public static PlayerVoidHandler EOnDeath;
     public static PlayerVoidHandler EOnNewPickup;
     public static PlayerVoidHandler EOnItemPickup;
@@ -178,8 +177,10 @@ public class PlayerController : MonoBehaviour
                     Debug.Log("Battery full!");
                     EOnEnergyFull?.Invoke();
 
-                    // Add a call dialogue piece
-                    GameStateManager.dialogueManager.AddCallDialogue(GameStateManager.dialogueManager.callDialogueList, GameStateManager.dialogueManager.player);
+                    // Add a call dialogue piece if not tutorial
+                    if (!GameStateManager.tutorialEnabled) {
+                        GameStateManager.dialogueManager.AddCallDialogue(GameStateManager.dialogueManager.callDialogueList, GameStateManager.dialogueManager.player);
+                    }
 
                     // Experience carries over to the next level (still need to make exponentially higher max energy reqs)
                     experience -= maxEnergy;
@@ -259,6 +260,113 @@ public class PlayerController : MonoBehaviour
         // Ignores any collisions with enemies or bulletignore (layer 9 & 8)
         movementFilter.SetLayerMask(~(1 << 9 | 1 << 8));
         
+        // Assigns necessary references
+        FindReferences();
+            
+        // Makes sure player isn't in an iFrame starting off
+        iFrame = false;
+
+        // Load player
+        string pathPlayer = Application.persistentDataPath + "/player.franny";
+
+        // Load player info from saved game
+        if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+            LoadPlayer();
+        } 
+        // Save data exists but player did not click load save --> most likely a NextLevel() call
+        else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+            Debug.Log("PLAYER SAVE DATA NEXT LEVEL CALL!");
+        } 
+        // Save data does not exist, and player clicked load save somehow
+        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
+            GameStateManager.SetSave(false);
+            Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
+        } 
+        // Save data does not exist and player did not click load save --> most likely started new game
+        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
+
+            // SET DEFAULT STATS
+            MaxHealth = 4;
+            Health = MaxHealth;
+            MaxEnergy = 20;
+            Experience = 0;
+
+            // Set speed
+            MoveSpeedMultiplier = 1;
+            MoveSpeed = 3.2f;
+
+            // Reset coins
+            Coins = 0;
+
+            // Reset item stats
+            DodgeChance = 0;
+            takenDamageMult = 1;
+
+            DamageModifier = 1;
+
+            // Set view range
+            ViewRangeBase = 5;
+            ViewRangeMultiplier = 1;
+
+            // Reset saved weapons
+            CurrentWeaponIndex = 0;
+            PrimaryWeaponID = 1;
+            PrimaryWeaponRarity = WeaponRarity.COMMON;
+            SecondaryWeaponID = 0;
+            SecondaryWeaponRarity = WeaponRarity.COMMON;
+
+            AmmoMaxMultiplier = 1;
+
+            HeldItemsCount = 0;
+
+            // Gives player default weapon if not inside Home or Tutorial
+            if (!home && HomeManager.TutorialDone) {
+                GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
+                heldWeapons.Add(weaponObject);
+
+                // Assigns correct starting ammo amounts
+                if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
+                    PrimaryWeaponCurrentAmmo = script.ammoMax * AmmoMaxMultiplier;
+                    script.currentAmmo = PrimaryWeaponCurrentAmmo;
+                }
+            }
+        }
+
+        // If player is not inside the Home—
+        if (!home) {
+            
+            // Set health, energy, ammo, and coins UI references on each stage load
+            healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
+            energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
+            ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
+            coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
+
+            // Set UI stat objects
+            healthBar.SetMaxHealth(MaxHealth);
+            healthBar.SetHealth(Health);
+            energyBar.SetMaxEnergy(MaxEnergy);
+            energyBar.SetEnergy(Experience);
+            coinsUI.SetCoins(Coins);
+
+            // If player isn't in the Tutorial (loaded up a saved run)—
+            if (HomeManager.TutorialDone) {
+
+                // Gives them their saved weapons and items back
+                AddSavedWeapons();
+                AddSavedItems();
+
+                // Assigns held Weapon component
+                if (weapon == null) {
+                    weapon = GetComponentInChildren<Weapon>();
+                    Debug.Log("WeaponFireMethod is null! Reassigned.");
+                }
+            }
+        }
+    }
+
+    // Assigns all correct references
+    private void FindReferences() {
+
         if (rb == null) {
             rb = GetComponent<Rigidbody2D>();
             Debug.Log("PlayerController rb is null! Reassigned.");
@@ -287,96 +395,9 @@ public class PlayerController : MonoBehaviour
             cameraLookAt = GameObject.FindGameObjectWithTag("CameraLookAt").GetComponent<CameraLookAt>();
             Debug.Log("Camera look at component is null! Reassigned.");
         }
-            
-        iFrame = false;
-
-        // Load player
-        string pathPlayer = Application.persistentDataPath + "/player.franny";
-        string pathHome = Application.persistentDataPath + "/home.soni";
-
-        // Load player info from saved game
-        if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            LoadPlayer();
-        } 
-        // Save data exists but player did not click load save --> most likely a NextLevel() call
-        else if (File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-            Debug.Log("PLAYER SAVE DATA NEXT LEVEL CALL!");
-        } 
-        // Save data does not exist, and player clicked load save somehow
-        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == true) {
-            GameStateManager.SetSave(false);
-            Debug.LogError("Saved player data not found while trying to load save. How did you get here?");
-        } 
-        // Save data does not exist and player did not click load save --> most likely started new game
-        else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
-
-            // SET DEFAULT STATS
-            MaxHealth = 4;
-            Health = MaxHealth;
-            MaxEnergy = 20;
-            Experience = 0;
-
-            // Set speed
-            MoveSpeedMultiplier = 1;
-            MoveSpeed = 3.2f;
-
-            Coins = 0;
-            DodgeChance = 0;
-            takenDamageMult = 1;
-
-            DamageModifier = 1;
-
-            // Set view range
-            ViewRangeBase = 5;
-            ViewRangeMultiplier = 1;
-
-            // Reset saved weapons
-            CurrentWeaponIndex = 0;
-            PrimaryWeaponID = 1;
-            PrimaryWeaponRarity = WeaponRarity.COMMON;
-            SecondaryWeaponID = 0;
-            SecondaryWeaponRarity = WeaponRarity.COMMON;
-
-            AmmoMaxMultiplier = 1;
-
-            HeldItemsCount = 0;
-
-            if (!home) {
-                GameObject weaponObject = Instantiate(defaultWeapon.pickupScript.objectToSpawn, weaponPivot.transform.position, Quaternion.identity, weaponPivot.transform);
-                heldWeapons.Add(weaponObject);
-
-                if (heldWeapons[0].TryGetComponent<Weapon>(out var script)) {
-                    PrimaryWeaponCurrentAmmo = script.ammoMax * AmmoMaxMultiplier;
-                    script.currentAmmo = PrimaryWeaponCurrentAmmo;
-                }
-            }
-        }
-
-        if (!home) {
-            
-            // Set health, energy, ammo, and coins UI references on each stage load
-            healthBar = GameObject.FindGameObjectWithTag("PlayerHealth").GetComponent<HealthBar>();
-            energyBar = GameObject.FindGameObjectWithTag("EnergyBar").GetComponent<EnergyBar>();
-            ammoBar = GameObject.FindGameObjectWithTag("AmmoBar").GetComponent<WeaponInfo>();
-            coinsUI = GameObject.FindGameObjectWithTag("CoinsUI").GetComponent<CoinsUI>();
-
-            // Set UI stat objects
-            healthBar.SetMaxHealth(MaxHealth);
-            healthBar.SetHealth(Health);
-            energyBar.SetMaxEnergy(MaxEnergy);
-            energyBar.SetEnergy(Experience);
-            coinsUI.SetCoins(Coins);
-
-            AddSavedWeapons();
-            AddSavedItems();
-
-            if (weapon == null) {
-                weapon = GetComponentInChildren<Weapon>();
-                Debug.Log("WeaponFireMethod is null! Reassigned.");
-            }
-        }
     }
 
+    // Adds saved weapons if loading a previous run
     public void AddSavedWeapons() {
 
         // Add Thornbloom if ID matches and player is not currently holding weapons
@@ -519,8 +540,10 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Adds saved items if loading a previous run
     public void AddSavedItems() {
 
+        // For every saved item needing to be added—
         for (int i = 0; i < HeldItemsCount; i++) {
 
             ItemPickup item;
@@ -528,15 +551,25 @@ public class PlayerController : MonoBehaviour
             
             switch (HeldItemsRarity[i]) {
                 case ItemRarity.COMMON:
+
+                    // Finds item in total items list
                     item = itemList.seenCommonItems.Find(x => x.itemID == HeldItemsID[i]);
+
+                    // Spawns it in and immediately hides it
                     itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
                     itemObject.SetActive(false);
+
+                    // Adds item to player's active items
                     heldItems.Add(itemObject.GetComponent<ItemPickup>());
+
+                    // Triggers any OnPickup abilities
                     if (heldItems[i].type == ItemType.ABILITY) {
                         item.effect.OnPickup();
                     }
                     break;
                 case ItemRarity.UNCOMMON:
+
+                    // Same as above ^^
                     item = itemList.seenUncommonItems.Find(x => x.itemID == HeldItemsID[i]);
                     itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
                     itemObject.SetActive(false);
@@ -546,6 +579,8 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case ItemRarity.RARE:
+
+                    // Same as above ^^
                     item = itemList.seenRareItems.Find(x => x.itemID == HeldItemsID[i]);
                     itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
                     itemObject.SetActive(false);
@@ -555,6 +590,8 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case ItemRarity.EPIC:
+
+                    // Same as above ^^
                     item = itemList.seenEpicItems.Find(x => x.itemID == HeldItemsID[i]);
                     itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
                     itemObject.SetActive(false);
@@ -564,6 +601,8 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case ItemRarity.LEGENDARY:
+
+                    // Same as above ^^
                     item = itemList.seenLegendaryItems.Find(x => x.itemID == HeldItemsID[i]);
                     itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
                     Debug.Log(item.gameObject);
@@ -574,6 +613,8 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case ItemRarity.SPECIAL:
+
+                    // Same as above ^^
                     item = itemList.seenSpecialItems.Find(x => x.itemID == HeldItemsID[i]);
                     itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
                     itemObject.SetActive(false);
@@ -583,6 +624,8 @@ public class PlayerController : MonoBehaviour
                     }
                     break;
                 case ItemRarity.FLOWER:
+
+                    // Same as above ^^
                     item = itemList.seenFlowerItems.Find(x => x.itemID == HeldItemsID[i]);
                     itemObject = Instantiate(item.gameObject, transform.position, Quaternion.identity);
                     itemObject.SetActive(false);
@@ -602,6 +645,7 @@ public class PlayerController : MonoBehaviour
         dodgeChanceTracker = DodgeChance;
         moveSpeedMultTracker = MoveSpeedMultiplier;
 
+        // If map was loaded and saved, save player as well
         if (savePressed) {
             savePressed = false;
             PlayerStart(false);
@@ -629,6 +673,7 @@ public class PlayerController : MonoBehaviour
 
             if (!heldWeapons[0].activeInHierarchy) {
                 StartWeaponSwitch(0, CurrentWeaponIndex);
+                GameStateManager.EOnWeaponSwitch?.Invoke();
             }
         }
         // Switch to second weapon
@@ -637,6 +682,17 @@ public class PlayerController : MonoBehaviour
 
             if (!heldWeapons[1].activeInHierarchy) {
                 StartWeaponSwitch(1, CurrentWeaponIndex);
+                GameStateManager.EOnWeaponSwitch?.Invoke();
+            }
+        } else if (Input.GetMouseButtonDown(1) && canSwitchWeapons 
+        && heldWeapons.Count == 2) {
+
+            if (!heldWeapons[0].activeInHierarchy) {
+                StartWeaponSwitch(0, CurrentWeaponIndex);
+                GameStateManager.EOnWeaponSwitch?.Invoke();
+            } else if (!heldWeapons[1].activeInHierarchy) {
+                StartWeaponSwitch(1, CurrentWeaponIndex);
+                GameStateManager.EOnWeaponSwitch?.Invoke();
             }
         }
 
@@ -646,6 +702,7 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    // Drop currently held weapon
     public void DropWeapon(Weapon dropping, bool replace) {
 
         // Put currently selected weapon's pickup object into temporary variable
@@ -737,6 +794,8 @@ public class PlayerController : MonoBehaviour
                 }
                 break;
         }
+
+        GameStateManager.EOnWeaponDrop?.Invoke();
     }
 
     public void StartWeaponSwitch(int switchTo, int switchFrom) {
@@ -1049,13 +1108,10 @@ public class PlayerController : MonoBehaviour
         yield return new WaitForSeconds(2f);
 
         ResetRun();
+        IncrementDeath();
     }
 
     public void ResetRun() {
-
-        string pathHome = Application.persistentDataPath + "/home.soni";
-        string pathMap = Application.persistentDataPath + "/map.chris";
-        string pathPlayer = Application.persistentDataPath + "/player.franny";
 
         lootList.ResetAllWeapons();
         itemList.ResetAllItems();
@@ -1063,6 +1119,13 @@ public class PlayerController : MonoBehaviour
         HeldItemsID.Clear();
         HeldItemsRarity.Clear();
         HeldItemsCount = 0;
+    }
+
+    public void IncrementDeath() {
+
+        string pathHome = Application.persistentDataPath + "/home.soni";
+        string pathMap = Application.persistentDataPath + "/map.chris";
+        string pathPlayer = Application.persistentDataPath + "/player.franny";
 
         HomeManager.PlayerDeaths++;
         

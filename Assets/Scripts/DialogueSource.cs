@@ -55,7 +55,7 @@ public class DialogueSource : MonoBehaviour
             };
             sourceList.Sort();
 
-            GameStateManager.dialogueManager.StartDialogue(sourceList[0]);
+            GameStateManager.dialogueManager.StartDialogue(sourceList[0], false);
 
         }
     }

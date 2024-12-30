@@ -52,7 +52,7 @@ public class Coin : ContactEnemy
         coinSpawn = false;
     }
 
-    public override void RemoveEnemy() {
+    public override void PostEnemyDeath() {
         Destroy(gameObject);
     }
 }

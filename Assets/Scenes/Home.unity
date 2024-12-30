@@ -12277,11 +12277,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: orthographic size
-      value: 3.375
+      value: 3.0546875
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: m_BackGroundColor.b
-      value: 0.050980393
+      value: 0.039215688
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: m_BackGroundColor.g
@@ -12289,7 +12289,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: m_BackGroundColor.r
-      value: 0.15686275
+      value: 0.15294118
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: m_NormalizedViewPortRect.x
@@ -12983,6 +12983,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5407901857503173397, guid: d3ab8db0120e14efca856efa2550f926, type: 3}
+      propertyPath: saveIcon
+      value: 
+      objectReference: {fileID: 1342780337}
     - target: {fileID: 5407901857503173397, guid: d3ab8db0120e14efca856efa2550f926, type: 3}
       propertyPath: homeLookAt
       value: 
@@ -17725,7 +17729,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9111432469672544482, guid: fe5dc26d6f55e4ac391ac915425336b7, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -400
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

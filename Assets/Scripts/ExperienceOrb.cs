@@ -112,7 +112,7 @@ public class ExperienceOrb : ContactEnemy
         expSpawn = false;
     }
 
-    public override void RemoveEnemy() {
+    public override void PostEnemyDeath() {
         Destroy(gameObject);
     }
 }

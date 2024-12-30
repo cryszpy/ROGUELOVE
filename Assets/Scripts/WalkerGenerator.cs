@@ -25,8 +25,10 @@ public class WalkerGenerator : MonoBehaviour
 
     public List<int> tileListY = new();
 
+    public List<Tuple<int, int>> groundTiles = new();
+
     // List of all active Walkers
-    private List<WalkerObject> walkers;
+    protected List<WalkerObject> walkers;
 
     public Camera mainCam;
 
@@ -41,9 +43,9 @@ public class WalkerGenerator : MonoBehaviour
 
     public Tilemap oTilemap;
 
-    [SerializeField] private GameObject chest;
+    [SerializeField] protected GameObject chest;
 
-    [SerializeField] private GameObject bossSpawnPoint;
+    [SerializeField] protected GameObject bossSpawnPoint;
 
     [Space(10)]
     [Header("MAP SETTINGS")]
@@ -59,11 +61,11 @@ public class WalkerGenerator : MonoBehaviour
     [SerializeField]
     [Range(1, 10)]
     // Maximum amount of active walkers
-    private int maxWalkers;
+    protected int maxWalkers;
 
     [SerializeField]
     // Chance for a single tile to not generate an obstacle
-    private int emptyChance;
+    protected int emptyChance;
 
     // Current tile count
     public int tileCount = default;
@@ -75,35 +77,35 @@ public class WalkerGenerator : MonoBehaviour
     [Range(0.1f, 0.98f)]
     // Compares the amount of floor tiles to the percentage of the total grid covered (in floor tiles)
     // NEVER SET THIS TO 1 OR ELSE UNITY WILL CRASH :skull:
-    private float fillPercentage;
+    protected float fillPercentage;
 
     [SerializeField]
     // Generation method, pause time between each successful movement
-    private float waitTime;
+    protected float waitTime;
 
     // SAVE FILE PATH
-    private string pathMap;
+    protected string pathMap;
 
     // Boolean to see if save file exists
-    private bool loadFromSave;
+    protected bool loadFromSave;
 
-    [SerializeField] private int lvl;
+    [SerializeField] protected int lvl;
 
-    [SerializeField] private int stg;
+    [SerializeField] protected int stg;
 
-    [SerializeField] private float spawnRadiusX;
+    [SerializeField] protected float spawnRadiusX;
     
-    [SerializeField] private float spawnRadiusY;
+    [SerializeField] protected float spawnRadiusY;
 
-    private bool doorwaySpawned;
+    protected bool doorwaySpawned;
 
     [Space(10)]
     [Header("ENTITIES")]
 
     // Finds player
-    [SerializeField] private GameObject player;
-    [SerializeField] private GameObject cameraLookAt;
-    private PlayerController playerCont;
+    [SerializeField] protected GameObject player;
+    [SerializeField] protected GameObject cameraLookAt;
+    [HideInInspector] public PlayerController playerCont;
 
     // List of all common enemies in this level
     public GameObject[] commonEnemies;
@@ -123,15 +125,18 @@ public class WalkerGenerator : MonoBehaviour
     [Space(10)]
     [Header("LEVEL INFO")]
 
-    private static int deadEnemies;
-    public static void SetDeadEnemy() {
+    protected static int deadEnemies;
+    public static void SetDeadEnemy(int value) {
+        deadEnemies = value;
+    }
+    public static void AddDeadEnemy() {
         deadEnemies++;
     }
     public static int GetDeadEnemies() {
         return deadEnemies;
     }
 
-    private static int enemyTotal;
+    protected static int enemyTotal;
 
     public static int EnemyTotal { 
         get => enemyTotal; 
@@ -141,21 +146,28 @@ public class WalkerGenerator : MonoBehaviour
         }
     }
 
-    [SerializeField] private bool bossLevel;
+    [SerializeField] protected bool bossLevel;
 
-    [SerializeField] private bool minibossSpawned = false;
+    [SerializeField] protected bool isTutorial;
+
+    [SerializeField] protected bool minibossSpawned = false;
 
     public static bool doneWithLevel = false;
 
-    [SerializeField] private GameObject saveIcon;
+    [SerializeField] protected GameObject saveIcon;
 
     // Initializes grid to be generated (size)
-    void Awake() {
+    private void Awake() {
         doneWithLevel = false;
-        enemyTotal = 0;
+        EnemyTotal = 0;
         deadEnemies = 0;
         GameStateManager.SetLevelClear(false);
         GameStateManager.SetState(GAMESTATE.PLAYING);
+
+        // Hide save icon
+        if (saveIcon) {
+            saveIcon.SetActive(false);
+        }
 
         if (GameStateManager.GetLevel() == 1) {
             minibossSpawned = false;
@@ -226,7 +238,7 @@ public class WalkerGenerator : MonoBehaviour
         }
     }
 
-    void Update() {
+    private void Update() {
 
         if (EnemyTotal != 0) {
             if (EnemyTotal == GetDeadEnemies() && GameStateManager.GetLevelClear() == false) {
@@ -245,13 +257,13 @@ public class WalkerGenerator : MonoBehaviour
             GameStateManager.dialogueManager.PlayCallDialogue(GameStateManager.dialogueManager.callDialogueList);
         }
     }
-    void InitializeGrid() {
+    private void InitializeGrid() {
 
         // Initializes grid size from variables
         gridHandler = new TileType[mapWidth, mapHeight];
         tileCount = 0;
 
-        if (bossLevel && !loadFromSave) {
+        if ((isTutorial || bossLevel) && !loadFromSave) {
             FillBossLevel();
             CreateBorders();
             CreateObstacles();
@@ -295,7 +307,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     // Returns a random single vector direction
-    Vector2 GetDirection() {
+    private Vector2 GetDirection() {
         int choice = Mathf.FloorToInt(UnityEngine.Random.value * 3.99f);
 
         switch (choice) {
@@ -313,7 +325,7 @@ public class WalkerGenerator : MonoBehaviour
     }
     
     // ^^ same thing but updates direction instead of deletes
-    void ChanceToRedirect() {
+    private void ChanceToRedirect() {
         for (int i = 0; i < walkers.Count; i++) {
             if (UnityEngine.Random.value < walkers[i].chanceToChange) {
                 WalkerObject currWalker = walkers[i];
@@ -324,7 +336,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     // ^^ same thing but creates a new walker (duplicates at position) as long as it is under max walkers
-    void ChanceToCreate() {
+    private void ChanceToCreate() {
         int updatedCount = walkers.Count;
         for (int i = 0; i < updatedCount; i++) {
             if (UnityEngine.Random.value < walkers[i].chanceToChange && walkers.Count < maxWalkers) {
@@ -338,7 +350,7 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     // Update actual position of the walkers, within the bounds of the grid size
-    void UpdatePosition() {
+    private void UpdatePosition() {
         for (int i = 0; i < walkers.Count; i++) {
             WalkerObject foundWalker = walkers[i];
             foundWalker.position += foundWalker.direction;
@@ -350,7 +362,7 @@ public class WalkerGenerator : MonoBehaviour
     
     // Loops through walker list, randomly compares a value to the WalkersChance, and if it's > 1 then 
     // deactivates walker if true
-    void ChanceToRemove() {
+    private void ChanceToRemove() {
         int updatedCount = walkers.Count;
         for (int i = 0; i < updatedCount; i++) {
             if (UnityEngine.Random.value < walkers[i].chanceToChange && walkers.Count > 1) {
@@ -460,6 +472,8 @@ public class WalkerGenerator : MonoBehaviour
                     tileListX.Add(x);
                     tileListY.Add(y);
                     tileCount++;
+                } else {
+                    groundTiles.Add(new Tuple<int, int>(x, y));
                 }
             }
         }
@@ -476,6 +490,7 @@ public class WalkerGenerator : MonoBehaviour
                     tileCount++;
                 } else {
                     gridHandler[x, y] = TileType.FLOOR;
+                    groundTiles.Add(new Tuple<int, int>(x, y));
                     tileCount++;
                 }
             }
@@ -591,7 +606,7 @@ public class WalkerGenerator : MonoBehaviour
 
             for (int br = 0; br < breakRange; br++) {
 
-                int rand = GetRandomTile();
+                int rand = GetRandomYTile();
 
                 // Check all X tiles
                 for (int x = 0; x < tileListX.Count; x++) {
@@ -605,14 +620,16 @@ public class WalkerGenerator : MonoBehaviour
                         break;
 
                     } else {
-                        rand = GetRandomTile();
+                        rand = GetRandomYTile();
                     }
                 }
             }
         }
-        SpawnRandomPlayer();
-        if (!bossLevel) {
+        if (!bossLevel && chest) {
             SpawnChests();
+        }
+        if (!isTutorial) {
+            SpawnRandomPlayer();
         }
         StartCoroutine(SpawnStuff());
     }
@@ -626,7 +643,7 @@ public class WalkerGenerator : MonoBehaviour
         for (int s = 0; s < chestRange; s++) {
             
             // Generates random number to pick chest spawnpoint
-            int rand = GetRandomTile();
+            int rand = GetRandomYTile();
 
             // For as many floor tiles as there are in the tilemap:
             for (int i = 0; i < tileListX.Count; i++) {
@@ -636,10 +653,10 @@ public class WalkerGenerator : MonoBehaviour
 
                     if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
                     && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                        rand = GetRandomTile();
+                        rand = GetRandomYTile();
                     } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
                     && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
-                        rand = GetRandomTile();
+                        rand = GetRandomYTile();
                     } else {
                         Debug.Log(tileListX[rand] + "::" + tileListY[rand]);
 
@@ -650,7 +667,7 @@ public class WalkerGenerator : MonoBehaviour
                 } else {
                     
                     // Generates random number to pick chest spawnpoint
-                    rand = GetRandomTile();
+                    rand = GetRandomYTile();
                 }
             }
         }
@@ -660,10 +677,12 @@ public class WalkerGenerator : MonoBehaviour
         yield return new WaitForSeconds(0.01f);
 
         PathScan();
-        SpawnRandomEnemies();
-        SaveMap();
+        if (!isTutorial) {
+            SpawnRandomEnemies();
+            SaveMap();
+            playerCont.savePressed = true;
+        }
         TransitionManager.EndLeaf(true);
-        playerCont.savePressed = true;
     }
 
     // SPAWN PLAYER
@@ -696,15 +715,52 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     // Spawns doorway to next level after level cleared
-    private void SpawnDoorway() {
+    protected void SpawnDoorway() {
         doorwaySpawned = false;
+        bool validTileFound = false;
+        
+        // Creates a local copy of the list containing all ground tiles
+        List<Tuple<int, int>> uncheckedTiles = new(groundTiles);
+        Debug.Log(uncheckedTiles.Count);
 
-        int rand = GetRandomTile();
+        // Chooses a random tile out of the ground tiles list
+        Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
 
-        // For all tiles in the map
+        // While a valid tile has yet to be found—
+        while (!validTileFound) {
+
+            // If selected tile is too close too player—
+            if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
+            && tile.Item1 >= player.transform.position.x - spawnRadiusX
+            && tile.Item2 <= player.transform.position.y + spawnRadiusY 
+            && tile.Item2 >= player.transform.position.y - spawnRadiusY) {
+
+                // Remove tile from possibilities list
+                uncheckedTiles.Remove(tile);
+
+                // Choose a new tile
+                tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
+
+            } else {
+                validTileFound = true;
+                break;
+            }
+        }
+
+        Debug.Log("Valid tile found: " + "(" + tile.Item1 + ", " + tile.Item2 + ")");
+
+        // Spawn doorway
+        if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
+            door.Create(tiles.doorwayObject, new Vector2((tile.Item1 * mapGrid.cellSize.x) + (mapGrid.cellSize.x / 2), (tile.Item2 * mapGrid.cellSize.y) + (mapGrid.cellSize.y / 2)), Quaternion.identity, cameraLookAt);
+            doorwaySpawned = true;
+        } else {
+            Debug.LogError("Could not find Doorway component of door while spawning!");
+        }
+
+        /* // For all tiles in the map
         for (int x = 0; x < tileListX.Count; x++) {
 
-            // If chosen tile is a floor tile, and doesn't have obstacles, then generate breakable
+            // If chosen tile is a floor tile—
             if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
 
                 Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[rand], tileListY[rand]));
@@ -714,7 +770,7 @@ public class WalkerGenerator : MonoBehaviour
                     && genPos.x >= player.transform.position.x - spawnRadiusX
                     && genPos.y <= player.transform.position.y + spawnRadiusY 
                     && genPos.y >= player.transform.position.y - spawnRadiusY) {
-                        rand = GetRandomTile();
+                        rand = GetRandomYTile();
                     } else {
 
                         // Spawn doorway
@@ -729,9 +785,10 @@ public class WalkerGenerator : MonoBehaviour
                     }
             } 
             else {
-                rand = GetRandomTile();
+                rand = GetRandomYTile();
             }
-        }
+        } */
+
         if (!doorwaySpawned) {
             Debug.LogWarning("Could not find suitable tile to spawn doorway.");
 
@@ -741,29 +798,11 @@ public class WalkerGenerator : MonoBehaviour
     }
 
     // SPAWN ENEMIES
-    private void SpawnRandomEnemies() {
+    protected void SpawnRandomEnemies() {
 
         // If level number is the last level in area, then disregard everything except Boss spawning
         if (!IsArrayEmpty(bosses)) {
-            
-            // Chooses a random boss out of the possible bosses for this stage
-            int chosenBoss = UnityEngine.Random.Range(0, bosses.Length);
-
-            if (bossSpawnPoint != null) {
-
-                // Spawns Enemy
-                if (bosses[chosenBoss].GetComponentInChildren<Enemy>()) {
-                    bosses[chosenBoss].GetComponentInChildren<Enemy>().Create(bosses[chosenBoss], bossSpawnPoint.transform.position, Quaternion.identity, this);
-                    enemyTotal++;
-                } else if (bosses[chosenBoss].TryGetComponent<Enemy>(out var enemy)) {
-                    enemy.Create(bosses[chosenBoss], bossSpawnPoint.transform.position, Quaternion.identity, this);   
-                    enemyTotal++;
-                } else {
-                    Debug.LogWarning("Could not find Enemy component in boss!");
-                }
-            } else {
-                Debug.LogWarning("Boss Spawnpoint is null!");
-            }
+            SpawnBoss(bossSpawnPoint);
         }
 
         // Miniboss spawning
@@ -811,7 +850,7 @@ public class WalkerGenerator : MonoBehaviour
 
                             // Generates random number to pick Enemy spawnpoint
                             int randX = GetRandomXTile();
-                            int randY = GetRandomTile();
+                            int randY = GetRandomYTile();
 
                             // For as many floor tiles as there are in the tilemap:
                             for (int i = 0; i < tileListX.Count; i++) {
@@ -826,28 +865,21 @@ public class WalkerGenerator : MonoBehaviour
                                     && genPos.y <= player.transform.position.y + spawnRadiusY 
                                     && genPos.y >= player.transform.position.y - spawnRadiusY) {
                                         randX = GetRandomXTile();
-                                        randY = GetRandomTile();
+                                        randY = GetRandomYTile();
                                     } else {
 
                                         // Spawns Enemy
-                                        if (minibosses[m].GetComponentInChildren<Enemy>()) {
-                                            minibosses[m].GetComponentInChildren<Enemy>().Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);
-                                            enemyTotal++;
-                                            minibossSpawned = true;
-                                            break;
-                                        } else {
-                                            enemy.Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                            enemyTotal++;
-                                            minibossSpawned = true;
-                                            break;
-                                        }
+                                        enemy.Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                        EnemyTotal++;
+                                        minibossSpawned = true;
+                                        break;
                                     }
 
                                 } else {
                                     
                                     // Generates random number to pick Enemy spawnpoint
                                     randX = GetRandomXTile();
-                                    randY = GetRandomTile();
+                                    randY = GetRandomYTile();
                                 }
                             }
                         } else {
@@ -902,7 +934,7 @@ public class WalkerGenerator : MonoBehaviour
 
                             // Generates random number to pick Enemy spawnpoint
                             int randX = GetRandomXTile();
-                            int randY = GetRandomTile();
+                            int randY = GetRandomYTile();
 
                             // For as many floor tiles as there are in the tilemap:
                             for (int i = 0; i < tileListX.Count; i++) {
@@ -917,7 +949,7 @@ public class WalkerGenerator : MonoBehaviour
                                     && genPos.y <= player.transform.position.y + (spawnRadiusY/2) 
                                     && genPos.y >= player.transform.position.y - (spawnRadiusY/2)) {
                                         randX = GetRandomXTile();
-                                        randY = GetRandomTile();
+                                        randY = GetRandomYTile();
                                     } else {
 
                                         Quaternion rot = Quaternion.Euler(0, 0, 0);
@@ -931,16 +963,10 @@ public class WalkerGenerator : MonoBehaviour
                                             Debug.Log("TOP WALL SPAWNED");
 
                                             // Spawns Enemy
-                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                                enemyTotal++;
-                                                break;
-                                            } else {
-                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                                enemyTotal++;
-                                                break;
-                                            }
+                                            gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                            enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                            EnemyTotal++;
+                                            break;
                                         } 
                                         // BOTTOM WALL
                                         else if (gridHandler[tileListX[randX], tileListY[randY] + 1] == TileType.FLOOR) {
@@ -951,16 +977,10 @@ public class WalkerGenerator : MonoBehaviour
 
                                             Debug.Log("BOTTOM WALL SPAWNED");
                                             // Spawns Enemy
-                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                                enemyTotal++;
-                                                break;
-                                            } else {
-                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                                enemyTotal++;
-                                                break;
-                                            }
+                                            gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                            enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                            EnemyTotal++;
+                                            break;
                                         } 
                                         // LEFT WALL
                                         else if (gridHandler[tileListX[randX] + 1, tileListY[randY]] == TileType.FLOOR) {
@@ -971,16 +991,10 @@ public class WalkerGenerator : MonoBehaviour
 
                                             Debug.Log("LEFT WALL SPAWNED");
                                             // Spawns Enemy
-                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                                enemyTotal++;
-                                                break;
-                                            } else {
-                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                                enemyTotal++;
-                                                break;
-                                            }
+                                            gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                            enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                            EnemyTotal++;
+                                            break;
                                         } 
                                         // RIGHT WALL
                                         else if (gridHandler[tileListX[randX] - 1, tileListY[randY]] == TileType.FLOOR) {
@@ -991,21 +1005,15 @@ public class WalkerGenerator : MonoBehaviour
 
                                             Debug.Log("RIGHT WALL SPAWNED");
                                             // Spawns Enemy
-                                            if (stationEnemies[st].GetComponentInChildren<Enemy>()) {
-                                                stationEnemies[st].GetComponentInChildren<Enemy>().Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);
-                                                enemyTotal++;
-                                                break;
-                                            } else {
-                                                gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
-                                                enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
-                                                enemyTotal++;
-                                                break;
-                                            }
+                                            gridHandler[tileListX[randX], tileListY[randY]] = TileType.BORDER;
+                                            enemy.Create(stationEnemies[st], new Vector2(xCoord, yCoord), rot, this);   
+                                            EnemyTotal++;
+                                            break;
                                         } 
                                         else {
                                             // Generates random number to pick Enemy spawnpoint
                                             randX = GetRandomXTile();
-                                            randY = GetRandomTile();
+                                            randY = GetRandomYTile();
                                         }
                                     }
 
@@ -1013,7 +1021,7 @@ public class WalkerGenerator : MonoBehaviour
                                     
                                     // Generates random number to pick Enemy spawnpoint
                                     randX = GetRandomXTile();
-                                    randY = GetRandomTile();
+                                    randY = GetRandomYTile();
                                 }
                             }
 
@@ -1067,7 +1075,7 @@ public class WalkerGenerator : MonoBehaviour
                         if (spawnValue <= spawnChance) {
 
                             // Generates random number to pick Enemy spawnpoint
-                            int rand = GetRandomTile();
+                            int rand = GetRandomYTile();
 
                             // For as many floor tiles as there are in the tilemap:
                             for (int i = 0; i < tileListX.Count; i++) {
@@ -1081,24 +1089,18 @@ public class WalkerGenerator : MonoBehaviour
                                     && genPos.x >= player.transform.position.x - spawnRadiusX
                                     && genPos.y <= player.transform.position.y + spawnRadiusY 
                                     && genPos.y >= player.transform.position.y - spawnRadiusY) {
-                                        rand = GetRandomTile();
+                                        rand = GetRandomYTile();
                                     } else {
 
-                                        if (rareEnemies[r].GetComponentInChildren<Enemy>()) {
-                                            rareEnemies[r].GetComponentInChildren<Enemy>().Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
-                                            enemyTotal++;
-                                            break;
-                                        } else {
-                                            enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                            enemyTotal++;
-                                            break;
-                                        }
+                                        enemy.Create(rareEnemies[r], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                        EnemyTotal++;
+                                        break;
                                     }
 
                                 } else {
                                     
                                     // Generates random number to pick Enemy spawnpoint
-                                    rand = GetRandomTile();
+                                    rand = GetRandomYTile();
                                 }
                             }
 
@@ -1115,6 +1117,7 @@ public class WalkerGenerator : MonoBehaviour
         
         // Common enemy spawning
         if (!IsArrayEmpty(commonEnemies) && !bossLevel) {
+
             // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
             for (int c = 0; c < commonEnemies.Length; c++) {
 
@@ -1151,7 +1154,7 @@ public class WalkerGenerator : MonoBehaviour
                         if (spawnValue <= spawnChance) {
 
                             // Generates random number to pick Enemy spawnpoint
-                            int rand = GetRandomTile();
+                            int rand = GetRandomYTile();
 
                             // For as many floor tiles as there are in the tilemap:
                             for (int i = 0; i < tileListX.Count; i++) {
@@ -1165,24 +1168,18 @@ public class WalkerGenerator : MonoBehaviour
                                     && genPos.x >= player.transform.position.x - spawnRadiusX
                                     && genPos.y <= player.transform.position.y + spawnRadiusY 
                                     && genPos.y >= player.transform.position.y - spawnRadiusY) {
-                                        rand = GetRandomTile();
+                                        rand = GetRandomYTile();
                                     } else {
                                         
                                         // Spawns Enemy
-                                        if (commonEnemies[c].GetComponentInChildren<Enemy>()) {
-                                            commonEnemies[c].GetComponentInChildren<Enemy>().Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
-                                            enemyTotal++;
-                                            break;
-                                        } else {
-                                            enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                            enemyTotal++;
-                                            break;
-                                        }
+                                        enemy.Create(commonEnemies[c], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                        EnemyTotal++;
+                                        break;
                                     }
                                 } else {
                                     
                                     // Generates random number to pick Enemy spawnpoint
-                                    rand = GetRandomTile();
+                                    rand = GetRandomYTile();
                                 }
                             }
                             
@@ -1198,7 +1195,7 @@ public class WalkerGenerator : MonoBehaviour
         }
 
         // IF LEVEL HAS SOMEHOW SPAWNED ZERO ENEMIES
-        if (enemyTotal == 0) {
+        if (EnemyTotal == 0) {
 
             Debug.LogWarning("No enemies were spawned on generation! Repopulating.");
 
@@ -1221,7 +1218,7 @@ public class WalkerGenerator : MonoBehaviour
                         }
                         
                         // Generates random number to pick Enemy spawnpoint
-                        int rand = GetRandomTile();
+                        int rand = GetRandomYTile();
 
                         // For as many floor tiles as there are in the tilemap:
                         for (int i = 0; i < tileListX.Count; i++) {
@@ -1235,24 +1232,18 @@ public class WalkerGenerator : MonoBehaviour
                                 && genPos.x >= player.transform.position.x - spawnRadiusX
                                 && genPos.y <= player.transform.position.y + spawnRadiusY 
                                 && genPos.y >= player.transform.position.y - spawnRadiusY) {
-                                    rand = GetRandomTile();
+                                    rand = GetRandomYTile();
                                 } else {
                                     
                                     // Spawns Enemy
-                                    if (commonEnemies[commonIndex].GetComponentInChildren<Enemy>()) {
-                                        commonEnemies[commonIndex].GetComponentInChildren<Enemy>().Create(commonEnemies[commonIndex], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);
-                                        enemyTotal++;
-                                        break;
-                                    } else {
-                                        enemy.Create(commonEnemies[commonIndex], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                        enemyTotal++;
-                                        break;
-                                    }
+                                    enemy.Create(commonEnemies[commonIndex], new Vector2(tileListX[rand] * mapGrid.cellSize.x, tileListY[rand] * mapGrid.cellSize.y), Quaternion.identity, this);   
+                                    EnemyTotal++;
+                                    break;
                                 }
                             } else {
                                 
                                 // Generates random number to pick Enemy spawnpoint
-                                rand = GetRandomTile();
+                                rand = GetRandomYTile();
                             }
                         }
 
@@ -1264,6 +1255,28 @@ public class WalkerGenerator : MonoBehaviour
         }
 
         Debug.Log("Spawned Enemies!");
+    }
+
+    public void SpawnBoss(GameObject spawnPoint) {
+
+        // Chooses a random boss out of the possible bosses for this stage
+        int chosenBoss = UnityEngine.Random.Range(0, bosses.Length);
+
+        if (spawnPoint != null) {
+
+            // Spawns Enemy
+            if (bosses[chosenBoss].GetComponentInChildren<Enemy>()) {
+                bosses[chosenBoss].GetComponentInChildren<Enemy>().Create(bosses[chosenBoss], spawnPoint.transform.position, Quaternion.identity, this);
+                EnemyTotal++;
+            } else if (bosses[chosenBoss].TryGetComponent<Enemy>(out var enemy)) {
+                enemy.Create(bosses[chosenBoss], spawnPoint.transform.position, Quaternion.identity, this);   
+                EnemyTotal++;
+            } else {
+                Debug.LogWarning("Could not find Enemy component in boss!");
+            }
+        } else {
+            Debug.LogWarning("Boss spawn point is null!");
+        }
     }
 
     private bool IsArrayEmpty(GameObject[] array) {
@@ -1278,7 +1291,7 @@ public class WalkerGenerator : MonoBehaviour
         return UnityEngine.Random.Range(0, gridHandler.GetLength(1) - 1);
     }
 
-    public int GetRandomTile() {
+    public int GetRandomYTile() {
         return UnityEngine.Random.Range(0, tileListY.Count);
     }
 

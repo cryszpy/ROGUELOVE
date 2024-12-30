@@ -34,12 +34,19 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private PixelPerfectCamera pixelPerfectCamera;
 
+    [SerializeField] private GameObject saveIcon;
+
     [Header("BEDROOM STATS")]
 
     [SerializeField] private float bedroomCamOrtho;
     [SerializeField] private CinemachinePixelPerfect bedroomPixelPerf;
 
     private void Awake() {
+
+        // Hide save icon
+        if (saveIcon) {
+            saveIcon.SetActive(false);
+        }
 
         string pathMap = Application.persistentDataPath + "/map.chris";
         string pathPlayer = Application.persistentDataPath + "/player.franny";
@@ -179,21 +186,22 @@ public class MainMenu : MonoBehaviour
 
     public void PlayButton() {
 
-        // Player does NOT have an existing save slot (START NEW GAME + TUTORIAL)
+        // Player does NOT have an existing save slot (START NEW GAME + CUTSCENE)
         if (GameStateManager.currentSaveType == SaveType.NEWGAME) {
 
+            GameStateManager.tutorialEnabled = true;
+
             // Reset saved profile stats if there is no profile
-            HomeManager.SeenItems.Clear();
-            HomeManager.SeenItemsCount = 0;
-            HomeManager.PlayerDeaths = 0;
+            GameStateManager.homeManager.ResetHome();
 
             GameStateManager.SetSave(false);
 
             MainMenuTransition(true);
-            Debug.Log("TUTORIAL");
+            Debug.LogWarning("CUTSCENE");
         }
         // Player has an existing save slot
         else {
+            GameStateManager.tutorialEnabled = false;
             saveSlots.SetActive(true);
         }
     }
@@ -218,8 +226,10 @@ public class MainMenu : MonoBehaviour
         else {
             GameStateManager.SetSave(false);
 
+            GameStateManager.homeManager.LoadHome();
+
             MainMenuTransition(false);
-            Debug.Log("WENT TO SAVED HOME");
+            Debug.LogWarning("WENT TO SAVED HOME");
         }
     }
 

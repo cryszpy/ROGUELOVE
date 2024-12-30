@@ -13,4 +13,4 @@ MonoBehaviour:
   m_Name: Cool Freaking Cape
   m_EditorClassIdentifier: 
   moveSpeedAdditive: 0
-  moveSpeedMultiplicative: 0.5
+  moveSpeedMultiplicative: 0.8

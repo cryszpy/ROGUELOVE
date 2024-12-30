@@ -23,6 +23,8 @@ public class GameStateManager : MonoBehaviour
 
     public static SaveType currentSaveType;
 
+    public static bool tutorialEnabled;
+
     // Methods to check the state of the game
     private static GAMESTATE state;
     public static GAMESTATE GetState() {
@@ -49,6 +51,8 @@ public class GameStateManager : MonoBehaviour
             GAMESTATE.GAMEOVER => false,
             _ => false,
         };
+
+        EOnGamestateChange?.Invoke();
     }
 
     // Methods to check whether the load save button was pressed
@@ -92,6 +96,16 @@ public class GameStateManager : MonoBehaviour
     }
 
     public GAMESTATE gameStateTracker;
+
+    public delegate void EventHandler();
+    public static EventHandler EOnTutorialTrigger;
+
+    public static EventHandler EOnDialogueEnd;
+    public static EventHandler EOnEnemyDeath;
+    public static EventHandler EOnGamestateChange;
+    public static EventHandler EOnWeaponDrop;
+    public static EventHandler EOnWeaponSwitch;
+    public static EventHandler EOnDoorwaySpawn;
 
     void Awake() {
 

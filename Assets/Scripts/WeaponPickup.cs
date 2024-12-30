@@ -11,8 +11,6 @@ public class WeaponPair {
 
 public class WeaponPickup : BasePickup, IPickupable
 {
-    public delegate void WeaponPickupVoidHandler();
-    public static WeaponPickupVoidHandler OnPickup;
 
     [SerializeField] private WeaponRarity weaponObjectRarity;
 
@@ -67,7 +65,7 @@ public class WeaponPickup : BasePickup, IPickupable
             UpdateWeapon(weapon);
         }
 
-        OnPickup?.Invoke();
+        PlayerController.EOnWeaponPickup?.Invoke();
     }
 
     private void UpdateWeapon(GameObject weapon) {

@@ -65,6 +65,8 @@ public class DialogueManager : MonoBehaviour
 
     private bool waitForSkip = false;
 
+    private bool useLetterbox;
+
     public void ContinueButton() {
 
         if (GameStateManager.GetState() == GAMESTATE.MENU && playingDialogue) {
@@ -221,7 +223,7 @@ public class DialogueManager : MonoBehaviour
         sourceList.Sort();
 
         if (sourceList.Count != 0) {
-            GameStateManager.dialogueManager.StartDialogue(sourceList[0]);
+            GameStateManager.dialogueManager.StartDialogue(sourceList[0], false);
         } else {
             Debug.LogWarning("There is nothing in the priority dialogue queue!");
         }
@@ -366,9 +368,11 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    public void StartDialogue (DialoguePiece dialogue) {
+    public void StartDialogue (DialoguePiece dialogue, bool letterbox) {
         Debug.Log("Started conversation with + " + dialogue.owner.characterName);
         playingDialogue = true;
+
+        useLetterbox = letterbox;
 
         FindReferences();
 
@@ -389,7 +393,11 @@ public class DialogueManager : MonoBehaviour
             priority.Remove(dialogue);
         }
 
-        animator.SetBool("IsOpen", true);
+        if (useLetterbox) {
+            animator.SetBool("IsBarOpen", true);
+        } else {
+            animator.SetBool("IsOpen", true);
+        }
 
         // Save previous game state and set current game state to MENU (disables input and enemies)
         if (GameStateManager.GetState() != GAMESTATE.MENU) {
@@ -582,7 +590,11 @@ public class DialogueManager : MonoBehaviour
         //priority.Clear();
 
         // Plays closing dialogue box animation
-        animator.SetBool("IsOpen", false);
+        if (useLetterbox) {
+            animator.SetBool("IsBarOpen", false);
+        } else {
+            animator.SetBool("IsOpen", false);
+        }
 
         // Resets game state to previous state
         GameStateManager.SetState(previousGameState);
@@ -599,5 +611,7 @@ public class DialogueManager : MonoBehaviour
         currentLine.choices = null;
 
         Debug.Log("--End of conversation--");
+
+        GameStateManager.EOnDialogueEnd?.Invoke();
     }
 }

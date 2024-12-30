@@ -151,6 +151,7 @@ MonoBehaviour:
   cam: {fileID: 0}
   cameraLookAt: {fileID: 0}
   animator: {fileID: 4865529348076879674}
+  sceneInfo: {fileID: 11400000, guid: 79b5a47eab3644e14a8ba799bbaac43d, type: 2}
 --- !u!95 &4865529348076879674
 Animator:
   serializedVersion: 7

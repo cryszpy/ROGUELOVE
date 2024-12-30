@@ -230,8 +230,7 @@ public abstract class Enemy : MonoBehaviour
     // Update is called once per frame
     private void FixedUpdate()
     {
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER 
-        && GameStateManager.GetState() != GAMESTATE.PAUSED) {
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
 
             if (enemyType != EnemyType.DEAD && enemyType != EnemyType.STATIONARY) {
 
@@ -587,34 +586,34 @@ public abstract class Enemy : MonoBehaviour
         hitbox.enabled = false;
     }
 
+    // Called at the START of this enemy's death animation
     public virtual void EnemyDeath() {
-
-        // Sets force to 0 so that the enemy doesn't just fly off
-        force = 0 * Time.fixedDeltaTime * direction;
 
         // Sets enemy type to DEAD
         enemyType = EnemyType.DEAD;
+
+        GameStateManager.EOnEnemyDeath?.Invoke();
+
+        // Sets force to 0 so that the enemy doesn't just fly off
+        force = 0 * Time.fixedDeltaTime * direction;
 
         // Spawns EXP
         SpawnExp();
         SpawnDrops();
 
         // Increments dead enemy counter
-        WalkerGenerator.SetDeadEnemy();
+        WalkerGenerator.AddDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.EnemyTotal);
     }
 
-    public virtual void RemoveEnemy() {
-
-        // Spawns EXP and drops
-        SpawnExp();
-        SpawnDrops();
+    // Called at the END of this enemy's death animation
+    public virtual void PostEnemyDeath() {
 
         // Removes enemy
         Destroy(gameObject);
 
         // Increments dead enemy counter
-        WalkerGenerator.SetDeadEnemy();
+        WalkerGenerator.AddDeadEnemy();
         Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.EnemyTotal);
     }
 }

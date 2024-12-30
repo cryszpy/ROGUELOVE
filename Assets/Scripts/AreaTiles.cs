@@ -20,22 +20,12 @@ public class AreaTiles : ScriptableObject
     public Tile empty;
 
     public Tile grass;
-
-    public Tile grassTop;
-
-    public Tile borderTop;
     
     public Tile borderDown;
 
     public Tile borderLeft;
 
-    public Tile borderRight;
-
     public GameObject doorwayObject;
 
     public GameObject[] breakables;
-
-    public List<int> bossSceneIndexes;
-
-    public int sceneOffset;
 }

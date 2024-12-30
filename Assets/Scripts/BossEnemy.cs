@@ -45,8 +45,7 @@ public class BossEnemy : Enemy
 
     public override void RollAttacks()
     {
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU 
-            && enemyType != EnemyType.DEAD) {
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING && enemyType != EnemyType.DEAD) {
 
             // Attack cooldown
             Cooldown();
@@ -140,5 +139,29 @@ public class BossEnemy : Enemy
         } else if (target.x - this.transform.position.x < 0f) {
             this.transform.localScale = new Vector3(-1f, 1f, 1f);
         }
+    }
+
+    // Called at the START of this enemy's death animation
+    public override void EnemyDeath() {
+
+        // Sets enemy type to DEAD
+        enemyType = EnemyType.DEAD;
+
+        GameStateManager.EOnEnemyDeath?.Invoke();
+
+        // Sets force to 0 so that the enemy doesn't just fly off
+        force = 0 * Time.fixedDeltaTime * direction;
+
+        // Spawns EXP
+        SpawnExp();
+        SpawnDrops();
+    }
+
+    // Called at the END of this enemy's death animation
+    public void PostBossDeath() {
+
+        // Increments dead enemy counter
+        WalkerGenerator.AddDeadEnemy();
+        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.EnemyTotal);
     }
 }

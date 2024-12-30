@@ -35,7 +35,7 @@ public class WeaponSingleShotFire : MonoBehaviour
 
     public virtual void FixedUpdate()
     {
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU) {
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
 
             Cooldown();
 
