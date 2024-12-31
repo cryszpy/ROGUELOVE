@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4127278730861676491}
   m_Layer: 5
   m_Name: SaveSlotMenu
-  m_TagString: SaveSlotMenu
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -1308,6 +1308,8 @@ MonoBehaviour:
   mainMenuScreen: {fileID: 779570814736934579}
   homeLookAt: {fileID: 0}
   virtualCamera: {fileID: 0}
+  pixelPerfectCamera: {fileID: 0}
+  saveIcon: {fileID: 0}
   bedroomCamOrtho: 1.71
   bedroomPixelPerf: {fileID: 0}
 --- !u!1 &9195781114735559847

@@ -7,10 +7,8 @@ TagManager:
   - Enemy
   - Collisions
   - Ignore
-  - SaveSlotMenu
   - A*
   - PlayerHealth
-  - AreaTiles
   - PostProcessing
   - VirtualCamera
   - Projectile
@@ -34,6 +32,7 @@ TagManager:
   - PickupInfoType
   - ChoicesBar
   - TransitionManager
+  - Letterbox
   layers:
   - Default
   - TransparentFX

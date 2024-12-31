@@ -19,7 +19,8 @@ public class DialogueManager : MonoBehaviour
 
     [SerializeField] private TMP_Text dialogueText;
 
-    [SerializeField] private Animator animator;
+    [SerializeField] private Animator dialogueAnimator;
+    [SerializeField] private Animator letterboxAnimator;
 
     public DialogueList callDialogueList;
 
@@ -71,6 +72,53 @@ public class DialogueManager : MonoBehaviour
     private void Update() {
         nodeTracker = nodes.ToList();
         currentNodeTracker = currentNode;
+    }
+
+    public void UIElementsAnimation(bool value) {
+
+        FindUIElementsReferences();
+
+        if (uiElements.Count > 0) {
+            foreach (Animator element in uiElements) {
+                element.SetBool("Hide", value);
+            }
+        }
+    }
+
+    private void FindUIElementsReferences() {
+
+        // If the current scene is NOT Home, assign relevant UI elements
+        if (GameStateManager.GetStage() != 0) {
+            uiElements.Clear();
+
+            if (GameObject.FindGameObjectWithTag("EnergyBar").TryGetComponent<Animator>(out var energybar)) {
+                uiElements.Add(energybar);
+            } else {
+                Debug.LogError("Could not find energy bar script!");
+            }
+
+            if (GameObject.FindGameObjectWithTag("PlayerHealth").TryGetComponent<Animator>(out var healthbar)) {
+                uiElements.Add(healthbar);
+            } else {
+                Debug.LogError("Could not find health bar script!");
+            }
+
+            if (GameObject.FindGameObjectWithTag("CoinsUI").TryGetComponent<Animator>(out var coins)) {
+                uiElements.Add(coins);
+            } else {
+                Debug.LogError("Could not find coins UI script!");
+            }
+
+            if (GameObject.FindGameObjectWithTag("AmmoBar").TryGetComponent<Animator>(out var ammobar)) {
+                uiElements.Add(ammobar);
+            } else {
+                Debug.LogError("Could not find ammo bar script!");
+            }
+        } 
+        // If the current scene IS Home, then clear the list
+        else {
+            uiElements.Clear();
+        }
     }
 
     public void ContinueButton() {
@@ -300,41 +348,7 @@ public class DialogueManager : MonoBehaviour
 
     private void FindReferences() {
 
-        // UI ANIMATOR REFERENCES
-
-
-        // If the current scene is NOT Home, assign relevant UI elements
-        if (GameStateManager.GetStage() != 0) {
-            uiElements.Clear();
-
-            if (GameObject.FindGameObjectWithTag("EnergyBar").TryGetComponent<Animator>(out var energybar)) {
-                uiElements.Add(energybar);
-            } else {
-                Debug.LogError("Could not find energy bar script!");
-            }
-
-            if (GameObject.FindGameObjectWithTag("PlayerHealth").TryGetComponent<Animator>(out var healthbar)) {
-                uiElements.Add(healthbar);
-            } else {
-                Debug.LogError("Could not find health bar script!");
-            }
-
-            if (GameObject.FindGameObjectWithTag("CoinsUI").TryGetComponent<Animator>(out var coins)) {
-                uiElements.Add(coins);
-            } else {
-                Debug.LogError("Could not find coins UI script!");
-            }
-
-            if (GameObject.FindGameObjectWithTag("AmmoBar").TryGetComponent<Animator>(out var ammobar)) {
-                uiElements.Add(ammobar);
-            } else {
-                Debug.LogError("Could not find ammo bar script!");
-            }
-        } 
-        // If the current scene IS Home, then clear the list
-        else {
-            uiElements.Clear();
-        }
+        FindUIElementsReferences();
     
         // DIALOGUE UI REFERENCES
 
@@ -347,9 +361,13 @@ public class DialogueManager : MonoBehaviour
             //continueButton.SetActive(false);
             Debug.Log("DialogueManager continueButton is null! Reassigned.");
         }
-        if (animator == null) {
-            animator = GameObject.FindGameObjectWithTag("DialogueBox").GetComponent<Animator>();
+        if (dialogueAnimator == null) {
+            dialogueAnimator = GameObject.FindGameObjectWithTag("DialogueBox").GetComponent<Animator>();
             Debug.Log("DialogueManager animator is null! Reassigned.");
+        }
+        if (!letterboxAnimator) {
+            letterboxAnimator = GameObject.FindGameObjectWithTag("Letterbox").GetComponent<Animator>();
+            Debug.Log("LetterboxAnimator animator is null! Reassigned.");
         }
         if (nameText == null) {
             nameText = GameObject.FindGameObjectWithTag("DialogueName").GetComponent<TextMeshProUGUI>();
@@ -393,11 +411,8 @@ public class DialogueManager : MonoBehaviour
             continueButton.SetActive(true);
         }
 
-        if (uiElements.Count > 0) {
-            foreach (Animator element in uiElements) {
-                element.SetBool("Hide", true);
-            }
-        }
+        // UI elements show/hide animation
+        UIElementsAnimation(true);
 
         currentDialogue = dialogue;
 
@@ -405,10 +420,11 @@ public class DialogueManager : MonoBehaviour
             priority.Remove(dialogue);
         }
 
+        dialogueAnimator.SetBool("IsOpen", true);
         if (useLetterbox) {
-            animator.SetBool("IsBarOpen", true);
-        } else {
-            animator.SetBool("IsOpen", true);
+            letterboxAnimator.SetBool("Show", true);
+        } else if (!TransitionManager.letterboxManualControl) {
+            letterboxAnimator.SetBool("Show", false);
         }
 
         // Save previous game state and set current game state to MENU (disables input and enemies)
@@ -588,10 +604,9 @@ public class DialogueManager : MonoBehaviour
 
     void EndDialogue() {
 
-        if (uiElements.Count != 0) {
-            foreach (Animator element in uiElements) {
-                element.SetBool("Hide", false);
-            }
+        // UI elements show/hide animation as long as letterbox doesn't have control
+        if (!TransitionManager.letterboxManualControl) {
+            UIElementsAnimation(false);
         }
 
         // Disables the continue button
@@ -603,10 +618,9 @@ public class DialogueManager : MonoBehaviour
         //priority.Clear();
 
         // Plays closing dialogue box animation
+        dialogueAnimator.SetBool("IsOpen", false);
         if (useLetterbox) {
-            animator.SetBool("IsBarOpen", false);
-        } else {
-            animator.SetBool("IsOpen", false);
+            letterboxAnimator.SetBool("Show", false);
         }
 
         // Resets game state to previous state

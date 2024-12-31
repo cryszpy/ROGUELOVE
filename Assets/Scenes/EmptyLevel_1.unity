@@ -6869,6 +6869,11 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1078158458}
   m_CullTransparentMesh: 1
+--- !u!20 &1084432861 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1247426906583740496, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
+  m_PrefabInstance: {fileID: 1297039953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1088625042
 GameObject:
   m_ObjectHideFlags: 0
@@ -7032,7 +7037,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: orthographic size
-      value: 4.265625
+      value: 3.375
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -7635,7 +7640,7 @@ Canvas:
   m_RenderMode: 0
   m_Camera: {fileID: 0}
   m_PlaneDistance: 100
-  m_PixelPerfect: 0
+  m_PixelPerfect: 1
   m_ReceivesEvents: 1
   m_OverrideSorting: 0
   m_OverridePixelPerfect: 0
@@ -7780,7 +7785,7 @@ PrefabInstance:
     - target: {fileID: 4959981397227134874, guid: 953512b8665f142b2a51f0bca0fd9154, type: 3}
       propertyPath: mainCam
       value: 
-      objectReference: {fileID: 1297039954}
+      objectReference: {fileID: 1084432861}
     - target: {fileID: 5199822150240556177, guid: 953512b8665f142b2a51f0bca0fd9154, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

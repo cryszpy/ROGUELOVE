@@ -35,6 +35,8 @@ public class TransitionManager : MonoBehaviour
         loadingBarEnable = condition;
     }
 
+    public static bool letterboxManualControl;
+
     void Start() {
         if (loadingBarEnable && GameStateManager.GetStage() == 0) {
             SetLoadingBar(false);

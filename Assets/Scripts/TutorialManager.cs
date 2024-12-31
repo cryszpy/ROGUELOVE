@@ -39,9 +39,11 @@ public class TutorialManager : MonoBehaviour
 
     [SerializeField] private int tutorialStage;
 
+    private Animator letterboxAnimator;
+
     [SerializeField] private List<DialoguePiece> totalDialogue = new();
 
-    [SerializeField] Queue<DialoguePiece> dialogueQueue;
+    private Queue<DialoguePiece> dialogueQueue;
 
     private bool moveNPC;
     private float moveTimer = 0;
@@ -76,6 +78,9 @@ public class TutorialManager : MonoBehaviour
 
         if (!cam) {
             cam = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        }
+        if (!letterboxAnimator) {
+            letterboxAnimator = GameObject.FindGameObjectWithTag("Letterbox").GetComponent<Animator>();
         }
 
         StartCoroutine(InitialCameraSway());
@@ -217,6 +222,9 @@ public class TutorialManager : MonoBehaviour
             case 0:
                 Debug.Log("0");
 
+                // Cue letterbox hide animation
+                LetterboxAnimation(true);
+
                 // Spawn NPC
                 SpawnTutorialNPC(npcSpawn1);
 
@@ -224,7 +232,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue
                 DialoguePiece pickupWeapon = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(pickupWeapon, true);
+                GameStateManager.dialogueManager.StartDialogue(pickupWeapon, false);
 
                 tutorialStage++;
                 break; 
@@ -251,7 +259,7 @@ public class TutorialManager : MonoBehaviour
                 
                 // Start dialogue
                 DialoguePiece fireWeapon = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(fireWeapon, true);
+                GameStateManager.dialogueManager.StartDialogue(fireWeapon, false);
 
                 tutorialStage++;
                 break;
@@ -277,7 +285,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue
                 DialoguePiece enemyKilled = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(enemyKilled, true);
+                GameStateManager.dialogueManager.StartDialogue(enemyKilled, false);
 
                 tutorialStage++;
                 break;
@@ -316,7 +324,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue about chests
                 DialoguePiece chestSpawned = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(chestSpawned, true);
+                GameStateManager.dialogueManager.StartDialogue(chestSpawned, false);
 
                 tutorialStage++;
 
@@ -338,7 +346,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue about weapon switching
                 DialoguePiece chestWeaponPickup = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(chestWeaponPickup, true);
+                GameStateManager.dialogueManager.StartDialogue(chestWeaponPickup, false);
 
                 tutorialStage++;
 
@@ -360,7 +368,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue about weapon dropping
                 DialoguePiece weaponDropping = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(weaponDropping, true);
+                GameStateManager.dialogueManager.StartDialogue(weaponDropping, false);
 
                 tutorialStage++;
 
@@ -382,7 +390,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue about big enemy fight
                 DialoguePiece enemyFight = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(enemyFight, true);
+                GameStateManager.dialogueManager.StartDialogue(enemyFight, false);
 
                 tutorialStage++;
 
@@ -401,7 +409,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue preceding boss fight
                 DialoguePiece bossFight = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(bossFight, true);
+                GameStateManager.dialogueManager.StartDialogue(bossFight, false);
 
                 tutorialStage++;
 
@@ -442,7 +450,7 @@ public class TutorialManager : MonoBehaviour
 
                 // Start dialogue post-bossfight
                 DialoguePiece bossDefeated = dialogueQueue.Dequeue();
-                GameStateManager.dialogueManager.StartDialogue(bossDefeated, true);
+                GameStateManager.dialogueManager.StartDialogue(bossDefeated, false);
                 
                 tutorialStage++;
 
@@ -489,9 +497,26 @@ public class TutorialManager : MonoBehaviour
         AstarPath.active.UpdateGraphs(gen.wallsTilemap.gameObject.GetComponent<TilemapCollider2D>().bounds);
     }
 
+    private void LetterboxAnimation(bool value) {
+
+        // Set manual control boolean
+        TransitionManager.letterboxManualControl = value;
+
+        // Show/Hide other UI elements
+        GameStateManager.dialogueManager.UIElementsAnimation(value);
+
+        // Show/Hide letterbox
+        letterboxAnimator.SetBool("Show", value);
+    }
+
     private IEnumerator InitialCameraSway() {
 
         GameStateManager.SetState(GAMESTATE.MENU);
+
+        yield return new WaitForSeconds(0.5f);
+
+        // Cue letterbox animation
+        LetterboxAnimation(true);
 
         yield return new WaitForSeconds(1.5f);
 
@@ -507,6 +532,9 @@ public class TutorialManager : MonoBehaviour
     }
 
     private IEnumerator CameraSway() {
+
+        // Cue letterbox animation
+        LetterboxAnimation(true);
 
         yield return new WaitForSeconds(0.5f);
 
@@ -535,6 +563,9 @@ public class TutorialManager : MonoBehaviour
 
     private void ReturnSway() {
 
+        // Cue letterbox hide animation
+        LetterboxAnimation(false);
+
         cam.Follow = cameraLookAt.transform;
         GameStateManager.SetState(GAMESTATE.PLAYING);
     }
@@ -547,6 +578,9 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void ChestSway() {
+
+        // Cue letterbox animation
+        LetterboxAnimation(true);
 
         cam.Follow = chestSpawn.transform;
         GameStateManager.SetState(GAMESTATE.MENU);

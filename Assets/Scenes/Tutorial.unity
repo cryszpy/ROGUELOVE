@@ -23212,7 +23212,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: orthographic size
-      value: 4.796875
+      value: 3.375
       objectReference: {fileID: 0}
     - target: {fileID: 7698106059568776995, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
       propertyPath: m_BackGroundColor.b
@@ -23247,6 +23247,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c88f5cead0c0b2a4eb05b5900433f8d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!20 &1297039956 stripped
+Camera:
+  m_CorrespondingSourceObject: {fileID: 1247426906583740496, guid: fe2c80da845cd4a02bd75f82e81657f5, type: 3}
+  m_PrefabInstance: {fileID: 1297039953}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1324546391
 GameObject:
   m_ObjectHideFlags: 0
@@ -24045,7 +24050,7 @@ PrefabInstance:
     - target: {fileID: 4959981397227134874, guid: 953512b8665f142b2a51f0bca0fd9154, type: 3}
       propertyPath: mainCam
       value: 
-      objectReference: {fileID: 1297039954}
+      objectReference: {fileID: 1297039956}
     - target: {fileID: 5199822150240556177, guid: 953512b8665f142b2a51f0bca0fd9154, type: 3}
       propertyPath: m_LocalPosition.x
       value: 0

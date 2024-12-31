@@ -24,6 +24,10 @@ public class Crosshair : MonoBehaviour
     void Awake()
     {
         Cursor.visible = false;
+
+        if (!mainCam) {
+            mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponentInChildren<Camera>();
+        }
     }
 
     // Update is called once per frame
