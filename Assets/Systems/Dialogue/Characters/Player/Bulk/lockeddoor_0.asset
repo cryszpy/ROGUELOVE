@@ -14,16 +14,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: lockeddoor_0
   owner: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
-  lines:
+  nodes:
   - sentence: ...
     character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
     emotion: 0
+    choices: []
   - sentence: ...I'm not quite ready for that yet.
     character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
     emotion: 0
-  nextDialogue: {fileID: 0}
+    choices: []
   priority: 0
   requirements: []
   callDialogueType: 0
   firstNameUsage: 0
-  choices: []

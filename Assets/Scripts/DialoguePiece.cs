@@ -3,18 +3,6 @@ using System.Collections.Generic;
 using UnityEngine;
 
 [System.Serializable]
-public struct DialogueLine {
-
-    [TextArea(3, 10)] public string sentence;
-
-    public Character character;
-
-    public CharacterEmotion emotion;
-
-    public List<DialogueChoice> choices;
-}
-
-[System.Serializable]
 public struct DialogueChoice {
 
     [TextArea(2, 5)] public string choiceText;
@@ -32,7 +20,7 @@ public class DialoguePiece : ScriptableObject, System.IComparable
     public Character owner;
 
     [Tooltip("This dialogue piece's total sentences.")]
-    public DialogueLine[] lines;
+    public DialogueNode[] nodes;
 
     public int priority;
 

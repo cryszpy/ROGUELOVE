@@ -14,29 +14,26 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: barngates_0
   owner: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
-  lines:
+  nodes:
   - sentence: Y'know, I would go in there, but a sneaking suspicion tells me I should
       wait for the game to get out of demo!
     character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
     emotion: 0
     choices:
-    - choiceText: Choice 1!!
+    - choiceText: Choice 1
       lines:
-      - sentence: Woah I just clicked choice 1!
+      - sentence: woah you picked choice 1!
         character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
         emotion: 0
-        choices: []
-    - choiceText: Choice 2!!
+    - choiceText: Choice 2
       lines:
-      - sentence: I just picked choice 2!
+      - sentence: woah you picked chice 2!
         character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
         emotion: 0
-        choices: []
-  - sentence: End of barn gates!
+  - sentence: end of barn gates
     character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
     emotion: 0
     choices: []
-  nextDialogue: {fileID: 0}
   priority: 0
   requirements: []
   callDialogueType: 0

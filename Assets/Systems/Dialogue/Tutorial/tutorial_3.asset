@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: tutorial_3
   owner: {fileID: 11400000, guid: 03f204bb1312448ef9cf159172162ba3, type: 2}
-  lines:
+  nodes:
   - sentence: Sometimes, you might need a little more...<b>firepower</b>.
     character: {fileID: 11400000, guid: 03f204bb1312448ef9cf159172162ba3, type: 2}
     emotion: 0

@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   id: tutorial_7
   owner: {fileID: 11400000, guid: 03f204bb1312448ef9cf159172162ba3, type: 2}
-  lines:
+  nodes:
   - sentence: Phew! That was...certainly something!
     character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
     emotion: 0

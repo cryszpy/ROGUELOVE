@@ -38,13 +38,13 @@ public class DialogueManager : MonoBehaviour
     public List<DialoguePiece> priority;
 
     [SerializeField] private DialoguePiece currentDialogue;
-    [SerializeField] private DialogueLine preChoiceLine;
-    [SerializeField] private DialogueLine currentLine;
+    [SerializeField] private DialogueNode currentNode;
 
     [Tooltip("Queued list of all sentences to say from current dialogue piece.")]
-    private Queue<DialogueLine> lines = new();
+    private Queue<DialogueNode> nodes = new();
+    public List<DialogueNode> nodeTracker = new();
 
-    private Queue<DialogueLine> choiceLines = new();
+    private Queue<DialogueNode> choiceNodes = new();
 
     [SerializeField] private float textCPS;
 
@@ -67,12 +67,16 @@ public class DialogueManager : MonoBehaviour
 
     private bool useLetterbox;
 
+    private void Update() {
+        nodeTracker = nodes.ToList();
+    }
+
     public void ContinueButton() {
 
         if (GameStateManager.GetState() == GAMESTATE.MENU && playingDialogue) {
 
             // Skip typing on click
-            if (currentLine.sentence != null && typingSentence) {
+            if (currentNode.sentence != null && typingSentence) {
                 dialogueText.maxVisibleCharacters = dialogueText.text.Length;
                 typingSentence = false;
             } 
@@ -296,6 +300,8 @@ public class DialogueManager : MonoBehaviour
 
         // UI ANIMATOR REFERENCES
 
+
+        // If the current scene is NOT Home, assign relevant UI elements
         if (GameStateManager.GetStage() != 0) {
             uiElements.Clear();
 
@@ -322,6 +328,10 @@ public class DialogueManager : MonoBehaviour
             } else {
                 Debug.LogError("Could not find ammo bar script!");
             }
+        } 
+        // If the current scene IS Home, then clear the list
+        else {
+            uiElements.Clear();
         }
     
         // DIALOGUE UI REFERENCES
@@ -406,13 +416,13 @@ public class DialogueManager : MonoBehaviour
         GameStateManager.SetState(GAMESTATE.MENU);
 
         // Clears the sentences list (just in case lol)
-        lines.Clear();
+        nodes.Clear();
 
         // Remove existing buttons, if any
         RemoveButtons();
 
-        foreach (DialogueLine line in dialogue.lines) {
-            lines.Enqueue(line);
+        foreach (DialogueNode line in dialogue.nodes) {
+            nodes.Enqueue(line);
         }
 
         DisplayNextSentence();
@@ -423,10 +433,10 @@ public class DialogueManager : MonoBehaviour
         RemoveButtons();
 
         // If there are queued choice lines, play those instead
-        if (choiceLines.Count() > 0) {
+        if (choiceNodes.Count() > 0) {
 
             // Removes current choice line from the queue of choice lines to be displayed
-            DialogueLine choiceLine = choiceLines.Dequeue();
+            DialogueNode choiceLine = choiceNodes.Dequeue();
 
             // Stops any currently displaying sentences if player clicks continue mid-way through
             StopAllCoroutines();
@@ -437,7 +447,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         // If the line leading to choices has already been said and there are choices to be made—
-        else if (currentLine.choices != null && currentLine.choices.Count > 0) {
+        else if (currentNode.choices != null && currentNode.choices.Count() > 0) {
 
             // Set boolean flag to signal choices being played
             playingChoices = true;
@@ -447,16 +457,16 @@ public class DialogueManager : MonoBehaviour
 
             return;
         }
-
+        
         // If there aren't any sentences to display (reached the end of this dialogue piece)
-        if (lines.Count == 0) {
+        if (nodes.Count == 0) {
 
             EndDialogue();
             return;
         }
 
         // Removes current sentence from the queue of sentences to be displayed
-        DialogueLine line = lines.Dequeue();
+        DialogueNode line = nodes.Dequeue();
 
         // Stops any currently displaying sentences if player clicks continue mid-way through
         StopAllCoroutines();
@@ -477,7 +487,7 @@ public class DialogueManager : MonoBehaviour
         // If there are choices to be displayed—
         if (currentDialogue) {
 
-            foreach (DialogueChoice choice in currentLine.choices) {
+            foreach (DialogueChoice choice in currentNode.choices) {
 
                 // Create button in UI
                 TMP_Text choiceText = Instantiate(choicePrefab, choicesBar.transform).GetComponentInChildren<TMP_Text>();
@@ -510,7 +520,8 @@ public class DialogueManager : MonoBehaviour
         if (choice.lines.Length > 0) {
 
             foreach (var line in choice.lines) {
-                choiceLines.Enqueue(line);
+                DialogueNode newNode = new(line.sentence, line.character, line.emotion, null);
+                choiceNodes.Enqueue(newNode);
             }
 
             DisplayNextSentence();
@@ -521,28 +532,28 @@ public class DialogueManager : MonoBehaviour
         }
     }
 
-    private IEnumerator TypeSentence (DialogueLine line) {
+    private IEnumerator TypeSentence (DialogueNode line) {
 
         // Sets the current line
-        currentLine = line;
+        currentNode = line;
 
         // Sets the character's sprite for this line of dialogue
-        CharacterExpression target = currentLine.character.expressions.Find(x => x.emotion == line.emotion);
+        CharacterExpression target = currentNode.character.expressions.Find(x => x.emotion == line.emotion);
         dialogueSprite.sprite = target.expressionSprite;
 
         // Reveal name if character says name
-        if (currentDialogue.firstNameUsage && !currentLine.character.nameRevealed) {
-            nameText.text = currentLine.character.characterName;
-            currentLine.character.nameRevealed = true;
-        } else if (!currentLine.character.nameRevealed) {
-            nameText.text = currentLine.character.characterNameHidden;
+        if (currentDialogue.firstNameUsage && !currentNode.character.nameRevealed) {
+            nameText.text = currentNode.character.characterName;
+            currentNode.character.nameRevealed = true;
+        } else if (!currentNode.character.nameRevealed) {
+            nameText.text = currentNode.character.characterNameHidden;
         }
 
         // Show revealed name status in transcript log
-        if (currentLine.character.nameRevealed) {
-            Debug.Log(currentLine.character.characterName + ": " + line.sentence);
+        if (currentNode.character.nameRevealed) {
+            Debug.Log(currentNode.character.characterName + ": " + line.sentence);
         } else {
-            Debug.Log(currentLine.character.characterNameHidden + ": " + line.sentence);
+            Debug.Log(currentNode.character.characterNameHidden + ": " + line.sentence);
         }
 
         // Set text, but hide all characters
@@ -605,10 +616,7 @@ public class DialogueManager : MonoBehaviour
         currentDialogue = null;
 
         // Clear current line
-        currentLine.sentence = null;
-        currentLine.emotion = CharacterEmotion.DEFAULT;
-        currentLine.character = null;
-        currentLine.choices = null;
+        currentNode = null;
 
         Debug.Log("--End of conversation--");
 
