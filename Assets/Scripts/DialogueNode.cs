@@ -19,5 +19,5 @@ public class DialogueNode : DialogueLine
         choices = node.choices;
     }
 
-    public DialogueChoice[] choices;
+    public DialogueChoice[] choices = null;
 }

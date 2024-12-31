@@ -38,7 +38,8 @@ public class DialogueManager : MonoBehaviour
     public List<DialoguePiece> priority;
 
     [SerializeField] private DialoguePiece currentDialogue;
-    [SerializeField] private DialogueNode currentNode;
+    private DialogueNode currentNode;
+    [SerializeField] private DialogueNode currentNodeTracker;
 
     [Tooltip("Queued list of all sentences to say from current dialogue piece.")]
     private Queue<DialogueNode> nodes = new();
@@ -69,6 +70,7 @@ public class DialogueManager : MonoBehaviour
 
     private void Update() {
         nodeTracker = nodes.ToList();
+        currentNodeTracker = currentNode;
     }
 
     public void ContinueButton() {
@@ -447,7 +449,7 @@ public class DialogueManager : MonoBehaviour
             return;
         }
         // If the line leading to choices has already been said and there are choices to be made—
-        else if (currentNode.choices != null && currentNode.choices.Count() > 0) {
+        else if (currentNode != null && currentNode.choices != null && currentNode.choices.Count() > 0) {
 
             // Set boolean flag to signal choices being played
             playingChoices = true;
