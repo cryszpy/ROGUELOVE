@@ -1026,7 +1026,7 @@ public class PlayerController : MonoBehaviour
 
     public void TakeDamage(int damage) {
 
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER || GameStateManager.GetState() != GAMESTATE.MAINMENU && !iFrame) {
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING && !iFrame) {
             iFrame = true;
 
             if (DodgeChance != 0) {

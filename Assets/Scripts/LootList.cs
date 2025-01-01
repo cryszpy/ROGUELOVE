@@ -18,6 +18,8 @@ public struct ChestAreaRarities {
 public class LootList : ScriptableObject
 {
     public ChestAreaRarities[] areaRarities;
+
+    public WeaponPair testingWeapon;
     
     [Tooltip("List of all common weapon *pickup* objects.")]
     public List<WeaponPair> commonWeapons;

@@ -611,9 +611,5 @@ public abstract class Enemy : MonoBehaviour
 
         // Removes enemy
         Destroy(gameObject);
-
-        // Increments dead enemy counter
-        WalkerGenerator.AddDeadEnemy();
-        Debug.Log(WalkerGenerator.GetDeadEnemies() + "/" + WalkerGenerator.EnemyTotal);
     }
 }

@@ -5,6 +5,15 @@ TextureImporter:
   - first:
       213: 6784288175403268396
     second: thornbloom_bullet_destroy_0
+  - first:
+      213: -4567010138511478946
+    second: thornbloom_bullet_destroy_1
+  - first:
+      213: 690762889349033024
+    second: thornbloom_bullet_destroy_2
+  - first:
+      213: 5306152541959104286
+    second: thornbloom_bullet_destroy_3
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -70,7 +79,7 @@ TextureImporter:
   swizzle: 50462976
   cookieLightType: 0
   platformSettings:
-  - serializedVersion: 3
+  - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -83,7 +92,20 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
+    buildTarget: Win64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
     buildTarget: WebGL
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -96,7 +118,20 @@ TextureImporter:
     ignorePlatformSupport: 0
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
-  - serializedVersion: 3
+  - serializedVersion: 4
+    buildTarget: Linux64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
     buildTarget: Standalone
     maxTextureSize: 2048
     resizeAlgorithm: 0
@@ -120,9 +155,10 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 9
-      pivot: {x: 0.515, y: 0.48}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
       tessellationDetail: -1
@@ -141,15 +177,16 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 9
-      pivot: {x: 0.515, y: 0.48}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: d6198cfb6f1f14ca883f6982529acae0
-      internalID: -681308390
+      spriteID: e5f6a60e978be90c0800000000000000
+      internalID: -4567010138511478946
       vertices: []
       indices: 
       edges: []
@@ -162,33 +199,60 @@ TextureImporter:
         y: 0
         width: 32
         height: 32
-      alignment: 9
-      pivot: {x: 0.515, y: 0.48}
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 0090fc6edf9a5481aa32c5af80907ba7
-      internalID: -1257690401
+      spriteID: 04ceba32035169900800000000000000
+      internalID: 690762889349033024
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: thornbloom_bullet_destroy_3
+      rect:
+        serializedVersion: 2
+        x: 96
+        y: 0
+        width: 32
+        height: 32
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e17228baf9d33a940800000000000000
+      internalID: 5306152541959104286
       vertices: []
       indices: 
       edges: []
       weights: []
     outline: []
+    customData: 
     physicsShape: []
     bones: []
-    spriteID: 2978fd9de31744dcc8e9364fb8a99feb
+    spriteID: 89453828f18294359a46fe121a0a9b4a
     internalID: 0
     vertices: []
     indices: 
     edges: []
     weights: []
     secondaryTextures: []
+    spriteCustomMetadata:
+      entries: []
     nameFileIdTable:
       thornbloom_bullet_destroy_0: 6784288175403268396
-      thornbloom_bullet_destroy_1: -681308390
-      thornbloom_bullet_destroy_2: -1257690401
+      thornbloom_bullet_destroy_1: -4567010138511478946
+      thornbloom_bullet_destroy_2: 690762889349033024
+      thornbloom_bullet_destroy_3: 5306152541959104286
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

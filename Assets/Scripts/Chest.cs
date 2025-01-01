@@ -77,10 +77,22 @@ public class Chest : MonoBehaviour
 
     public virtual void OpenWeaponChest() {
 
-        // Generate a random value between 0.0 and 1.0 (to generate rarity of weapon)
-        float rand = Random.value;
+        // For dev testing only, should be null upon build
+        if (lootList.testingWeapon != null) {
 
-        GetWeaponProbability(rand, lootList.areaRarities[GameStateManager.GetStage() - 1].area);
+            WeaponPair weaponPair = lootList.testingWeapon;
+            weaponPair.pickupScript.dropped = false;
+            Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
+
+            lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+        } else {
+
+            // Generate a random value between 0.0 and 1.0 (to generate rarity of weapon)
+            float rand = Random.value;
+
+            GetWeaponProbability(rand, lootList.areaRarities[GameStateManager.GetStage() - 1].area);
+        }
+
     }
 
     public virtual void GetWeaponProbability(float value, float[] lootTable) {

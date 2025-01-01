@@ -264,6 +264,7 @@ public class WalkerGenerator : MonoBehaviour
         gridHandler = new TileType[mapWidth, mapHeight];
         tileCount = 0;
 
+        // Fill manually created levels (tutorial and boss)
         if ((isTutorial || bossLevel) && !loadFromSave) {
             FillBossLevel();
             CreateBorders();
@@ -474,7 +475,11 @@ public class WalkerGenerator : MonoBehaviour
                     tileListY.Add(y);
                     tileCount++;
                 } else {
-                    groundTiles.Add(new Tuple<int, int>(x, y));
+                    
+                    // Check if tile is next to wall or void
+                    if (IsSpaciousGroundTile(x, y)) {
+                        groundTiles.Add(new Tuple<int, int>(x, y));
+                    }
                 }
             }
         }
@@ -491,7 +496,12 @@ public class WalkerGenerator : MonoBehaviour
                     tileCount++;
                 } else {
                     gridHandler[x, y] = TileType.FLOOR;
-                    groundTiles.Add(new Tuple<int, int>(x, y));
+
+                    // Check if bordering walls or void
+                    if (IsSpaciousGroundTile(x, y)) {
+                        groundTiles.Add(new Tuple<int, int>(x, y));
+                    }
+
                     tileCount++;
                 }
             }
@@ -1354,6 +1364,23 @@ public class WalkerGenerator : MonoBehaviour
 
     public bool CheckGroundTile(Vector3 vector) {
         return floorTilemap.GetSprite(new Vector3Int((int)vector.x, (int)vector.y, 0)) == tiles.ground;
+    }
+
+    // Checks if the ground tile is neighboring the void or walls in a + pattern, returns true if not, false if yes
+    public bool IsSpaciousGroundTile(int x, int y) {
+        int counter = 0;
+
+        // Check if tile is a border tile
+        if (x - 1 < 0 || x + 1 > mapWidth || y + 1 > mapHeight || y - 1 < 0) {
+            counter++;
+        } 
+        // Check if neighboring wall tile
+        else if (gridHandler[x-1, y] == TileType.WALLS || gridHandler[x+1, y] == TileType.WALLS
+        || gridHandler[x, y+1] == TileType.WALLS || gridHandler[x, y-1] == TileType.WALLS) {
+            counter++;
+        }
+
+        return counter == 0;
     }
 
     // GENERATE PATHFINDING MAP
