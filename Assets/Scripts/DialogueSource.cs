@@ -9,6 +9,8 @@ public class DialogueSource : MonoBehaviour
 
     [SerializeField] private PlayerController player;
 
+    [SerializeField] private Animator useAnimator;
+
     public DialogueList dialogueList;
 
     [SerializeField] DialogueManager dialogueManager;
@@ -26,6 +28,9 @@ public class DialogueSource : MonoBehaviour
         // If player is within radius, set true
         if (collider.CompareTag("Player")) {
 
+            // Show use indicator
+            UseIndicator(true);
+
             if (player == null) {
                 player = collider.gameObject.GetComponent<PlayerController>();
             }
@@ -38,6 +43,10 @@ public class DialogueSource : MonoBehaviour
 
         // If player leaves radius, set false
         if (collider.CompareTag("Player")) {
+
+            // Hide use indicator
+            UseIndicator(false);
+
             inRadius = false;
         } 
     }
@@ -57,6 +66,14 @@ public class DialogueSource : MonoBehaviour
 
             GameStateManager.dialogueManager.StartDialogue(sourceList[0], false);
 
+        }
+    }
+
+    // Show/hide use indicator
+    public virtual void UseIndicator(bool value) {
+
+        if (useAnimator) {
+            useAnimator.SetBool("Show", value);
         }
     }
 
