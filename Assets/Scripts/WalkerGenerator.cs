@@ -43,8 +43,6 @@ public class WalkerGenerator : MonoBehaviour
 
     public Tilemap oTilemap;
 
-    [SerializeField] protected GameObject chest;
-
     [SerializeField] protected GameObject bossSpawnPoint;
 
     [Space(10)]
@@ -124,6 +122,9 @@ public class WalkerGenerator : MonoBehaviour
 
     [Space(10)]
     [Header("LEVEL INFO")]
+
+    [Tooltip("List of all spawned chests for this level.")]
+    public List<GameObject> spawnedChests = new();
 
     protected static int deadEnemies;
     public static void SetDeadEnemy(int value) {
@@ -625,7 +626,7 @@ public class WalkerGenerator : MonoBehaviour
                 }
             }
         }
-        if (!bossLevel && chest) {
+        if (!bossLevel && tiles.chest) {
             SpawnChests();
         }
         if (!isTutorial) {
@@ -637,38 +638,88 @@ public class WalkerGenerator : MonoBehaviour
     private void SpawnChests() {
 
         // Generate random amount of chests per level
-        int chestRange = 1;
+        int chestRange = UnityEngine.Random.Range(1, 3);
         
         // For the amount of chests generated per level
         for (int s = 0; s < chestRange; s++) {
-            
-            // Generates random number to pick chest spawnpoint
-            int rand = GetRandomYTile();
 
-            // For as many floor tiles as there are in the tilemap:
-            for (int i = 0; i < tileListX.Count; i++) {
+            GameObject bigChest = null;
 
-                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                if (gridHandler[tileListX[rand], tileListY[rand]] == TileType.FLOOR) {
+            // Roll for big chest chance if the chance is non-zero
+            if (PlayerController.BigChestChance > 0) {
 
-                    if (tileListX[rand] <= player.transform.position.x + spawnRadiusX 
-                    && tileListX[rand] >= player.transform.position.x - spawnRadiusX) {
-                        rand = GetRandomYTile();
-                    } else if (tileListY[rand] <= player.transform.position.y + spawnRadiusY 
-                    && tileListY[rand] >= player.transform.position.y - spawnRadiusY) {
-                        rand = GetRandomYTile();
-                    } else {
-                        Debug.Log(tileListX[rand] + "::" + tileListY[rand]);
+                // Generate random value
+                float rand = UnityEngine.Random.value;
 
-                        Instantiate(chest, new Vector2(tileListX[rand] * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tileListY[rand] * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity);
-                        break;
-                    }
+                // If roll succeeds—
+                if (rand <= PlayerController.BigChestChance) {
+
+                    // Reset big chest chance
+                    PlayerController.BigChestChance = 0;
+
+                    // Replace this chest with a big chest
+                    bigChest = tiles.bigChest;
+                }
+            }
+
+            bool validTileFound = false;
+        
+            // Creates a local copy of the list containing all ground tiles
+            List<Tuple<int, int>> uncheckedTiles = new(groundTiles);
+
+            // Chooses a random tile out of the ground tiles list
+            Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
+
+            // While a valid tile has yet to be found—
+            for (int i = 0; i < groundTiles.Count; i++) {
+
+                // If selected tile is too close too player—
+                if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
+                && tile.Item1 >= player.transform.position.x - spawnRadiusX
+                && tile.Item2 <= player.transform.position.y + spawnRadiusY 
+                && tile.Item2 >= player.transform.position.y - spawnRadiusY) {
+
+                    // Remove tile from possibilities list
+                    uncheckedTiles.Remove(tile);
+
+                    // Choose a new tile
+                    tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
 
                 } else {
-                    
-                    // Generates random number to pick chest spawnpoint
-                    rand = GetRandomYTile();
+                    validTileFound = true;
+                    break;
                 }
+            }
+
+            if (validTileFound) {
+
+                if (bigChest != null) {
+                    if (bigChest.TryGetComponent<Chest>(out var script)) {
+                        GameObject spawned = (GameObject)script.Create(bigChest, new Vector2(tile.Item1 * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tile.Item2 * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity, this);
+
+                        // Add spawned chest to list of chests for this level
+                        spawnedChests.Add(spawned);
+
+                        Debug.Log("Chest spawned at: " + tile.Item1 + "::" + tile.Item2);
+                    } else {
+                        Debug.LogError("Could not get Chest component on this GameObject!");
+                    }
+                    
+                } else {
+                    if (tiles.chest.TryGetComponent<Chest>(out var script)) {
+                        GameObject spawned = (GameObject)script.Create(tiles.chest, new Vector2(tile.Item1 * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tile.Item2 * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity, this);
+
+                        // Add spawned chest to list of chests for this level
+                        spawnedChests.Add(spawned);
+
+                        Debug.Log("Chest spawned at: " + tile.Item1 + "::" + tile.Item2);
+                    } else {
+                        Debug.LogError("Could not get Chest component on this GameObject!");
+                    }
+                }
+
+            } else {
+                Debug.LogError("Could not find suitable tile to spawn chest!");
             }
         }
     }
@@ -721,13 +772,12 @@ public class WalkerGenerator : MonoBehaviour
         
         // Creates a local copy of the list containing all ground tiles
         List<Tuple<int, int>> uncheckedTiles = new(groundTiles);
-        Debug.Log(uncheckedTiles.Count);
 
         // Chooses a random tile out of the ground tiles list
         Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
 
         // While a valid tile has yet to be found—
-        while (!validTileFound) {
+        for (int i = 0; i < groundTiles.Count; i++) {
 
             // If selected tile is too close too player—
             if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
@@ -747,14 +797,17 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
 
-        Debug.Log("Valid tile found: " + "(" + tile.Item1 + ", " + tile.Item2 + ")");
+        if (validTileFound) {
 
-        // Spawn doorway
-        if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
-            door.Create(tiles.doorwayObject, new Vector2((tile.Item1 * mapGrid.cellSize.x) + (mapGrid.cellSize.x / 2), (tile.Item2 * mapGrid.cellSize.y) + (mapGrid.cellSize.y / 2)), Quaternion.identity, cameraLookAt);
-            doorwaySpawned = true;
-        } else {
-            Debug.LogError("Could not find Doorway component of door while spawning!");
+            Debug.Log("Valid tile found: " + "(" + tile.Item1 + ", " + tile.Item2 + ")");
+
+            // Spawn doorway
+            if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
+                door.Create(tiles.doorwayObject, new Vector2((tile.Item1 * mapGrid.cellSize.x) + (mapGrid.cellSize.x / 2), (tile.Item2 * mapGrid.cellSize.y) + (mapGrid.cellSize.y / 2)), Quaternion.identity, cameraLookAt, this);
+                doorwaySpawned = true;
+            } else {
+                Debug.LogError("Could not find Doorway component of door while spawning!");
+            }
         }
 
         /* // For all tiles in the map

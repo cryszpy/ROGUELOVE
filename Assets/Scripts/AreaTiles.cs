@@ -27,5 +27,8 @@ public class AreaTiles : ScriptableObject
 
     public GameObject doorwayObject;
 
+    public GameObject chest;
+    public GameObject bigChest;
+
     public GameObject[] breakables;
 }

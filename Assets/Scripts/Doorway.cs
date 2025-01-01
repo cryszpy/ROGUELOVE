@@ -5,6 +5,8 @@ using UnityEngine;
 
 public class Doorway : MonoBehaviour
 {
+    private WalkerGenerator map;
+
     [SerializeField] private CinemachineVirtualCamera cam;
     
     public Transform cameraLookAt;
@@ -24,6 +26,15 @@ public class Doorway : MonoBehaviour
 
         // If collided with the player, start next level
         if (collider.CompareTag("Player")) {
+
+            // If there are unopened or missed chests in completed level—
+            if (map.spawnedChests.Count > 0) {
+
+                // Increase chance to spawn big chest
+                foreach (var chest in map.spawnedChests) {
+                    PlayerController.AddBigChestChance(0.2f);
+                }
+            }
 
             // Start first level if coming out of tutorial
             if (GameStateManager.tutorialEnabled) {
@@ -57,10 +68,11 @@ public class Doorway : MonoBehaviour
         animator.SetTrigger("Open");
     }
 
-    public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject player) {
+    public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject player, WalkerGenerator gen) {
         GameObject door = Instantiate(original, position, rotation) as GameObject;
         
         if (door.TryGetComponent<Doorway>(out var doorway)) {
+            doorway.map = gen;
             doorway.cameraLookAt = player.transform;
             Debug.Log("Doorway Spawned!");
             return door;

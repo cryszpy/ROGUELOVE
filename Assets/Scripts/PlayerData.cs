@@ -10,7 +10,7 @@ public class PlayerData
 {
 
     public float playerDamageModifier;
-    public float playerFireRateModifier;
+    public float playerFireRateMult;
 
     public int playerHealth;
     public int playerMaxHealth;
@@ -42,6 +42,8 @@ public class PlayerData
     public float viewRangeBase;
     public float viewRangeMult;
 
+    public float bigChestChance;
+
     public PlayerData (PlayerController player, Weapon weapon) {
 
         playerDamageModifier = PlayerController.DamageModifier;
@@ -55,7 +57,7 @@ public class PlayerData
         playerMoveSpeed = PlayerController.MoveSpeed;
         moveSpeedMult = PlayerController.MoveSpeedMultiplier;
 
-        playerFireRateModifier = player.fireRateModifier;
+        playerFireRateMult = PlayerController.FireRateMultiplier;
 
         playerCoins = PlayerController.Coins;
 
@@ -81,5 +83,7 @@ public class PlayerData
         takenDamageMult = PlayerController.TakenDamageMult;
         viewRangeMult = PlayerController.ViewRangeMultiplier;
         viewRangeBase = PlayerController.ViewRangeBase;
+
+        bigChestChance = PlayerController.BigChestChance;
     }
 }

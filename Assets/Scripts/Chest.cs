@@ -4,25 +4,27 @@ using UnityEngine;
 
 public class Chest : MonoBehaviour
 {
-    [SerializeField] private float itemChance;
+    protected WalkerGenerator map;
 
-    [SerializeField] private Collider2D coll;
+    [SerializeField] protected float itemChance;
 
-    [SerializeField] private Animator animator;
+    [SerializeField] protected Collider2D coll;
 
-    [SerializeField] private LootList lootList;
+    [SerializeField] protected Animator animator;
 
-    [SerializeField] private ItemList itemList;
+    [SerializeField] protected LootList lootList;
 
-    private bool playerInRadius;
+    [SerializeField] protected ItemList itemList;
 
-    void Awake() {
+    protected bool playerInRadius;
+
+    public virtual void Awake() {
         if (coll.enabled == false) {
             coll.enabled = true;
         }
     }
 
-    private void OnTriggerEnter2D(Collider2D collider) {
+    public virtual void OnTriggerEnter2D(Collider2D collider) {
 
         // If player is within radius, light up
         if (collider.CompareTag("Player")) {
@@ -31,7 +33,7 @@ public class Chest : MonoBehaviour
         } 
     }
 
-    private void OnTriggerExit2D(Collider2D collider) {
+    public virtual void OnTriggerExit2D(Collider2D collider) {
 
         // If player leaves radius, stop glow
         if (collider.CompareTag("Player")) {
@@ -40,12 +42,23 @@ public class Chest : MonoBehaviour
         } 
     }
 
-    private void Update() {
+    public virtual void Update() {
+
+        // Open chest
         if (playerInRadius && Input.GetKeyDown(KeyCode.E)) {
 
+            if (map) {
+                map.spawnedChests.Remove(gameObject);
+
+                Debug.Log("Opened chest and successfully removed from list!");
+            } else {
+                Debug.LogError("WalkerGenerator component of chest not assigned!");
+            }
+
             float rand = UnityEngine.Random.value;
-            Debug.Log(rand);
+
             coll.enabled = false;
+
             if (rand <= itemChance) {
                 OpenItemChest();
             } else {
@@ -54,7 +67,7 @@ public class Chest : MonoBehaviour
         }
     }
 
-    private void OpenItemChest() {
+    public virtual void OpenItemChest() {
 
         // Generate a random value between 0.0 and 1.0 (to generate rarity of item)
         float rand = Random.value;
@@ -62,7 +75,7 @@ public class Chest : MonoBehaviour
         GetItemProbability(rand, itemList.areaRarities[GameStateManager.GetStage() - 1].area);
     }
 
-    public void OpenWeaponChest() {
+    public virtual void OpenWeaponChest() {
 
         // Generate a random value between 0.0 and 1.0 (to generate rarity of weapon)
         float rand = Random.value;
@@ -70,7 +83,7 @@ public class Chest : MonoBehaviour
         GetWeaponProbability(rand, lootList.areaRarities[GameStateManager.GetStage() - 1].area);
     }
 
-    private void GetWeaponProbability(float value, float[] lootTable) {
+    public virtual void GetWeaponProbability(float value, float[] lootTable) {
 
         if (value <= lootTable[0]) {
             if (lootList.commonWeapons.Count != 0) {
@@ -139,7 +152,7 @@ public class Chest : MonoBehaviour
         }
     }
 
-    private void GetItemProbability(float value, float[] lootTable) {
+    public virtual void GetItemProbability(float value, float[] lootTable) {
 
         if (value <= lootTable[0]) {
             if (itemList.commonItems.Count != 0) {
@@ -205,6 +218,19 @@ public class Chest : MonoBehaviour
             } else {
                 Debug.Log("Would've spawned a LEGENDARY item but there are none!");
             }
+        }
+    }
+
+    public virtual UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, WalkerGenerator gen) {
+        GameObject chest = Instantiate(original, position, rotation) as GameObject;
+        
+        if (chest.TryGetComponent<Chest>(out var script)) {
+            script.map = gen;
+            Debug.Log("Chest spawned!");
+            return chest;
+        } else {
+            Debug.LogError("Could not find Chest script or extension of such on this Object.");
+            return null;
         }
     }
 }

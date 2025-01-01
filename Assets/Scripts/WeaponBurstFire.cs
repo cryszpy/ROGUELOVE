@@ -59,7 +59,7 @@ public class WeaponBurstFire : MonoBehaviour
         if (!canFire) {
             timer += Time.deltaTime;
             
-            if(timer > parent.timeBetweenFiring) {
+            if(timer > parent.timeBetweenFiring * PlayerController.FireRateMultiplier) {
                 canFire = true;
                 timer = 0;
             }

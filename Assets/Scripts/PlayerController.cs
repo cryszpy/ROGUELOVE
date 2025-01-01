@@ -72,6 +72,7 @@ public class PlayerController : MonoBehaviour
 
     [Header("STATS")]
 
+    // WEAPONS
     public List<GameObject> heldWeapons = new();
 
     public static int CurrentWeaponIndex;
@@ -91,8 +92,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("A multiplier that increases or decreases the maximum ammo capacity of the player's weapons.")]
     public static float AmmoMaxMultiplier;
 
-    [SerializeField] private bool canSwitchWeapons = true;
-
+    // ITEMS
     [Tooltip("List of all items that the player has picked up.")]
     public List<ItemPickup> heldItems = new();
     public static List<int> HeldItemsID = new();
@@ -101,31 +101,7 @@ public class PlayerController : MonoBehaviour
     [Tooltip("Total number of items that the player is holding.")]
     public static int HeldItemsCount;
 
-    public bool iFrame;
-    
-    private Vector2 movementInput;
-
-    // Current direction vector
-    [SerializeField] private Vector2 currentDirection;
-
-    // Dash duration boolean
-    [SerializeField] private bool isDashing = false;
-
-    // Dash cooldown boolean
-    [SerializeField] private bool canDash = true;
-
-    // Dash duration
-    [SerializeField] private float dashingTime;
-    private float dashTimer = 0;
-
-    // Dash cooldown time
-    [SerializeField] private float dashingCooldown;
-    private float dashcdTimer = 0;
-
-    // Dash force / power
-    [SerializeField] private float dashingPower;
-
-    // Player max health
+    // HEALTH
     private static int maxHealth;
     public static int MaxHealth { get => maxHealth; set => maxHealth = value; }
 
@@ -133,10 +109,7 @@ public class PlayerController : MonoBehaviour
         MaxHealth += num;
     }
 
-    // Player current health
-    public static int currentHealth;
-
-    // Player movement speed
+    // MOVEMENT SPEED
     private static float moveSpeed = 3.2f;
     public static float MoveSpeed { get => moveSpeed; set => moveSpeed = value * MoveSpeedMultiplier; }
     public static void ChangeMoveSpeed(float speed) {
@@ -146,21 +119,38 @@ public class PlayerController : MonoBehaviour
     private static float moveSpeedMultiplier = 1;
     public static float MoveSpeedMultiplier { get => moveSpeedMultiplier; set => moveSpeedMultiplier = value; }
 
+    public static int currentHealth;
+
+    public int Health {
+        set {
+            currentHealth = value;
+            if(currentHealth <= 0) {
+                currentHealth = 0;
+                EOnDeath?.Invoke(); // Triggers the OnDeath event
+            }
+        }
+
+        get {
+            return currentHealth;
+        }
+    }
+
+    // DODGE CHANCE
     [Tooltip("Chance to dodge incoming attacks.")]
     private static float dodgeChance;
     public static float DodgeChance { get => dodgeChance; set => dodgeChance = value;}
 
+    // TAKEN DAMAGE MULTIPLIER
     [Tooltip("Enemy damage reduction multiplier.")]
     private static float takenDamageMult;
     public static float TakenDamageMult { get => takenDamageMult; set => takenDamageMult = value;}
 
-    // Player max energy
+    // ENERGY
     private static float maxEnergy;
     public static float MaxEnergy { get => maxEnergy; set => maxEnergy = value; }
 
     private static bool chargedBattery = false;
 
-    // Player experience / energy
     private static float experience;
     public static float Experience { 
         get => experience; 
@@ -196,7 +186,7 @@ public class PlayerController : MonoBehaviour
         Experience += exp;
     }
 
-    // Player coins
+    // COINS
     private static int coins;
     public static int Coins { get => coins; set => coins = value; }
 
@@ -204,14 +194,57 @@ public class PlayerController : MonoBehaviour
         Coins += value;
     }
 
+    // VIEW RANGE
     public static float viewRangeBase;
     public static float ViewRangeBase { get => viewRangeBase; set => viewRangeBase = value; }
     private static float viewRangeMultiplier;
     public static float ViewRangeMultiplier { get => viewRangeMultiplier; set => viewRangeMultiplier = value;}
 
+    // DAMAGE MULTIPLIER
     public static float DamageModifier;
 
-    public float fireRateModifier;
+    // FIRE RATE
+    public static float FireRateMultiplier;
+
+    // CHEST CHANCES
+    public static float BigChestChance;
+    public static void AddBigChestChance(float value) {
+
+        // Clamp value to max 1 (100%)
+        if (BigChestChance + value > 1) {
+            BigChestChance = 1;
+        } else {
+            BigChestChance += value;
+        }
+    }
+
+    [Header("OTHER VARS")]
+
+    [SerializeField] private bool canSwitchWeapons = true;
+
+    public bool iFrame;
+    
+    private Vector2 movementInput;
+
+    // Current direction vector
+    [SerializeField] private Vector2 currentDirection;
+
+    // Dash duration boolean
+    [SerializeField] private bool isDashing = false;
+
+    // Dash cooldown boolean
+    [SerializeField] private bool canDash = true;
+
+    // Dash duration
+    [SerializeField] private float dashingTime;
+    private float dashTimer = 0;
+
+    // Dash cooldown time
+    [SerializeField] private float dashingCooldown;
+    private float dashcdTimer = 0;
+
+    // Dash force / power
+    [SerializeField] private float dashingPower;
 
     [SerializeField] private float collisionOffset = 0.01f;
 
@@ -225,20 +258,8 @@ public class PlayerController : MonoBehaviour
     public float speedTracker;
     public float dodgeChanceTracker;
     public float moveSpeedMultTracker;
-
-    public int Health {
-        set {
-            currentHealth = value;
-            if(currentHealth <= 0) {
-                currentHealth = 0;
-                EOnDeath?.Invoke(); // Triggers the OnDeath event
-            }
-        }
-
-        get {
-            return currentHealth;
-        }
-    }
+    public float fireRateMultTracker;
+    public float bigChestChanceTracker;
 
     private void OnEnable() {
         EOnDeath += StartDeath; // Subscribes wrapper function StartDeath to event OnDeath
@@ -286,38 +307,7 @@ public class PlayerController : MonoBehaviour
         else if (!File.Exists(pathPlayer) && GameStateManager.SavePressed() == false) {
 
             // SET DEFAULT STATS
-            MaxHealth = 4;
-            Health = MaxHealth;
-            MaxEnergy = 20;
-            Experience = 0;
-
-            // Set speed
-            MoveSpeedMultiplier = 1;
-            MoveSpeed = 3.2f;
-
-            // Reset coins
-            Coins = 0;
-
-            // Reset item stats
-            DodgeChance = 0;
-            takenDamageMult = 1;
-
-            DamageModifier = 1;
-
-            // Set view range
-            ViewRangeBase = 5;
-            ViewRangeMultiplier = 1;
-
-            // Reset saved weapons
-            CurrentWeaponIndex = 0;
-            PrimaryWeaponID = 1;
-            PrimaryWeaponRarity = WeaponRarity.COMMON;
-            SecondaryWeaponID = 0;
-            SecondaryWeaponRarity = WeaponRarity.COMMON;
-
-            AmmoMaxMultiplier = 1;
-
-            HeldItemsCount = 0;
+            SetDefaultStats();
 
             // Gives player default weapon if not inside Home or Tutorial
             if (!home && HomeManager.TutorialDone) {
@@ -362,6 +352,48 @@ public class PlayerController : MonoBehaviour
                 }
             }
         }
+    }
+
+    public void SetDefaultStats() {
+
+        MaxHealth = 4;
+        Health = MaxHealth;
+        MaxEnergy = 20;
+        Experience = 0;
+
+        // Fire rate
+        FireRateMultiplier = 1;
+
+        // Set speed
+        MoveSpeedMultiplier = 1;
+        MoveSpeed = 3.2f;
+
+        // Reset coins
+        Coins = 0;
+
+        // Reset item stats
+        DodgeChance = 0;
+        takenDamageMult = 1;
+
+        DamageModifier = 1;
+
+        // Set view range
+        ViewRangeBase = 5;
+        ViewRangeMultiplier = 1;
+
+        // Chest chances
+        BigChestChance = 0;
+
+        // Reset saved weapons
+        CurrentWeaponIndex = 0;
+        PrimaryWeaponID = 1;
+        PrimaryWeaponRarity = WeaponRarity.COMMON;
+        SecondaryWeaponID = 0;
+        SecondaryWeaponRarity = WeaponRarity.COMMON;
+
+        AmmoMaxMultiplier = 1;
+
+        HeldItemsCount = 0;
     }
 
     // Assigns all correct references
@@ -644,6 +676,8 @@ public class PlayerController : MonoBehaviour
         speedTracker = MoveSpeed;
         dodgeChanceTracker = DodgeChance;
         moveSpeedMultTracker = MoveSpeedMultiplier;
+        fireRateMultTracker = FireRateMultiplier;
+        bigChestChanceTracker = BigChestChance;
 
         // If map was loaded and saved, save player as well
         if (savePressed) {
@@ -1063,7 +1097,7 @@ public class PlayerController : MonoBehaviour
         // Set speeds
         MoveSpeed = data.playerMoveSpeed;
         MoveSpeedMultiplier = data.moveSpeedMult;
-        fireRateModifier = data.playerFireRateModifier;
+        FireRateMultiplier = data.playerFireRateMult;
 
         // Load coins
         Coins = data.playerCoins;
@@ -1091,6 +1125,8 @@ public class PlayerController : MonoBehaviour
         // Load view range
         ViewRangeBase = data.viewRangeBase;
         ViewRangeMultiplier = data.viewRangeMult;
+
+        BigChestChance = data.bigChestChance;
 
         Debug.Log("LOADED PLAYER");
     }

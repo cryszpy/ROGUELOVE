@@ -18,17 +18,10 @@ MonoBehaviour:
   walls: {fileID: 11400000, guid: 2bb634a50b99e43a2bbaba3bb5cfbc4e, type: 2}
   empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
   grass: {fileID: 11400000, guid: 8d06dc7e0d8114c7f884afcdc01c83d3, type: 2}
-  grassTop: {fileID: 11400000, guid: b1dc22a03af974ad483f281ebc74be30, type: 2}
-  borderTop: {fileID: 11400000, guid: 1842b72306175454b8d63c2a5c1a1a3a, type: 2}
   borderDown: {fileID: 11400000, guid: 3681fde4c677b4698983b7220a817b6a, type: 2}
   borderLeft: {fileID: 11400000, guid: 0779a567f384c47a9bdc7a28f6a301cb, type: 2}
-  borderRight: {fileID: 11400000, guid: 94cc65d33b56c4a08bb53d6c542d8559, type: 2}
-  wallUp: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
-  wallDown: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
-  wallLeft: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
-  wallRight: {fileID: -1423171231, guid: 2ab3af3da84aa4bf8a886782598b8862, type: 3}
   doorwayObject: {fileID: 600595444076492859, guid: 5f4696210434b47c9aabda4fe42d5233, type: 3}
+  chest: {fileID: 5468405295723552563, guid: 4743bc2f8205d4081ad0bb21168f1cfc, type: 3}
+  bigChest: {fileID: 5468405295723552563, guid: e56c37b706ac542f19c414af827f5875, type: 3}
   breakables:
   - {fileID: 370015407570139740, guid: 2ee1f97e3845b40499272d07022ba644, type: 3}
-  bossSceneIndexes: 02000000
-  sceneOffset: 2
