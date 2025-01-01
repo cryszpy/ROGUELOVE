@@ -22,7 +22,7 @@ public class BulletScript : MonoBehaviour
 
     [SerializeField] protected Collider2D coll;
 
-    [SerializeField] protected Weapon weapon;
+    protected Weapon weapon;
 
     [Space(10)]
     [Header("STATS")]

@@ -45,8 +45,11 @@ public class Weapon : MonoBehaviour
     [Tooltip("Whether this weapon has infinite ammo or not.")]
     public bool infiniteAmmo;
 
+    [Tooltip("How long it takes to charge this weapon.")]
+    public float chargeTime;
+
     [Tooltip("The cooldown time between firing bullets.")]
-    public float timeBetweenFiring;
+    public float fireRate;
 
     [Tooltip("The worth of this weapon when sold, in coins.")]
     public float coinValue;

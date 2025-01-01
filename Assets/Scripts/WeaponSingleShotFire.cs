@@ -57,7 +57,7 @@ public class WeaponSingleShotFire : MonoBehaviour
         if (!canFire) {
             timer += Time.fixedDeltaTime;
             
-            if(timer > parent.timeBetweenFiring * PlayerController.FireRateMultiplier) {
+            if(timer > parent.fireRate * PlayerController.FireRateMultiplier) {
                 canFire = true;
                 timer = 0;
             }

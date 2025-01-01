@@ -5,9 +5,9 @@ public class WeaponCursorAim : MonoBehaviour
 
     [Header("SCRIPT REFERENCES")]
 
-    public Camera mainCam;
+    private Camera mainCam;
     
-    public Vector3 mousePos;
+    private Vector3 mousePos;
 
     void Start() {
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();

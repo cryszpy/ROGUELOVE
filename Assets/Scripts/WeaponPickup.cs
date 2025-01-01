@@ -12,7 +12,7 @@ public class WeaponPair {
 public class WeaponPickup : BasePickup, IPickupable
 {
 
-    [SerializeField] private WeaponRarity weaponObjectRarity;
+    public WeaponRarity weaponObjectRarity;
 
     public int weaponID;
 

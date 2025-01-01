@@ -211,6 +211,9 @@ public class MainMenu : MonoBehaviour
         // Player has an active run in progress
         if (GameStateManager.currentSaveType == SaveType.ACTIVERUN) {
 
+            // Load home data for tutorial status
+            GameStateManager.homeManager.LoadHome();
+
             // Load save data to get level number
             MapData data = SaveSystem.LoadMap();
 

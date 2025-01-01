@@ -76,7 +76,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 1
-  m_Sprite: {fileID: 21300000, guid: eab841a6da2a14f51b753b594ec062a3, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 700a626595d3d4ffbbd1466ddf722dba, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -101,9 +101,9 @@ GameObject:
   - component: {fileID: 7053368458532133441}
   - component: {fileID: 8527430155177576119}
   m_Layer: 12
-  m_Name: Short Barrel
+  m_Name: Big Gun
   m_TagString: Untagged
-  m_Icon: {fileID: 2488908585195742037, guid: 0000000000000000d000000000000000, type: 0}
+  m_Icon: {fileID: 6519382022992737161, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
@@ -136,25 +136,24 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: 5d78c7db7257e46ab866a89a8071c19b, type: 3}
+  ammo: {fileID: 5001664913613443686, guid: 1392798df0ea341e793641b6dbe49e9d, type: 3}
   sprite: {fileID: 7395041985158127922}
   spawnPos: {fileID: 6524611403680658214}
-  weaponPickup: {fileID: 8481469185648990204, guid: 5e6cbc8da0fee422f822ec374e69c9fa, type: 3}
+  weaponPickup: {fileID: 8481469185648990204, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
   type: 1
-  rarity: 1
-  id: 11
+  rarity: 4
+  id: 15
   ammoMax: 50
   ammoPerClick: 1
   currentAmmo: 50
   infiniteAmmo: 0
-  chargeTime: 0
-  fireRate: 0.8
-  coinValue: 37
-  flavorText: The small barrel of this gun allows its bullets to spread out more
-    . . . right?
-  fireSound: shortBarrel_fire
+  chargeTime: 2
+  fireRate: 0.6
+  coinValue: 263
+  flavorText: Wait . . . what?
+  fireSound: bigGun_fire
   chargeSound: 
-  bulletHitSound: shortBarrel_hit
+  bulletHitSound: bigGun_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -196,11 +195,11 @@ MonoBehaviour:
   shake: {fileID: 0}
   player: {fileID: 0}
   timeBetweenBulletBurst: 0
-  numberOfBurstShots: 5
+  numberOfBurstShots: 1
   canFire: 1
-  shakeDuration: 0
-  shakeAmplitude: 0
-  shakeFrequency: 0
+  shakeDuration: 0.1
+  shakeAmplitude: 8
+  shakeFrequency: 1
 --- !u!1 &6524611403680658214
 GameObject:
   m_ObjectHideFlags: 0
@@ -226,7 +225,7 @@ Transform:
   m_GameObject: {fileID: 6524611403680658214}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.509, y: 0.074, z: 0}
+  m_LocalPosition: {x: 0.648, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -47,12 +47,16 @@ public class Chest : MonoBehaviour
         // Open chest
         if (playerInRadius && Input.GetKeyDown(KeyCode.E)) {
 
-            if (map) {
-                map.spawnedChests.Remove(gameObject);
+            // Makes sure this isn't the tutorial chest
+            if (GameStateManager.GetStage() != 1) {
 
-                Debug.Log("Opened chest and successfully removed from list!");
-            } else {
-                Debug.LogError("WalkerGenerator component of chest not assigned!");
+                if (map) {
+                    map.spawnedChests.Remove(gameObject);
+
+                    Debug.Log("Opened chest and successfully removed from list!");
+                } else {
+                    Debug.LogError("WalkerGenerator component of chest not assigned!");
+                }
             }
 
             float rand = UnityEngine.Random.value;
@@ -85,6 +89,7 @@ public class Chest : MonoBehaviour
             Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
 
             lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
+            lootList.RemoveWeapon(weaponPair, weaponPair.pickupScript.weaponObjectRarity);
         } else {
 
             // Generate a random value between 0.0 and 1.0 (to generate rarity of weapon)
@@ -92,7 +97,6 @@ public class Chest : MonoBehaviour
 
             GetWeaponProbability(rand, lootList.areaRarities[GameStateManager.GetStage() - 1].area);
         }
-
     }
 
     public virtual void GetWeaponProbability(float value, float[] lootTable) {

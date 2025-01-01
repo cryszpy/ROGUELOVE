@@ -147,7 +147,8 @@ MonoBehaviour:
   ammoPerClick: 1
   currentAmmo: 60
   infiniteAmmo: 0
-  timeBetweenFiring: 1
+  chargeTime: 0
+  fireRate: 1
   coinValue: 22
   flavorText: Wild bloom of the valley with magical properties.
   fireSound: sonoraBloom_fire
@@ -165,8 +166,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f74bb8ddaeb74e0a83050ce3fa17f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 0}
-  mousePos: {x: 0, y: 0, z: 0}
 --- !u!114 &7053368458532133441
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -72,27 +72,52 @@ public class LootList : ScriptableObject
         }
     }
 
+    // Returns a specific weapon from the loot list
+    public WeaponPair GetSpecificWeapon(WeaponPair weapon, WeaponRarity rarity) {
+
+        return rarity switch
+        {
+            WeaponRarity.COMMON => commonWeapons.Find(x => x.pickupScript.weaponID == weapon.pickupScript.weaponID),
+            WeaponRarity.UNCOMMON => uncommonWeapons.Find(x => x.pickupScript.weaponID == weapon.pickupScript.weaponID),
+            WeaponRarity.RARE => rareWeapons.Find(x => x.pickupScript.weaponID == weapon.pickupScript.weaponID),
+            WeaponRarity.EPIC => epicWeapons.Find(x => x.pickupScript.weaponID == weapon.pickupScript.weaponID),
+            WeaponRarity.LEGENDARY => legendaryWeapons.Find(x => x.pickupScript.weaponID == weapon.pickupScript.weaponID),
+            _ => commonWeapons.Find(x => x.pickupScript.weaponID == weapon.pickupScript.weaponID),
+        };
+    }
+
+    // Removes a specific weapon from the loot list
     public void RemoveWeapon(WeaponPair pair, WeaponRarity rarity) {
 
         switch (rarity) {
             case WeaponRarity.COMMON:
-                seenCommonWeapons.Add(pair);
+                if (!seenCommonWeapons.Contains(pair)) {
+                    seenCommonWeapons.Add(pair);
+                }
                 commonWeapons.Remove(pair);
                 break;
             case WeaponRarity.UNCOMMON:
-                seenUncommonWeapons.Add(pair);
+                if (!seenUncommonWeapons.Contains(pair)) {
+                    seenUncommonWeapons.Add(pair);
+                }
                 uncommonWeapons.Remove(pair);
                 break;
             case WeaponRarity.RARE:
-                seenRareWeapons.Add(pair);
+                if (!seenRareWeapons.Contains(pair)) {
+                    seenRareWeapons.Add(pair);
+                }
                 rareWeapons.Remove(pair);
                 break;
             case WeaponRarity.EPIC:
-                seenEpicWeapons.Add(pair);
+                if (!seenEpicWeapons.Contains(pair)) {
+                    seenEpicWeapons.Add(pair);
+                }
                 epicWeapons.Remove(pair);
                 break;
             case WeaponRarity.LEGENDARY:
-                seenLegendaryWeapons.Add(pair);
+                if (!seenLegendaryWeapons.Contains(pair)) {
+                    seenLegendaryWeapons.Add(pair);
+                }
                 legendaryWeapons.Remove(pair);
                 break;
         }
@@ -101,7 +126,10 @@ public class LootList : ScriptableObject
     public void ResetWeapons(List<WeaponPair> swapFrom, List<WeaponPair> swapTo) {
         if (swapFrom.Count != 0) {
             foreach (WeaponPair pair in swapFrom.ToArray()) {
-                swapTo.Add(pair);
+
+                if (!swapTo.Contains(pair)) {
+                    swapTo.Add(pair);
+                }
                 swapFrom.Remove(pair);
             }
         }

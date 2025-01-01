@@ -193,7 +193,8 @@ MonoBehaviour:
   ammoPerClick: 1
   currentAmmo: 65
   infiniteAmmo: 0
-  timeBetweenFiring: 1.2
+  chargeTime: 0
+  fireRate: 1.2
   coinValue: 26
   flavorText: Who would abandon a perfectly good longbow like this?
   fireSound: woodenLongbow_fire
@@ -211,8 +212,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f74bb8ddaeb74e0a83050ce3fa17f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mainCam: {fileID: 0}
-  mousePos: {x: 0, y: 0, z: 0}
 --- !u!114 &6661772877316794564
 MonoBehaviour:
   m_ObjectHideFlags: 0

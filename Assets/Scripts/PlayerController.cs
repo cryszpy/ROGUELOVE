@@ -73,7 +73,7 @@ public class PlayerController : MonoBehaviour
     [Header("STATS")]
 
     // WEAPONS
-    public List<GameObject> heldWeapons = new();
+    [HideInInspector] public List<GameObject> heldWeapons = new();
 
     public static int CurrentWeaponIndex;
 
@@ -254,6 +254,7 @@ public class PlayerController : MonoBehaviour
 
     public bool savePressed = false;
 
+    public int primaryWeaponIDTracker;
     public float damageModifierTracker;
     public float speedTracker;
     public float dodgeChanceTracker;
@@ -678,6 +679,7 @@ public class PlayerController : MonoBehaviour
         moveSpeedMultTracker = MoveSpeedMultiplier;
         fireRateMultTracker = FireRateMultiplier;
         bigChestChanceTracker = BigChestChance;
+        primaryWeaponIDTracker = PrimaryWeaponID;
 
         // If map was loaded and saved, save player as well
         if (savePressed) {

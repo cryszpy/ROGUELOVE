@@ -96,6 +96,7 @@ public class GameStateManager : MonoBehaviour
     }
 
     public GAMESTATE gameStateTracker;
+    public SaveType saveTypeTracker;
 
     public delegate void EventHandler();
     public static EventHandler EOnTutorialTrigger;
@@ -130,6 +131,7 @@ public class GameStateManager : MonoBehaviour
     void Update() {
         stageTracker = GetStage();
         gameStateTracker = GetState();
+        saveTypeTracker = currentSaveType;
     } 
 
     public static void NextLevel() {

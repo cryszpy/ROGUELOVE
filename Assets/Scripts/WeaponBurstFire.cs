@@ -28,6 +28,8 @@ public class WeaponBurstFire : MonoBehaviour
 
     protected bool bursting = false;
 
+    protected float chargeTimer;
+
     void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
@@ -42,13 +44,37 @@ public class WeaponBurstFire : MonoBehaviour
 
             // Firing logic, if not on cooldown and mouse button pressed, fire
             if (Input.GetMouseButton(0) && canFire && parent.currentAmmo > 0 && !bursting) {
-                bursting = true;
-                StartCoroutine(BurstFire());
 
-                // If weapon doesn't have infinite ammo then use ammo
-                if (!parent.infiniteAmmo) {
-                    UseAmmo();
+                // If gun needs to charge, begin charging
+                if (parent.chargeTime > 0) {
+                    chargeTimer += Time.fixedDeltaTime;
+
+                    // Once charging is finished, begin firing
+                    if (chargeTimer >= parent.chargeTime) {
+                        bursting = true;
+                        StartCoroutine(BurstFire());
+
+                        // If weapon doesn't have infinite ammo then use ammo
+                        if (!parent.infiniteAmmo) {
+                            UseAmmo();
+                        }
+                    }
+                } 
+                // Otherwise, fire
+                else {
+                    bursting = true;
+                    StartCoroutine(BurstFire());
+
+                    // If weapon doesn't have infinite ammo then use ammo
+                    if (!parent.infiniteAmmo) {
+                        UseAmmo();
+                    }
                 }
+            }
+
+            // Reset charging
+            if (!Input.GetMouseButton(0) && chargeTimer > 0) {
+                chargeTimer = 0;
             }
         }
     }
@@ -59,7 +85,7 @@ public class WeaponBurstFire : MonoBehaviour
         if (!canFire) {
             timer += Time.deltaTime;
             
-            if(timer > parent.timeBetweenFiring * PlayerController.FireRateMultiplier) {
+            if(timer > parent.fireRate * PlayerController.FireRateMultiplier) {
                 canFire = true;
                 timer = 0;
             }
