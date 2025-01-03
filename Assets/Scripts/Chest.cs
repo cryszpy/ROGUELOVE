@@ -89,7 +89,10 @@ public class Chest : MonoBehaviour
             Instantiate(weaponPair.pickupObject, transform.position, Quaternion.identity);
 
             lootList.drawnWeaponID = weaponPair.pickupScript.weaponID;
-            lootList.RemoveWeapon(weaponPair, weaponPair.pickupScript.weaponObjectRarity);
+
+            WeaponPair listItem = lootList.GetSpecificWeapon(weaponPair, weaponPair.pickupScript.weaponObjectRarity);
+
+            lootList.RemoveWeapon(listItem, listItem.pickupScript.weaponObjectRarity);
         } else {
 
             // Generate a random value between 0.0 and 1.0 (to generate rarity of weapon)

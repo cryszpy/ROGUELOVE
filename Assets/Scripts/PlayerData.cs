@@ -44,6 +44,9 @@ public class PlayerData
 
     public float bigChestChance;
 
+    public float fireDamageMultiplier;
+    public float baseFireDamage;
+
     public PlayerData (PlayerController player, Weapon weapon) {
 
         playerDamageModifier = PlayerController.DamageModifier;
@@ -58,6 +61,9 @@ public class PlayerData
         moveSpeedMult = PlayerController.MoveSpeedMultiplier;
 
         playerFireRateMult = PlayerController.FireRateMultiplier;
+        
+        fireDamageMultiplier = PlayerController.FireDamageMultiplier;
+        baseFireDamage = PlayerController.BaseFireDamage;
 
         playerCoins = PlayerController.Coins;
 

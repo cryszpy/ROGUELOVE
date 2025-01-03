@@ -54,8 +54,8 @@ MonoBehaviour:
     - 0.45
     - 0.85
   testingWeapon:
-    pickupObject: {fileID: 8481469185648990204, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
-    pickupScript: {fileID: 5054346420906217912, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
+    pickupObject: {fileID: 8481469185648990204, guid: 2bc6087af8a57469e99373411343ea92, type: 3}
+    pickupScript: {fileID: 5054346420906217912, guid: 2bc6087af8a57469e99373411343ea92, type: 3}
     dropChance: 0
   commonWeapons:
   - pickupObject: {fileID: 8481469185648990204, guid: 02a18205ae3074177804e439537ee1ae, type: 3}
@@ -81,6 +81,9 @@ MonoBehaviour:
   - pickupObject: {fileID: 8481469185648990204, guid: 5e6cbc8da0fee422f822ec374e69c9fa, type: 3}
     pickupScript: {fileID: 5054346420906217912, guid: 5e6cbc8da0fee422f822ec374e69c9fa, type: 3}
     dropChance: 0
+  - pickupObject: {fileID: 8481469185648990204, guid: 29a8c3100a8864e9da8f3fedde43a1c5, type: 3}
+    pickupScript: {fileID: 5054346420906217912, guid: 29a8c3100a8864e9da8f3fedde43a1c5, type: 3}
+    dropChance: 0
   seenUncommonWeapons: []
   rareWeapons:
   - pickupObject: {fileID: 8481469185648990204, guid: 48a0a9a8f309f4098ad11dc5df735a87, type: 3}
@@ -88,6 +91,9 @@ MonoBehaviour:
     dropChance: 0
   - pickupObject: {fileID: 8481469185648990204, guid: 4d5fc598d58bc49cebaaf052baca35d8, type: 3}
     pickupScript: {fileID: 5054346420906217912, guid: 4d5fc598d58bc49cebaaf052baca35d8, type: 3}
+    dropChance: 0
+  - pickupObject: {fileID: 8481469185648990204, guid: 2bc6087af8a57469e99373411343ea92, type: 3}
+    pickupScript: {fileID: 5054346420906217912, guid: 2bc6087af8a57469e99373411343ea92, type: 3}
     dropChance: 0
   seenRareWeapons: []
   epicWeapons:
@@ -99,13 +105,10 @@ MonoBehaviour:
   - pickupObject: {fileID: 8481469185648990204, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
     pickupScript: {fileID: 5054346420906217912, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
     dropChance: 0
-  seenLegendaryWeapons:
+  seenLegendaryWeapons: []
+  specialWeapons:
   - pickupObject: {fileID: 8481469185648990204, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
     pickupScript: {fileID: 5054346420906217912, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
     dropChance: 0
-  - pickupObject: {fileID: 8481469185648990204, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
-    pickupScript: {fileID: 5054346420906217912, guid: 07a8b38bf644c4a0ca7b063113793b9c, type: 3}
-    dropChance: 0
-  specialWeapons: []
   seenSpecialWeapons: []
   drawnWeaponID: 15

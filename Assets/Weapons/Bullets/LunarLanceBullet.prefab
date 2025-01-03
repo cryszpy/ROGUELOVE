@@ -108,7 +108,6 @@ MonoBehaviour:
   animator: {fileID: 2920130361219395360}
   spriteRenderer: {fileID: 8741305754039510082}
   coll: {fileID: 5490067005516740771}
-  weapon: {fileID: 0}
   ignoredCollisions: {fileID: 11400000, guid: a6541197f5fc64d5eb37eddc0083087e, type: 2}
   force: 5
   damage: 5

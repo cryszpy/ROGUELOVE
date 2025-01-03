@@ -113,7 +113,8 @@ MonoBehaviour:
   ammoPerClick: 0
   currentAmmo: 100
   infiniteAmmo: 1
-  timeBetweenFiring: 0
+  chargeTime: 0
+  fireRate: 0
   coinValue: 0
   flavorText: 
   fireSound: 

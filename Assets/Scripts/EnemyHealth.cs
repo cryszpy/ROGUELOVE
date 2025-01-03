@@ -58,7 +58,7 @@ public class EnemyHealth : MonoBehaviour
     }
 
     public void TakeDamage(float damage, Vector2 direction, float knockback) {
-        Health -= damage;
+        Health -= damage * PlayerController.DamageModifier;
         Debug.Log("Took this amount of damage: " + damage);
 
         animator.SetBool("Hurt", true);
@@ -72,36 +72,38 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
-    public void TakeFireDamage(float damage, Vector2 direction) {
-        Health -= damage;
+    public void TakeFireDamage(float damage, Vector2 direction, float knockback) {
+        Health -= damage * PlayerController.DamageModifier;
         Debug.Log("Took this amount of damage: " + damage);
 
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
         if (Health <= 0) {
             StopAllCoroutines();
-            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized, 0));
+            StartCoroutine(EnemyDeathKnockback(parent.rb, direction.normalized, knockback));
         } else {
             StopAllCoroutines();
-            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized, 0));
+            StartCoroutine(EnemyKnockback(parent.rb, direction.normalized, knockback));
         }
         animator.SetBool("FireHurt", true);
-        StartCoroutine(FireDamage(2));
+        StartCoroutine(FireDamage(PlayerController.BaseFireDamage));
     }
 
     public IEnumerator FireDamage(float damage) {
         takingFireDamage = true;
-        Health -= damage;
+        float sum = damage * PlayerController.BaseFireDamage;
+
+        Health -= sum;
         //Debug.Log("Took this amount of FIRE damage: " + damage);
 
         yield return new WaitForSeconds(1f);
 
-        Health -= damage;
+        Health -= sum;
         //Debug.Log("Took this amount of FIRE damage: " + damage);
 
         yield return new WaitForSeconds(1f);
 
-        Health -= damage;
+        Health -= sum;
         //Debug.Log("Took this amount of FIRE damage: " + damage);
 
         takingFireDamage = false;

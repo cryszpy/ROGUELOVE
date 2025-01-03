@@ -180,10 +180,10 @@ public class BulletScript : MonoBehaviour
 
                 // If bullet is a flame bullet, deal fire damage
                 if (isFire && !enemy.immuneToFire) {
-                    enemy.TakeFireDamage(damage * PlayerController.DamageModifier, direction);
+                    enemy.TakeFireDamage(damage, direction, knockback);
                 }
                 else {
-                    enemy.TakeDamage(damage * PlayerController.DamageModifier, direction, knockback);
+                    enemy.TakeDamage(damage, direction, knockback);
                 }
             }
             else {

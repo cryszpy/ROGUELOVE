@@ -218,6 +218,9 @@ public class PlayerController : MonoBehaviour
         }
     }
 
+    public static float FireDamageMultiplier;
+    public static float BaseFireDamage;
+
     [Header("OTHER VARS")]
 
     [SerializeField] private bool canSwitchWeapons = true;
@@ -261,6 +264,8 @@ public class PlayerController : MonoBehaviour
     public float moveSpeedMultTracker;
     public float fireRateMultTracker;
     public float bigChestChanceTracker;
+    public float baseFireDamageTracker;
+    public float fireDamageMultTracker;
 
     private void OnEnable() {
         EOnDeath += StartDeath; // Subscribes wrapper function StartDeath to event OnDeath
@@ -377,6 +382,9 @@ public class PlayerController : MonoBehaviour
         takenDamageMult = 1;
 
         DamageModifier = 1;
+
+        FireDamageMultiplier = 1;
+        BaseFireDamage = 1;
 
         // Set view range
         ViewRangeBase = 5;
@@ -1130,6 +1138,9 @@ public class PlayerController : MonoBehaviour
 
         BigChestChance = data.bigChestChance;
 
+        FireDamageMultiplier = data.fireDamageMultiplier;
+        BaseFireDamage = data.baseFireDamage;
+
         Debug.Log("LOADED PLAYER");
     }
 
@@ -1143,7 +1154,7 @@ public class PlayerController : MonoBehaviour
         animator.SetBool("Death", true);
         AudioManager.instance.PlaySoundByName("player_death", gameObject.transform);
 
-        yield return new WaitForSeconds(2f);
+        yield return new WaitForSeconds(1f);
 
         ResetRun();
         IncrementDeath();

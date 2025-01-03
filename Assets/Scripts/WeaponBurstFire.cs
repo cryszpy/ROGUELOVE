@@ -5,26 +5,26 @@ public class WeaponBurstFire : MonoBehaviour
 {
     [Header("SCRIPT REFERENCES")]
 
-    private Camera mainCam;
+    protected Camera mainCam;
 
     public Weapon parent;
 
-    [SerializeField] private CameraShake shake;
+    [SerializeField] protected CameraShake shake;
 
-    [SerializeField] private PlayerController player;
+    [SerializeField] protected PlayerController player;
 
     [Header("STATS")]
 
-    [SerializeField] private float timeBetweenBulletBurst;
+    [SerializeField] protected float timeBetweenBulletBurst;
 
-    [SerializeField] private float numberOfBurstShots;
+    [SerializeField] protected float numberOfBurstShots;
 
     public bool canFire = true;
     protected float timer;
 
-    [SerializeField] private float shakeDuration;
-    [SerializeField] private float shakeAmplitude;
-    [SerializeField] private float shakeFrequency;
+    [SerializeField] protected float shakeDuration;
+    [SerializeField] protected float shakeAmplitude;
+    [SerializeField] protected float shakeFrequency;
 
     protected bool bursting = false;
 
