@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 78a70a7139ef94b03acd0d3bf05c3a9f
+guid: 8b897dd7665934687ae3d190f3c07937
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -9177240813332916340
-    second: roguelove_fallow_0
+      213: 4450571894607458806
+    second: fallow_def_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -51,7 +51,7 @@ TextureImporter:
   spriteMeshType: 1
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 100
+  spritePixelsToUnits: 32
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
@@ -139,13 +139,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: roguelove_fallow_0
+      name: fallow_def_0
       rect:
         serializedVersion: 2
-        x: 0
+        x: 14
         y: 0
-        width: 470
-        height: 470
+        width: 70
+        height: 100
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -154,8 +154,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: c8713177a14e3a080800000000000000
-      internalID: -9177240813332916340
+      spriteID: 6f13a69de8b93cd30800000000000000
+      internalID: 4450571894607458806
       vertices: []
       indices: 
       edges: []
@@ -174,7 +174,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      roguelove_fallow_0: -9177240813332916340
+      fallow_def_0: 4450571894607458806
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

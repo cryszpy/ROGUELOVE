@@ -14,7 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   expressions:
   - emotion: 0
-    expressionSprite: {fileID: 21300000, guid: 78a70a7139ef94b03acd0d3bf05c3a9f, type: 3}
+    expressionSprite: {fileID: 21300000, guid: 8b897dd7665934687ae3d190f3c07937, type: 3}
   characterName: FALLOW
   characterNameHidden: ???
   nameRevealed: 0

@@ -16,6 +16,9 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
 
     protected List<EnemyHealth> collidedEnemies = new();
 
+    protected bool usingAmmo = false;
+    protected float ammoTimer = 0;
+
     public override void FixedUpdate()
     {
         if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
@@ -24,6 +27,9 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
 
             // Firing logic, if not on cooldown and mouse button pressed, fire
             if (Input.GetMouseButton(0) && parent.currentAmmo > 0) {
+
+                // Use ammo
+                usingAmmo = true;
 
                 // Enables flamethrower detection radius
                 EnableVisualSpread(true);
@@ -69,6 +75,34 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
         }
     }
 
+    public virtual void Update() {
+
+        // If weapon does not have infinite ammo, use ammo while firing
+        if (usingAmmo && !parent.infiniteAmmo) {
+            ammoTimer += Time.deltaTime;
+
+            if (ammoTimer > parent.fireRate * PlayerController.FireRateMultiplier) {
+                usingAmmo = false;
+                ammoTimer = 0;
+
+                UseAmmo();
+            }
+        }
+    }
+
+    // Weapon fire cooldown
+    public override void Cooldown() {
+        
+        if (!canFire) {
+            timer += Time.deltaTime;
+            
+            if(timer > parent.fireRate * PlayerController.FireRateMultiplier) {
+                canFire = true;
+                timer = 0;
+            }
+        }
+    }
+
     public virtual void EnableVisualSpread(bool value) {
         coll.enabled = value;
 
@@ -92,11 +126,6 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
             
             if (canFire) {
                 StartCoroutine(FlameFire(script));
-
-                // If weapon doesn't have infinite ammo then use ammo
-                if (!parent.infiniteAmmo) {
-                    UseAmmo();
-                }
             }
         }
     }

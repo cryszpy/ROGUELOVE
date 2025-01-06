@@ -323,7 +323,7 @@ MonoBehaviour:
   animator: {fileID: 8722914626086714706}
   parent: {fileID: 4897255179998494822}
   currentHealth: 0
-  maxHealth: 550
+  maxHealth: 270
   knockbackResistance: 0.8
   takingFireDamage: 0
   immuneToFire: 1
@@ -495,7 +495,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: 1af2773b5dd964410a3511499463670b, type: 3}
-  sprite: {fileID: 163189661128954202}
+  spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 2918801732731569437}
   weaponPickup: {fileID: 0}
   type: 0
@@ -505,7 +505,8 @@ MonoBehaviour:
   ammoPerClick: 0
   currentAmmo: 100
   infiniteAmmo: 1
-  timeBetweenFiring: 0.01
+  chargeTime: 0
+  fireRate: 0
   coinValue: 0
   flavorText: 
   fireSound: 
@@ -731,7 +732,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: 6df33a4b1e485439b899808c2fc4d681, type: 3}
-  sprite: {fileID: 163189661128954202}
+  spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 4337055667690004690}
   weaponPickup: {fileID: 0}
   type: 0
@@ -741,7 +742,8 @@ MonoBehaviour:
   ammoPerClick: 0
   currentAmmo: 100
   infiniteAmmo: 1
-  timeBetweenFiring: 0
+  chargeTime: 0
+  fireRate: 0
   coinValue: 0
   flavorText: 
   fireSound: 
