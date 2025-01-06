@@ -12,6 +12,8 @@ public class WeaponPair {
 public class WeaponPickup : BasePickup, IPickupable
 {
 
+    public Weapon parent;
+
     public WeaponRarity weaponObjectRarity;
 
     public int weaponID;
@@ -54,6 +56,15 @@ public class WeaponPickup : BasePickup, IPickupable
 
             UpdateWeapon(objectToSpawn);
         } else {
+
+            // If this is the first time picking up the weapon ever, add it to the new weapons list and trigger UI animation
+            if (!HomeManager.SeenWeapons.Contains(weaponID)) {
+                HomeManager.SeenWeapons.Add(weaponID);
+                HomeManager.SeenWeaponsCount++;
+                GameStateManager.pickupManager.StartWeaponAnimation(parent);
+                PlayerController.EOnNewPickup?.Invoke(); // Trigger any OnNewPickup events
+            }
+
             GameObject weapon = Instantiate(objectToSpawn, player.weaponPivot.transform.position, Quaternion.identity, player.weaponPivot.transform);
 
             if (replace) {
@@ -80,7 +91,7 @@ public class WeaponPickup : BasePickup, IPickupable
                 PlayerController.PrimaryWeaponCurrentAmmo = primary.currentAmmo;
                 player.ammoBar.SetMaxAmmo(primary.ammoMax * PlayerController.AmmoMaxMultiplier);
                 player.ammoBar.SetAmmo(PlayerController.PrimaryWeaponCurrentAmmo, primary);
-                player.ammoBar.weaponSprite.sprite = primary.sprite.sprite;
+                player.ammoBar.weaponSprite.sprite = primary.spriteRenderer.sprite;
             }
         } 
         // If picked up weapon goes into the secondary weapon slot
@@ -93,7 +104,7 @@ public class WeaponPickup : BasePickup, IPickupable
                 PlayerController.SecondaryWeaponCurrentAmmo = secondary.currentAmmo;
                 player.ammoBar.SetMaxAmmo(secondary.ammoMax * PlayerController.AmmoMaxMultiplier);
                 player.ammoBar.SetAmmo(PlayerController.SecondaryWeaponCurrentAmmo, secondary);
-                player.ammoBar.weaponSprite.sprite = secondary.sprite.sprite;
+                player.ammoBar.weaponSprite.sprite = secondary.spriteRenderer.sprite;
             }
         }
     }

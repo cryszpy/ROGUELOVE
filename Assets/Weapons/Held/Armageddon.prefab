@@ -5017,7 +5017,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 0}
-  sprite: {fileID: 7395041985158127922}
+  spriteRenderer: {fileID: 7395041985158127922}
   spawnPos: {fileID: 6524611403680658214}
   weaponPickup: {fileID: 8481469185648990204, guid: 2bc6087af8a57469e99373411343ea92, type: 3}
   type: 1

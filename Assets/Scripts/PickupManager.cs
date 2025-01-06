@@ -11,7 +11,7 @@ public class PickupManager : MonoBehaviour
     [SerializeField] private Image image;
 
     [SerializeField] private TMP_Text nameText;
-    [SerializeField] private TMP_Text typeText;
+    private TMP_Text typeText;
 
     [SerializeField] private float holdTime;
 
@@ -38,24 +38,39 @@ public class PickupManager : MonoBehaviour
                 nameText = GameObject.FindGameObjectWithTag("PickupInfoName").GetComponent<TextMeshProUGUI>();
                 Debug.Log("Pickup info name text was null! Reassigned.");
             }
-            if (typeText == null) {
+            /* if (typeText == null) {
                 typeText = GameObject.FindGameObjectWithTag("PickupInfoType").GetComponent<TextMeshProUGUI>();
                 Debug.Log("Pickup info flavor text was null! Reassigned.");
-            }
+            } */
         }
     }
 
-    public void StartAnimation() {
+    public void StartItemAnimation() {
 
         FindReferences();
 
         image.sprite = player.heldItems[^1].imageSprite;
         nameText.text = player.heldItems[^1].pickupName;
-        if (player.heldItems[^1].TryGetComponent<ItemPickup>(out var item)) {
+        /* if (player.heldItems[^1].TryGetComponent<ItemPickup>(out var item)) {
             typeText.text = "Item Pickup!";
         } else if (player.heldItems[^1].TryGetComponent<WeaponPickup>(out var weapon)) {
             typeText.text = "Weapon Pickup!";
-        }
+        } */
+
+        StartCoroutine(PlayAnimation());
+    }
+
+    public void StartWeaponAnimation(Weapon weapon) {
+
+        FindReferences();
+
+        image.sprite = weapon.spriteRenderer.sprite;
+        nameText.text = weapon.name;
+        /* if (player.heldItems[^1].TryGetComponent<ItemPickup>(out var item)) {
+            typeText.text = "Item Pickup!";
+        } else if (player.heldItems[^1].TryGetComponent<WeaponPickup>(out var weapon)) {
+            typeText.text = "Weapon Pickup!";
+        } */
 
         StartCoroutine(PlayAnimation());
     }

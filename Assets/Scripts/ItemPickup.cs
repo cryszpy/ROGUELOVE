@@ -62,7 +62,7 @@ public class ItemPickup : BasePickup, IPickupable
         if (!HomeManager.SeenItems.Contains(itemID)) {
             HomeManager.SeenItems.Add(itemID);
             HomeManager.SeenItemsCount++;
-            GameStateManager.pickupManager.StartAnimation();
+            GameStateManager.pickupManager.StartItemAnimation();
             PlayerController.EOnNewPickup?.Invoke();
         }
 

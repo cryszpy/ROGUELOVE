@@ -183,7 +183,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: 158e9acc693b14eedafffcf52f3148c1, type: 3}
-  sprite: {fileID: 8096842307378342048}
+  spriteRenderer: {fileID: 8096842307378342048}
   spawnPos: {fileID: 767796559657468289}
   weaponPickup: {fileID: 8481469185648990204, guid: 48a0a9a8f309f4098ad11dc5df735a87, type: 3}
   type: 0

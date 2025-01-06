@@ -512,8 +512,8 @@ MonoBehaviour:
   saveIcon: {fileID: 0}
   cameraLookAt: {fileID: 0}
   heldWeapons: []
-  canSwitchWeapons: 1
   heldItems: []
+  canSwitchWeapons: 1
   iFrame: 0
   currentDirection: {x: 0, y: 0}
   isDashing: 0
@@ -521,13 +521,17 @@ MonoBehaviour:
   dashingTime: 0.3
   dashingCooldown: 0.5
   dashingPower: 900
-  fireRateModifier: 1
   collisionOffset: 0.01
   hurtShakeDuration: 0
   hurtShakeAmplitude: 0
   hurtShakeFrequency: 0
   savePressed: 0
+  primaryWeaponIDTracker: 0
   damageModifierTracker: 0
   speedTracker: 0
   dodgeChanceTracker: 0
   moveSpeedMultTracker: 0
+  fireRateMultTracker: 0
+  bigChestChanceTracker: 0
+  baseFireDamageTracker: 0
+  fireDamageMultTracker: 0

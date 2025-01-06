@@ -29,7 +29,6 @@ TagManager:
   - PickupInfo
   - PickupInfoSprite
   - PickupInfoName
-  - PickupInfoType
   - ChoicesBar
   - TransitionManager
   - Letterbox

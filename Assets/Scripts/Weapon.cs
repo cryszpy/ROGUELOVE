@@ -14,7 +14,7 @@ public class Weapon : MonoBehaviour
     public GameObject ammo;
 
     [Tooltip("Weapon sprite.")]
-    public SpriteRenderer sprite;
+    public SpriteRenderer spriteRenderer;
 
     [Tooltip("Spawn position of the bullet.")]
     public GameObject spawnPos;

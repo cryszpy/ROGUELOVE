@@ -14,18 +14,33 @@ public class HomeData
     public int playerDeaths;
 
     public int seenItemsCount;
-    public int[] seenItemsID;
+    public int[] seenItemsIDs;
+
+    public int seenWeaponsCount;
+    public int[] seenWeaponsIDs;
 
     public HomeData () {
 
+        // Tutorial status
         tutorialDone = HomeManager.TutorialDone;
 
+        // Player deaths
         playerDeaths = HomeManager.PlayerDeaths;
 
+        // Seen items
         seenItemsCount = HomeManager.SeenItemsCount;
-        seenItemsID = new int[seenItemsCount];
+        seenItemsIDs = new int[seenItemsCount];
         for (int i = 0; i < seenItemsCount; i++) {
-            seenItemsID[i] = HomeManager.SeenItems[i];
+            seenItemsIDs[i] = HomeManager.SeenItems[i];
+        }
+
+        // Seen weapons
+        seenWeaponsCount = HomeManager.SeenWeaponsCount;
+        Debug.Log(seenWeaponsCount);
+        seenWeaponsIDs = new int[seenWeaponsCount];
+        Debug.Log(seenWeaponsIDs);
+        for (int i = 0; i < seenWeaponsCount; i++) {
+            seenWeaponsIDs[i] = HomeManager.SeenWeapons[i];
         }
         
     }

@@ -15,12 +15,24 @@ public class HomeManager : MonoBehaviour
     public static List<int> SeenItems = new();
     public static int SeenItemsCount;
 
+    public static List<int> SeenWeapons = new();
+    public static int SeenWeaponsCount;
+
     public static bool TutorialDone;
     public bool tutorialTracker;
+    public int[] seenItemsTracker;
+    public int seenItemsCountTracker;
+    public int[] seenWeaponsTracker;
+    public int seenWeaponsCountTracker;
 
     private void Update() {
         playerDeathsTracker = PlayerDeaths;
         tutorialTracker = TutorialDone;
+
+        seenItemsTracker = SeenItems.ToArray();
+        seenWeaponsTracker = SeenWeapons.ToArray();
+        seenItemsCountTracker = SeenItemsCount;
+        seenWeaponsCountTracker = SeenWeaponsCount;
     }
 
     private void FindReferences() {
@@ -45,6 +57,9 @@ public class HomeManager : MonoBehaviour
         SeenItemsCount = 0;
         SeenItems.Clear();
 
+        SeenWeaponsCount = 0;
+        SeenWeapons.Clear();
+
         TutorialDone = false;
 
         Debug.LogWarning("RESET HOME");
@@ -59,8 +74,13 @@ public class HomeManager : MonoBehaviour
 
         PlayerDeaths = data.playerDeaths;
 
+        // Seen items
         SeenItemsCount = data.seenItemsCount;
-        SeenItems = new(data.seenItemsID);
+        SeenItems = new(data.seenItemsIDs); // Copies over entire array to static list
+
+        // Seen weapons
+        SeenWeaponsCount = data.seenWeaponsCount;
+        SeenWeapons = new(data.seenWeaponsIDs); // Copies over entire array to static list
 
         TutorialDone = data.tutorialDone;
 

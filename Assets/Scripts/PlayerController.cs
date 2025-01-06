@@ -561,7 +561,7 @@ public class PlayerController : MonoBehaviour
                 // Sets maximum weapon ammo UI stat to base value * static multiplier
                 ammoBar.SetMaxAmmo(weaponScript.ammoMax * AmmoMaxMultiplier);
                 ammoBar.SetAmmo(PrimaryWeaponCurrentAmmo, weaponScript);
-                ammoBar.weaponSprite.sprite = weaponScript.sprite.sprite;
+                ammoBar.weaponSprite.sprite = weaponScript.spriteRenderer.sprite;
             }
         } else if (CurrentWeaponIndex == 1 && heldWeapons.Count > 1) {
             if (heldWeapons[1].TryGetComponent<Weapon>(out var weaponScript)) {
@@ -576,7 +576,7 @@ public class PlayerController : MonoBehaviour
                 // Sets maximum weapon ammo to base value * static multiplier
                 ammoBar.SetMaxAmmo(weaponScript.ammoMax * AmmoMaxMultiplier);
                 ammoBar.SetAmmo(SecondaryWeaponCurrentAmmo, weaponScript);
-                ammoBar.weaponSprite.sprite = weaponScript.sprite.sprite;
+                ammoBar.weaponSprite.sprite = weaponScript.spriteRenderer.sprite;
             }
         }
     }
@@ -885,7 +885,7 @@ public class PlayerController : MonoBehaviour
                     break;
             }
 
-            ammoBar.weaponSprite.sprite = gotWeapon.sprite.sprite;
+            ammoBar.weaponSprite.sprite = gotWeapon.spriteRenderer.sprite;
         }
         else {
             Debug.LogError("Tried to switch to nonexistent weapon!");

@@ -694,5 +694,6 @@ MonoBehaviour:
   pickupTooltip: {fileID: 4556567734409118450}
   dropped: 0
   animator: {fileID: 1628827709118400308}
+  parent: {fileID: 9158207511991905080, guid: 8c41b0dbd69f14b17bd2657dcd08582e, type: 3}
   weaponObjectRarity: 0
   weaponID: 17
