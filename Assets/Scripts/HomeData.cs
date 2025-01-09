@@ -36,9 +36,7 @@ public class HomeData
 
         // Seen weapons
         seenWeaponsCount = HomeManager.SeenWeaponsCount;
-        Debug.Log(seenWeaponsCount);
         seenWeaponsIDs = new int[seenWeaponsCount];
-        Debug.Log(seenWeaponsIDs);
         for (int i = 0; i < seenWeaponsCount; i++) {
             seenWeaponsIDs[i] = HomeManager.SeenWeapons[i];
         }

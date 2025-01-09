@@ -36,10 +36,24 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject saveIcon;
 
+    [SerializeField] private GameObject livingRoomPoint;
+    [SerializeField] private GameObject playPoint;
+    [SerializeField] private List<GameObject> montagePoints = new();
+
     [Header("BEDROOM STATS")]
 
     [SerializeField] private float bedroomCamOrtho;
     [SerializeField] private CinemachinePixelPerfect bedroomPixelPerf;
+
+    private int montageIndex = 0;
+    private bool montagePlaying = true;
+    private bool stopMontage = false;
+    private bool playerInPos = false;
+    private bool readyToPlay = false;
+    private float montageTimer = 0;
+
+    [Tooltip("Montage positions change according to this speed. (in seconds)")]
+    [SerializeField] private float montageSpeed;
 
     private void Awake() {
 
@@ -86,11 +100,13 @@ public class MainMenu : MonoBehaviour
 
         // If the HOME scene is loaded after a player death, don't show the main menu
         if (GameStateManager.GetState() == GAMESTATE.GAMEOVER) {
+            playerCont.gameObject.transform.position = livingRoomPoint.transform.position;
+            montagePlaying = false;
             mainMenuScreen.SetActive(false);
             TransitionManager.EndLeaf(true);
 
             SetupCamera(false);
-
+            
             StartHome();
         } 
         // Otherwise, show main menu
@@ -100,8 +116,83 @@ public class MainMenu : MonoBehaviour
             GameStateManager.SetLevel(0);
             GameStateManager.SetState(GAMESTATE.MAINMENU);
 
+            montagePlaying = true;
+            stopMontage = false;
+            playerInPos = false;
+            readyToPlay = false;
+
             SetupCamera(true);
         }
+    }
+
+    private void Update() {
+
+        if (montagePlaying) {
+            Cooldown();
+        }
+
+        // If montage animation has concluded, and player has pressed an active save slot—
+        if (readyToPlay && playerInPos) {
+
+            // Reset flags
+            readyToPlay = false;
+            playerInPos = false;
+
+            // Load save slot
+            GameStateManager.SetSave(false);
+
+            GameStateManager.homeManager.LoadHome();
+
+            MainMenuTransition(false);
+            Debug.LogWarning("WENT TO SAVED HOME");
+        }
+    }
+
+    private void Cooldown() {
+        if (playerCont.contactColl.isActiveAndEnabled) {
+            playerCont.contactColl.enabled = false;
+        }
+
+        montageTimer += Time.deltaTime;
+        
+        if (montageTimer > montageSpeed) {
+            if (!stopMontage) {
+                montageTimer = 0;
+
+                // Switch player position
+                playerCont.gameObject.transform.position = montagePoints[montageIndex].transform.position;
+
+                // Switch Fallow position
+
+
+                if (montageIndex + 1 > montagePoints.Count - 1) {
+                    montageIndex = 0;
+                } else {
+                    montageIndex++;
+                }
+
+            } else {
+                montageTimer = 0;
+                montagePlaying = false;
+
+                // Switch player position
+                playerCont.gameObject.transform.position = playPoint.transform.position;
+                playerCont.contactColl.enabled = true;
+
+                // Switch Fallow position
+                
+                StartCoroutine(PauseAfterPlayerInPos());
+            }
+        }
+    }
+
+    // Pause for a split second after player is ready to start the game
+    private IEnumerator PauseAfterPlayerInPos() {
+
+        yield return new WaitForSeconds(0.5f);
+
+        stopMontage = false;
+        playerInPos = true;
     }
 
     private void SetupCamera(bool bedroom) {
@@ -125,7 +216,8 @@ public class MainMenu : MonoBehaviour
                 cameraState = CameraState.DEFAULT;
 
                 homeLookAt.bedroom = false;
-                homeLookAt.room4 = true;
+                homeLookAt.room4 = false;
+                homeLookAt.room2 = true;
 
                 bedroomPixelPerf.enabled = false;
                 pixelPerfectCamera.enabled = false;
@@ -152,7 +244,7 @@ public class MainMenu : MonoBehaviour
         while (ortho < 3.2f) {
             ortho += 0.025f;
             virtualCamera.m_Lens.OrthographicSize = ortho;
-            yield return new WaitForSeconds(0.01f);
+            yield return new WaitForSeconds(0.06f);
         }
 
         bedroomPixelPerf.enabled = true;
@@ -227,12 +319,10 @@ public class MainMenu : MonoBehaviour
         }
         // Player does NOT have an active run in progress
         else {
-            GameStateManager.SetSave(false);
+            stopMontage = true;
+            readyToPlay = true;
 
-            GameStateManager.homeManager.LoadHome();
-
-            MainMenuTransition(false);
-            Debug.LogWarning("WENT TO SAVED HOME");
+            mainMenuScreen.SetActive(false);
         }
     }
 
@@ -255,7 +345,6 @@ public class MainMenu : MonoBehaviour
                 pixelPerfectCamera.enabled = true;
                 bedroomPixelPerf.enabled = true;
                 
-                mainMenuScreen.SetActive(false);
                 StartHome();
                 break;
         }
