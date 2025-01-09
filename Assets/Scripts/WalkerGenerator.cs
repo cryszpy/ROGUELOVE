@@ -873,19 +873,18 @@ public class WalkerGenerator : MonoBehaviour
 
             // For every possible miniboss in the level (e.g. Scout, Chris)
             for (int m = 0; m < minibosses.Length; m++) {
-                
-                // Generate random max amount of each unique miniboss in level (e.g. 1 Scout, 1 Chris)
-                int minibossesRange = UnityEngine.Random.Range(1, 2);
-                
-                // For the max amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
-                for (int s = 0; s < minibossesRange; s++) {
 
-                    // If able to get script—
-                    if (minibosses[m].TryGetComponent<Enemy>(out var enemy) || minibosses[m].GetComponentInChildren<Enemy>()) {
-
-                        if (enemy == null) {
-                            enemy = minibosses[m].GetComponentInChildren<Enemy>();
-                        }
+                // If able to get script—
+                if (minibosses[m].TryGetComponent<Enemy>(out var enemy) || minibosses[m].GetComponentInChildren<Enemy>()) {
+                    if (enemy == null) {
+                        enemy = minibosses[m].GetComponentInChildren<Enemy>();
+                    }
+                    
+                    // Generate random max amount of each unique miniboss in level (e.g. 1 Scout, 1 Chris)
+                    int minibossesRange = UnityEngine.Random.Range(enemy.minSpawnCount, enemy.maxSpawnCount);
+                    
+                    // For the max amount of every different type of miniboss (e.g. for 1 Scout, for 1 Chris)
+                    for (int s = 0; s < minibossesRange; s++) {
 
                         // Current level
                         int level = GameStateManager.GetLevel();
@@ -948,10 +947,9 @@ public class WalkerGenerator : MonoBehaviour
                         } else {
                             Debug.Log(minibosses[m] + " failed the spawn roll! " + spawnChance);
                         }
-
-                    } else {
-                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
+                } else {
+                    Debug.Log("Could not find Enemy script component on this enemy!");
                 }
             }
         }
@@ -962,25 +960,23 @@ public class WalkerGenerator : MonoBehaviour
             // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
             for (int st = 0; st < stationEnemies.Length; st++) {
 
-                // Generate random max amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
-                int stationRange = UnityEngine.Random.Range(1, 4);
+                // If able to get script—
+                if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy) || stationEnemies[st].GetComponentInChildren<Enemy>()) {
+                    if (enemy == null) {
+                        enemy = stationEnemies[st].GetComponentInChildren<Enemy>();
+                    }
 
-                // For the max amount of every different type of stationary enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
-                for (int s = 0; s < stationRange; s++) {
+                    // Generate random max amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+                    int stationRange = UnityEngine.Random.Range(enemy.minSpawnCount, enemy.maxSpawnCount);
 
-                    // If able to get script—
-                    if (stationEnemies[st].TryGetComponent<Enemy>(out var enemy) || stationEnemies[st].GetComponentInChildren<Enemy>()) {
-
-                        if (enemy == null) {
-                            enemy = stationEnemies[st].GetComponentInChildren<Enemy>();
-                        }
+                    // For the max amount of every different type of stationary enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
+                    for (int s = 0; s < stationRange; s++) {
 
                         // Current level
                         int level = GameStateManager.GetLevel();
 
                         // Roll to see if enemy is able to spawn
                         var spawnValue = UnityEngine.Random.value;
-                        Debug.Log(spawnValue);
 
                         var exponent = Mathf.Pow(Mathf.Abs(enemy.spawnChanceMultiplier * level - enemy.spawnChanceXTransform), enemy.spawnChanceExponent);
 
@@ -1079,7 +1075,6 @@ public class WalkerGenerator : MonoBehaviour
                                             randY = GetRandomYTile();
                                         }
                                     }
-
                                 } else {
                                     
                                     // Generates random number to pick Enemy spawnpoint
@@ -1087,14 +1082,12 @@ public class WalkerGenerator : MonoBehaviour
                                     randY = GetRandomYTile();
                                 }
                             }
-
                         } else {
                             Debug.Log(stationEnemies[st] + " failed the spawn roll! " + spawnChance);
                         }
-
-                    } else {
-                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
+                } else {
+                    Debug.Log("Could not find Enemy script component on this enemy!");
                 }
             }
         }
@@ -1104,19 +1097,18 @@ public class WalkerGenerator : MonoBehaviour
             
             // For every rare enemy in the level (e.g. Deforestation Guy, Nancy)
             for (int r = 0; r < rareEnemies.Length; r++) {
-                
-                // Generate random amount of rare enemies in level (e.g. 3 Deforestation Guy, 2 Nancy)
-                int rareRange = UnityEngine.Random.Range(1, 3);
-                
-                // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
-                for (int s = 0; s < rareRange; s++) {
 
-                    // If able to get script—
-                    if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy) || rareEnemies[r].GetComponentInChildren<Enemy>()) {
-
-                        if (enemy == null) {
-                            enemy = rareEnemies[r].GetComponentInChildren<Enemy>();
-                        }
+                // If able to get script—
+                if (rareEnemies[r].TryGetComponent<Enemy>(out var enemy) || rareEnemies[r].GetComponentInChildren<Enemy>()) {
+                    if (enemy == null) {
+                        enemy = rareEnemies[r].GetComponentInChildren<Enemy>();
+                    }
+                
+                    // Generate random amount of rare enemies in level (e.g. 3 Deforestation Guy, 2 Nancy)
+                    int rareRange = UnityEngine.Random.Range(enemy.minSpawnCount, enemy.maxSpawnCount);
+                    
+                    // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
+                    for (int s = 0; s < rareRange; s++) {
 
                         // Current level
                         int level = GameStateManager.GetLevel();
@@ -1166,14 +1158,12 @@ public class WalkerGenerator : MonoBehaviour
                                     rand = GetRandomYTile();
                                 }
                             }
-
                         } else {
                             Debug.Log(rareEnemies[r] + " failed the spawn roll! " + spawnChance);
                         }
-
-                    } else {
-                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
+                } else {
+                    Debug.Log("Could not find Enemy script component on this enemy!");
                 }
             }
         }
@@ -1184,18 +1174,17 @@ public class WalkerGenerator : MonoBehaviour
             // For every common enemy in the level (e.g. Wispling, Slime, Joseph)
             for (int c = 0; c < commonEnemies.Length; c++) {
 
-                // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
-                int commonRange = UnityEngine.Random.Range(3, 5);
+                // If able to get script—
+                if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy) || commonEnemies[c].GetComponentInChildren<Enemy>()) {
+                    if (enemy == null) {
+                        enemy = commonEnemies[c].GetComponentInChildren<Enemy>();
+                    }
 
-                // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
-                for (int s = 0; s < commonRange; s++) {
+                    // Generate random amount of common enemies in level (e.g. 4 Wisplings, 5 Slimes, 1 Joseph)
+                    int commonRange = UnityEngine.Random.Range(enemy.minSpawnCount, enemy.maxSpawnCount);
 
-                    // If able to get script—
-                    if (commonEnemies[c].TryGetComponent<Enemy>(out var enemy) || commonEnemies[c].GetComponentInChildren<Enemy>()) {
-
-                        if (enemy == null) {
-                            enemy = commonEnemies[c].GetComponentInChildren<Enemy>();
-                        }
+                    // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
+                    for (int s = 0; s < commonRange; s++) {
 
                         // Current level
                         int level = GameStateManager.GetLevel();
@@ -1245,14 +1234,12 @@ public class WalkerGenerator : MonoBehaviour
                                     rand = GetRandomYTile();
                                 }
                             }
-                            
                         } else {
                             Debug.Log(commonEnemies[c] + " failed the spawn roll! " + spawnChance);
                         }
-
-                    } else {
-                        Debug.Log("Could not find Enemy script component on this enemy!");
                     }
+                } else {
+                    Debug.Log("Could not find Enemy script component on this enemy!");
                 }
             }
         }

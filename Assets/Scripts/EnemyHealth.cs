@@ -135,7 +135,7 @@ public class EnemyHealth : MonoBehaviour
     IEnumerator EnemyDeathKnockback(Rigidbody2D rigidBody, Vector2 dir, float kb) {
         parent.kbEd = true;
         rigidBody.linearVelocity = Vector2.zero;
-        rigidBody.AddForce(dir * (kb * (1 - knockbackResistance) * 2), ForceMode2D.Impulse);
+        rigidBody.AddForce(dir * (kb * (1 - knockbackResistance) * 4), ForceMode2D.Impulse);
 
         yield return new WaitForSeconds(0.5f);
 

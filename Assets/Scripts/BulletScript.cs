@@ -193,6 +193,7 @@ public class BulletScript : MonoBehaviour
     }
 
     public virtual void DestroyBullet() {
+        rb.linearVelocity = Vector2.zero;
         Destroy(gameObject);
     }
 }

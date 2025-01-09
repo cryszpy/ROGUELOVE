@@ -1,4 +1,5 @@
 using System.Collections;
+using Cinemachine;
 using UnityEngine;
 
 public class WeaponBurstFire : MonoBehaviour
@@ -9,7 +10,7 @@ public class WeaponBurstFire : MonoBehaviour
 
     public Weapon parent;
 
-    [SerializeField] protected CameraShake shake;
+    [SerializeField] protected CinemachineImpulseSource camShake;
 
     [SerializeField] protected PlayerController player;
 
@@ -22,9 +23,7 @@ public class WeaponBurstFire : MonoBehaviour
     public bool canFire = true;
     protected float timer;
 
-    [SerializeField] protected float shakeDuration;
-    [SerializeField] protected float shakeAmplitude;
-    [SerializeField] protected float shakeFrequency;
+    [SerializeField] protected float shakeAmplitude = 1f;
 
     protected bool bursting = false;
 
@@ -93,12 +92,6 @@ public class WeaponBurstFire : MonoBehaviour
     }
 
     public virtual IEnumerator BurstFire() {
-        
-        if (shake == null) {
-            Debug.Log("CameraShake camShake is null! Reassigned.");
-            //shake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
-            shake = player.hurtShake;
-        }
 
         for (int i = 0; i < numberOfBurstShots; i++) {
 
@@ -108,8 +101,7 @@ public class WeaponBurstFire : MonoBehaviour
             }
 
             // Start camera shake
-            StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
-            //camShake.Shake(0.15f, 0.4f);
+            TriggerCamShake();
 
             // Spawn bullet and add player damage modifier
             if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
@@ -159,6 +151,20 @@ public class WeaponBurstFire : MonoBehaviour
                 PlayerController.SecondaryWeaponCurrentAmmo = parent.currentAmmo;
             }
         }
+    }
+
+    public virtual void TriggerCamShake() {
+
+        if (camShake == null) {
+            camShake = GetComponent<CinemachineImpulseSource>();
+            Debug.Log("CinemachineImpulseSource camShake is null! Reassigned.");
+        }
+
+        var mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector3 direction = mousePos - transform.position;
+
+        camShake.GenerateImpulse(direction.normalized * shakeAmplitude);
     }
 
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time

@@ -110,6 +110,12 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("Maximum overall target chance for this enemy to spawn in any level.")]
     public float maxSpawnChance = 1;
 
+    [Tooltip("The minimum target amount of this enemy to spawn.")]
+    public int minSpawnCount;
+
+    [Tooltip("The maximum target amount of this enemy to spawn.")]
+    public int maxSpawnCount;
+
     [Tooltip("This enemy's damage-per-hit.")]
     public int damage;
 
@@ -170,7 +176,7 @@ public abstract class Enemy : MonoBehaviour
     // Start is called before the first frame update
     public virtual void Start()
     {
-        if (enemyType != EnemyType.DEAD) {
+        if (enemyType != EnemyType.DEAD && GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
             SetEnemyType();
 
             if (rb == null) {

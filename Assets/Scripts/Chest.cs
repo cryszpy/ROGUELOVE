@@ -82,7 +82,7 @@ public class Chest : MonoBehaviour
     public virtual void OpenWeaponChest() {
 
         // For dev testing only, should be null upon build
-        if (lootList.testingWeapon != null) {
+        if (lootList.testingWeapon.pickupScript != null) {
 
             WeaponPair weaponPair = lootList.testingWeapon;
             weaponPair.pickupScript.dropped = false;

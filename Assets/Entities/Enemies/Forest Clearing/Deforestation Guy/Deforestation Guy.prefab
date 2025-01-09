@@ -179,8 +179,8 @@ Transform:
   m_GameObject: {fileID: 1561680727378319464}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.009765625, y: 0.009765625, z: 0}
-  m_LocalScale: {x: 0.01953125, y: 0.01953125, z: 1}
+  m_LocalPosition: {x: -0.011111111, y: 0.011111111, z: 0}
+  m_LocalScale: {x: 0.022222223, y: 0.022222223, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3622345872674339659}
@@ -623,6 +623,8 @@ MonoBehaviour:
   spawnChanceExponent: 2
   spawnChanceYTransform: 0
   maxSpawnChance: 0.7
+  minSpawnCount: 2
+  maxSpawnCount: 4
   damage: 0
   chaseSpeed: 800
   wanderSpeed: 560

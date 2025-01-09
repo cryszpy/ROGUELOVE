@@ -294,6 +294,8 @@ MonoBehaviour:
   spawnChanceExponent: 2
   spawnChanceYTransform: 0
   maxSpawnChance: 1
+  minSpawnCount: 1
+  maxSpawnCount: 1
   damage: 1
   chaseSpeed: 200
   wanderSpeed: 0

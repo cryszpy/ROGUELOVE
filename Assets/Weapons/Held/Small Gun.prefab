@@ -123,7 +123,8 @@ GameObject:
   - component: {fileID: 9158207511991905080}
   - component: {fileID: 8444947705294881318}
   - component: {fileID: 6661772877316794564}
-  - component: {fileID: 5151835637289417907}
+  - component: {fileID: 9052439293634592292}
+  - component: {fileID: 5898026873206873237}
   m_Layer: 12
   m_Name: Small Gun
   m_TagString: Untagged
@@ -225,7 +226,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 9158207511991905080}
---- !u!114 &5151835637289417907
+--- !u!114 &9052439293634592292
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -234,16 +235,69 @@ MonoBehaviour:
   m_GameObject: {fileID: 4603566924701312467}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e82e524895cca4309b7b9f598e32ead4, type: 3}
+  m_Script: {fileID: 11500000, guid: 76d25ccb4401a4cb2a3fc720003a0e8b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   parent: {fileID: 9158207511991905080}
+  camShake: {fileID: 5898026873206873237}
   player: {fileID: 0}
-  shake: {fileID: 0}
+  timeBetweenBulletBurst: 0
+  numberOfBurstShots: 1
   canFire: 1
-  shakeDuration: 0.075
-  shakeAmplitude: 1
-  shakeFrequency: 1
+  shakeAmplitude: 0.5
+--- !u!114 &5898026873206873237
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4603566924701312467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_ImpulseDefinition:
+    m_ImpulseChannel: 1
+    m_ImpulseShape: 1
+    m_CustomImpulseShape:
+      serializedVersion: 2
+      m_Curve: []
+      m_PreInfinity: 2
+      m_PostInfinity: 2
+      m_RotationOrder: 4
+    m_ImpulseDuration: 0.1
+    m_ImpulseType: 0
+    m_DissipationRate: 0.25
+    m_RawSignal: {fileID: 0}
+    m_AmplitudeGain: 1
+    m_FrequencyGain: 1
+    m_RepeatMode: 0
+    m_Randomize: 1
+    m_TimeEnvelope:
+      m_AttackShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_DecayShape:
+        serializedVersion: 2
+        m_Curve: []
+        m_PreInfinity: 2
+        m_PostInfinity: 2
+        m_RotationOrder: 4
+      m_AttackTime: 0
+      m_SustainTime: 0.2
+      m_DecayTime: 0.7
+      m_ScaleWithImpact: 1
+      m_HoldForever: 0
+    m_ImpactRadius: 100
+    m_DirectionMode: 0
+    m_DissipationMode: 2
+    m_DissipationDistance: 100
+    m_PropagationSpeed: 343
+  m_DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &6924588348523518064
 GameObject:
   m_ObjectHideFlags: 0

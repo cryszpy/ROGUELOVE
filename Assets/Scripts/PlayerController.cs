@@ -10,6 +10,7 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
 using NUnit.Framework.Internal;
 using System.Linq;
+using Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -64,7 +65,8 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private CircleCollider2D dashColl;
 
-    public CameraShake hurtShake;
+    private Camera mainCam;
+    public CinemachineImpulseSource camShake;
 
     public GameObject saveIcon;
 
@@ -251,9 +253,7 @@ public class PlayerController : MonoBehaviour
 
     [SerializeField] private float collisionOffset = 0.01f;
 
-    [SerializeField] private float hurtShakeDuration;
     [SerializeField] private float hurtShakeAmplitude;
-    [SerializeField] private float hurtShakeFrequency;
 
     public bool savePressed = false;
 
@@ -408,6 +408,8 @@ public class PlayerController : MonoBehaviour
     // Assigns all correct references
     private void FindReferences() {
 
+        mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
+
         if (rb == null) {
             rb = GetComponent<Rigidbody2D>();
             Debug.Log("PlayerController rb is null! Reassigned.");
@@ -423,10 +425,6 @@ public class PlayerController : MonoBehaviour
         if (volumeProfile == null) {
             volumeProfile = FindAnyObjectByType<Volume>().sharedProfile;
             Debug.Log("VolumeProfile volumeProfile is null! Reassigned.");
-        }
-        if (hurtShake == null) {
-            hurtShake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
-            Debug.Log("CameraShake camShake is null! Reassigned.");
         }
         if (saveIcon == null) {
             saveIcon = GameObject.FindGameObjectWithTag("SaveIcon");
@@ -1059,7 +1057,7 @@ public class PlayerController : MonoBehaviour
 
         iFrame = true;
         StartCoroutine(SetHurtFlash(true));
-        StartCoroutine(hurtShake.Shake(hurtShakeDuration, hurtShakeAmplitude, hurtShakeFrequency));
+        TriggerCamShake();
         Health -= Mathf.RoundToInt(damage * takenDamageMult);
         healthBar.SetHealth(currentHealth);
 
@@ -1077,6 +1075,20 @@ public class PlayerController : MonoBehaviour
         }
 
         yield return null;
+    }
+
+    public void TriggerCamShake() {
+
+        if (camShake == null) {
+            camShake = GetComponent<CinemachineImpulseSource>();
+            Debug.Log("CinemachineImpulseSource camShake is null! Reassigned.");
+        }
+
+        var mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+
+        Vector3 direction = mousePos - transform.position;
+
+        camShake.GenerateImpulse(direction.normalized * hurtShakeAmplitude);
     }
 
     public void SavePlayer () {

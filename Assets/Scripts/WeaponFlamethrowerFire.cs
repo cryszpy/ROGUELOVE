@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Cinemachine;
 using UnityEngine;
 
 public class WeaponFlamethrowerFire : WeaponBurstFire
@@ -103,6 +104,14 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
         }
     }
 
+    public override void UseAmmo()
+    {
+        base.UseAmmo();
+        
+        // Start camera shake
+        TriggerCamShake();
+    }
+
     public virtual void EnableVisualSpread(bool value) {
         coll.enabled = value;
 
@@ -131,13 +140,6 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
     }
 
     public virtual IEnumerator FlameFire(EnemyHealth script) {
-        
-        // Assign camera shake
-        if (shake == null) {
-            Debug.Log("CameraShake camShake is null! Reassigned.");
-            //shake = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CameraShake>();
-            shake = player.hurtShake;
-        }
 
         for (int i = 0; i < numberOfBurstShots; i++) {
 
@@ -145,10 +147,6 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
             if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
                 FireSound();
             }
-
-            // Start camera shake
-            StartCoroutine(shake.Shake(shakeDuration, shakeAmplitude, shakeFrequency));
-            //camShake.Shake(0.15f, 0.4f);
 
             switch (doesFireDamage) {
                 case true:
@@ -165,24 +163,4 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
         bursting = false;
         canFire = false;
     }
-
-    // Adds enemies to collided list if in range
-    /* public virtual void OnTriggerEnter2D (Collider2D collider) {
-
-        if (collider.CompareTag("Enemy") && collider.gameObject.TryGetComponent<EnemyHealth>(out var script)) {
-            if (!collidedEnemies.Contains(script)) {
-                collidedEnemies.Add(script);
-            }
-        }
-    }
-
-    // Removes enemies from collided list if out of range
-    public virtual void OnTriggerExit2D (Collider2D collider) {
-
-        if (collider.CompareTag("Enemy") && collider.gameObject.TryGetComponent<EnemyHealth>(out var script)) {
-            if (collidedEnemies.Contains(script)) {
-                collidedEnemies.Remove(script);
-            }
-        }
-    } */
 }
