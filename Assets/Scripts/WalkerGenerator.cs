@@ -43,6 +43,8 @@ public class WalkerGenerator : MonoBehaviour
 
     public Tilemap oTilemap;
 
+    public Tilemap borderTilemap;
+
     [SerializeField] protected GameObject bossSpawnPoint;
 
     [Space(10)]
@@ -182,6 +184,9 @@ public class WalkerGenerator : MonoBehaviour
         }
         if (oTilemap == null) {
             oTilemap = GameObject.Find("Obstacles").GetComponent<Tilemap>();
+        }
+        if (!borderTilemap) {
+            borderTilemap = GameObject.Find("Border").GetComponent<Tilemap>();
         }
         if (player == null) {
             player = GameObject.FindGameObjectWithTag("Player");
@@ -514,9 +519,9 @@ public class WalkerGenerator : MonoBehaviour
         for (int x = 0; x < gridHandler.GetLength(0); x++) {
 
             // Create border along top of map
-            wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.walls);
+            wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.borderUp);
             wallsTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1), 0), tiles.grass);
-            oTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1), 0), tiles.grass);
+            borderTilemap.SetTile(new Vector3Int(x, gridHandler.GetLength(1) - 1, 0), tiles.grass);
             gridHandler[x, gridHandler.GetLength(1) - 1] = TileType.BORDER;
             tileCount++;
 
@@ -524,13 +529,13 @@ public class WalkerGenerator : MonoBehaviour
             if (wallsTilemap.GetTile(new Vector3Int(x, 1, 0)) == tiles.walls) {
 
                 wallsTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
-                oTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
+                borderTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
 
                 gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
             } else {
                 wallsTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.borderDown);
-                oTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
+                borderTilemap.SetTile(new Vector3Int(x, 0, 0), tiles.grass);
                 gridHandler[x, 0] = TileType.BORDER;
                 tileCount++;
             }
@@ -546,13 +551,13 @@ public class WalkerGenerator : MonoBehaviour
             if (wallsTilemap.GetTile(new Vector3Int(1, y, 0)) == tiles.walls) {
 
                 wallsTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
-                oTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
+                borderTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
 
                 gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
             } else {
                 wallsTilemap.SetTile(new Vector3Int(0, y, 0), tiles.borderLeft);
-                oTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
+                borderTilemap.SetTile(new Vector3Int(0, y, 0), tiles.grass);
                 gridHandler[0, y] = TileType.BORDER;
                 tileCount++;
             }
@@ -562,7 +567,7 @@ public class WalkerGenerator : MonoBehaviour
             // Create border along right of map
             wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, y, 0), tiles.walls);
             wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), y, 0), tiles.grass);
-            oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), y, 0), tiles.grass);
+            borderTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), y, 0), tiles.grass);
             gridHandler[gridHandler.GetLength(1) - 1, y] = TileType.BORDER;
             tileCount++;
         }
@@ -578,7 +583,8 @@ public class WalkerGenerator : MonoBehaviour
         gridHandler[gridHandler.GetLength(0) - 1, 0] = TileType.BORDER;
 
         // Set top right corner
-        oTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), gridHandler.GetLength(1), 0), tiles.grass);
+        wallsTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0) - 1, gridHandler.GetLength(1) - 1, 0), tiles.grass);
+        borderTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), gridHandler.GetLength(1), 0), tiles.grass);
         gridHandler[gridHandler.GetLength(0) - 1, gridHandler.GetLength(1) - 1] = TileType.BORDER;
     }
 

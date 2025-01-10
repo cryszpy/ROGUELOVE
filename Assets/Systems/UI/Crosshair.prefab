@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 5199822150240556177}
   - component: {fileID: 6235096948570483296}
   - component: {fileID: 622116017228817165}
-  - component: {fileID: -4843079783854839305}
   - component: {fileID: 4959981397227134874}
   m_Layer: 11
   m_Name: Crosshair
@@ -79,12 +78,12 @@ SpriteRenderer:
   m_SortingLayerID: -2073903903
   m_SortingLayer: 4
   m_SortingOrder: 0
-  m_Sprite: {fileID: -6142374563283994760, guid: b371fe445c2f34f4d87ce04d91892962, type: 3}
+  m_Sprite: {fileID: 21300000, guid: b371fe445c2f34f4d87ce04d91892962, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
-  m_Size: {x: 0.14, y: 0.14}
+  m_Size: {x: 0.5, y: 0.5}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -126,28 +125,6 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0}
   m_Radius: 0.01
---- !u!95 &-4843079783854839305
-Animator:
-  serializedVersion: 7
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8210336251283386332}
-  m_Enabled: 0
-  m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: aba532a02396c43a79608e70ef3c7307, type: 2}
-  m_CullingMode: 0
-  m_UpdateMode: 0
-  m_ApplyRootMotion: 0
-  m_LinearVelocityBlending: 0
-  m_StabilizeFeet: 0
-  m_AnimatePhysics: 0
-  m_WarningMessage: 
-  m_HasTransformHierarchy: 1
-  m_AllowConstantClipSamplingOptimization: 1
-  m_KeepAnimatorStateOnDisable: 0
-  m_WriteDefaultValuesOnDisable: 0
 --- !u!114 &4959981397227134874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -161,6 +138,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   mainCam: {fileID: 0}
-  normal: {fileID: -6142374563283994760, guid: b371fe445c2f34f4d87ce04d91892962, type: 3}
+  normal: {fileID: 21300000, guid: b371fe445c2f34f4d87ce04d91892962, type: 3}
   empty: {fileID: 21300000, guid: 5778a15f6b7314594970eea6d181ab24, type: 3}
   spriteRenderer: {fileID: 6235096948570483296}

@@ -20,7 +20,9 @@ public class AreaTiles : ScriptableObject
     public Tile empty;
 
     public Tile grass;
-    
+
+    public Tile borderUp;
+
     public Tile borderDown;
 
     public Tile borderLeft;

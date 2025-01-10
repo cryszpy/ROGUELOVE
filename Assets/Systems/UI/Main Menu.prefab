@@ -1310,8 +1310,13 @@ MonoBehaviour:
   virtualCamera: {fileID: 0}
   pixelPerfectCamera: {fileID: 0}
   saveIcon: {fileID: 0}
-  bedroomCamOrtho: 1.71
+  livingRoomPoint: {fileID: 0}
+  playPoint: {fileID: 0}
+  montagePoints: []
   bedroomPixelPerf: {fileID: 0}
+  defaultSize: 2.8125
+  transitionSize: 1.40625
+  montageSpeed: 1
 --- !u!1 &9195781114735559847
 GameObject:
   m_ObjectHideFlags: 0

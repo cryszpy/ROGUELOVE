@@ -5,7 +5,7 @@ public class HomeLookAt : MonoBehaviour
 {
     [SerializeField] private Transform playerTransform;
     [SerializeField] private List<GameObject> points;
-    [Range(2, 100)] [SerializeField] private float cameraTargetDivider;
+    [Range(1, 100)] [SerializeField] private float cameraTargetDivider;
 
     [Header("BOOLS")]
 

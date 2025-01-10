@@ -66,7 +66,7 @@ public class BulletScript : MonoBehaviour
             rb = GetComponent<Rigidbody2D>();
         }
 
-        mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        mousePos = ToWorldPoint(Input.mousePosition);
 
         // DIRECTION OF THE BULLET
 
@@ -95,6 +95,24 @@ public class BulletScript : MonoBehaviour
         }
         float angle = Mathf.Atan2(rot.y, rot.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
+    }
+
+    private Vector2 ToWorldPoint(Vector3 input) {
+
+        Vector2 inCamera;
+        Vector2 pixelAmount;
+        Vector2 worldPoint;
+
+        inCamera.y = mainCam.orthographicSize * 2;
+        inCamera.x = inCamera.y * Screen.width / Screen.height;
+
+        pixelAmount.x = Screen.width / inCamera.x;
+        pixelAmount.y = Screen.height / inCamera.y;
+
+        worldPoint.x = ((input.x / pixelAmount.x) - (inCamera.x / 2) + mainCam.transform.position.x);
+        worldPoint.y = ((input.y / pixelAmount.y) - (inCamera.y / 2) + mainCam.transform.position.y);
+
+        return worldPoint;
     }
 
     public void FixedUpdate() {

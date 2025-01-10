@@ -167,6 +167,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f74bb8ddaeb74e0a83050ce3fa17f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 4769477716828700568}
 --- !u!114 &7053368458532133441
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,7 +199,7 @@ MonoBehaviour:
   timeBetweenBulletBurst: 0.065
   numberOfBurstShots: 2
   canFire: 1
-  shakeAmplitude: 0.4
+  shakeAmplitude: 0.25
 --- !u!114 &5197741760824253294
 MonoBehaviour:
   m_ObjectHideFlags: 0

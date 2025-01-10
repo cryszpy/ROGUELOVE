@@ -47,8 +47,8 @@ TagManager:
   - UI/Crosshair
   - Weapon
   - Item
-  - 
-  - 
+  - UI/Render
+  - GlobalLight
   - 
   - 
   - 

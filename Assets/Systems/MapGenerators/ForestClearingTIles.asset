@@ -18,6 +18,7 @@ MonoBehaviour:
   walls: {fileID: 11400000, guid: 2bb634a50b99e43a2bbaba3bb5cfbc4e, type: 2}
   empty: {fileID: 11400000, guid: 59ac24a4b38a14e92a4f2797ca2e1fd4, type: 2}
   grass: {fileID: 11400000, guid: 8d06dc7e0d8114c7f884afcdc01c83d3, type: 2}
+  borderUp: {fileID: 11400000, guid: 3ef0fc391d21b4862ae2eb6d040abfbd, type: 2}
   borderDown: {fileID: 11400000, guid: 3681fde4c677b4698983b7220a817b6a, type: 2}
   borderLeft: {fileID: 11400000, guid: 0779a567f384c47a9bdc7a28f6a301cb, type: 2}
   doorwayObject: {fileID: 600595444076492859, guid: 5f4696210434b47c9aabda4fe42d5233, type: 3}

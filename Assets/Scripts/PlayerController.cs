@@ -362,7 +362,7 @@ public class PlayerController : MonoBehaviour
 
     public void SetDefaultStats() {
 
-        MaxHealth = 4;
+        MaxHealth = 3;
         Health = MaxHealth;
         MaxEnergy = 20;
         Experience = 0;

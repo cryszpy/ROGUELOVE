@@ -179,8 +179,8 @@ Transform:
   m_GameObject: {fileID: 1561680727378319464}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.011111111, y: 0.011111111, z: 0}
-  m_LocalScale: {x: 0.022222223, y: 0.022222223, z: 1}
+  m_LocalPosition: {x: -0.0022222223, y: 0.0022222223, z: 0}
+  m_LocalScale: {x: 0.0044444446, y: 0.0044444446, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 3622345872674339659}
@@ -259,7 +259,7 @@ MonoBehaviour:
   m_LineColorA: {r: 1, g: 0, b: 0, a: 0.7490196}
   m_LineColorB: {r: 1, g: 0, b: 0, a: 0.7490196}
   m_BackgroundColor: {r: 0, g: 0, b: 0, a: 0}
-  m_LineThickness: 5
+  m_LineThickness: 1
   m_DottedLineLength: 99999
   m_DottedLineOffset: 0
   m_PositionsAreLocalSpace: 0

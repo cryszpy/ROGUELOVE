@@ -41,8 +41,7 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private List<GameObject> montagePoints = new();
 
     [Header("BEDROOM STATS")]
-
-    [SerializeField] private float bedroomCamOrtho;
+    
     [SerializeField] private CinemachinePixelPerfect bedroomPixelPerf;
 
     private int montageIndex = 0;
@@ -51,6 +50,9 @@ public class MainMenu : MonoBehaviour
     private bool playerInPos = false;
     private bool readyToPlay = false;
     private float montageTimer = 0;
+
+    [SerializeField] private float defaultSize;
+    [SerializeField] private float transitionSize;
 
     [Tooltip("Montage positions change according to this speed. (in seconds)")]
     [SerializeField] private float montageSpeed;
@@ -95,7 +97,7 @@ public class MainMenu : MonoBehaviour
 
         if (!pixelPerfectCamera) {
             pixelPerfectCamera = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<PixelPerfectCamera>();
-            Debug.LogWarning("PixelPerfectCamera component null! Reassigned.");
+            Debug.LogWarning("PixelPerfectCamera component or main camera null! Reassigned.");
         }
 
         // If the HOME scene is loaded after a player death, don't show the main menu
@@ -138,13 +140,30 @@ public class MainMenu : MonoBehaviour
             readyToPlay = false;
             playerInPos = false;
 
-            // Load save slot
-            GameStateManager.SetSave(false);
+            // NO SAVE SLOT (NEW GAME)
+            if (GameStateManager.currentSaveType == SaveType.NEWGAME) {
 
-            GameStateManager.homeManager.LoadHome();
+                GameStateManager.tutorialEnabled = true;
 
-            MainMenuTransition(false);
-            Debug.LogWarning("WENT TO SAVED HOME");
+                // Reset saved profile stats if there is no profile
+                GameStateManager.homeManager.ResetHome();
+
+                GameStateManager.SetSave(false);
+
+                MainMenuTransition(true);
+                Debug.LogWarning("CUTSCENE");
+            } 
+            // SAVE SLOT
+            else {
+
+                // Load save slot
+                GameStateManager.SetSave(false);
+
+                GameStateManager.homeManager.LoadHome();
+
+                MainMenuTransition(false);
+                Debug.LogWarning("WENT TO SAVED HOME");
+            }
         }
     }
 
@@ -208,7 +227,7 @@ public class MainMenu : MonoBehaviour
                 bedroomPixelPerf.enabled = false;
                 pixelPerfectCamera.enabled = false;
 
-                virtualCamera.m_Lens.OrthographicSize = bedroomCamOrtho;
+                virtualCamera.m_Lens.OrthographicSize = transitionSize;
 
                 break;
             // Setup camera for player death respawn
@@ -222,7 +241,7 @@ public class MainMenu : MonoBehaviour
                 bedroomPixelPerf.enabled = false;
                 pixelPerfectCamera.enabled = false;
 
-                virtualCamera.m_Lens.OrthographicSize = 3.2f;
+                virtualCamera.m_Lens.OrthographicSize = defaultSize;
 
                 bedroomPixelPerf.enabled = true;
                 pixelPerfectCamera.enabled = true;
@@ -241,7 +260,7 @@ public class MainMenu : MonoBehaviour
         homeLookAt.bedroom = false;
         homeLookAt.room4 = true;
 
-        while (ortho < 3.2f) {
+        while (ortho < defaultSize) {
             ortho += 0.025f;
             virtualCamera.m_Lens.OrthographicSize = ortho;
             yield return new WaitForSeconds(0.06f);
@@ -280,16 +299,8 @@ public class MainMenu : MonoBehaviour
 
         // Player does NOT have an existing save slot (START NEW GAME + CUTSCENE)
         if (GameStateManager.currentSaveType == SaveType.NEWGAME) {
-
-            GameStateManager.tutorialEnabled = true;
-
-            // Reset saved profile stats if there is no profile
-            GameStateManager.homeManager.ResetHome();
-
-            GameStateManager.SetSave(false);
-
-            MainMenuTransition(true);
-            Debug.LogWarning("CUTSCENE");
+            stopMontage = true;
+            readyToPlay = true;
         }
         // Player has an existing save slot
         else {
@@ -339,7 +350,7 @@ public class MainMenu : MonoBehaviour
             case false:
                 Debug.Log("Started main menu transition!");
 
-                virtualCamera.m_Lens.OrthographicSize = 3.2f;
+                virtualCamera.m_Lens.OrthographicSize = defaultSize;
                 homeLookAt.bedroom = false;
                 homeLookAt.room4 = true;
                 pixelPerfectCamera.enabled = true;

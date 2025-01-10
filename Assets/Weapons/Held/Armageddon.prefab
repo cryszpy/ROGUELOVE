@@ -754,14 +754,14 @@ ParticleSystem:
     serializedVersion: 6
     enabled: 1
     type: 4
-    angle: 47.6
+    angle: 18.5
     length: 5
     boxThickness: {x: 0, y: 0, z: 0}
     radiusThickness: 1
     donutRadius: 0.2
     m_Position: {x: 0, y: 0, z: 0}
     m_Rotation: {x: 0, y: 0, z: 0}
-    m_Scale: {x: 1, y: 0.58, z: 1}
+    m_Scale: {x: 1, y: 1, z: 1}
     placementMode: 0
     m_MeshMaterialIndex: 0
     m_MeshNormalOffset: 0
@@ -838,7 +838,7 @@ ParticleSystem:
     m_TextureBilinearFiltering: 0
     randomDirectionAmount: 0
     sphericalDirectionAmount: 0
-    randomPositionAmount: 0
+    randomPositionAmount: 0.35
     radius:
       value: 0.19
       mode: 0
@@ -899,7 +899,7 @@ ParticleSystem:
     arc:
       value: 360
       mode: 0
-      spread: 0.45
+      spread: 0
       speed:
         serializedVersion: 2
         minMaxState: 0
@@ -959,7 +959,7 @@ ParticleSystem:
     rateOverTime:
       serializedVersion: 2
       minMaxState: 0
-      scalar: 50
+      scalar: 100
       minScalar: 10
       maxCurve:
         serializedVersion: 2
@@ -4958,7 +4958,7 @@ MonoBehaviour:
   timeBetweenBulletBurst: 0
   numberOfBurstShots: 1
   canFire: 1
-  shakeAmplitude: 0.2
+  shakeAmplitude: 0.05
   damage: 1
   knockback: 1
   doesFireDamage: 1
@@ -5098,6 +5098,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f74bb8ddaeb74e0a83050ce3fa17f90, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  parent: {fileID: 4769477716828700568}
 --- !u!114 &7053368458532133441
 MonoBehaviour:
   m_ObjectHideFlags: 0

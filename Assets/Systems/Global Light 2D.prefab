@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5767481931039754935}
   - component: {fileID: 7184398281095302224}
-  m_Layer: 0
+  m_Layer: 15
   m_Name: Global Light 2D
   m_TagString: Untagged
   m_Icon: {fileID: 0}
