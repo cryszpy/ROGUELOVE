@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SortingLayerID: 1049480431
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1423268827149126271, guid: 60372bffb91964eafae41b3342dab018, type: 3}
+  m_Sprite: {fileID: 4295287521596626657, guid: dcff49fe882cc4081b10f1f9be146471, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -226,8 +226,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.12, y: 0.73}
-  m_Size: {x: 1.41, y: 1.2}
+  m_Offset: {x: -0.02, y: 0.55}
+  m_Size: {x: 2.01, y: 3.19}
   m_Direction: 0
 --- !u!95 &8722914626086714706
 Animator:
@@ -297,7 +297,7 @@ MonoBehaviour:
   minSpawnCount: 1
   maxSpawnCount: 1
   damage: 1
-  chaseSpeed: 200
+  chaseSpeed: 0
   wanderSpeed: 0
   rangedAttackCooldownMin: 3
   rangedAttackCooldownMax: 3
@@ -326,7 +326,7 @@ MonoBehaviour:
   parent: {fileID: 4897255179998494822}
   currentHealth: 0
   maxHealth: 270
-  knockbackResistance: 0.8
+  knockbackResistance: 1
   takingFireDamage: 0
   immuneToFire: 1
   wasPierceHit: 0
@@ -355,7 +355,7 @@ Transform:
   m_GameObject: {fileID: 2918801732731569437}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0304, y: 0.1748, z: 0}
+  m_LocalPosition: {x: -0.159, y: 0.117, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -387,7 +387,7 @@ Transform:
   m_GameObject: {fileID: 4337055667690004690}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.0304, y: 0.1748, z: 0}
+  m_LocalPosition: {x: -0.159, y: 0.117, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -534,6 +534,8 @@ MonoBehaviour:
   timeBetweenBulletBurst: 0
   numberOfBurstShots: 16
   rotationSpeed: 20
+  ringAmount: 3
+  ringCooldown: 0.1
 --- !u!114 &6610068232510643037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -952,8 +954,8 @@ CircleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.8}
-  m_Radius: 8.5
+  m_Offset: {x: 0, y: 0}
+  m_Radius: 6.5
 --- !u!114 &591328465342926331
 MonoBehaviour:
   m_ObjectHideFlags: 0

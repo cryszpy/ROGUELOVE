@@ -7,6 +7,10 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
 
     public float rotationSpeed;
 
+    public int ringAmount;
+
+    public float ringCooldown;
+
     // Start is called before the first frame update
     public override void Start()
     {
@@ -33,7 +37,7 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
                 } 
                 // Otherwise just fire
                 else {
-                    StartCoroutine(BurstFire());
+                    StartCoroutine(StartBurst());
                 }
             }
 
@@ -67,7 +71,18 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
         charging = false;
 
         // Fires and stops drawing the line of fire
-        StartCoroutine(BurstFire());
+        StartCoroutine(StartBurst());
+    }
+
+    public virtual IEnumerator StartBurst() {
+
+        // Shoots specified number of rings
+        for (int i = 0; i < ringAmount; i++) {
+
+            StartCoroutine(BurstFire());
+
+            yield return new WaitForSeconds(ringCooldown);
+        }
     }
 
     // Firing logic
@@ -112,6 +127,5 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
         
             bursting = false;
         }
-        
     }
 }

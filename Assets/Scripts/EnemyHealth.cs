@@ -21,6 +21,7 @@ public class EnemyHealth : MonoBehaviour
     // Enemy maximum health
     public float maxHealth;
 
+    [Tooltip("This enemy's knockback resistance. (0-1, 1 being immune)")]
     [SerializeField] private float knockbackResistance;
 
     public bool takingFireDamage;

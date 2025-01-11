@@ -54,8 +54,8 @@ MonoBehaviour:
     - 0.45
     - 0.85
   testingWeapon:
-    pickupObject: {fileID: 8481469185648990204, guid: 262462e0d43ba4677ade48936cbee1f0, type: 3}
-    pickupScript: {fileID: 5054346420906217912, guid: 262462e0d43ba4677ade48936cbee1f0, type: 3}
+    pickupObject: {fileID: 0}
+    pickupScript: {fileID: 0}
     dropChance: 0
   commonWeapons:
   - pickupObject: {fileID: 8481469185648990204, guid: 1a999c34ce8cd47d8b6e1fd78d2f894e, type: 3}
