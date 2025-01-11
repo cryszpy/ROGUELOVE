@@ -57,7 +57,7 @@ public class EnemyBulletSpawner : MonoBehaviour
                 } 
                 // Otherwise just fire
                 else {
-                    StartCoroutine(BurstFire());
+                    StartAttackAnim();
                 }
             }
 
@@ -91,55 +91,64 @@ public class EnemyBulletSpawner : MonoBehaviour
         charging = false;
 
         // Fires and stops drawing the line of fire
-        StartCoroutine(BurstFire());
+        StartAttackAnim();
     }
 
     // Firing logic
-    public virtual IEnumerator BurstFire()
-    {
-        if (enemy.enemyType != EnemyType.DEAD) {
+    public virtual void StartAttackAnim() {
+        if (enemy.enemyType != EnemyType.DEAD && GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
 
             bursting = true;
             enemy.canFire = false;
 
-            for (int i = 0; i < numberOfBurstShots; i++) {
-
-                enemy.animator.SetBool("Attack", true);
-
-                // Play firing sound
-                if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
-                    FireSound();
-                }
-
-                // Sets the rotation of the spawner to face the player right before firing
-                Vector3 rotation =  enemy.player.transform.position - transform.position;
-                float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
-                transform.rotation = Quaternion.Euler(0, 0, rotZ);
-
-                // Spawns bullet
-                GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
-                StartCoroutine(BulletDestroy(2, instantBullet));
-                if (instantBullet.TryGetComponent<EnemyBulletScript>(out var bullet)) {
-                    bullet.transform.rotation = transform.rotation;
-                }
-                /* if (parent.ammo.TryGetComponent<EnemyBulletScript>(out var bullet)) {
-                    GameObject projectile = (GameObject)bullet.Create(parent.ammo, transform.position, Quaternion.identity, gameObject);
-                    StartCoroutine(BulletDestroy(2, projectile));
-                    projectile.transform.rotation = transform.rotation;
-                } else {
-                    Debug.LogError("Could not find EnemyBulletScript component on this object!");
-                } */
-
-                yield return new WaitForSeconds(timeBetweenBulletBurst);
-            }
-
-            // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
-            if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
-                enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
-            }
-        
-            bursting = false;
+            enemy.animator.SetBool("Attack", true);
         }
+    }
+
+    // Called once attack animation is complete, fires actual attack
+    public virtual void SpawnAttack() {
+        StartCoroutine(Attack());
+    }
+
+    public virtual IEnumerator Attack() {
+
+        for (int i = 0; i < numberOfBurstShots; i++) {
+
+            // Play firing sound
+            if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
+                FireSound();
+            }
+
+            // Sets the rotation of the spawner to face the player right before firing
+            Vector3 rotation =  enemy.player.transform.position - transform.position;
+            float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
+            transform.rotation = Quaternion.Euler(0, 0, rotZ);
+
+            // Spawns bullet
+            GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
+            StartCoroutine(BulletDestroy(2, instantBullet));
+            if (instantBullet.TryGetComponent<EnemyBulletScript>(out var bullet)) {
+                bullet.transform.rotation = transform.rotation;
+            }
+            /* if (parent.ammo.TryGetComponent<EnemyBulletScript>(out var bullet)) {
+                GameObject projectile = (GameObject)bullet.Create(parent.ammo, transform.position, Quaternion.identity, gameObject);
+                StartCoroutine(BulletDestroy(2, projectile));
+                projectile.transform.rotation = transform.rotation;
+            } else {
+                Debug.LogError("Could not find EnemyBulletScript component on this object!");
+            } */
+
+            yield return new WaitForSeconds(timeBetweenBulletBurst);
+        }
+
+        // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
+        if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
+            enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
+        }
+    
+        enemy.currentAttack = null;
+        bursting = false;
+        enemy.animator.SetBool("Attack", false);
     }
 
     public virtual void FireSound() {

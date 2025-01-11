@@ -34,7 +34,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] private GameObject npcToSpawn;
     [SerializeField] private GameObject chestToSpawn;
 
-    private Rigidbody2D npcRb;
+    public Rigidbody2D npcRb;
     private GameObject spawnedEnemy;
 
     [SerializeField] private int tutorialStage;
@@ -416,6 +416,8 @@ public class TutorialManager : MonoBehaviour
                 break;
             case 15:
                 Debug.Log("15");
+
+                yield return new WaitForSeconds(0.35f);
 
                 // Despawn NPC, move camera to boss spawn and spawn boss
                 Destroy(npcRb.gameObject);

@@ -89,6 +89,8 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("All possible attacks this enemy has—SUM OF THESE attackChance VARIABLES MUST BE EQUAL TO 1.")]
     [SerializeField] protected List<EnemyBulletSpawner> attacksList;
 
+    public EnemyBulletSpawner currentAttack;
+
     [Space(10)]
     [Header("ENEMY STATS")]
 
@@ -311,13 +313,24 @@ public abstract class Enemy : MonoBehaviour
                 // If the attack's success roll is successful—
                 if (roll <= attack.attackChance) {
 
-                    // Use the attack
+                    // Sets the current attack and uses the attack
+                    currentAttack = attack;
                     attack.FiringMethod();
 
                     // Don't use any other attack
                     break;
                 }
             }
+        }
+    }
+
+    // Ends the attack animation and begins actual attack (RUNS AT THE LAST FRAME OF ANIMATION)
+    public virtual void BeginAttack() {
+
+        if (currentAttack) {
+            currentAttack.SpawnAttack();
+        } else {
+            Debug.LogError(this.name + " tried to attack without having a current attack!");
         }
     }
 
@@ -391,11 +404,6 @@ public abstract class Enemy : MonoBehaviour
                 Wander();
             }
         }
-    }
-
-    // Ends the attack animation (RUNS AT THE LAST FRAME OF ANIMATION)
-    public void StopAttackAnim() {
-        animator.SetBool("Attack", false);
     }
 
     // Sprite direction facing

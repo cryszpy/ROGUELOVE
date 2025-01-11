@@ -13,5 +13,10 @@ public class ContactEnemy : Enemy
     public override void SetEnemyType() {
         enemyType = EnemyType.CONTACT;
     }
-    
+
+    public override void BeginAttack()
+    {
+        animator.SetBool("Attack", false);
+    }
+
 }

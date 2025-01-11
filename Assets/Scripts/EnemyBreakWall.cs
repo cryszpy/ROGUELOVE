@@ -37,7 +37,7 @@ public class EnemyBreakWall : MonoBehaviour
     public void OnCollisionStay2D(Collision2D collider) {
         if (canCheck && GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
             canCheck = false;
-            parent.animator.SetBool("Attack", true);
+            parent.animator.SetBool("BreakWall", true);
             CheckCollisions(collider);
         }
     }

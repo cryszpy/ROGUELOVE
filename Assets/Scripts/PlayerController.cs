@@ -419,7 +419,7 @@ public class PlayerController : MonoBehaviour
             Debug.Log("PlayerController animator is null! Reassigned.");
         }
         if (contactColl == null) {
-            contactColl = GetComponentInChildren<CapsuleCollider2D>();
+            contactColl = GetComponent<CapsuleCollider2D>();
             Debug.Log("Collider2D contactColl is null! Reassigned.");
         }
         if (volumeProfile == null) {

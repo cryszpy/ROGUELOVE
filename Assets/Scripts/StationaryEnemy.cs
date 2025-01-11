@@ -12,4 +12,9 @@ public class StationaryEnemy : Enemy
         enemyType = EnemyType.STATIONARY;
     }
 
+    public override void BeginAttack()
+    {
+        animator.SetBool("Attack", false);
+    }
+
 }

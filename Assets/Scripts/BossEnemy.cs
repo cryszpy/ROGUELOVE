@@ -83,6 +83,7 @@ public class BossEnemy : Enemy
                 if (roll <= attack.attackChance) {
 
                     // Use the attack
+                    currentAttack = attack;
                     attack.FiringMethod();
 
                     fired = true;
@@ -115,6 +116,7 @@ public class BossEnemy : Enemy
                 if (roll <= attack.attackChance) {
 
                     // Use the attack
+                    currentAttack = attack;
                     attack.FiringMethod();
 
                     fired = true;
@@ -127,6 +129,7 @@ public class BossEnemy : Enemy
 
         // If all possible attacks failed the roll, use the first attack in the list.
         if (!fired) {
+            currentAttack = attacksList[0];
             attacksList[0].FiringMethod();
         }
     }

@@ -263,7 +263,7 @@ public class MainMenu : MonoBehaviour
         while (ortho < defaultSize) {
             ortho += 0.025f;
             virtualCamera.m_Lens.OrthographicSize = ortho;
-            yield return new WaitForSeconds(0.06f);
+            yield return new WaitForSeconds(0.03f);
         }
 
         bedroomPixelPerf.enabled = true;

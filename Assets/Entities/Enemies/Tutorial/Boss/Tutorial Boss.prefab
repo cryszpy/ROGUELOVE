@@ -89,7 +89,7 @@ SpriteRenderer:
   m_SortingLayerID: 1049480431
   m_SortingLayer: 2
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1423268827149126271, guid: 60372bffb91964eafae41b3342dab018, type: 3}
+  m_Sprite: {fileID: -6203449167013802069, guid: 7ff6b385a967c47ab88088c148b568b4, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -226,8 +226,8 @@ CapsuleCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.12, y: 0.73}
-  m_Size: {x: 1.41, y: 1.2}
+  m_Offset: {x: 0.03, y: 0.18}
+  m_Size: {x: 0.43, y: 0.71}
   m_Direction: 0
 --- !u!95 &8722914626086714706
 Animator:
@@ -239,7 +239,7 @@ Animator:
   m_GameObject: {fileID: 2496777416409024874}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: 9d88bb7e72538441ba8700684d208fbe, type: 2}
+  m_Controller: {fileID: 9100000, guid: b9251ff3e59eb4fcf993f59714abd0a2, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -288,12 +288,15 @@ MonoBehaviour:
   attacksList:
   - {fileID: 4337496282947585320}
   - {fileID: 5650005142565248593}
+  currentAttack: {fileID: 0}
   spawnChanceVertAmp: 1
   spawnChanceMultiplier: 1
   spawnChanceXTransform: 1
   spawnChanceExponent: 2
   spawnChanceYTransform: 0
   maxSpawnChance: 1
+  minSpawnCount: 0
+  maxSpawnCount: 0
   damage: 1
   chaseSpeed: 200
   wanderSpeed: 0
@@ -495,7 +498,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: 1af2773b5dd964410a3511499463670b, type: 3}
-  sprite: {fileID: 163189661128954202}
+  spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 2918801732731569437}
   weaponPickup: {fileID: 0}
   type: 0
@@ -505,7 +508,8 @@ MonoBehaviour:
   ammoPerClick: 0
   currentAmmo: 100
   infiniteAmmo: 1
-  timeBetweenFiring: 0.01
+  chargeTime: 0
+  fireRate: 0
   coinValue: 0
   flavorText: 
   fireSound: 
@@ -529,8 +533,10 @@ MonoBehaviour:
   attackChance: 1
   attackType: 1
   timeBetweenBulletBurst: 0
-  numberOfBurstShots: 16
+  numberOfBurstShots: 18
   rotationSpeed: 20
+  ringAmount: 3
+  ringCooldown: 0.1
 --- !u!114 &6610068232510643037
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -731,7 +737,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: 6df33a4b1e485439b899808c2fc4d681, type: 3}
-  sprite: {fileID: 163189661128954202}
+  spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 4337055667690004690}
   weaponPickup: {fileID: 0}
   type: 0
@@ -741,7 +747,8 @@ MonoBehaviour:
   ammoPerClick: 0
   currentAmmo: 100
   infiniteAmmo: 1
-  timeBetweenFiring: 0
+  chargeTime: 0
+  fireRate: 0
   coinValue: 0
   flavorText: 
   fireSound: 

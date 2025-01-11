@@ -1,61 +1,58 @@
 fileFormatVersion: 2
-guid: 1c1fefee666ee4168ad02e2fa77e94a0
+guid: 7ff6b385a967c47ab88088c148b568b4
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -5226024667926672319
-    second: deforestation_guy_0
+      213: -6203449167013802069
+    second: larie_the_wizard_0
   - first:
-      213: -4838793633694483712
-    second: deforestation_guy_1
+      213: 6066087347088552287
+    second: larie_the_wizard_1
   - first:
-      213: -9137646502910678600
-    second: deforestation_guy_2
+      213: -4772759888291291357
+    second: larie_the_wizard_2
   - first:
-      213: -961688719139040850
-    second: deforestation_guy_3
+      213: 3125496338949406836
+    second: larie_the_wizard_3
   - first:
-      213: -8379499160721268646
-    second: deforestation_guy_4
+      213: 6039774024820793947
+    second: larie_the_wizard_4
   - first:
-      213: 4315924198126234798
-    second: deforestation_guy_5
+      213: 8873725849925391947
+    second: larie_the_wizard_5
   - first:
-      213: -4946068018033460524
-    second: deforestation_guy_6
+      213: 794829299932520407
+    second: larie_the_wizard_6
   - first:
-      213: 7215555522922713496
-    second: deforestation_guy_7
+      213: 2129198494081758259
+    second: larie_the_wizard_7
   - first:
-      213: -4720356033606491116
-    second: deforestation_guy_8
+      213: -8474625190126257682
+    second: larie_the_wizard_8
   - first:
-      213: 2893420694324112991
-    second: deforestation_guy_9
+      213: 7313580489924297507
+    second: larie_the_wizard_9
   - first:
-      213: -694171537267128206
-    second: deforestation_guy_10
+      213: 4510683356364651407
+    second: larie_the_wizard_10
   - first:
-      213: -459910825615334913
-    second: deforestation_guy_11
+      213: 3217675379753828130
+    second: larie_the_wizard_11
   - first:
-      213: 1418519639087028315
-    second: deforestation_guy_12
+      213: 8159142312239124521
+    second: larie_the_wizard_12
   - first:
-      213: 3742170677157874471
-    second: deforestation_guy_13
+      213: -6373092667443727776
+    second: larie_the_wizard_13
   - first:
-      213: 1365970822153938581
-    second: deforestation_guy_14
+      213: 4121455333645869777
+    second: larie_the_wizard_14
   - first:
-      213: 6884139430502886417
-    second: deforestation_guy_15
+      213: 8160379558134100788
+    second: larie_the_wizard_15
   - first:
-      213: -3592538642376877543
-    second: deforestation_guy_16
-  - first:
-      213: -77850864645144803
-    second: deforestation_guy_17
+      213: 1867530396056593429
+    second: larie_the_wizard_16
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -135,7 +132,33 @@ TextureImporter:
     androidETC2FallbackOverride: 0
     forceMaximumCompressionQuality_BC6H_BC7: 0
   - serializedVersion: 4
+    buildTarget: Win64
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
     buildTarget: WebGL
+    maxTextureSize: 2048
+    resizeAlgorithm: 0
+    textureFormat: -1
+    textureCompression: 1
+    compressionQuality: 50
+    crunchedCompression: 0
+    allowsAlphaSplitting: 0
+    overridden: 0
+    ignorePlatformSupport: 0
+    androidETC2FallbackOverride: 0
+    forceMaximumCompressionQuality_BC6H_BC7: 0
+  - serializedVersion: 4
+    buildTarget: Linux64
     maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
@@ -164,7 +187,7 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: deforestation_guy_0
+      name: larie_the_wizard_0
       rect:
         serializedVersion: 2
         x: 0
@@ -179,14 +202,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 14c4dc0d04e6977b0800000000000000
-      internalID: -5226024667926672319
+      spriteID: baf03f199dbe8e9a0800000000000000
+      internalID: -6203449167013802069
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_1
+      name: larie_the_wizard_1
       rect:
         serializedVersion: 2
         x: 32
@@ -201,14 +224,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 00bf732c3d629dcb0800000000000000
-      internalID: -4838793633694483712
+      spriteID: f5174bb7d421f2450800000000000000
+      internalID: 6066087347088552287
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_2
+      name: larie_the_wizard_2
       rect:
         serializedVersion: 2
         x: 64
@@ -223,14 +246,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8b92bee3bee803180800000000000000
-      internalID: -9137646502910678600
+      spriteID: 32f1a243b20c3cdb0800000000000000
+      internalID: -4772759888291291357
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_3
+      name: larie_the_wizard_3
       rect:
         serializedVersion: 2
         x: 96
@@ -245,14 +268,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ea19737843567a2f0800000000000000
-      internalID: -961688719139040850
+      spriteID: 4700dd55c5eff5b20800000000000000
+      internalID: 3125496338949406836
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_4
+      name: larie_the_wizard_4
       rect:
         serializedVersion: 2
         x: 0
@@ -267,14 +290,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a506689e8e906bb80800000000000000
-      internalID: -8379499160721268646
+      spriteID: b522319b97691d350800000000000000
+      internalID: 6039774024820793947
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_5
+      name: larie_the_wizard_5
       rect:
         serializedVersion: 2
         x: 32
@@ -289,14 +312,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eaca3d2013e35eb30800000000000000
-      internalID: 4315924198126234798
+      spriteID: b46110f35aec52b70800000000000000
+      internalID: 8873725849925391947
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_6
+      name: larie_the_wizard_6
       rect:
         serializedVersion: 2
         x: 64
@@ -311,14 +334,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4daf13ec7590c5bb0800000000000000
-      internalID: -4946068018033460524
+      spriteID: 7dfdc8f790dc70b00800000000000000
+      internalID: 794829299932520407
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_7
+      name: larie_the_wizard_7
       rect:
         serializedVersion: 2
         x: 96
@@ -333,14 +356,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8919ae8b48dc22460800000000000000
-      internalID: 7215555522922713496
+      spriteID: 3343a08dfbe6c8d10800000000000000
+      internalID: 2129198494081758259
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_8
+      name: larie_the_wizard_8
       rect:
         serializedVersion: 2
         x: 128
@@ -355,14 +378,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 414638b623ded7eb0800000000000000
-      internalID: -4720356033606491116
+      spriteID: ee972f14a45146a80800000000000000
+      internalID: -8474625190126257682
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_9
+      name: larie_the_wizard_9
       rect:
         serializedVersion: 2
         x: 160
@@ -377,14 +400,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: f5ee3fe9ace772820800000000000000
-      internalID: 2893420694324112991
+      spriteID: 3234a22e4be0f7560800000000000000
+      internalID: 7313580489924297507
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_10
+      name: larie_the_wizard_10
       rect:
         serializedVersion: 2
         x: 0
@@ -399,14 +422,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 278810c2aaecd56f0800000000000000
-      internalID: -694171537267128206
+      spriteID: f8bb16e2d9a299e30800000000000000
+      internalID: 4510683356364651407
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_11
+      name: larie_the_wizard_11
       rect:
         serializedVersion: 2
         x: 32
@@ -421,14 +444,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ff167d27a811e99f0800000000000000
-      internalID: -459910825615334913
+      spriteID: 22f3fbcb5ba77ac20800000000000000
+      internalID: 3217675379753828130
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_12
+      name: larie_the_wizard_12
       rect:
         serializedVersion: 2
         x: 0
@@ -443,14 +466,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: b5892ba98189fa310800000000000000
-      internalID: 1418519639087028315
+      spriteID: 9205fd834b81b3170800000000000000
+      internalID: 8159142312239124521
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_13
+      name: larie_the_wizard_13
       rect:
         serializedVersion: 2
         x: 32
@@ -465,14 +488,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 72bc0ec676cdee330800000000000000
-      internalID: 3742170677157874471
+      spriteID: 062be5c2cf93e87a0800000000000000
+      internalID: -6373092667443727776
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_14
+      name: larie_the_wizard_14
       rect:
         serializedVersion: 2
         x: 64
@@ -487,14 +510,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 596a80cb937e4f210800000000000000
-      internalID: 1365970822153938581
+      spriteID: 1d2e99f1ac9523930800000000000000
+      internalID: 4121455333645869777
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_15
+      name: larie_the_wizard_15
       rect:
         serializedVersion: 2
         x: 96
@@ -509,36 +532,14 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 11c626b9650698f50800000000000000
-      internalID: 6884139430502886417
+      spriteID: 43331faf8fd7f3170800000000000000
+      internalID: 8160379558134100788
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: deforestation_guy_16
-      rect:
-        serializedVersion: 2
-        x: 128
-        y: 0
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.32}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 91a134b832db42ec0800000000000000
-      internalID: -3592538642376877543
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: deforestation_guy_17
+      name: larie_the_wizard_16
       rect:
         serializedVersion: 2
         x: 160
@@ -553,30 +554,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d1f7e531d0b6beef0800000000000000
-      internalID: -77850864645144803
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: deforestation_guy_18
-      rect:
-        serializedVersion: 2
-        x: 64
-        y: 32
-        width: 32
-        height: 32
-      alignment: 9
-      pivot: {x: 0.5, y: 0.32}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 8ebd9d49a77f3438a8dce10016a49328
-      internalID: 1580497121
+      spriteID: 514a238200dcae910800000000000000
+      internalID: 1867530396056593429
       vertices: []
       indices: 
       edges: []
@@ -585,7 +564,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 11365a2d05e144da0846a6300cbef080
+    spriteID: 5e97eb03825dee720800000000000000
     internalID: 0
     vertices: []
     indices: 
@@ -595,25 +574,23 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      deforestation_guy_0: -5226024667926672319
-      deforestation_guy_1: -4838793633694483712
-      deforestation_guy_10: -694171537267128206
-      deforestation_guy_11: -459910825615334913
-      deforestation_guy_12: 1418519639087028315
-      deforestation_guy_13: 3742170677157874471
-      deforestation_guy_14: 1365970822153938581
-      deforestation_guy_15: 6884139430502886417
-      deforestation_guy_16: -3592538642376877543
-      deforestation_guy_17: -77850864645144803
-      deforestation_guy_18: 1580497121
-      deforestation_guy_2: -9137646502910678600
-      deforestation_guy_3: -961688719139040850
-      deforestation_guy_4: -8379499160721268646
-      deforestation_guy_5: 4315924198126234798
-      deforestation_guy_6: -4946068018033460524
-      deforestation_guy_7: 7215555522922713496
-      deforestation_guy_8: -4720356033606491116
-      deforestation_guy_9: 2893420694324112991
+      larie_the_wizard_0: -6203449167013802069
+      larie_the_wizard_1: 6066087347088552287
+      larie_the_wizard_10: 4510683356364651407
+      larie_the_wizard_11: 3217675379753828130
+      larie_the_wizard_12: 8159142312239124521
+      larie_the_wizard_13: -6373092667443727776
+      larie_the_wizard_14: 4121455333645869777
+      larie_the_wizard_15: 8160379558134100788
+      larie_the_wizard_16: 1867530396056593429
+      larie_the_wizard_2: -4772759888291291357
+      larie_the_wizard_3: 3125496338949406836
+      larie_the_wizard_4: 6039774024820793947
+      larie_the_wizard_5: 8873725849925391947
+      larie_the_wizard_6: 794829299932520407
+      larie_the_wizard_7: 2129198494081758259
+      larie_the_wizard_8: -8474625190126257682
+      larie_the_wizard_9: 7313580489924297507
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

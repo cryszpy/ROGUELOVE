@@ -22,14 +22,16 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
     }
 
     public override void FiringMethod() {
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU 
-            && enemy.enemyType != EnemyType.DEAD) {
+        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU && enemy.enemyType != EnemyType.DEAD) {
+            Debug.Log("1");
             
             // If the enemy can fire, sees the player, and is not charging a shot—
             if (!charging && !bursting) {
+                Debug.Log("2");
 
                 // If enemy needs to charge shot, then charge
                 if (enemy.lineRenderer != null) {
+                    Debug.Log("4");
                     
                     // Starts drawing the line of fire in FixedUpdate()
                     charging = true;
@@ -37,7 +39,8 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
                 } 
                 // Otherwise just fire
                 else {
-                    StartCoroutine(StartBurst());
+                    Debug.Log("3");
+                    StartAttackAnim();
                 }
             }
 
@@ -60,6 +63,7 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
 
     // Initiate the charging of a shot
     public override IEnumerator ChargeShot() {
+        Debug.Log("5");
 
         // Waits for the charging time
         yield return new WaitForSeconds(enemy.chargeTime);
@@ -71,31 +75,29 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
         charging = false;
 
         // Fires and stops drawing the line of fire
-        StartCoroutine(StartBurst());
-    }
-
-    public virtual IEnumerator StartBurst() {
-
-        // Shoots specified number of rings
-        for (int i = 0; i < ringAmount; i++) {
-
-            StartCoroutine(BurstFire());
-
-            yield return new WaitForSeconds(ringCooldown);
-        }
+        StartAttackAnim();
     }
 
     // Firing logic
-    public override IEnumerator BurstFire()
-    {
-        if (enemy.enemyType != EnemyType.DEAD) {
+    public override void StartAttackAnim() {
+        if (enemy.enemyType != EnemyType.DEAD && GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
+            Debug.Log("STARTATTACKANIM()");
 
             bursting = true;
             enemy.canFire = false;
 
-            for (int i = 0; i < numberOfBurstShots; i++) {
+            enemy.animator.SetBool("Attack", true);
+        }
+    }
 
-                enemy.animator.SetBool("Attack", true);
+    // Firing logic
+    public override IEnumerator Attack() {
+        Debug.Log("ATTACK()");
+
+        // Shoots specified number of rings
+        for (int i = 0; i < ringAmount; i++) {
+            
+            for (int b = 0; b < numberOfBurstShots; b++) {
 
                 // Play firing sound
                 if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
@@ -119,13 +121,17 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
                 yield return new WaitForSeconds(timeBetweenBulletBurst);
             }
 
+            yield return new WaitForSeconds(ringCooldown);
 
-            // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
-            if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
-                enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
-            }
-        
-            bursting = false;
         }
+
+        // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
+        if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
+            enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
+        }
+    
+        enemy.currentAttack = null;
+        bursting = false;
+        enemy.animator.SetBool("Attack", false);
     }
 }
