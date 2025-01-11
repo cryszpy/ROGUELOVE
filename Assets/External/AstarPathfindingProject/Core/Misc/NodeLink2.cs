@@ -222,14 +222,14 @@ namespace Pathfinding {
 		private readonly static Color GizmosColorSelected = new Color(235.0f/255.0f, 123.0f/255.0f, 32.0f/255.0f, 1.0f);
 
 		public virtual void OnDrawGizmosSelected () {
-			OnDrawGizmos(true);
+			OnDrawGizmo(true);
 		}
 
 		public void OnDrawGizmos () {
-			OnDrawGizmos(false);
+			OnDrawGizmo(false);
 		}
 
-		public void OnDrawGizmos (bool selected) {
+		public void OnDrawGizmo (bool selected) {
 			Color color = selected ? GizmosColorSelected : GizmosColor;
 
 			if (StartTransform != null) {

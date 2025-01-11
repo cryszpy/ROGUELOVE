@@ -11,13 +11,11 @@ public class PickupManager : MonoBehaviour
     [SerializeField] private Image image;
 
     [SerializeField] private TMP_Text nameText;
-    private TMP_Text typeText;
 
     [SerializeField] private float holdTime;
 
     private void Start() {
         FindReferences();
-        //PlayerController.EOnNewPickup += StartAnimation;
     }
 
     private void FindReferences() {
@@ -77,10 +75,14 @@ public class PickupManager : MonoBehaviour
 
     private IEnumerator PlayAnimation() {
 
-        animator.SetBool("Open", true);
+        if (animator) {
+            animator.SetBool("Open", true);
+        }
 
-        yield return new WaitForSeconds(holdTime);
+            yield return new WaitForSeconds(holdTime);
 
-        animator.SetBool("Open", false);
+        if (animator) {
+            animator.SetBool("Open", false);
+        }
     }
 }

@@ -29,7 +29,7 @@ namespace Pathfinding {
 			cam = Camera.main;
 			// Slightly inefficient way of finding all AIs, but this is just an example script, so it doesn't matter much.
 			// FindObjectsOfType does not support interfaces unfortunately.
-			ais = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.None).OfType<IAstarAI>().ToArray();
+			ais = FindObjectsByType<MonoBehaviour>(FindObjectsSortMode.InstanceID).OfType<IAstarAI>().ToArray();
 			useGUILayout = false;
 		}
 

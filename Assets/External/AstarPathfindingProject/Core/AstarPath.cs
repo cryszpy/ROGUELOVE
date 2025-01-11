@@ -1222,7 +1222,7 @@ public class AstarPath : VersionedMonoBehaviour {
 		// Very important to set this. Ensures the singleton pattern holds
 		active = this;
 
-		if (FindObjectsByType(typeof(AstarPath), FindObjectsSortMode.None).Length > 1) {
+		if (FindObjectsByType(typeof(AstarPath), FindObjectsSortMode.InstanceID).Length > 1) {
 			Debug.LogError("You should NOT have more than one AstarPath component in the scene at any time.\n" +
 				"This can cause serious errors since the AstarPath component builds around a singleton pattern.");
 		}

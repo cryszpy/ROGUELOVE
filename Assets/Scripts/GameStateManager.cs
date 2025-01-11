@@ -111,11 +111,11 @@ public class GameStateManager : MonoBehaviour
     void Awake() {
 
         if (instance != null) {
+            pickupManager = GameObject.FindGameObjectWithTag("PickupManager").GetComponent<PickupManager>();
             Destroy(gameObject);
         } else {
             instance = this;
             dialogueManager = GetComponent<DialogueManager>();
-            pickupManager = GetComponent<PickupManager>();
             transitionManager = GameObject.FindGameObjectWithTag("TransitionManager").GetComponent<TransitionManager>();
             homeManager = GetComponent<HomeManager>();
             DontDestroyOnLoad(gameObject);

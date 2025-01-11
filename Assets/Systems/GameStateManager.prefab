@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 8162904416319405166}
   - component: {fileID: 1304198974309830220}
   - component: {fileID: 2804473715840246968}
-  - component: {fileID: 893565884414087022}
   - component: {fileID: 1975629337793439861}
   m_Layer: 0
   m_Name: GameStateManager
@@ -48,6 +47,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   stageTracker: 0
+  gameStateTracker: 0
+  saveTypeTracker: 0
 --- !u!114 &2804473715840246968
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -64,16 +65,23 @@ MonoBehaviour:
   dialogueSprite: {fileID: 0}
   nameText: {fileID: 0}
   dialogueText: {fileID: 0}
-  animator: {fileID: 0}
+  dialogueAnimator: {fileID: 0}
+  letterboxAnimator: {fileID: 0}
   callDialogueList: {fileID: 11400000, guid: bc6e93211537a4eeba2a8eb6207a3304, type: 2}
   continueButton: {fileID: 0}
-  currentDialogue: {fileID: 0}
   choicesBar: {fileID: 0}
   choicePrefab: {fileID: 7495876816993698091, guid: 878038968cc9a463db09ec941a1fe36c, type: 3}
   choiceButtonsList: []
   uiElements: []
   sceneInfo: {fileID: 11400000, guid: 79b5a47eab3644e14a8ba799bbaac43d, type: 2}
   priority: []
+  currentDialogue: {fileID: 0}
+  currentNodeTracker:
+    sentence: 
+    character: {fileID: 0}
+    emotion: 0
+    choices: []
+  nodeTracker: []
   textCPS: 0.03
   previousGameState: 0
   callDialogueChance: 0
@@ -85,24 +93,7 @@ MonoBehaviour:
   movedDialogue: 0
   playingDialogue: 0
   playingChoices: 0
---- !u!114 &893565884414087022
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7135090300805884794}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0d125081ef6004b4cbc6d1a8e361bc2d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  animator: {fileID: 0}
-  image: {fileID: 0}
-  nameText: {fileID: 0}
-  typeText: {fileID: 0}
-  holdTime: 2
+  typingSentence: 0
 --- !u!114 &1975629337793439861
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -117,3 +108,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerCont: {fileID: 0}
   playerDeathsTracker: 0
+  tutorialTracker: 0
+  seenItemsTracker: 
+  seenItemsCountTracker: 0
+  seenWeaponsTracker: 
+  seenWeaponsCountTracker: 0

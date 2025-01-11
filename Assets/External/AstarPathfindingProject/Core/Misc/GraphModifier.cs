@@ -39,7 +39,7 @@ namespace Pathfinding {
 		}
 
 		public static void FindAllModifiers () {
-			var allModifiers = FindObjectsByType(typeof(GraphModifier), FindObjectsSortMode.None) as GraphModifier[];
+			var allModifiers = FindObjectsByType(typeof(GraphModifier), FindObjectsSortMode.InstanceID) as GraphModifier[];
 
 			for (int i = 0; i < allModifiers.Length; i++) {
 				if (allModifiers[i].enabled) allModifiers[i].OnEnable();

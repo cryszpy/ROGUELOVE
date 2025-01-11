@@ -51,4 +51,10 @@ public class CATMachineEnemy : ContactEnemy
             Wander();
         }
     }
+
+    public override void BeginAttack()
+    {
+        base.BeginAttack();
+        animator.SetBool("BreakWall", false);
+    }
 }

@@ -291,16 +291,16 @@ namespace Pathfinding {
 
 		/// <summary>Draws some gizmos</summary>
 		void OnDrawGizmos () {
-			OnDrawGizmos(false);
+			OnDrawGizmo(false);
 		}
 
 		/// <summary>Draws some gizmos</summary>
 		void OnDrawGizmosSelected () {
-			OnDrawGizmos(true);
+			OnDrawGizmo(true);
 		}
 
 		/// <summary>Draws some gizmos</summary>
-		void OnDrawGizmos (bool selected) {
+		void OnDrawGizmo (bool selected) {
 			Color c = selected ? new Color(227/255f, 61/255f, 22/255f, 1.0f) : new Color(227/255f, 61/255f, 22/255f, 0.9f);
 
 			if (selected) {
