@@ -71,6 +71,13 @@ public class WeaponBurstFire : MonoBehaviour
                 }
             }
 
+            if (Input.GetMouseButtonDown(0) && canFire && parent.currentAmmo > 0 && !bursting) {
+                // Play firing sound
+                if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
+                    FireSound();
+                }
+            }
+
             // Reset charging
             if (!Input.GetMouseButton(0) && chargeTimer > 0) {
                 chargeTimer = 0;

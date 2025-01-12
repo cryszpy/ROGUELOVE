@@ -73,9 +73,16 @@ public class EnemyHealth : MonoBehaviour
         animator.SetBool("Hurt", false);
     }
 
+    public virtual void HurtSound() {
+        AudioManager.instance.PlaySoundByName("enemy_hurt", transform);
+    }
+
     public void TakeDamage(float damage, Vector2 direction, float knockback) {
         Health -= damage * PlayerController.DamageModifier;
         Debug.Log("Took this amount of damage: " + damage);
+
+        // Play hurt sound
+        HurtSound();
 
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
@@ -91,6 +98,9 @@ public class EnemyHealth : MonoBehaviour
     public void TakeFireDamage(float damage, Vector2 direction, float knockback) {
         Health -= damage * PlayerController.DamageModifier;
         Debug.Log("Took this amount of damage: " + damage);
+
+        // Play hurt sound
+        HurtSound();
 
         animator.SetBool("Hurt", true);
         parent.kbEd = true;
@@ -112,15 +122,24 @@ public class EnemyHealth : MonoBehaviour
         Health -= sum;
         //Debug.Log("Took this amount of FIRE damage: " + damage);
 
-        yield return new WaitForSeconds(1f);
-
-        Health -= sum;
-        //Debug.Log("Took this amount of FIRE damage: " + damage);
+        // Play hurt sound
+        HurtSound();
 
         yield return new WaitForSeconds(1f);
 
         Health -= sum;
         //Debug.Log("Took this amount of FIRE damage: " + damage);
+
+        // Play hurt sound
+        HurtSound();
+
+        yield return new WaitForSeconds(1f);
+
+        Health -= sum;
+        //Debug.Log("Took this amount of FIRE damage: " + damage);
+
+        // Play hurt sound
+        HurtSound();
 
         takingFireDamage = false;
     }

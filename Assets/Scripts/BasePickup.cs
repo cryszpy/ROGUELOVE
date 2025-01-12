@@ -63,6 +63,10 @@ public class BasePickup : MonoBehaviour
         }
     }
 
+    public virtual void PickupSound() {
+        AudioManager.instance.PlaySoundByName("pickup", transform);
+    }
+
     public virtual void RemoveObject() {
         Destroy(gameObject);
     }

@@ -269,11 +269,13 @@ public class PlayerController : MonoBehaviour
 
     private void OnEnable() {
         EOnDeath += StartDeath; // Subscribes wrapper function StartDeath to event OnDeath
+        EOnEnergyFull += CallSound;
     }
 
     // Unsubscribes all events on player being disabled
     private void OnDisable() {
         EOnDeath -= StartDeath;
+        EOnEnergyFull -= CallSound;
         EOnDodged = null;
         EOnDamaged = null;
         EOnEnergyFull = null;
@@ -1089,6 +1091,10 @@ public class PlayerController : MonoBehaviour
         Vector3 direction = mousePos - transform.position;
 
         camShake.GenerateImpulse(direction.normalized * hurtShakeAmplitude);
+    }
+
+    public void CallSound() {
+        AudioManager.instance.PlaySoundByName("call", transform);
     }
 
     public void SavePlayer () {

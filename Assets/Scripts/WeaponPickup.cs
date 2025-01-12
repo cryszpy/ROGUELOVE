@@ -18,6 +18,14 @@ public class WeaponPickup : BasePickup, IPickupable
 
     public int weaponID;
 
+    public virtual void OnEnable() {
+        PlayerController.EOnWeaponPickup += PickupSound;
+    }
+
+    public virtual void OnDisable() {
+        PlayerController.EOnWeaponPickup -= PickupSound;
+    }
+
     public override void Update() {
 
         if (!playerFound) {
@@ -77,6 +85,11 @@ public class WeaponPickup : BasePickup, IPickupable
         }
 
         PlayerController.EOnWeaponPickup?.Invoke();
+    }
+
+    public override void PickupSound()
+    {
+        AudioManager.instance.PlaySoundByName("weapon_pickup", transform);
     }
 
     private void UpdateWeapon(GameObject weapon) {

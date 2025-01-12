@@ -63,12 +63,19 @@ public class Chest : MonoBehaviour
 
             coll.enabled = false;
 
+            // Play open sound
+            OpenSound();
+
             if (rand <= itemChance) {
                 OpenItemChest();
             } else {
                 OpenWeaponChest();
             }
         }
+    }
+    
+    public void OpenSound() {
+        AudioManager.instance.PlaySoundByName("chest_open", transform);
     }
 
     public virtual void OpenItemChest() {

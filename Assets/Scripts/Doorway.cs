@@ -20,6 +20,7 @@ public class Doorway : MonoBehaviour
     {
         cam = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
         StartCoroutine(CameraSway());
+        SpawnSound();
     }
 
     private void OnTriggerEnter2D(Collider2D collider) {
@@ -66,6 +67,10 @@ public class Doorway : MonoBehaviour
 
     public void TriggerAnimOpen() {
         animator.SetTrigger("Open");
+    }
+
+    public void SpawnSound() {
+        AudioManager.instance.PlaySoundByName("doorway_spawn", transform);
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject player, WalkerGenerator gen) {

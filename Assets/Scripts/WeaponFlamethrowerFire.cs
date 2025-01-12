@@ -119,6 +119,11 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
         
         switch (value) {
             case true:
+
+                // Play firing sound
+                if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
+                    FireSound();
+                }
                 
                 emission.rateOverTime = 100;
                 break;
@@ -142,11 +147,6 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
     public virtual IEnumerator FlameFire(EnemyHealth script) {
 
         for (int i = 0; i < numberOfBurstShots; i++) {
-
-            // Play firing sound
-            if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
-                FireSound();
-            }
 
             switch (doesFireDamage) {
                 case true:
