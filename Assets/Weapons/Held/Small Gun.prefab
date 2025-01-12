@@ -198,9 +198,9 @@ MonoBehaviour:
   fireRate: 0.25
   coinValue: 0
   flavorText: 
-  fireSound: smallGun_fire
+  fireSound: smallgun_fire
   chargeSound: 
-  bulletHitSound: smallGun_hit
+  bulletHitSound: smallgun_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

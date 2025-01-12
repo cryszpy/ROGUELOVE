@@ -152,9 +152,9 @@ MonoBehaviour:
   fireRate: 0.25
   coinValue: 53
   flavorText: Utter doom.
-  fireSound: galacticaRifle_fire
+  fireSound: galacticarifle_fire
   chargeSound: 
-  bulletHitSound: galacticaRifle_hit
+  bulletHitSound: galacticarifle_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -153,9 +153,9 @@ MonoBehaviour:
   coinValue: 37
   flavorText: The small barrel of this gun allows its bullets to spread out more
     . . . right?
-  fireSound: shortBarrel_fire
+  fireSound: shortbarrel_fire
   chargeSound: 
-  bulletHitSound: shortBarrel_hit
+  bulletHitSound: shortbarrel_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -198,9 +198,9 @@ MonoBehaviour:
   camShake: {fileID: 1830112311909804315}
   player: {fileID: 0}
   timeBetweenBulletBurst: 0
-  numberOfBurstShots: 5
+  numberOfBurstShots: 7
   canFire: 1
-  shakeAmplitude: 0.35
+  shakeAmplitude: 0.11
 --- !u!114 &1830112311909804315
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -222,7 +222,7 @@ MonoBehaviour:
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.125
+    m_ImpulseDuration: 0.1
     m_ImpulseType: 0
     m_DissipationRate: 0.25
     m_RawSignal: {fileID: 0}

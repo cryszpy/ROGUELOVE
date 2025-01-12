@@ -199,9 +199,9 @@ MonoBehaviour:
   coinValue: 17
   flavorText: The natural denizens of the forest turned mad by encroaching industrialization,
     fashioned crude weapons to thwart attackers.
-  fireSound: impBlowgun_fire
+  fireSound: impblowgun_fire
   chargeSound: 
-  bulletHitSound: impBlowgun_hit
+  bulletHitSound: impblowgun_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

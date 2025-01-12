@@ -5205,6 +5205,37 @@ Tilemap:
     e31: 0
     e32: 0
     e33: 1
+--- !u!1 &120433046
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 120433047}
+  m_Layer: 0
+  m_Name: CutsceneJumpPoint
+  m_TagString: Untagged
+  m_Icon: {fileID: -5938655980376293919, guid: 0000000000000000d000000000000000, type: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &120433047
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 120433046}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 8.737, y: 9.079, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &126695082
 GameObject:
   m_ObjectHideFlags: 0
@@ -17129,6 +17160,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 3881570187225596987}
     - target: {fileID: 5407901857503173397, guid: d3ab8db0120e14efca856efa2550f926, type: 3}
+      propertyPath: cutsceneJumpPoint
+      value: 
+      objectReference: {fileID: 120433046}
+    - target: {fileID: 5407901857503173397, guid: d3ab8db0120e14efca856efa2550f926, type: 3}
       propertyPath: pixelPerfectCamera
       value: 
       objectReference: {fileID: 7495216912434794849}
@@ -24390,4 +24425,5 @@ SceneRoots:
   - {fileID: 1536214757}
   - {fileID: 1631791145}
   - {fileID: 349220985}
+  - {fileID: 120433047}
   - {fileID: 934876725}

@@ -1312,7 +1312,10 @@ MonoBehaviour:
   saveIcon: {fileID: 0}
   livingRoomPoint: {fileID: 0}
   playPoint: {fileID: 0}
+  cutsceneJumpPoint: {fileID: 0}
   montagePoints: []
+  cutsceneDialogue:
+  - {fileID: 11400000, guid: 3f5f1cafd792c46258e22ff5aa404b3b, type: 2}
   bedroomPixelPerf: {fileID: 0}
   defaultSize: 2.8125
   transitionSize: 1.40625

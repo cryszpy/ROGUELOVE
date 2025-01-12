@@ -198,9 +198,9 @@ MonoBehaviour:
   fireRate: 1.2
   coinValue: 26
   flavorText: Who would abandon a perfectly good longbow like this?
-  fireSound: woodenLongbow_fire
+  fireSound: woodenlongbow_fire
   chargeSound: 
-  bulletHitSound: woodenLongbow_hit
+  bulletHitSound: woodenlongbow_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

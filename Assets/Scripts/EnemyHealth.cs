@@ -24,11 +24,14 @@ public class EnemyHealth : MonoBehaviour
     [Tooltip("This enemy's knockback resistance. (0-1, 1 being immune)")]
     [SerializeField] private float knockbackResistance;
 
-    public bool takingFireDamage;
+    [HideInInspector] public bool takingFireDamage;
 
     public bool immuneToFire;
 
-    public bool wasPierceHit;
+    [HideInInspector] public bool wasPierceHit;
+
+    private float pierceTimer;
+    [SerializeField] private float pierceTime = 0.75f;
 
     public float Health {
         set {
@@ -53,8 +56,20 @@ public class EnemyHealth : MonoBehaviour
         }
     }
 
+    private void Update() {
+
+        if (wasPierceHit) {
+            pierceTimer += Time.deltaTime;
+
+            if (pierceTimer > pierceTime) {
+                pierceTimer = 0;
+                wasPierceHit = false;
+            }
+        }
+    }
+
     public void HurtCheck() {
-        wasPierceHit = false;
+        //wasPierceHit = false;
         animator.SetBool("Hurt", false);
     }
 

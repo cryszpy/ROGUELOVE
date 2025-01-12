@@ -89,6 +89,8 @@ public class BulletPiercingScript : BulletScript
         // Checks whether collided object is an enemy
         if (target.CompareTag("Enemy")) {
 
+            GameStateManager.EOnBulletHitEnemy?.Invoke(); // Triggers bullet hit enemy event
+
             // If bullet is a flame bullet, deal fire damage
             if (isFire && !enemy.immuneToFire) {
                 enemy.TakeFireDamage(damage, direction, knockback);
@@ -97,6 +99,8 @@ public class BulletPiercingScript : BulletScript
                 enemy.TakeDamage(damage, direction, knockback);
             }
             
+        } else {
+            GameStateManager.EOnBulletHitWall?.Invoke(); // Triggers bullet hit wall (not enemy) event
         }
     }
 }

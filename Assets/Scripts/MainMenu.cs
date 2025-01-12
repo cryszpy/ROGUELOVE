@@ -38,7 +38,13 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private GameObject livingRoomPoint;
     [SerializeField] private GameObject playPoint;
+    [SerializeField] private GameObject cutsceneJumpPoint;
     [SerializeField] private List<GameObject> montagePoints = new();
+
+    [SerializeField] private List<DialoguePiece> cutsceneDialogue = new();
+    private Queue<DialoguePiece> dialogueQueue;
+
+    private Animator letterboxAnimator;
 
     [Header("BEDROOM STATS")]
     
@@ -58,6 +64,12 @@ public class MainMenu : MonoBehaviour
     [SerializeField] private float montageSpeed;
 
     private void Awake() {
+
+        dialogueQueue = new(cutsceneDialogue);
+
+        if (!letterboxAnimator) {
+            letterboxAnimator = GameObject.FindGameObjectWithTag("Letterbox").GetComponent<Animator>();
+        }
 
         // Hide save icon
         if (saveIcon) {
@@ -194,8 +206,13 @@ public class MainMenu : MonoBehaviour
                 montageTimer = 0;
                 montagePlaying = false;
 
-                // Switch player position
-                playerCont.gameObject.transform.position = playPoint.transform.position;
+                // Switch player position (if cutscene, have player on bed)
+                if (GameStateManager.currentSaveType == SaveType.NEWGAME) {
+                    playerCont.gameObject.transform.position = cutsceneJumpPoint.transform.position;
+                } else {
+                    playerCont.gameObject.transform.position = playPoint.transform.position;
+                    
+                }
                 playerCont.contactColl.enabled = true;
 
                 // Switch Fallow position
@@ -337,14 +354,14 @@ public class MainMenu : MonoBehaviour
         }
     }
 
+    // Handles triggering newgame cutscene or returning camera zoom
     public void MainMenuTransition(bool tutorialStatus) {
 
         switch (tutorialStatus) {
             case true:
-                Debug.Log("Started tutorial transition!");
-                // TODO: Implement beginning cutscene
+                Debug.Log("Started cutscene transition!");
 
-                StartCoroutine(BedroomTransition());
+                StartCoroutine(InitialCameraSway());
 
                 break;
             case false:
@@ -359,6 +376,80 @@ public class MainMenu : MonoBehaviour
                 StartHome();
                 break;
         }
+    }
+
+    private IEnumerator InitialCameraSway() {
+
+        GameStateManager.SetState(GAMESTATE.MAINMENU);
+
+        // Sets camera stats
+        homeLookAt.bedroom = false;
+        homeLookAt.room4 = true;
+
+        bedroomPixelPerf.enabled = true;
+        pixelPerfectCamera.enabled = true;
+
+        // Disables main menu screen
+        mainMenuScreen.SetActive(false);
+
+        yield return new WaitForSeconds(0.1f);
+
+        StartCoroutine(StartCutscene());
+    }
+
+    public IEnumerator StartCutscene() {
+        Debug.Log("Started Cutscene");
+
+        // Cue letterbox animation
+        LetterboxAnimation(true);
+
+        GameStateManager.EOnDialogueEnd += TriggerEndCutscene;
+
+        yield return new WaitForSeconds(1.25f);
+
+        // Cue Player wake up animation
+
+        yield return new WaitForSeconds(1.25f);
+
+        // Cue phone buzz animation and pick up
+
+        yield return new WaitForSeconds(1f);
+
+        // Start dialogue
+        DialoguePiece startCall = dialogueQueue.Dequeue();
+        GameStateManager.dialogueManager.StartDialogue(startCall, false);
+    }
+
+    public void TriggerEndCutscene() {
+
+        Debug.Log("End Cutscene Called");
+
+        GameStateManager.EOnDialogueEnd -= TriggerEndCutscene;
+
+        StartCoroutine(EndCutscene());
+    }
+
+    private IEnumerator EndCutscene() {
+
+        // Cue Player jump off bed animation
+
+        yield return new WaitForSeconds(1.35f);
+
+        LetterboxAnimation(false);
+
+        StartCoroutine(BedroomTransition());
+    }
+
+    private void LetterboxAnimation(bool value) {
+
+        // Set manual control boolean
+        TransitionManager.letterboxManualControl = value;
+
+        // Show/Hide other UI elements
+        GameStateManager.dialogueManager.UIElementsAnimation(value);
+
+        // Show/Hide letterbox
+        letterboxAnimator.SetBool("Show", value);
     }
 
     public void QuitButton() {

@@ -198,9 +198,9 @@ MonoBehaviour:
   fireRate: 1
   coinValue: 64
   flavorText: 
-  fireSound: lunarLance_fire
+  fireSound: lunarlance_fire
   chargeSound: 
-  bulletHitSound: lunarLance_hit
+  bulletHitSound: lunarlance_hit
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0

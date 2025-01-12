@@ -107,6 +107,8 @@ public class GameStateManager : MonoBehaviour
     public static EventHandler EOnWeaponDrop;
     public static EventHandler EOnWeaponSwitch;
     public static EventHandler EOnDoorwaySpawn;
+    public static EventHandler EOnBulletHitWall;
+    public static EventHandler EOnBulletHitEnemy;
 
     void Awake() {
 

@@ -47,6 +47,18 @@ public class BulletScript : MonoBehaviour
 
     protected bool madeContact;
 
+    public virtual void OnEnable() {
+        GameStateManager.EOnBulletHitWall += SoundHitWall;
+    }
+
+    public virtual void OnDisable() {
+        DisconnectEvents();
+    }
+
+    public virtual void DisconnectEvents() {
+        GameStateManager.EOnBulletHitWall -= SoundHitWall;
+    }
+
     // Start is called before the first frame update
     public virtual void Start()
     {
@@ -193,6 +205,8 @@ public class BulletScript : MonoBehaviour
         // Checks whether collided object is an enemy
         if (target.CompareTag("Enemy")) {
 
+            GameStateManager.EOnBulletHitEnemy?.Invoke(); // Triggers bullet hit enemy event
+
             // Tries to get the EnemyHealth component of collided enemy
             if (target.TryGetComponent<EnemyHealth>(out var enemy)) {
 
@@ -207,10 +221,18 @@ public class BulletScript : MonoBehaviour
             else {
                 Debug.LogError("Could not get collided enemy's EnemyHealth component!");
             }
+        } else {
+            GameStateManager.EOnBulletHitWall?.Invoke(); // Triggers bullet hit wall (not enemy) event
         }
     }
 
+    // Play non-enemy hit sound for this projectile // Subscribed to EOnBulletHitWall event
+    public virtual void SoundHitWall() {
+        AudioManager.instance.PlaySoundByName(weapon.bulletHitSound, transform);
+    }
+
     public virtual void DestroyBullet() {
+        DisconnectEvents();
         rb.linearVelocity = Vector2.zero;
         Destroy(gameObject);
     }

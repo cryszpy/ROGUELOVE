@@ -152,9 +152,9 @@ MonoBehaviour:
   fireRate: 0.6
   coinValue: 263
   flavorText: Wait . . . what?
-  fireSound: bigGun_fire
+  fireSound: biggun_fire
   chargeSound: 
-  bulletHitSound: bigGun_hit
+  bulletHitSound: biggun_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0

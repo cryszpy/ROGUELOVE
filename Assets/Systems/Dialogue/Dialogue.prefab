@@ -306,17 +306,17 @@ MonoBehaviour:
   m_fontSize: 20
   m_fontSizeBase: 20
   m_fontWeight: 400
-  m_enableAutoSizing: 0
+  m_enableAutoSizing: 1
   m_fontSizeMin: 18
-  m_fontSizeMax: 72
+  m_fontSizeMax: 20
   m_fontStyle: 0
   m_HorizontalAlignment: 1
   m_VerticalAlignment: 256
   m_textAlignment: 65535
   m_characterSpacing: 0
   m_wordSpacing: 0
-  m_lineSpacing: 0
-  m_lineSpacingMax: 0
+  m_lineSpacing: -25
+  m_lineSpacingMax: -60
   m_paragraphSpacing: 0
   m_charWidthMaxAdj: 0
   m_TextWrappingMode: 1
@@ -955,6 +955,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 0}
+  useAnimator: {fileID: 0}
   dialogueList: {fileID: 11400000, guid: bc6e93211537a4eeba2a8eb6207a3304, type: 2}
   dialogueManager: {fileID: 0}
   inRadius: 0

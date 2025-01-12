@@ -9,7 +9,6 @@ public class BulletShotgun : BulletScript
         base.Start();
 
         StartCoroutine(BulletStall());
-        Debug.Log(rb.linearVelocity.magnitude);
     }
 
     public virtual IEnumerator BulletStall() {

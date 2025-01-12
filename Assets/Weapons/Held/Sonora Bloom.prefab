@@ -152,9 +152,9 @@ MonoBehaviour:
   fireRate: 1
   coinValue: 22
   flavorText: Wild bloom of the valley with magical properties.
-  fireSound: sonoraBloom_fire
+  fireSound: sonorabloom_fire
   chargeSound: 
-  bulletHitSound: sonoraBloom_hit
+  bulletHitSound: sonorabloom_hit
 --- !u!114 &1044425668205847616
 MonoBehaviour:
   m_ObjectHideFlags: 0

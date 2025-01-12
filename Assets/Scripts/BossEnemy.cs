@@ -9,6 +9,16 @@ public class BossEnemy : Enemy
         enemyType = EnemyType.BOSS;
     }
 
+    public override void Start()
+    {
+        base.Start();
+
+        // Start this boss's cutscene
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
+
+        }
+    }
+
     public override void PlayerCheck() {
 
         /* if (!timerSet) {

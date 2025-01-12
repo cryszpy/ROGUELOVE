@@ -8,11 +8,7 @@ public class EnemyWeaponRaycast : MonoBehaviour
     [SerializeField] private Enemy enemy;
 
     public virtual void FixedUpdate() {
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER 
-        && GameStateManager.GetState() != GAMESTATE.PAUSED 
-        && GameStateManager.GetState() != GAMESTATE.MENU
-        && enemy.enemyType != EnemyType.DEAD
-        && !enemy.kbEd) {
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING && enemy.enemyType != EnemyType.DEAD && !enemy.kbEd) {
 
             // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot
             Vector3 direction = enemy.player.position - transform.position;

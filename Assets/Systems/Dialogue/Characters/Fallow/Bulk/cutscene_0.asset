@@ -1,0 +1,116 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2375cc55695de471ca0957b5411488b6, type: 3}
+  m_Name: cutscene_0
+  m_EditorClassIdentifier: 
+  id: cutscene_0
+  owner: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+  nodes:
+  - sentence: Hey...
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: ...Fallow?
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: "Oh gosh, did I wake you up? I'm so sorry I\u2014"
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: "No no shut up\u2014ah, you know I should be getting up at this time
+      of day anyway."
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: ...
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: Hey, everything alright?
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: ...Not really.
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: They've initiated a lockdown. Something about "magical spikes" or something
+      in the city.
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: "Normally I wouldn't really mind, but my dad's forcing me to stay inside
+      and I don't know what to do he insists it's for my protection but I just can't
+      stay he\u2014"
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: <b>WHAT?!?!</b>
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: ...Okay I'm coming to get you.
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: <b>WAIT!</b>
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: It's too dangerous and it's a really far drive and besides, you don't
+      have a car. What are you going to do, walk??
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: I'll do whatever it takes.
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: And besides, this is totally wrong! You shouldn't be made to stay in
+      that cell of a room for any amount of time if you don't want to!
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: If walking is what it takes, then that's what I'll do.
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: "No no no stop seriously it's okay, I'm fine I just wan\u2014"
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: My phone's running low on battery, so I'll charge it on the way. Just
+      stay safe until I get there okay?
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: "Wait no I just wanted someone to liste\u2014"
+    character: {fileID: 11400000, guid: 4672e976c526f4184853f303289586ff, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: '*click*'
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: Oh there it goes.
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  - sentence: Okay, time to prepare myself.
+    character: {fileID: 11400000, guid: 99186366cd6444ddbb432c1c287fdf42, type: 2}
+    emotion: 0
+    choices: []
+  priority: 10
+  requirements: []
+  callDialogueType: 0
+  firstNameUsage: 0
