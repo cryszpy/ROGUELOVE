@@ -20677,6 +20677,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a8a05de0ac134f4f9d01bef6b9da077, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &78989010760556510 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3095397921105040612, guid: 4d64912cd691843f199983461614ba9a, type: 3}
+  m_PrefabInstance: {fileID: 2656021221941403255}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f9dfa5b682dcd46bda6128250e975f58, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &127528024522356099 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4290039451402430895, guid: c1766e8ff6eea4485a3d19e35b0c414f, type: 3}
@@ -22161,6 +22172,10 @@ PrefabInstance:
       propertyPath: playerCont
       value: 
       objectReference: {fileID: 6180122820010406976}
+    - target: {fileID: 1788937182696446962, guid: ecb0eb483669c433f8a0c2e930e88dc8, type: 3}
+      propertyPath: virtualCamera
+      value: 
+      objectReference: {fileID: 78989010760556510}
     - target: {fileID: 1788937182696446962, guid: ecb0eb483669c433f8a0c2e930e88dc8, type: 3}
       propertyPath: livingRoomPoint
       value: 

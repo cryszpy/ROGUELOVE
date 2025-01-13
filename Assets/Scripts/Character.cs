@@ -6,13 +6,16 @@ using UnityEngine;
 public class Character : ScriptableObject
 {
 
+    public int id;
+
     public List<CharacterExpression> expressions;
 
     public string characterName;
 
     public string characterNameHidden;
 
-    public bool nameRevealed;
+    public bool nameRevealed = false;
+
 }
 
 [System.Serializable]

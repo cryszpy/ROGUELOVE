@@ -8,7 +8,6 @@ public class HomeManager : MonoBehaviour
 
     // Player max health
     public static int PlayerDeaths;
-    public int playerDeathsTracker;
 
     public static List<int> SeenItems = new();
     public static int SeenItemsCount;
@@ -17,11 +16,17 @@ public class HomeManager : MonoBehaviour
     public static int SeenWeaponsCount;
 
     public static bool TutorialDone;
+
+    public static List<int> SeenCharacterIDs = new();
+
+    public int playerDeathsTracker;
     public bool tutorialTracker;
     public int[] seenItemsTracker;
     public int seenItemsCountTracker;
     public int[] seenWeaponsTracker;
     public int seenWeaponsCountTracker;
+    public int[] seenCharacterIDsTracker;
+    
 
     private void Update() {
         playerDeathsTracker = PlayerDeaths;
@@ -31,6 +36,8 @@ public class HomeManager : MonoBehaviour
         seenWeaponsTracker = SeenWeapons.ToArray();
         seenItemsCountTracker = SeenItemsCount;
         seenWeaponsCountTracker = SeenWeaponsCount;
+
+        seenCharacterIDsTracker = SeenCharacterIDs.ToArray();
     }
 
     private void FindReferences() {
@@ -60,6 +67,9 @@ public class HomeManager : MonoBehaviour
 
         TutorialDone = false;
 
+        SeenCharacterIDs.Clear();
+        GameStateManager.dialogueManager.charactersList.ResetAllCharacterNameReveals();
+
         Debug.LogWarning("RESET HOME");
     }
 
@@ -81,6 +91,9 @@ public class HomeManager : MonoBehaviour
         SeenWeapons = new(data.seenWeaponsIDs); // Copies over entire array to static list
 
         TutorialDone = data.tutorialDone;
+
+        // Character name reveals
+        SeenCharacterIDs = new(data.seenCharacterIDs);
 
         Debug.LogWarning("LOADED HOME");
     }

@@ -37,6 +37,8 @@ public class DialogueManager : MonoBehaviour
 
     public List<DialoguePiece> priority;
 
+    public CharactersList charactersList;
+
     [SerializeField] private DialoguePiece currentDialogue;
     private DialogueNode currentNode;
     [SerializeField] private DialogueNode currentNodeTracker;
@@ -537,7 +539,7 @@ public class DialogueManager : MonoBehaviour
         if (choice.lines.Length > 0) {
 
             foreach (var line in choice.lines) {
-                DialogueNode newNode = new(line.sentence, line.character, line.emotion, null);
+                DialogueNode newNode = new(line.sentence, line.character, line.emotion, null, false);
                 choiceNodes.Enqueue(newNode);
             }
 
@@ -554,15 +556,26 @@ public class DialogueManager : MonoBehaviour
         // Sets the current line
         currentNode = line;
 
+        // Add character to seen characters list
+        if (!HomeManager.SeenCharacterIDs.Contains(currentNode.character.id)) {
+            HomeManager.SeenCharacterIDs.Add(currentNode.character.id);
+        }
+
         // Sets the character's sprite for this line of dialogue
         CharacterExpression target = currentNode.character.expressions.Find(x => x.emotion == line.emotion);
         dialogueSprite.sprite = target.expressionSprite;
 
-        // Reveal name if character says name
-        if (currentDialogue.firstNameUsage && !currentNode.character.nameRevealed) {
-            nameText.text = currentNode.character.characterName;
+        // Reveal name if character says name and update character definition
+        if (currentNode.firstNameUsage && !currentNode.character.nameRevealed) {
             currentNode.character.nameRevealed = true;
-        } else if (!currentNode.character.nameRevealed) {
+            nameText.text = currentNode.character.characterName;
+        } 
+        // If name is already revealed, use revealed name
+        else if (currentNode.character.nameRevealed) {
+            nameText.text = currentNode.character.characterName;
+        } 
+        // If name isn't revealed, use hidden name
+        else if (!currentNode.character.nameRevealed) {
             nameText.text = currentNode.character.characterNameHidden;
         }
 

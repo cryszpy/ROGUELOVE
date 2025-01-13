@@ -13,6 +13,8 @@ public class HomeData
     public int seenWeaponsCount;
     public int[] seenWeaponsIDs;
 
+    public int[] seenCharacterIDs;
+
     public HomeData () {
 
         // Tutorial status
@@ -34,6 +36,11 @@ public class HomeData
         for (int i = 0; i < seenWeaponsCount; i++) {
             seenWeaponsIDs[i] = HomeManager.SeenWeapons[i];
         }
-        
+
+        // Character name reveals
+        seenCharacterIDs = new int[HomeManager.SeenCharacterIDs.Count];
+        for (int i = 0; i < HomeManager.SeenCharacterIDs.Count; i++) {
+            seenCharacterIDs[i] = HomeManager.SeenCharacterIDs[i];
+        }
     }
 }

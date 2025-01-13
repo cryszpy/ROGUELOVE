@@ -61,6 +61,18 @@ public class MainMenu : MonoBehaviour
     [Tooltip("Montage positions change according to this speed. (in seconds)")]
     [SerializeField] private float montageSpeed;
 
+    private void OnEnable() {
+        GameStateManager.EOnDialogueEnd -= TriggerEndCutscene;
+    }
+
+    private void OnDisable() {
+        DisconnectEvents();
+    }
+
+    private void DisconnectEvents() {
+        GameStateManager.EOnDialogueEnd -= TriggerEndCutscene;
+    }
+
     private void Awake() {
 
         dialogueQueue = new(cutsceneDialogue);
@@ -296,6 +308,8 @@ public class MainMenu : MonoBehaviour
     // Called AFTER scene is loaded and main menu visibility checks have completed
     public void StartHome() {
 
+        DisconnectEvents();
+
         // Hides the cursor
         Cursor.visible = false;
 
@@ -307,9 +321,6 @@ public class MainMenu : MonoBehaviour
             playerCont.PlayerStart(true);
         }
 
-        // Subscribes the SaveHome() function to the OnNewPickup event
-        PlayerController.EOnNewPickup += GameStateManager.homeManager.SaveHome;
-
         // Saves the home
         GameStateManager.homeManager.SaveHome();
     }
@@ -318,6 +329,7 @@ public class MainMenu : MonoBehaviour
 
         // Player does NOT have an existing save slot (START NEW GAME + CUTSCENE)
         if (GameStateManager.currentSaveType == SaveType.NEWGAME) {
+            mainMenuScreen.SetActive(false);
             stopMontage = true;
             readyToPlay = true;
         }
@@ -426,12 +438,13 @@ public class MainMenu : MonoBehaviour
 
         Debug.Log("End Cutscene Called");
 
-        GameStateManager.EOnDialogueEnd -= TriggerEndCutscene;
-
-        StartCoroutine(EndCutscene());
+        if (gameObject != null)
+            StartCoroutine(EndCutscene());
     }
 
-    private IEnumerator EndCutscene() {
+    public IEnumerator EndCutscene() {
+
+        GameStateManager.EOnDialogueEnd -= TriggerEndCutscene;
 
         // Cue Player jump off bed animation
 

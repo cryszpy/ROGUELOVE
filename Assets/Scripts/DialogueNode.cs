@@ -3,11 +3,12 @@
 public class DialogueNode : DialogueLine
 {
 
-    public DialogueNode(string sent, Character person, CharacterEmotion emote, DialogueChoice[] choicesList) {
+    public DialogueNode(string sent, Character person, CharacterEmotion emote, DialogueChoice[] choicesList, bool firstName) {
         sentence = sent;
         character = person;
         emotion = emote;
         choices = choicesList;
+        firstNameUsage = firstName;
     }
 
     public DialogueNode(DialogueNode node) {
@@ -15,6 +16,7 @@ public class DialogueNode : DialogueLine
         character = node.character;
         emotion = node.emotion;
         choices = node.choices;
+        firstNameUsage = node.firstNameUsage;
     }
 
     public DialogueChoice[] choices = null;

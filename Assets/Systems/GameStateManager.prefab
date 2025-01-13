@@ -75,11 +75,13 @@ MonoBehaviour:
   uiElements: []
   sceneInfo: {fileID: 11400000, guid: 79b5a47eab3644e14a8ba799bbaac43d, type: 2}
   priority: []
+  charactersList: {fileID: 11400000, guid: 037e2a78b7b874d86b07e6c71c98aea3, type: 2}
   currentDialogue: {fileID: 0}
   currentNodeTracker:
     sentence: 
     character: {fileID: 0}
     emotion: 0
+    firstNameUsage: 0
     choices: []
   nodeTracker: []
   textCPS: 0.03
@@ -113,3 +115,4 @@ MonoBehaviour:
   seenItemsCountTracker: 0
   seenWeaponsTracker: 
   seenWeaponsCountTracker: 0
+  seenCharacterIDsTracker: 

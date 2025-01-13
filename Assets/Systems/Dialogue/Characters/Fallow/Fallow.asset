@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 648ef3326691c4b91898cadba447832d, type: 3}
   m_Name: Fallow
   m_EditorClassIdentifier: 
+  id: 1
   expressions:
   - emotion: 0
     expressionSprite: {fileID: 21300000, guid: 8b897dd7665934687ae3d190f3c07937, type: 3}

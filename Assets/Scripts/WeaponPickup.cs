@@ -68,7 +68,7 @@ public class WeaponPickup : BasePickup, IPickupable
                 HomeManager.SeenWeapons.Add(weaponID);
                 HomeManager.SeenWeaponsCount++;
                 GameStateManager.pickupManager.StartWeaponAnimation(parent);
-                PlayerController.EOnNewPickup?.Invoke(); // Trigger any OnNewPickup events
+                GameStateManager.EOnNewPickup?.Invoke(); // Trigger any OnNewPickup events
             }
 
             GameObject weapon = Instantiate(objectToSpawn, player.weaponPivot.transform.position, Quaternion.identity, player.weaponPivot.transform);

@@ -15,7 +15,6 @@ public class PlayerController : MonoBehaviour
     public static PlayerVoidHandler EOnMoving;
     public static PlayerVoidHandler EOnEnergyFull;
     public static PlayerVoidHandler EOnDeath;
-    public static PlayerVoidHandler EOnNewPickup;
     public static PlayerVoidHandler EOnItemPickup;
     public static PlayerVoidHandler EOnWeaponPickup;
 

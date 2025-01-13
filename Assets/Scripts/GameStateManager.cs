@@ -109,6 +109,24 @@ public class GameStateManager : MonoBehaviour
     public static EventHandler EOnDoorwaySpawn;
     public static EventHandler EOnBulletHitWall;
     public static EventHandler EOnBulletHitEnemy;
+    public static EventHandler EOnNewPickup;
+
+    // Events that are intended to be connected throughout the game
+    private void ConnectEvents() {
+        Debug.LogWarning("CONNECTED EVENTS");
+        EOnNewPickup += homeManager.SaveHome;
+        EOnDialogueEnd += homeManager.SaveHome;
+    }
+
+    private void OnDisable() {
+        DisconnectEvents();
+    }
+
+    private void DisconnectEvents() {
+        Debug.LogWarning("DISCONNECTED EVENTS");
+        EOnNewPickup -= homeManager.SaveHome;
+        EOnDialogueEnd -= homeManager.SaveHome;
+    }
 
     void Awake() {
 
@@ -126,6 +144,8 @@ public class GameStateManager : MonoBehaviour
         if (GetStage() != 0) {
             SetState(GAMESTATE.PLAYING);
         }
+
+        ConnectEvents();
 
         //Debug.Log("previous scene: " + GameStateManager.PreviousScene);  // use this in any level to get the last level.
     }

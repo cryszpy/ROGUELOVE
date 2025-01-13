@@ -27,9 +27,6 @@ public class DialoguePiece : ScriptableObject, System.IComparable
 
     public CallDialogueType callDialogueType;
 
-    [Tooltip("Boolean flag; Whether this dialogue piece contains the first mention of the passenger's name.")]
-    public bool firstNameUsage = false;
-
     public int CompareTo(object obj) {
         var a = this;
         var b = obj as DialoguePiece;
