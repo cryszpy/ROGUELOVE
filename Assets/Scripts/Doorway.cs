@@ -1,13 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class Doorway : MonoBehaviour
 {
     private WalkerGenerator map;
 
-    [SerializeField] private CinemachineVirtualCamera cam;
+    [SerializeField] private CinemachineVirtualCameraBase cam;
     
     public Transform cameraLookAt;
 
@@ -18,7 +17,7 @@ public class Doorway : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        cam = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+        cam = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCameraBase>();
         StartCoroutine(CameraSway());
         SpawnSound();
     }

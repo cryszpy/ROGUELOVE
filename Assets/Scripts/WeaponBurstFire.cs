@@ -1,5 +1,5 @@
 using System.Collections;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 
 public class WeaponBurstFire : MonoBehaviour
@@ -25,8 +25,6 @@ public class WeaponBurstFire : MonoBehaviour
 
     [SerializeField] protected float shakeAmplitude = 1f;
 
-    protected bool bursting = false;
-
     protected float chargeTimer;
 
     void Start() {
@@ -42,7 +40,7 @@ public class WeaponBurstFire : MonoBehaviour
             Cooldown();
 
             // Firing logic, if not on cooldown and mouse button pressed, fire
-            if (Input.GetMouseButton(0) && canFire && parent.currentAmmo > 0 && !bursting) {
+            if (Input.GetMouseButton(0) && canFire && parent.currentAmmo > 0 && !parent.bursting) {
 
                 // If gun needs to charge, begin charging
                 if (parent.chargeTime > 0) {
@@ -50,7 +48,7 @@ public class WeaponBurstFire : MonoBehaviour
 
                     // Once charging is finished, begin firing
                     if (chargeTimer >= parent.chargeTime) {
-                        bursting = true;
+                        parent.bursting = true;
                         StartCoroutine(BurstFire());
 
                         // If weapon doesn't have infinite ammo then use ammo
@@ -61,7 +59,7 @@ public class WeaponBurstFire : MonoBehaviour
                 } 
                 // Otherwise, fire
                 else {
-                    bursting = true;
+                    parent.bursting = true;
                     StartCoroutine(BurstFire());
 
                     // If weapon doesn't have infinite ammo then use ammo
@@ -71,7 +69,7 @@ public class WeaponBurstFire : MonoBehaviour
                 }
             }
 
-            if (Input.GetMouseButtonDown(0) && canFire && parent.currentAmmo > 0 && !bursting) {
+            if (Input.GetMouseButtonDown(0) && canFire && parent.currentAmmo > 0 && !parent.bursting) {
                 // Play firing sound
                 if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
                     FireSound();
@@ -128,7 +126,7 @@ public class WeaponBurstFire : MonoBehaviour
             yield return new WaitForSeconds(timeBetweenBulletBurst);
         }
         
-        bursting = false;
+        parent.bursting = false;
         canFire = false;
     }
 

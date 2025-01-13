@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -53,7 +52,7 @@ public class DialogueSource : MonoBehaviour
 
     public virtual void Update() {
 
-        if (inRadius && Input.GetKeyDown(KeyCode.E) && !dialogueManager.playingDialogue) {
+        if (inRadius && Input.GetKeyDown(KeyCode.E) && !dialogueManager.playingDialogue && GameStateManager.GetState() == GAMESTATE.PLAYING) {
 
             AddDialogue();
 

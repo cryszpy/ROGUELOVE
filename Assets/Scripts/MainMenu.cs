@@ -1,10 +1,8 @@
-using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System.IO;
-using UnityEngine.SceneManagement;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine.Rendering.Universal;
 
 public enum CameraState {
@@ -30,7 +28,7 @@ public class MainMenu : MonoBehaviour
 
     [SerializeField] private HomeLookAt homeLookAt;
 
-    [SerializeField] private CinemachineVirtualCamera virtualCamera;
+    [SerializeField] private CinemachineCamera virtualCamera;
 
     [SerializeField] private PixelPerfectCamera pixelPerfectCamera;
 
@@ -70,6 +68,9 @@ public class MainMenu : MonoBehaviour
         if (!letterboxAnimator) {
             letterboxAnimator = GameObject.FindGameObjectWithTag("Letterbox").GetComponent<Animator>();
         }
+        if (!playerCont) {
+            playerCont = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
+        }
 
         // Hide save icon
         if (saveIcon) {
@@ -97,7 +98,7 @@ public class MainMenu : MonoBehaviour
 
         if (!virtualCamera) {
             GameObject camObject = GameObject.FindGameObjectWithTag("VirtualCamera");
-            virtualCamera = camObject.GetComponent<CinemachineVirtualCamera>();
+            virtualCamera = camObject.GetComponent<CinemachineCamera>();
 
             if (!bedroomPixelPerf) {
                 bedroomPixelPerf = camObject.GetComponent<CinemachinePixelPerfect>();
@@ -180,11 +181,12 @@ public class MainMenu : MonoBehaviour
     }
 
     private void Cooldown() {
-        if (playerCont.contactColl.isActiveAndEnabled) {
-            playerCont.contactColl.enabled = false;
-        }
 
         montageTimer += Time.deltaTime;
+
+        if ((montageTimer > (montageSpeed / 2)) && playerCont.contactColl.isActiveAndEnabled == true){
+            playerCont.contactColl.enabled = false;
+        }
         
         if (montageTimer > montageSpeed) {
             if (!stopMontage) {
@@ -244,7 +246,7 @@ public class MainMenu : MonoBehaviour
                 bedroomPixelPerf.enabled = false;
                 pixelPerfectCamera.enabled = false;
 
-                virtualCamera.m_Lens.OrthographicSize = transitionSize;
+                virtualCamera.Lens.OrthographicSize = transitionSize;
 
                 break;
             // Setup camera for player death respawn
@@ -258,7 +260,7 @@ public class MainMenu : MonoBehaviour
                 bedroomPixelPerf.enabled = false;
                 pixelPerfectCamera.enabled = false;
 
-                virtualCamera.m_Lens.OrthographicSize = defaultSize;
+                virtualCamera.Lens.OrthographicSize = defaultSize;
 
                 bedroomPixelPerf.enabled = true;
                 pixelPerfectCamera.enabled = true;
@@ -269,7 +271,7 @@ public class MainMenu : MonoBehaviour
 
     private IEnumerator BedroomTransition() {
 
-        float ortho = virtualCamera.m_Lens.OrthographicSize;
+        float ortho = virtualCamera.Lens.OrthographicSize;
 
         bedroomPixelPerf.enabled = false;
         pixelPerfectCamera.enabled = false;
@@ -279,7 +281,7 @@ public class MainMenu : MonoBehaviour
 
         while (ortho < defaultSize) {
             ortho += 0.025f;
-            virtualCamera.m_Lens.OrthographicSize = ortho;
+            virtualCamera.Lens.OrthographicSize = ortho;
             yield return new WaitForSeconds(0.03f);
         }
 
@@ -367,7 +369,7 @@ public class MainMenu : MonoBehaviour
             case false:
                 Debug.Log("Started main menu transition!");
 
-                virtualCamera.m_Lens.OrthographicSize = defaultSize;
+                virtualCamera.Lens.OrthographicSize = defaultSize;
                 homeLookAt.bedroom = false;
                 homeLookAt.room4 = true;
                 pixelPerfectCamera.enabled = true;

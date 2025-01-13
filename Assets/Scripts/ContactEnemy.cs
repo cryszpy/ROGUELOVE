@@ -1,10 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
-using Pathfinding;
-using System.IO;
-using NUnit.Framework.Constraints;
-using System;
 
 public class ContactEnemy : Enemy
 {

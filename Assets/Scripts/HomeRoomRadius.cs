@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -10,8 +9,9 @@ public class HomeRoomRadius : MonoBehaviour
     [SerializeField] private HomeLookAt lookAt;
 
     public List<HomeRoomDividerRadius> dividers;
-    
+
     private void OnTriggerEnter2D(Collider2D collider) {
+
         if (collider.CompareTag("Player")) {
 
             foreach (var divider in dividers) {

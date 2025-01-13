@@ -2,15 +2,8 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
-using System.Xml;
-using JetBrains.Annotations;
-using NUnit.Framework.Internal;
 using Pathfinding;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.SceneManagement;
-using UnityEngine.TextCore.Text;
 using UnityEngine.Tilemaps;
 
 public class WalkerGenerator : MonoBehaviour
@@ -195,6 +188,9 @@ public class WalkerGenerator : MonoBehaviour
         }
         if (cameraLookAt == null) {
             cameraLookAt = GameObject.FindGameObjectWithTag("CameraLookAt");
+        }
+        if (!mainCam) {
+            mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
         }
 
         pathMap = Application.persistentDataPath + "/map.chris";

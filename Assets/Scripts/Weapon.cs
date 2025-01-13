@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum WeaponType {
@@ -65,5 +63,7 @@ public class Weapon : MonoBehaviour
 
     [Tooltip("The sound this weapon's bullets make when hitting something.")]
     public string bulletHitSound;
+
+    [HideInInspector] public bool bursting = false;
 
 }

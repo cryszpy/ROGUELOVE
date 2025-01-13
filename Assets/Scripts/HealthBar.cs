@@ -1,9 +1,7 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
-using System;
 
 public class HealthBar : MonoBehaviour
 {
@@ -14,7 +12,6 @@ public class HealthBar : MonoBehaviour
     [SerializeField]
     private Slider slider;
 
-    [SerializeField] private Vector2 startPos;
     [SerializeField] private GameObject parentTo;
 
     [SerializeField] private float xOffset;
@@ -56,11 +53,9 @@ public class HealthBar : MonoBehaviour
                 updateHealthList.Add((int)HEARTSTATUS.EMPTY);
                 healthList.Add((int)HEARTSTATUS.EMPTY);
 
-                //Debug.Log(startPos.y);
-
                 // Spawn heart at each offset interval from spawn position
-                GameObject spawnedHeart = Instantiate(heartObject, new Vector2(startPos.x + (xOffset * i), startPos.y), Quaternion.identity, parentTo.transform);
-
+                GameObject spawnedHeart = Instantiate(heartObject, parentTo.transform, false);
+                spawnedHeart.transform.localPosition = new Vector2(parentTo.transform.localPosition.x + (xOffset * i), 0);
                 // Adds heart GameObject to initialized list
                 heartList.Add(spawnedHeart);
 
@@ -75,8 +70,8 @@ public class HealthBar : MonoBehaviour
                 healthList.Add((int)HEARTSTATUS.EMPTY);
 
                 // Spawn heart at each offset interval from spawn position
-                GameObject spawnedHeart = Instantiate(heartObject, new Vector2(startPos.x + (xOffset * i), startPos.y), Quaternion.identity, parentTo.transform);
-
+                GameObject spawnedHeart = Instantiate(heartObject, parentTo.transform, false);
+                spawnedHeart.transform.localPosition = new Vector2(parentTo.transform.localPosition.x + (xOffset * i), 0);
                 // Adds heart GameObject to initialized list
                 heartList.Add(spawnedHeart);
             }

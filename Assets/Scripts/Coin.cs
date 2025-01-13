@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public enum CoinType {
@@ -39,11 +38,29 @@ public class Coin : ContactEnemy
         if (!coinSpawn) {
 
             if (player.gameObject.TryGetComponent<PlayerController>(out var controller)) {
-                target = map.mainCam.ScreenToWorldPoint(controller.coinsUI.transform.position);
+                target = ToWorldPoint(controller.coinsUI.transform.position);
             }
 
             transform.position = Vector3.MoveTowards(transform.position, target, chaseSpeed * Time.fixedDeltaTime);
         }
+    }
+
+    private Vector2 ToWorldPoint(Vector3 input) {
+
+        Vector2 inCamera;
+        Vector2 pixelAmount;
+        Vector2 worldPoint;
+
+        inCamera.y = map.mainCam.orthographicSize * 2;
+        inCamera.x = inCamera.y * Screen.width / Screen.height;
+
+        pixelAmount.x = Screen.width / inCamera.x;
+        pixelAmount.y = Screen.height / inCamera.y;
+
+        worldPoint.x = ((input.x / pixelAmount.x) - (inCamera.x / 2) + map.mainCam.transform.position.x);
+        worldPoint.y = ((input.y / pixelAmount.y) - (inCamera.y / 2) + map.mainCam.transform.position.y);
+
+        return worldPoint;
     }
 
     private IEnumerator Emerge(Vector2 fuerza) {

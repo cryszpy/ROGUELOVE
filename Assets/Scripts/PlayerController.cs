@@ -1,16 +1,11 @@
 using System.Collections;
 using System.Collections.Generic;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using System.IO;
-using System;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using UnityEngine.Tilemaps;
-using NUnit.Framework.Internal;
-using System.Linq;
-using Cinemachine;
+using Unity.Cinemachine;
 
 public class PlayerController : MonoBehaviour
 {
@@ -257,11 +252,14 @@ public class PlayerController : MonoBehaviour
 
     public bool savePressed = false;
 
+    public bool ableToDrop = true;
+
     public int primaryWeaponIDTracker;
     public float damageModifierTracker;
     public float speedTracker;
     public float dodgeChanceTracker;
     public float moveSpeedMultTracker;
+    public float viewRangeMultTracker;
     public float fireRateMultTracker;
     public float bigChestChanceTracker;
     public float baseFireDamageTracker;
@@ -685,6 +683,7 @@ public class PlayerController : MonoBehaviour
         speedTracker = MoveSpeed;
         dodgeChanceTracker = DodgeChance;
         moveSpeedMultTracker = MoveSpeedMultiplier;
+        viewRangeMultTracker = ViewRangeMultiplier;
         fireRateMultTracker = FireRateMultiplier;
         bigChestChanceTracker = BigChestChance;
         primaryWeaponIDTracker = PrimaryWeaponID;
@@ -703,17 +702,16 @@ public class PlayerController : MonoBehaviour
         }
 
         // Dash
-        if (Input.GetKeyDown(KeyCode.Space) && canDash) {
+        /* if (Input.GetKeyDown(KeyCode.Space) && canDash) {
             canDash = false;
             isDashing = true;
             animator.SetBool("Dash", true);
-        }
+        } */
 
         // WEAPON SWITCHING AND DROPPING MECHANICS
 
         // Switch to first weapon
-        if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && canSwitchWeapons 
-        && heldWeapons.Count == 2) {
+        if ((Input.GetKeyDown(KeyCode.Keypad1) || Input.GetKeyDown(KeyCode.Alpha1)) && canSwitchWeapons && heldWeapons.Count == 2) {
 
             if (!heldWeapons[0].activeInHierarchy) {
                 StartWeaponSwitch(0, CurrentWeaponIndex);
@@ -721,15 +719,13 @@ public class PlayerController : MonoBehaviour
             }
         }
         // Switch to second weapon
-        else if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && canSwitchWeapons 
-        && heldWeapons.Count == 2) {
+        else if ((Input.GetKeyDown(KeyCode.Keypad2) || Input.GetKeyDown(KeyCode.Alpha2)) && canSwitchWeapons && heldWeapons.Count == 2) {
 
             if (!heldWeapons[1].activeInHierarchy) {
                 StartWeaponSwitch(1, CurrentWeaponIndex);
                 GameStateManager.EOnWeaponSwitch?.Invoke();
             }
-        } else if (Input.GetMouseButtonDown(1) && canSwitchWeapons 
-        && heldWeapons.Count == 2) {
+        } else if (Input.GetMouseButtonDown(1) && canSwitchWeapons && heldWeapons.Count == 2) {
 
             if (!heldWeapons[0].activeInHierarchy) {
                 StartWeaponSwitch(0, CurrentWeaponIndex);
@@ -741,7 +737,7 @@ public class PlayerController : MonoBehaviour
         }
 
         // Drop selected weapon
-        if (Input.GetKeyDown(KeyCode.Q) && weapon != null) {
+        if (Input.GetKeyDown(KeyCode.Q) && weapon != null && ableToDrop) {
             DropWeapon(weapon, false);
         }
     }
@@ -751,6 +747,8 @@ public class PlayerController : MonoBehaviour
 
         // Put currently selected weapon's pickup object into temporary variable
         GameObject dropped = Instantiate(dropping.weaponPickup, transform.position, Quaternion.identity);
+
+        weapon = null;
 
         // If script is obtainable, set this weapon to the pickup object's weaponObject (to be parented to player on pickup)
         if (dropped.TryGetComponent<WeaponPickup>(out var script)) {
@@ -853,6 +851,13 @@ public class PlayerController : MonoBehaviour
 
         // Disable old weapon if switching between two different weapons
         if (switchTo != switchFrom) {
+
+            // Reset old weapon's ability to fire if mid-way through firing
+            if (heldWeapons[switchTo].TryGetComponent<Weapon>(out var oldWeapon)) {
+                oldWeapon.bursting = false;
+            }
+
+            // Disable old weapon
             heldWeapons[switchFrom].SetActive(false);
         }
 

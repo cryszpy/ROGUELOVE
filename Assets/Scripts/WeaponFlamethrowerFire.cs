@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
 using UnityEngine;
 
 public class WeaponFlamethrowerFire : WeaponBurstFire
@@ -160,7 +159,7 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
             yield return new WaitForSeconds(timeBetweenBulletBurst);
         }
         
-        bursting = false;
+        parent.bursting = false;
         canFire = false;
     }
 }

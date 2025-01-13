@@ -8,13 +8,32 @@ public class BedroomRadius : MonoBehaviour
 {
     public RoomType roomType;
 
+    [SerializeField] private HomeLookAt homeLookAt;
+
     [SerializeField] private Animator animator;
 
     [SerializeField] private bool inRadius = false;
 
-    private void OnTriggerEnter2D(Collider2D collider) {
+    /* private void OnTriggerEnter2D(Collider2D collider) {
 
         if (collider.CompareTag("Player") && !inRadius) {
+            inRadius = true;
+
+            SwitchRooms();
+        }
+    } */
+
+    private void OnTriggerEnter2D(Collider2D collider) {
+
+        if (collider.CompareTag("Player")) {
+            inRadius = true;
+
+            SwitchRooms();
+        }
+    }
+
+    private void OnTriggerStay2D(Collider2D collider) {
+        if (collider.CompareTag("Player")) {
             inRadius = true;
 
             SwitchRooms();

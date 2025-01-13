@@ -1,6 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
-using Cinemachine;
+using Unity.Cinemachine;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.Tilemaps;
@@ -22,7 +22,7 @@ public class TutorialManager : MonoBehaviour
 
     [SerializeField] private GameObject weapon;
 
-    private CinemachineVirtualCamera cam;
+    private CinemachineCamera cam;
     [SerializeField] private PixelPerfectCamera camPixelPerfect;
     [SerializeField] private CinemachinePixelPerfect cinemachinePixelPerfect;
     
@@ -73,11 +73,12 @@ public class TutorialManager : MonoBehaviour
 
         gen.playerCont.PlayerStart(false);
         gen.playerCont.ResetRun();
+        gen.playerCont.ableToDrop = false;
 
         tutorialStage = 0;
 
         if (!cam) {
-            cam = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineVirtualCamera>();
+            cam = GameObject.FindGameObjectWithTag("VirtualCamera").GetComponent<CinemachineCamera>();
         }
         if (!letterboxAnimator) {
             letterboxAnimator = GameObject.FindGameObjectWithTag("Letterbox").GetComponent<Animator>();
@@ -376,6 +377,8 @@ public class TutorialManager : MonoBehaviour
             case 11:
                 Debug.Log("11");
 
+                gen.playerCont.ableToDrop = true;
+
                 // Adds requirement of dropping weapon
                 GameStateManager.EOnWeaponDrop += ContinueTutorial;
 
@@ -595,11 +598,11 @@ public class TutorialManager : MonoBehaviour
         camPixelPerfect.enabled = false;
         cinemachinePixelPerfect.enabled = false;
 
-        cam.m_Lens.OrthographicSize = 3.2f;
+        cam.Lens.OrthographicSize = 3.2f;
 
         // Zoom out
-        while (cam.m_Lens.OrthographicSize < 9) {
-            cam.m_Lens.OrthographicSize += 0.1f;
+        while (cam.Lens.OrthographicSize < 9) {
+            cam.Lens.OrthographicSize += 0.1f;
 
             yield return new WaitForSeconds(0.005f);
         }
@@ -612,8 +615,8 @@ public class TutorialManager : MonoBehaviour
 
         ReturnSway();
 
-        while (cam.m_Lens.OrthographicSize > 3.2f) {
-            cam.m_Lens.OrthographicSize -= 0.1f;
+        while (cam.Lens.OrthographicSize > 3.2f) {
+            cam.Lens.OrthographicSize -= 0.1f;
 
             yield return new WaitForSeconds(0.005f);
         }

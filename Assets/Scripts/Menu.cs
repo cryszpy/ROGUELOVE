@@ -1,9 +1,4 @@
-using System;
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using System.IO;
-using UnityEngine.SceneManagement;
 
 public class Menu : MonoBehaviour
 {
@@ -47,8 +42,9 @@ public class Menu : MonoBehaviour
     }
 
     public void LoadMainMenu() {
-        GameStateManager.SetState(GAMESTATE.PAUSED);
+        GameStateManager.SetState(GAMESTATE.GAMEOVER);
         
         player.ResetRun();
+        player.IncrementDeath();
     }
 }

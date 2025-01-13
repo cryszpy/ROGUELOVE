@@ -2,13 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using Pathfinding;
-using System.IO;
-using NUnit.Framework.Constraints;
-using System;
-using UnityEngine.Serialization;
-using TMPro;
 using Game.Core.Rendering;
-using UnityEngine.AI;
 
 public enum EnemyType {
     CONTACT, RANGED, SPLITTER, STATIONARY, MINIBOSS, BOSS, DEAD

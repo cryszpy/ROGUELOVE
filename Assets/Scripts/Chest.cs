@@ -1,5 +1,3 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class Chest : MonoBehaviour
@@ -45,7 +43,7 @@ public class Chest : MonoBehaviour
     public virtual void Update() {
 
         // Open chest
-        if (playerInRadius && Input.GetKeyDown(KeyCode.E)) {
+        if (playerInRadius && Input.GetKeyDown(KeyCode.E) && GameStateManager.GetState() == GAMESTATE.PLAYING) {
 
             // Makes sure this isn't the tutorial chest
             if (GameStateManager.GetStage() != 1) {
