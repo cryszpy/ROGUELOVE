@@ -42,7 +42,7 @@ public class Menu : MonoBehaviour
     }
 
     public void LoadMainMenu() {
-        GameStateManager.SetState(GAMESTATE.GAMEOVER);
+        GameStateManager.SetState(GAMESTATE.MAINMENU);
         
         player.ResetRun();
         player.IncrementDeath();
