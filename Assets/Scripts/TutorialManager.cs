@@ -64,6 +64,7 @@ public class TutorialManager : MonoBehaviour
         GameStateManager.EOnEnemyDeath -= ContinueTutorial;
         GameStateManager.EOnWeaponSwitch -= ContinueTutorial;
         GameStateManager.EOnWeaponDrop -= ContinueTutorial;
+        GameStateManager.EOnEnemyDeath -= CheckEnemyStatus;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created
@@ -537,13 +538,12 @@ public class TutorialManager : MonoBehaviour
     }
 
     private IEnumerator CameraSway() {
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         // Cue letterbox animation
         LetterboxAnimation(true);
 
         yield return new WaitForSeconds(0.5f);
-
-        GameStateManager.SetState(GAMESTATE.MENU);
 
         if (tutorialStage == 3) {
             cam.Follow = enemySpawn1.transform;

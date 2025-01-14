@@ -737,12 +737,18 @@ public class PlayerController : MonoBehaviour
 
         // Drop selected weapon
         if (Input.GetKeyDown(KeyCode.Q) && weapon != null && ableToDrop) {
-            DropWeapon(weapon, false);
+            InitiateDrop(weapon, false);
         }
     }
 
+    public void InitiateDrop(Weapon dropping, bool replace) {
+        StartCoroutine(DropWeapon(dropping, replace));
+    }
+
     // Drop currently held weapon
-    public void DropWeapon(Weapon dropping, bool replace) {
+    public IEnumerator DropWeapon(Weapon dropping, bool replace) {
+        dropping.bursting = false;
+        ableToDrop = false;
 
         // Put currently selected weapon's pickup object into temporary variable
         GameObject dropped = Instantiate(dropping.weaponPickup, transform.position, Quaternion.identity);
@@ -837,6 +843,10 @@ public class PlayerController : MonoBehaviour
         }
 
         GameStateManager.EOnWeaponDrop?.Invoke();
+
+        yield return new WaitForSeconds(0.6f);
+
+        ableToDrop = true;
     }
 
     public void StartWeaponSwitch(int switchTo, int switchFrom) {

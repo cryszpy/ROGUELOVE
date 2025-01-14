@@ -42,7 +42,7 @@ public class FrontDoorTrigger : MonoBehaviour
 
     public void Update() {
         
-        if (inRadius && Input.GetKeyDown(KeyCode.E)) {
+        if (inRadius && Input.GetKeyDown(KeyCode.E) && GameStateManager.GetState() == GAMESTATE.PLAYING) {
 
             // Play tutorial
             if (!HomeManager.TutorialDone && !skipTutorial) {

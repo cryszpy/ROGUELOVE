@@ -26,7 +26,7 @@ public class WeaponPickup : BasePickup, IPickupable
 
     public override void Update() {
 
-        if (!playerFound) {
+        if (!playerFound || GameStateManager.GetState() != GAMESTATE.PLAYING) {
             return;
         } 
         // Pickup weapon
@@ -40,7 +40,7 @@ public class WeaponPickup : BasePickup, IPickupable
         else if (Input.GetKeyDown(KeyCode.E) && playerFound && player.heldWeapons.Count == 2 && player.heldWeapons[PlayerController.CurrentWeaponIndex] != null 
         && playerInRadius) {
             if (player.heldWeapons[PlayerController.CurrentWeaponIndex].TryGetComponent<Weapon>(out var script)) {
-                player.DropWeapon(script, true);
+                player.InitiateDrop(script, true);
                 Pickup(true);
                 player.StartWeaponSwitch(PlayerController.CurrentWeaponIndex, player.heldWeapons.Count - 1 - PlayerController.CurrentWeaponIndex);
                 RemoveObject();
