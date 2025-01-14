@@ -9,8 +9,8 @@ public class EnemyWeaponRaycast : MonoBehaviour
         if (GameStateManager.GetState() == GAMESTATE.PLAYING && enemy.enemyType != EnemyType.DEAD && !enemy.kbEd) {
 
             // Raycast a theoretical bullet path to see if there are any obstacles in the way, if there are then don't shoot
-            Vector3 direction = enemy.player.position - transform.position;
-            Debug.DrawRay(transform.position, direction, Color.cyan, 0.05f);
+            Vector3 direction = enemy.player.position - enemy.transform.position;
+            Debug.DrawRay(enemy.transform.position, direction, Color.cyan, 0.05f);
 
             RaycastHit2D hit = Physics2D.Raycast(transform.position, direction, 100f, LayerMask.GetMask("Player", "Collisions/Ground", "Collisions/Obstacles"));
 

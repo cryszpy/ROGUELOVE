@@ -127,29 +127,11 @@ public class WeaponSingleShotFire : MonoBehaviour
             Debug.Log("CinemachineImpulseSource camShake is null! Reassigned.");
         }
 
-        Vector3 mousePos = ToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = GameStateManager.ToWorldPoint(Input.mousePosition, mainCam);
 
         Vector3 direction = mousePos - transform.position;
 
         camShake.GenerateImpulse(direction.normalized * shakeAmplitude);
-    }
-
-    private Vector2 ToWorldPoint(Vector3 input) {
-
-        Vector2 inCamera;
-        Vector2 pixelAmount;
-        Vector2 worldPoint;
-
-        inCamera.y = mainCam.orthographicSize * 2;
-        inCamera.x = inCamera.y * Screen.width / Screen.height;
-
-        pixelAmount.x = Screen.width / inCamera.x;
-        pixelAmount.y = Screen.height / inCamera.y;
-
-        worldPoint.x = ((input.x / pixelAmount.x) - (inCamera.x / 2) + mainCam.transform.position.x);
-        worldPoint.y = ((input.y / pixelAmount.y) - (inCamera.y / 2) + mainCam.transform.position.y);
-
-        return worldPoint;
     }
 
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time

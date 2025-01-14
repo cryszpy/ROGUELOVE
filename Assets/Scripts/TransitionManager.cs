@@ -17,6 +17,7 @@ public class TransitionManager : MonoBehaviour
     private static int start = -1;
     public static void StartLeaf(int index) {
         start = index;
+        GameStateManager.transitionPauseLock = true;
     }
 
     private static bool end;

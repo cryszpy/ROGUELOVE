@@ -1095,12 +1095,14 @@ public class PlayerController : MonoBehaviour
 
     public void TriggerCamShake() {
 
+        FindReferences();
+
         if (camShake == null) {
             camShake = GetComponent<CinemachineImpulseSource>();
             Debug.Log("CinemachineImpulseSource camShake is null! Reassigned.");
         }
 
-        var mousePos = mainCam.ScreenToWorldPoint(Input.mousePosition);
+        Vector3 mousePos = GameStateManager.ToWorldPoint(Input.mousePosition, mainCam);
 
         Vector3 direction = mousePos - transform.position;
 

@@ -31,25 +31,7 @@ public class Crosshair : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        this.transform.position = ToWorldPoint(Input.mousePosition);
-    }
-
-    private Vector2 ToWorldPoint(Vector3 input) {
-
-        Vector2 inCamera;
-        Vector2 pixelAmount;
-        Vector2 worldPoint;
-
-        inCamera.y = mainCam.orthographicSize * 2;
-        inCamera.x = inCamera.y * Screen.width / Screen.height;
-
-        pixelAmount.x = Screen.width / inCamera.x;
-        pixelAmount.y = Screen.height / inCamera.y;
-
-        worldPoint.x = ((input.x / pixelAmount.x) - (inCamera.x / 2) + mainCam.transform.position.x);
-        worldPoint.y = ((input.y / pixelAmount.y) - (inCamera.y / 2) + mainCam.transform.position.y);
-
-        return worldPoint;
+        this.transform.position = GameStateManager.ToWorldPoint(Input.mousePosition, mainCam);
     }
 
     private void CheckVisibility() {

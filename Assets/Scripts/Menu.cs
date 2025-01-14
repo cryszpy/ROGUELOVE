@@ -14,21 +14,21 @@ public class Menu : MonoBehaviour
     }
 
     void Update() {
-        if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null) {
-            TogglePauseMenu();
+        if ((GameStateManager.GetState() == GAMESTATE.PAUSED || GameStateManager.GetState() == GAMESTATE.PLAYING) && !GameStateManager.transitionPauseLock) {
+            if (Input.GetKeyDown(KeyCode.Escape) && pauseMenu != null) {
+                TogglePauseMenu();
+            }
         }
     }
 
     public void TogglePauseMenu() {
         // Unpause
         if (GameStateManager.GetState() == GAMESTATE.PAUSED) {
-            GameStateManager.TogglePause();
             GameStateManager.SetState(GAMESTATE.PLAYING);
             pauseMenu.SetActive(false);
         } 
         // Pause
         else if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
-            GameStateManager.TogglePause();
             GameStateManager.SetState(GAMESTATE.PAUSED);
             pauseMenu.SetActive(true);
         }

@@ -19,7 +19,7 @@ public class WeaponCursorAim : MonoBehaviour
 
         if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
             
-            mousePos = ToWorldPoint(Input.mousePosition);
+            mousePos = GameStateManager.ToWorldPoint(Input.mousePosition, mainCam);
 
             Vector3 rotation = mousePos - transform.position;
 
@@ -33,23 +33,5 @@ public class WeaponCursorAim : MonoBehaviour
                 parent.spriteRenderer.sortingOrder = 1;
             } */
         }
-    }
-
-    private Vector2 ToWorldPoint(Vector3 input) {
-
-        Vector2 inCamera;
-        Vector2 pixelAmount;
-        Vector2 worldPoint;
-
-        inCamera.y = mainCam.orthographicSize * 2;
-        inCamera.x = inCamera.y * Screen.width / Screen.height;
-
-        pixelAmount.x = Screen.width / inCamera.x;
-        pixelAmount.y = Screen.height / inCamera.y;
-
-        worldPoint.x = ((input.x / pixelAmount.x) - (inCamera.x / 2) + mainCam.transform.position.x);
-        worldPoint.y = ((input.y / pixelAmount.y) - (inCamera.y / 2) + mainCam.transform.position.y);
-
-        return worldPoint;
     }
 }

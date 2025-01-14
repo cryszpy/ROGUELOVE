@@ -10,6 +10,7 @@ public class AreaTransitionManager : MonoBehaviour
     [SerializeField] private Animator areaTransitionTextAnimator;
 
     public void StartAreaTransition() {
+        GameStateManager.transitionPauseLock = false;
 
         // If entering a new area (level is 1)—
         if (GameStateManager.GetLevel() == 1 && !GameStateManager.tutorialEnabled) {

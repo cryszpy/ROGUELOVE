@@ -89,6 +89,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     public void ContinueTutorial() {
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         switch (tutorialStage) {
             case 1:
@@ -232,11 +233,12 @@ public class TutorialManager : MonoBehaviour
 
                 yield return new WaitForSeconds(1f);
 
+                tutorialStage++;
+
                 // Start dialogue
                 DialoguePiece pickupWeapon = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(pickupWeapon, false);
-
-                tutorialStage++;
+                
                 break; 
             case 1:
                 Debug.Log("1");
@@ -250,20 +252,21 @@ public class TutorialManager : MonoBehaviour
 
                 yield return new WaitForSeconds(1f);
 
+                tutorialStage++;
+
                 // Switch camera back to player
                 ReturnSway();
 
-                tutorialStage++;
                 break;
 
             case 2:
                 Debug.Log("2");
+                tutorialStage++;
                 
                 // Start dialogue
                 DialoguePiece fireWeapon = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(fireWeapon, false);
-
-                tutorialStage++;
+                
                 break;
 
             case 3:
@@ -277,19 +280,21 @@ public class TutorialManager : MonoBehaviour
 
                 yield return new WaitForSeconds(2f);
 
-                ReturnSway();
-
                 tutorialStage++;
+
+                ReturnSway();
+                
                 break;
 
             case 4:
                 Debug.Log("4");
 
+                tutorialStage++;
+
                 // Start dialogue
                 DialoguePiece enemyKilled = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(enemyKilled, false);
 
-                tutorialStage++;
                 break;
             case 5:
                 Debug.Log("5");
@@ -304,9 +309,9 @@ public class TutorialManager : MonoBehaviour
 
                 yield return new WaitForSeconds(2f);
 
-                ReturnSway();
-
                 tutorialStage++;
+
+                ReturnSway();
                 
                 break;
             case 6:
@@ -324,11 +329,11 @@ public class TutorialManager : MonoBehaviour
 
                 cam.Follow = npcSpawn2.transform;
 
+                tutorialStage++;
+
                 // Start dialogue about chests
                 DialoguePiece chestSpawned = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(chestSpawned, false);
-
-                tutorialStage++;
 
                 break;
             case 7:
@@ -337,20 +342,20 @@ public class TutorialManager : MonoBehaviour
                 // Adds requirement of picking up weapon
                 PlayerController.EOnWeaponPickup += ContinueTutorial;
 
+                tutorialStage++;
+
                 // Return to player and wait for chest weapon pickup
                 ReturnSway();
-
-                tutorialStage++;
                 
                 break;
             case 8:
                 Debug.Log("8");
 
+                tutorialStage++;
+
                 // Start dialogue about weapon switching
                 DialoguePiece chestWeaponPickup = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(chestWeaponPickup, false);
-
-                tutorialStage++;
 
                 break;
             case 9:
@@ -359,20 +364,20 @@ public class TutorialManager : MonoBehaviour
                 // Adds requirement of switching weapon
                 GameStateManager.EOnWeaponSwitch += ContinueTutorial;
 
+                tutorialStage++;
+
                 // Return to player and wait for weapon switch
                 ReturnSway();
-
-                tutorialStage++;
 
                 break;
             case 10:
                 Debug.Log("10");
 
+                tutorialStage++;
+
                 // Start dialogue about weapon dropping
                 DialoguePiece weaponDropping = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(weaponDropping, false);
-
-                tutorialStage++;
 
                 break;
             case 11:
@@ -383,39 +388,41 @@ public class TutorialManager : MonoBehaviour
                 // Adds requirement of dropping weapon
                 GameStateManager.EOnWeaponDrop += ContinueTutorial;
 
+                tutorialStage++;
+
                 // Return to player and wait for weapon drop
                 ReturnSway();
-
-                tutorialStage++;
 
                 break;
             case 12:
                 Debug.Log("12");
 
+                tutorialStage++;
+
                 // Start dialogue about big enemy fight
                 DialoguePiece enemyFight = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(enemyFight, false);
-
-                tutorialStage++;
 
                 break;
             case 13:
                 Debug.Log("13");
 
+                tutorialStage++;
+
                 // Adds requirement of all enemies dead
                 GameStateManager.EOnEnemyDeath += CheckEnemyStatus;
 
-                tutorialStage++;
+                GameStateManager.SetState(GAMESTATE.PLAYING);
 
                 break;
             case 14:
                 Debug.Log("14");
 
+                tutorialStage++;
+
                 // Start dialogue preceding boss fight
                 DialoguePiece bossFight = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(bossFight, false);
-
-                tutorialStage++;
 
                 break;
             case 15:
@@ -444,9 +451,9 @@ public class TutorialManager : MonoBehaviour
 
                 yield return new WaitForSeconds(2f);
 
-                ReturnSway();
-
                 tutorialStage++;
+
+                ReturnSway();
 
                 break;
             case 16:
@@ -454,18 +461,15 @@ public class TutorialManager : MonoBehaviour
 
                 yield return new WaitForSeconds(0.75f);
 
+                tutorialStage++;
+
                 // Start dialogue post-bossfight
                 DialoguePiece bossDefeated = dialogueQueue.Dequeue();
                 GameStateManager.dialogueManager.StartDialogue(bossDefeated, false);
-                
-                tutorialStage++;
 
                 break;
             case 17:
                 Debug.Log("17");
-
-                // Return camera focus to player
-                ReturnSway();
 
                 // Removes all functions linked to events
                 DisconnectEvents();
@@ -473,6 +477,9 @@ public class TutorialManager : MonoBehaviour
                 // Tutorial done
                 HomeManager.TutorialDone = true;
                 GameStateManager.homeManager.SaveHome();
+
+                // Return camera focus to player
+                ReturnSway();
 
                 break;
         }
@@ -493,6 +500,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void RemoveWalls() {
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         gen.gridHandler[24, 6] = TileType.EMPTY;
         gen.wallsTilemap.SetTile(new Vector3Int(24, 6), gen.tiles.empty);
@@ -504,6 +512,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void LetterboxAnimation(bool value) {
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         // Set manual control boolean
         TransitionManager.letterboxManualControl = value;
@@ -516,7 +525,6 @@ public class TutorialManager : MonoBehaviour
     }
 
     private IEnumerator InitialCameraSway() {
-
         GameStateManager.SetState(GAMESTATE.MENU);
 
         yield return new WaitForSeconds(0.5f);
@@ -576,6 +584,7 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void WeaponSway() {
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         cam.Follow = weaponSpawn1.transform;
 
@@ -583,15 +592,16 @@ public class TutorialManager : MonoBehaviour
     }
 
     private void ChestSway() {
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         // Cue letterbox animation
         LetterboxAnimation(true);
 
         cam.Follow = chestSpawn.transform;
-        GameStateManager.SetState(GAMESTATE.MENU);
     }
 
     private IEnumerator EnemySpawnSway() {
+        GameStateManager.SetState(GAMESTATE.MENU);
 
         cam.Follow = enemyCameraFocus.transform;
         

@@ -25,6 +25,8 @@ public class GameStateManager : MonoBehaviour
 
     public static bool tutorialEnabled;
 
+    public static bool transitionPauseLock = false;
+
     // Methods to check the state of the game
     private static GAMESTATE state;
     public static GAMESTATE GetState() {
@@ -154,7 +156,25 @@ public class GameStateManager : MonoBehaviour
         stageTracker = GetStage();
         gameStateTracker = GetState();
         saveTypeTracker = currentSaveType;
-    } 
+    }
+
+    public static Vector2 ToWorldPoint(Vector3 input, Camera mainCam) {
+
+        Vector2 inCamera;
+        Vector2 pixelAmount;
+        Vector2 worldPoint;
+
+        inCamera.y = mainCam.orthographicSize * 2;
+        inCamera.x = inCamera.y * Screen.width / Screen.height;
+
+        pixelAmount.x = Screen.width / inCamera.x;
+        pixelAmount.y = Screen.height / inCamera.y;
+
+        worldPoint.x = ((input.x / pixelAmount.x) - (inCamera.x / 2) + mainCam.transform.position.x);
+        worldPoint.y = ((input.y / pixelAmount.y) - (inCamera.y / 2) + mainCam.transform.position.y);
+
+        return worldPoint;
+    }
 
     public static void NextLevel() {
 
@@ -216,14 +236,6 @@ public class GameStateManager : MonoBehaviour
     private void OnDestroy()
     {
         PreviousScene = gameObject.scene.name;
-    }
-
-    public static void TogglePause() {
-        if (GetState() == GAMESTATE.PLAYING) {
-            SetState(GAMESTATE.PAUSED);
-        } else if (GetState() == GAMESTATE.PAUSED) {
-            SetState(GAMESTATE.PLAYING);
-        }
     }
 
     public static void GameOver() {
