@@ -10,6 +10,8 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
 
     public float ringCooldown;
 
+    public float ringRotation;
+
     public override void Update() {
         base.Update();
         transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + rotationSpeed);
@@ -26,6 +28,11 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
 
         // Shoots specified number of rings
         for (int i = 0; i < ringAmount; i++) {
+
+            // Angle rings by rotation angle
+            if (i > 0) {
+                transform.eulerAngles = new Vector3(0, 0, transform.eulerAngles.z + ringRotation);
+            }
             
             // For the specified number of bullets in this burst attack—
             for (int b = 0; b < numberOfBurstShots; b++) {
