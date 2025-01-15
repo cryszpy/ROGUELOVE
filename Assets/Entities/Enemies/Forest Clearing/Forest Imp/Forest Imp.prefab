@@ -120,6 +120,7 @@ MonoBehaviour:
   fireSound: 
   chargeSound: 
   bulletHitSound: 
+  bursting: 0
 --- !u!114 &944568721832130506
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -152,6 +153,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 688565378050225313}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 200
 --- !u!1 &2496777416409024874
 GameObject:
   m_ObjectHideFlags: 0
@@ -422,6 +426,7 @@ MonoBehaviour:
   contactColl: {fileID: 0}
   rb: {fileID: 1923873099500596009}
   hitbox: {fileID: 7546251876369635720}
+  spriteRenderer: {fileID: 163189661128954202}
   lineSpriteRenderer: {fileID: 0}
   lineRenderer: {fileID: 0}
   chargeTime: 0
@@ -437,6 +442,7 @@ MonoBehaviour:
   maxExp: 4
   attacksList:
   - {fileID: 944568721832130506}
+  currentAttack: {fileID: 0}
   spawnChanceVertAmp: 0.6
   spawnChanceMultiplier: 0.1
   spawnChanceXTransform: -0.3
@@ -479,6 +485,7 @@ MonoBehaviour:
   takingFireDamage: 0
   immuneToFire: 0
   wasPierceHit: 0
+  pierceTime: 0.75
 --- !u!1 &5826619376852643059
 GameObject:
   m_ObjectHideFlags: 0

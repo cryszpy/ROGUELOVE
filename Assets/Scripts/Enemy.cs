@@ -43,14 +43,14 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("This enemy's hitbox.")]
     public Collider2D hitbox;
 
+    [Tooltip("This enemy's SpriteRenderer.")]
+    public SpriteRenderer spriteRenderer;
+
     [Tooltip("This enemy's SpriteRenderer that is responsible for drawing the line of fire.")]
     public SpriteRenderer lineSpriteRenderer;
 
     [Tooltip("This enemy's LineRenderer2D component for drawing line of fire.")]
     public LineRenderer2D lineRenderer;
-
-    [Tooltip("Time it takes for the enemy to charge a shot.")]
-    public float chargeTime;
 
     [Tooltip("List of this enemy's possible weapon drops.")]
     [SerializeField] private List<WeaponPair> weaponDropsList;
@@ -113,7 +113,7 @@ public abstract class Enemy : MonoBehaviour
     public int maxSpawnCount;
 
     [Tooltip("This enemy's damage-per-hit.")]
-    public int damage;
+    public int contactDamage;
 
     [Tooltip("The speed that this enemy moves when it is chasing a target.")]
     [SerializeField] protected float chaseSpeed;
@@ -126,10 +126,24 @@ public abstract class Enemy : MonoBehaviour
     public float rangedAttackCooldownMax;
     public float attackCooldown;
 
+    [Tooltip("Time it takes for the enemy to charge a shot.")]
+    public float chargeTime;
+
     // Boolean to determine whether attack animation is playing
     protected bool attackAnim;
 
+    public bool seen;
+
+    public bool kbEd;
+
     public bool canFire;
+
+    public bool hitPlayer = false;
+
+    public bool inContactColl;
+
+    public bool charging = false;
+    public bool bursting = false;
 
     [Space(10)]
     [Header("PATHFINDING")]
@@ -158,16 +172,8 @@ public abstract class Enemy : MonoBehaviour
 
     protected bool tileGot = false;
 
-    public bool seen;
-
-    public bool kbEd;
-
     protected bool expSpawn;
     protected bool coinSpawn;
-
-    public bool hitPlayer = false;
-
-    public bool inContactColl;
 
     // Start is called before the first frame update
     public virtual void Start()
@@ -230,7 +236,7 @@ public abstract class Enemy : MonoBehaviour
     }
 
     // Update is called once per frame
-    private void FixedUpdate()
+    public virtual void FixedUpdate()
     {
         if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
 
@@ -262,6 +268,9 @@ public abstract class Enemy : MonoBehaviour
 
                 DirectionFacing();
 
+                // Attack cooldown
+                Cooldown();
+
                 // If the enemy has ranged attacks—
                 if (attacksList.Count > 0) {
 
@@ -270,7 +279,6 @@ public abstract class Enemy : MonoBehaviour
                     // 2. the enemy only has ranged attacks—
                     if ((contactColl != null && !inContactColl) || contactColl == null) {
 
-                        // Start a ranged attack
                         RollAttacks();
                     }
                 }
@@ -278,19 +286,15 @@ public abstract class Enemy : MonoBehaviour
         }
     }
 
+    // Used in boss enemy to separate close and distance ranged attacks
     public virtual void RollAttacks() {
-        if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU 
-            && enemyType != EnemyType.DEAD) {
 
-            // Attack cooldown
-            Cooldown();
+        // If the enemy can fire, sees the player, the player is within range, and the enemy is not in/charging an attack—
+        if (canFire && inFollowRadius && hitPlayer && seen && !charging && !bursting) {
+            Debug.LogWarning("Rolled Attacks");
             
-            // If the enemy can fire, sees the player, and is not charging a shot—
-            if (canFire && inFollowRadius && hitPlayer && seen) {
-
-                // Fire a ranged attack
-                DistanceAttack();
-            }
+            // Start a ranged attack
+            DistanceAttack();
         }
     }
 
@@ -407,12 +411,12 @@ public abstract class Enemy : MonoBehaviour
 
             if (rb.linearVelocity.x >= 0.001f) {
 
-                this.transform.localScale = new Vector3(1f, 1f, 1f);
+                spriteRenderer.flipX = false;
                 animator.SetBool("IsMoving", true);
 
             } else if (rb.linearVelocity.x <= -0.001f) {
 
-                this.transform.localScale = new Vector3(-1f, 1f, 1f);
+                spriteRenderer.flipX = true;
                 animator.SetBool("IsMoving", true);
 
             } else if (rb.linearVelocity.y <= -0.001 || rb.linearVelocity.y >= 0.001) {
@@ -463,10 +467,6 @@ public abstract class Enemy : MonoBehaviour
         }
 
         return Vector3.zero;
-    }
-
-    public virtual IEnumerator AttackEntity(Collider2D target) {
-        yield return null;
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, WalkerGenerator gen) {

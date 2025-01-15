@@ -121,13 +121,13 @@ public class RangedEnemy : Enemy
             // If moving in a direction, face that direction
             if (rb.linearVelocity.x >= 0.001f) {
 
-                this.transform.localScale = new Vector3(1f, 1f, 1f);
+                spriteRenderer.flipX = false;
                 animator.SetBool("IsMoving", true);
 
             } 
             else if (rb.linearVelocity.x <= -0.001f) {
 
-                this.transform.localScale = new Vector3(-1f, 1f, 1f);
+                spriteRenderer.flipX = true;
                 animator.SetBool("IsMoving", true);
 
             } 
@@ -137,10 +137,10 @@ public class RangedEnemy : Enemy
             // Else if player is in direct line of sight, face player
             else if (hitPlayer) {
                 if (player.transform.position.x > this.transform.position.x) {
-                    this.transform.localScale = new Vector3(1f, 1f, 1f);
+                    spriteRenderer.flipX = false;
                 } 
                 else if (player.transform.position.x < this.transform.position.x) {
-                    this.transform.localScale = new Vector3(-1f, 1f, 1f);
+                    spriteRenderer.flipX = true;
                 }
             }
             else {

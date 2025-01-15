@@ -86,7 +86,7 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
     // Firing logic
     public override void Fire()
     {
-        if (enemy.enemyType != EnemyType.DEAD) {
+        if (enemy.enemyType != EnemyType.DEAD && GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
             
             enemy.animator.SetBool("Attack", true);
 

@@ -19,54 +19,39 @@ public class BossEnemy : Enemy
 
     public override void PlayerCheck() {
 
-        /* if (!timerSet) {
-
-            // Sets the amount of time spent moving
-            moveTime = UnityEngine.Random.Range(3, 5);
-
-            // Sets a cooldown before wandering again
-            waitTime = UnityEngine.Random.Range(5, 7);
-            
-            timerSet = true;
-        } */
-
-        // If enemy is not currently taking knockback
-        //if (!kbEd) {
-
-            // If player is NOT in follow radius then chase
-            if (!inFollowRadius) {
-                seen = true;
-                canWander = false;
-                force = Vector2.zero;
-                target = player.position;
-                Chase();
-            } 
-            // If player IS in follow radius, then stand still
-            else if (inFollowRadius) {
-                seen = true;
-                canWander = false;
-                force = Vector2.zero;
-                target = player.position;
-            }
-        //}
+        // If player is NOT in follow radius then chase
+        if (!inFollowRadius) {
+            seen = true;
+            canWander = false;
+            force = Vector2.zero;
+            target = player.position;
+            Chase();
+        } 
+        // If player IS in follow radius, then stand still
+        else if (inFollowRadius) {
+            seen = true;
+            canWander = false;
+            force = Vector2.zero;
+            target = player.position;
+        }
     }
 
     public override void RollAttacks()
     {
         if (GameStateManager.GetState() == GAMESTATE.PLAYING && enemyType != EnemyType.DEAD) {
-
-            // Attack cooldown
-            Cooldown();
             
-            // If the enemy can fire, sees the player, and is not charging a shot—
+            // If the enemy can fire—
             if (canFire) {
 
+                // If player is close enough—
                 if (inFollowRadius) {
 
                     // Roll for close-quarters combat
                     CloseAttack();
 
-                } else {
+                }
+                // Otherwise use distance attack
+                else {
                     // Roll for long-distance combat
                     DistanceAttack();
                 }
@@ -146,9 +131,9 @@ public class BossEnemy : Enemy
     {
 
         if (target.x - this.transform.position.x >= 0f) {
-            this.transform.localScale = new Vector3(1f, 1f, 1f);
+            spriteRenderer.flipX = false;
         } else if (target.x - this.transform.position.x < 0f) {
-            this.transform.localScale = new Vector3(-1f, 1f, 1f);
+            spriteRenderer.flipX = true;
         }
     }
 

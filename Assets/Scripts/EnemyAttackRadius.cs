@@ -44,7 +44,7 @@ public class EnemyAttackRadius : MonoBehaviour
             // Start animation
             parent.animator.SetBool("Attack", true);
 
-            player.TakeDamage(parent.damage);
+            player.TakeDamage(parent.contactDamage);
             
         } else {
             Debug.LogError("Tried to damage nonexistent entity! Or the entity has no collider.");

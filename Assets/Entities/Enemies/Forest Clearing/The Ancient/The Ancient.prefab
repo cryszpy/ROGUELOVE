@@ -39,7 +39,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 105477745542617589}
-  - {fileID: 7571492346485729075}
   - {fileID: 5255361493749537144}
   - {fileID: 1581292779354591126}
   - {fileID: 6100693915990985616}
@@ -272,6 +271,7 @@ MonoBehaviour:
   contactColl: {fileID: 0}
   rb: {fileID: 1923873099500596009}
   hitbox: {fileID: 7546251876369635720}
+  spriteRenderer: {fileID: 163189661128954202}
   lineSpriteRenderer: {fileID: 0}
   lineRenderer: {fileID: 0}
   chargeTime: 0
@@ -288,6 +288,7 @@ MonoBehaviour:
   attacksList:
   - {fileID: 4337496282947585320}
   - {fileID: 5650005142565248593}
+  currentAttack: {fileID: 0}
   spawnChanceVertAmp: 1
   spawnChanceMultiplier: 1
   spawnChanceXTransform: 1
@@ -330,6 +331,7 @@ MonoBehaviour:
   takingFireDamage: 0
   immuneToFire: 1
   wasPierceHit: 0
+  pierceTime: 0.75
 --- !u!1 &2918801732731569437
 GameObject:
   m_ObjectHideFlags: 0
@@ -360,37 +362,6 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 5112030372781941968}
-  m_Father: {fileID: 3622345872674339659}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &4337055667690004690
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 7571492346485729075}
-  m_Layer: 9
-  m_Name: WeaponPivot (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7571492346485729075
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4337055667690004690}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.159, y: 0.117, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
   - {fileID: 1917258235924509482}
   m_Father: {fileID: 3622345872674339659}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -514,6 +485,7 @@ MonoBehaviour:
   fireSound: 
   chargeSound: 
   bulletHitSound: 
+  bursting: 0
 --- !u!114 &4337496282947585320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -549,6 +521,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 4897255179998494822}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 200
 --- !u!1 &5298915112532488095
 GameObject:
   m_ObjectHideFlags: 0
@@ -662,11 +637,11 @@ Transform:
   m_GameObject: {fileID: 5573539958254898950}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.05, y: -0.0284, z: 0}
+  m_LocalPosition: {x: 0.049999997, y: -0.028400004, z: 0}
   m_LocalScale: {x: 0.5, y: 0.5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7571492346485729075}
+  m_Father: {fileID: 105477745542617589}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &1922307736781096543
 SpriteRenderer:
@@ -737,7 +712,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   ammo: {fileID: 5001664913613443686, guid: 6df33a4b1e485439b899808c2fc4d681, type: 3}
   spriteRenderer: {fileID: 0}
-  spawnPos: {fileID: 4337055667690004690}
+  spawnPos: {fileID: 0}
   weaponPickup: {fileID: 0}
   type: 0
   rarity: 0
@@ -753,6 +728,7 @@ MonoBehaviour:
   fireSound: 
   chargeSound: 
   bulletHitSound: 
+  bursting: 0
 --- !u!114 &5650005142565248593
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -785,6 +761,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   enemy: {fileID: 4897255179998494822}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 200
 --- !u!1 &5826619376852643059
 GameObject:
   m_ObjectHideFlags: 0

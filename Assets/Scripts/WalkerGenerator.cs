@@ -438,7 +438,6 @@ public class WalkerGenerator : MonoBehaviour
         CreateBorders();
         CreateObstacles();
         CreateBreakables();
-        GizmoTileType();
     }
 
     private void CreateWalls() {
@@ -1275,12 +1274,9 @@ public class WalkerGenerator : MonoBehaviour
         }
     }
 
-    public void GizmoTileType() {
-
-        
-    }
-
+#if UNITY_EDITOR
     public void OnDrawGizmos() {
+
         for (int x = 0; x < gridHandler.GetLength(0); x++) {
             for (int y = 0; y < gridHandler.GetLength(1); y++) {
 
@@ -1304,6 +1300,7 @@ public class WalkerGenerator : MonoBehaviour
             }
         }
     }
+#endif
     
     private bool IsArrayEmpty(GameObject[] array) {
         return Array.TrueForAll(array, x => x == null);
@@ -1445,14 +1442,12 @@ public class WalkerGenerator : MonoBehaviour
             CreateBorders();
             CreateObstacles();
             CreateBreakables();
-            GizmoTileType();
         } else {
             // Create walls around map
             CreateWalls();
             FillFloors();
             CreateBorders();
             CreateBreakables();
-            GizmoTileType();
         }
     }
 

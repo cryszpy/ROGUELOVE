@@ -55,7 +55,7 @@ public class EnemyBulletScript : MonoBehaviour
                 rb = GetComponent<Rigidbody2D>();
             }
 
-            target = GameObject.FindGameObjectWithTag("Player").transform.position;
+            //target = GameObject.FindGameObjectWithTag("Player").transform.position;
             
             //direction = target - transform.position;
 
@@ -88,7 +88,6 @@ public class EnemyBulletScript : MonoBehaviour
     }
 
     public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject spawnPosition) {
-        Debug.Log(spawnPosition);
         GameObject bullet = Instantiate(original, position, rotation) as GameObject;
         
         if (bullet.TryGetComponent<EnemyBulletScript>(out var script)) {
@@ -104,13 +103,6 @@ public class EnemyBulletScript : MonoBehaviour
             return null;
         }
     }
-
-    /*
-    public virtual Vector2 Movement(float timer) {
-        float x = timer * speed * transform.up.x;
-        float y = timer * speed * transform.up.y;
-        return new Vector2(x + spawnPoint.x + error.x, y + spawnPoint.y + error.y);
-    } */
 
     // Damage player or destroy self when hitting obstacles
     public virtual void OnTriggerEnter2D(Collider2D other) {

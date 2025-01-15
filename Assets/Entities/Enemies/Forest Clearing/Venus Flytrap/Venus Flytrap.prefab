@@ -351,9 +351,9 @@ MonoBehaviour:
   contactColl: {fileID: 8975077011246908917}
   rb: {fileID: 1923873099500596009}
   hitbox: {fileID: 7546251876369635720}
+  spriteRenderer: {fileID: 163189661128954202}
   lineSpriteRenderer: {fileID: 0}
   lineRenderer: {fileID: 0}
-  chargeTime: 0
   weaponDropsList: []
   itemDropsList: []
   coinBronze: {fileID: 2496777416409024874, guid: 44001b0e4c30b486f976a6e0a757e593, type: 3}
@@ -365,6 +365,7 @@ MonoBehaviour:
   minExp: 2
   maxExp: 4
   attacksList: []
+  currentAttack: {fileID: 0}
   spawnChanceVertAmp: 1.2
   spawnChanceMultiplier: 0.6
   spawnChanceXTransform: 2
@@ -373,20 +374,23 @@ MonoBehaviour:
   maxSpawnChance: 0.8
   minSpawnCount: 1
   maxSpawnCount: 5
-  damage: 1
+  contactDamage: 1
   chaseSpeed: 0
   wanderSpeed: 0
   rangedAttackCooldownMin: 0
   rangedAttackCooldownMax: 0
   attackCooldown: 2
+  chargeTime: 0
+  seen: 0
+  kbEd: 0
   canFire: 0
+  hitPlayer: 0
+  inContactColl: 0
+  charging: 0
+  bursting: 0
   nextWaypointDistance: 0
   inFollowRadius: 0
   canWander: 0
-  seen: 0
-  kbEd: 0
-  hitPlayer: 0
-  inContactColl: 0
 --- !u!95 &8722914626086714706
 Animator:
   serializedVersion: 7
@@ -429,6 +433,7 @@ MonoBehaviour:
   takingFireDamage: 0
   immuneToFire: 0
   wasPierceHit: 0
+  pierceTime: 0.75
 --- !u!1 &4921378223618343124
 GameObject:
   m_ObjectHideFlags: 0
