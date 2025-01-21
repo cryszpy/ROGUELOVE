@@ -12,7 +12,7 @@ public class RangedEnemy : Enemy
         if (!timerSet) {
 
             // If enemy has direct line of sight with player
-            if (hitPlayer && inFollowRadius) {
+            if (seesPlayer && inFollowRadius) {
 
                 // Sets the amount of time spent moving
                 moveTime = UnityEngine.Random.Range(0.5f, 1f);
@@ -36,13 +36,13 @@ public class RangedEnemy : Enemy
         if (!kbEd) {
             
             // If player is not in follow radius and enemy has direct line of sight, move towards player
-            if (inFollowRadius != true && hitPlayer) {
-                target = player.position;
+            if (inFollowRadius != true && seesPlayer) {
+                target = player.transform.position;
 
                 Chase();
             } 
             // If enemy has direct line of sight with player (and follow radius does not matter)
-            else if (hitPlayer && canWander) {
+            else if (seesPlayer && canWander) {
                 // Gets target tile
                 Vector3 randTile = GetCombatWanderTile();
 
@@ -58,7 +58,7 @@ public class RangedEnemy : Enemy
                 Wander();
             }
             // If enemy does NOT have direct line of sight, wander around
-            else if (!hitPlayer && canWander) {
+            else if (!seesPlayer && canWander) {
 
                 // Gets target tile
                 Vector3 randTile = GetWanderTile();
@@ -135,7 +135,7 @@ public class RangedEnemy : Enemy
                 animator.SetBool("IsMoving", true);
             } 
             // Else if player is in direct line of sight, face player
-            else if (hitPlayer) {
+            else if (seesPlayer) {
                 if (player.transform.position.x > this.transform.position.x) {
                     spriteRenderer.flipX = false;
                 } 

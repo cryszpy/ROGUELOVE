@@ -1,3 +1,4 @@
+using UnityEngine;
 
 public class ContactEnemy : Enemy
 {
@@ -7,9 +8,10 @@ public class ContactEnemy : Enemy
         enemyType = EnemyType.CONTACT;
     }
 
-    public override void BeginAttack()
+    public override void RollAttacks()
     {
-        animator.SetBool("Attack", false);
+        if (inContactColl) {
+            base.RollAttacks();
+        }
     }
-
 }

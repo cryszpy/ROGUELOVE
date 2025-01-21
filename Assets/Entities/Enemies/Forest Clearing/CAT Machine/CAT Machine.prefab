@@ -285,7 +285,10 @@ MonoBehaviour:
   expOrb: {fileID: 2496777416409024874, guid: c277ee52a28e84f81881014f10b695ab, type: 3}
   minExp: 5
   maxExp: 12
-  attacksList: []
+  contactAttacks:
+  - attack: {fileID: 1101312975805991935}
+    attackChance: 1
+  rangedAttacks: []
   currentAttack: {fileID: 0}
   spawnChanceVertAmp: 0.7
   spawnChanceMultiplier: 0.4
@@ -295,7 +298,6 @@ MonoBehaviour:
   maxSpawnChance: 0.86
   minSpawnCount: 1
   maxSpawnCount: 1
-  contactDamage: 1
   chaseSpeed: 900
   wanderSpeed: 60
   rangedAttackCooldownMin: 0
@@ -305,10 +307,10 @@ MonoBehaviour:
   seen: 0
   kbEd: 0
   canFire: 0
-  hitPlayer: 0
+  seesPlayer: 0
   inContactColl: 0
   charging: 0
-  bursting: 0
+  attacking: 0
   nextWaypointDistance: 1
   inFollowRadius: 0
   canWander: 0
@@ -511,9 +513,10 @@ GameObject:
   m_Component:
   - component: {fileID: 5643919067637981619}
   - component: {fileID: 7721675988448470313}
-  - component: {fileID: 4743777430853698853}
+  - component: {fileID: 1101312975805991935}
+  - component: {fileID: 456973273073281249}
   m_Layer: 8
-  m_Name: DamageRadius
+  m_Name: ContactAttack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -570,7 +573,7 @@ CircleCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0, y: 0.8}
   m_Radius: 1.2
---- !u!114 &4743777430853698853
+--- !u!114 &1101312975805991935
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -579,10 +582,28 @@ MonoBehaviour:
   m_GameObject: {fileID: 5716199046430564954}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e5cb2c17a98ac4bd6925c9a3c58891a0, type: 3}
+  m_Script: {fileID: 11500000, guid: 10b3bd717376649b8b9c5629339fa384, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  weapon: {fileID: 0}
   parent: {fileID: 228780233094893626}
+  attackDamage: 1
+--- !u!114 &456973273073281249
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5716199046430564954}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 22f5cadb9bb894b3ca41d84f625ed0be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  enemy: {fileID: 228780233094893626}
+  layerMask:
+    serializedVersion: 2
+    m_Bits: 200
 --- !u!1 &5826619376852643059
 GameObject:
   m_ObjectHideFlags: 0

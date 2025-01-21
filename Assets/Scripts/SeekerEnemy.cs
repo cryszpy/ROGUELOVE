@@ -26,13 +26,13 @@ public class SeekerEnemy : Enemy
             
             // If player is not in follow radius and enemy has seen, move towards player
             if (inFollowRadius != true && seen) {
-                target = player.position;
+                target = player.transform.position;
 
                 Chase();
             } 
             // If player is in follow radius and enemy has seen but something is blocking, move towards player
-            else if (inFollowRadius == true && seen && !hitPlayer) {
-                target = player.position;
+            else if (inFollowRadius == true && seen && !seesPlayer) {
+                target = player.transform.position;
 
                 Chase();
             }

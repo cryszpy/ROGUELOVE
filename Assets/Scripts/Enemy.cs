@@ -25,8 +25,8 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("This enemy's current target.")]
     protected Vector3 target;
 
-    [Tooltip("This enemy's player Transform reference. (Assigned at runtime)")]
-    public Transform player;
+    [Tooltip("Reference to the active player. (Assigned at runtime)")]
+    public PlayerController player;
 
     [Tooltip("This enemy's pathfinder script.")]
     [SerializeField] private Seeker seeker;
@@ -80,10 +80,13 @@ public abstract class Enemy : MonoBehaviour
     [SerializeField] private int minExp;
     [SerializeField] private int maxExp;
 
-    [Tooltip("All possible attacks this enemy has—SUM OF THESE attackChance VARIABLES MUST BE EQUAL TO 1.")]
-    [SerializeField] protected List<EnemyBulletSpawner> attacksList;
+    [Tooltip("All contact attacks this enemy has—SUM OF THESE attackChance VARIABLES MUST BE EQUAL TO 1.")]
+    [SerializeField] protected List<EnemyAttackStruct> contactAttacks;
 
-    public EnemyBulletSpawner currentAttack;
+    [Tooltip("All ranged attacks this enemy has—SUM OF THESE attackChance VARIABLES MUST BE EQUAL TO 1.")]
+    [SerializeField] protected List<EnemyAttackStruct> rangedAttacks;
+
+    public EnemyAttackBase currentAttack;
 
     [Space(10)]
     [Header("ENEMY STATS")]
@@ -112,9 +115,6 @@ public abstract class Enemy : MonoBehaviour
     [Tooltip("The maximum target amount of this enemy to spawn.")]
     public int maxSpawnCount;
 
-    [Tooltip("This enemy's damage-per-hit.")]
-    public int contactDamage;
-
     [Tooltip("The speed that this enemy moves when it is chasing a target.")]
     [SerializeField] protected float chaseSpeed;
 
@@ -138,12 +138,12 @@ public abstract class Enemy : MonoBehaviour
 
     public bool canFire;
 
-    public bool hitPlayer = false;
+    public bool seesPlayer = false;
 
     public bool inContactColl;
 
     public bool charging = false;
-    public bool bursting = false;
+    public bool attacking = false;
 
     [Space(10)]
     [Header("PATHFINDING")]
@@ -191,10 +191,9 @@ public abstract class Enemy : MonoBehaviour
             }
             hitbox.enabled = true;
 
-            player = GameObject.FindGameObjectWithTag("Player").transform;
+            player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
 
             attackAnim = false;
-            seen = false;
             expSpawn = false;
             coinSpawn = false;
             canFire = false;
@@ -238,87 +237,107 @@ public abstract class Enemy : MonoBehaviour
     // Update is called once per frame
     public virtual void FixedUpdate()
     {
-        if (GameStateManager.GetState() == GAMESTATE.PLAYING) {
+        if (GameStateManager.GetState() == GAMESTATE.PLAYING && enemyType != EnemyType.DEAD) {
 
-            if (enemyType != EnemyType.DEAD && enemyType != EnemyType.STATIONARY) {
-
-                if (canWander && timerSet) {
-                    wanderTimer += Time.fixedDeltaTime;
-                    //Debug.Log("wanderTimer: " + wanderTimer);
-                    if(wanderTimer > moveTime) {
-                        //Debug.Log("Done With WanderTimer");
-                        canWander = false;
-                        tileGot = false;
-                        wanderTimer = 0;
-                    }
+            if (canWander && timerSet) {
+                wanderTimer += Time.fixedDeltaTime;
+                //Debug.Log("wanderTimer: " + wanderTimer);
+                if(wanderTimer > moveTime) {
+                    //Debug.Log("Done With WanderTimer");
+                    canWander = false;
+                    tileGot = false;
+                    wanderTimer = 0;
                 }
-                
-                if (!canWander) {
-                    waitTimer += Time.fixedDeltaTime;
-                    //Debug.Log("waitTimer: " + waitTimer);
-                    if(waitTimer > waitTime) {
-                        canWander = true;
-                        timerSet = false;
-                        waitTimer = 0;
-                    }
+            }
+            
+            if (!canWander) {
+                waitTimer += Time.fixedDeltaTime;
+                //Debug.Log("waitTimer: " + waitTimer);
+                if(waitTimer > waitTime) {
+                    canWander = true;
+                    timerSet = false;
+                    waitTimer = 0;
                 }
+            }
 
-                // Pathfinding
-                Pathfinder();
+            // Pathfinding
+            Pathfinder();
 
-                DirectionFacing();
+            DirectionFacing();
 
-                // Attack cooldown
-                Cooldown();
+            // Attack cooldown
+            Cooldown();
 
-                // If the enemy has ranged attacks—
-                if (attacksList.Count > 0) {
+            // If the enemy has any attacks—
+            if (contactAttacks.Count > 0 || rangedAttacks.Count > 0) {
 
-                    // If either: 
-                    // 1. the enemy also has a contact attack, and only if the player is not currently in range of contact, or—
-                    // 2. the enemy only has ranged attacks—
-                    if ((contactColl != null && !inContactColl) || contactColl == null) {
+                // If enemy can fire and has seen the player and is not currently attacking or charging an attack—
+                if (canFire && seen && seesPlayer && !charging && !attacking) {
 
-                        RollAttacks();
-                    }
+                    // Roll attacks
+                    RollAttacks();
                 }
             }
         }
     }
 
-    // Used in boss enemy to separate close and distance ranged attacks
+    // Generate enemy attacks
     public virtual void RollAttacks() {
 
-        // If the enemy can fire, sees the player, the player is within range, and the enemy is not in/charging an attack—
-        if (canFire && inFollowRadius && hitPlayer && seen && !charging && !bursting) {
-            Debug.LogWarning("Rolled Attacks");
-            
-            // Start a ranged attack
-            DistanceAttack();
+        List<EnemyAttackStruct> targetList = null;
+
+        // If player is inside contact radius, uses a contact attack, otherwise uses a ranged attack
+        switch (inContactColl) {
+
+            case true:
+                targetList = contactAttacks.Count > 0 ? contactAttacks : rangedAttacks;
+                break;
+            case false:
+                targetList = rangedAttacks.Count > 0 ? rangedAttacks : contactAttacks;
+                break;
         }
-    }
 
-    public virtual void DistanceAttack() {
+        if (targetList == null || targetList.Count <= 0) {
+            Debug.LogError("Enemy attack TargetList is null or empty! " + gameObject.name);
+            return;
+        }
 
-        float roll = UnityEngine.Random.value;
+        bool attackSuccess = false;
 
-        // For every possible attack this enemy has—
-        foreach (var attack in attacksList) {
+        int counter = 0;
 
-            // If the attack is ranged—
-            if (attack.attackType == EnemyAttackType.DISTANCE) {
+        while (!attackSuccess) {
+
+            // Ensures that this loop stops at 5 maximum iterations
+            // Uses first contact attack if this somehow occurs.
+            if (counter > 4) {
+                currentAttack = contactAttacks[0].attack;
+                currentAttack.FiringMethod();
+
+                attackSuccess = true;
+                break;
+            }
+
+            // For every possible contact attack this enemy has—
+            foreach (var attackStruct in targetList) {
+
+                // Roll for spawning success
+                float roll = UnityEngine.Random.value;
 
                 // If the attack's success roll is successful—
-                if (roll <= attack.attackChance) {
+                if (roll <= attackStruct.attackChance) {
 
                     // Sets the current attack and uses the attack
-                    currentAttack = attack;
-                    attack.FiringMethod();
+                    currentAttack = attackStruct.attack;
+                    attackStruct.attack.FiringMethod();
 
                     // Don't use any other attack
+                    attackSuccess = true;
                     break;
                 }
             }
+
+            counter++;
         }
     }
 
@@ -330,6 +349,15 @@ public abstract class Enemy : MonoBehaviour
         } else {
             Debug.LogError(this.name + " tried to attack without having a current attack!");
         }
+    }
+
+    public virtual void EndAttack() {
+        animator.SetBool("Attack", false);
+    }
+
+    // Called at the end of the attack animation (after attack has been called mid-way through)
+    public virtual void ResetOrbitalAttackAnim() {
+        animator.SetBool("OrbitalAttack", false);
     }
 
     // PATHFINDER MOVEMENT and calling PlayerCheck()
@@ -381,7 +409,7 @@ public abstract class Enemy : MonoBehaviour
                 seen = true;
                 canWander = false;
                 force = Vector2.zero;
-                target = player.position;
+                target = player.transform.position;
                 Chase();
             } 
             // If player is not in follow radius, and wander cooldown is reset, then wander

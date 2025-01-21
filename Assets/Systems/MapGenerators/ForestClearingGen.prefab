@@ -64,8 +64,8 @@ MonoBehaviour:
   waitTime: 0
   lvl: 0
   stg: 0
-  spawnRadiusX: 6
-  spawnRadiusY: 6
+  spawnRadiusX: 5
+  spawnRadiusY: 5
   player: {fileID: 0}
   cameraLookAt: {fileID: 0}
   playerCont: {fileID: 0}

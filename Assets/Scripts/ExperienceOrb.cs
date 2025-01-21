@@ -99,7 +99,7 @@ public class ExperienceOrb : ContactEnemy
             
         }
         if (!expSpawn) {
-            target = player.position;
+            target = player.transform.position;
             //Chase();
             transform.position = Vector3.MoveTowards(transform.position, target, chaseSpeed * Time.fixedDeltaTime);
         }

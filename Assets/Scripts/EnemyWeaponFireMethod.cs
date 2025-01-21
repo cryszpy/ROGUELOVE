@@ -22,7 +22,7 @@ public class EnemyWeaponFireMethod : WeaponSingleShotFire
             Cooldown();
             
             // If the enemy can fire, sees the player, and is not charging a shot—
-            if (canFire && enemy.inFollowRadius && enemy.hitPlayer && enemy.seen && !charging) {
+            if (canFire && enemy.inFollowRadius && enemy.seesPlayer && enemy.seen && !charging) {
 
                 // If enemy needs to charge shot, then charge
                 if (enemy.lineRenderer != null) {

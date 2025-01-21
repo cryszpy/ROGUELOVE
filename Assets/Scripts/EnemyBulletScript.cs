@@ -13,13 +13,12 @@ public class EnemyBulletScript : MonoBehaviour
 
     [SerializeField] protected SpriteRenderer spriteRenderer;
 
-    public Vector3 direction;
+    protected Vector3 direction;
 
     [SerializeField] protected Collider2D coll;
 
     [Header("STATS")]
 
-    [SerializeField] protected Vector2 spawnPoint;
     [SerializeField] protected GameObject weaponPivot;
 
     [SerializeField] protected float speed;
@@ -30,8 +29,6 @@ public class EnemyBulletScript : MonoBehaviour
 
     [SerializeField] protected bool reflected = false;
 
-    protected float timer = 0f;
-
     protected Vector2 error;
 
     [Tooltip("Lower values are more accurate— 0 fires in a straight line.")]
@@ -41,7 +38,6 @@ public class EnemyBulletScript : MonoBehaviour
     public virtual void Start()
     {
         if (GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
-            spawnPoint = new Vector2(transform.position.x, transform.position.y);
 
             coll.enabled = true;
 
@@ -87,7 +83,7 @@ public class EnemyBulletScript : MonoBehaviour
         }
     }
 
-    public UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject spawnPosition) {
+    public virtual UnityEngine.Object Create(UnityEngine.Object original, Vector3 position, Quaternion rotation, GameObject spawnPosition) {
         GameObject bullet = Instantiate(original, position, rotation) as GameObject;
         
         if (bullet.TryGetComponent<EnemyBulletScript>(out var script)) {

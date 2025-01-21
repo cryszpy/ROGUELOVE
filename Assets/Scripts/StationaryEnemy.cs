@@ -1,13 +1,17 @@
+using UnityEngine;
 
 public class StationaryEnemy : Enemy
 {
     public override void SetEnemyType() {
         enemyType = EnemyType.STATIONARY;
+        seen = true;
+        seesPlayer = true;
     }
 
-    public override void BeginAttack()
+    public override void RollAttacks()
     {
-        animator.SetBool("Attack", false);
+        if (inContactColl) {
+            base.RollAttacks();
+        }
     }
-
 }

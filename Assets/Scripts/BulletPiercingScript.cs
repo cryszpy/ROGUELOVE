@@ -17,7 +17,7 @@ public class BulletPiercingScript : BulletScript
         // For all objects detected in the raycast—
         for (int i = 0; i < hits.Length; i++) {
 
-            Debug.Log(hits[i].collider.gameObject.layer + " " + hits[i].collider.transform.root.name);
+            //Debug.Log(hits[i].collider.gameObject.layer + " " + hits[i].collider.transform.root.name);
 
             // If the piercing bullet hits an enemy, don't destroy the bullet
             if (hits[i].collider.gameObject.layer == 9) {

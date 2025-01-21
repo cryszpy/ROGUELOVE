@@ -24,7 +24,7 @@ public class CATMachineEnemy : ContactEnemy
         else if (seen) {
             canWander = false;
             force = Vector2.zero;
-            target = player.position;
+            target = player.transform.position;
             Chase();
         }
         // If player is not in follow radius, and wander cooldown is reset, then wander
@@ -46,9 +46,14 @@ public class CATMachineEnemy : ContactEnemy
         }
     }
 
-    public override void BeginAttack()
+    public override void RollAttacks()
     {
-        base.BeginAttack();
+        if (inContactColl) {
+            base.RollAttacks();
+        }
+    }
+
+    public virtual void EndBreakWall() {
         animator.SetBool("BreakWall", false);
     }
 }

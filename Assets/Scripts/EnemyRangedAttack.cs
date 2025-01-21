@@ -2,24 +2,10 @@ using System.Collections;
 using Unity.VisualScripting;
 using UnityEngine;
 
-public enum EnemyAttackType {
-    DISTANCE, CLOSE, SPECIAL
-}
-
-public class EnemyBulletSpawner : MonoBehaviour
+public class EnemyRangedAttack : EnemyAttackBase
 {
 
-    [Header("SCRIPT REFERENCES")]
-
-    public Weapon parent;
-
-    [SerializeField] protected Enemy enemy;
-
     [Header("STATS")]
-
-    public float attackChance;
-
-    public EnemyAttackType attackType;
 
     [SerializeField] protected float timeBetweenBulletBurst;
 
@@ -27,21 +13,21 @@ public class EnemyBulletSpawner : MonoBehaviour
 
     protected bool isChargedShot = false;
 
-    [SerializeField] protected float chargeTimer;
+    protected float chargeTimer;
 
     public virtual void Update() {
 
         // If enemy is charging a shot—
-        if (enemy.charging) {
+        if (parent.charging) {
 
             // If something blocks line of sight while charging, reset charge and wait
-            if (!enemy.hitPlayer) {
-                enemy.charging = false;
+            if (!parent.seesPlayer) {
+                parent.charging = false;
                 chargeTimer = 0;
-                enemy.bursting = false;
+                parent.attacking = false;
                 isChargedShot = false;
-                enemy.canFire = false;
-                enemy.currentAttack = null;
+                parent.canFire = false;
+                parent.currentAttack = null;
                 TurnOffCharge();
                 return;
             } 
@@ -49,26 +35,26 @@ public class EnemyBulletSpawner : MonoBehaviour
             chargeTimer += Time.deltaTime;
 
             // Aim towards the player
-            if (enemy.enemyType != EnemyType.BOSS) {
+            if (parent.enemyType != EnemyType.BOSS) {
                 RotateSpawner();
             }
 
             // Enable the line renderer if it isn't already
-            if (enemy.lineSpriteRenderer.enabled == false && enemy.lineSpriteRenderer != null) {
-                enemy.lineSpriteRenderer.enabled = true;
+            if (parent.lineSpriteRenderer.enabled == false && parent.lineSpriteRenderer != null) {
+                parent.lineSpriteRenderer.enabled = true;
             }
 
             // Draw the line of fire
-            if (enemy.lineRenderer != null) {
-                enemy.lineRenderer.PointA = enemy.transform.position;
-                enemy.lineRenderer.PointB = enemy.player.transform.position;
+            if (parent.lineRenderer != null) {
+                parent.lineRenderer.PointA = parent.transform.position;
+                parent.lineRenderer.PointB = parent.player.transform.position;
             }
 
             // Once charging is complete—
-            if (chargeTimer > enemy.chargeTime) {
+            if (chargeTimer > parent.chargeTime) {
 
                 // Reset
-                enemy.charging = false;
+                parent.charging = false;
                 chargeTimer = 0;
 
                 // Start firing
@@ -80,7 +66,7 @@ public class EnemyBulletSpawner : MonoBehaviour
             chargeTimer = 0;
 
             // If the enemy also isn't firing anything, disable line renderer
-            if (!enemy.bursting) {
+            if (!parent.attacking) {
                 TurnOffCharge();
             }
         }
@@ -90,33 +76,33 @@ public class EnemyBulletSpawner : MonoBehaviour
     public virtual void RotateSpawner() {
 
         // Sets the rotation of the spawner to face the player right before firing
-        Vector3 rotation =  enemy.player.transform.position - enemy.transform.position;
+        Vector3 rotation =  parent.player.transform.position - parent.transform.position;
         float rotZ = Mathf.Atan2(rotation.y, rotation.x) * Mathf.Rad2Deg;
         transform.rotation = Quaternion.Euler(0, 0, rotZ);
     }
 
     // Disables the line renderer if this enemy charges
     public virtual void TurnOffCharge() {
-        if (enemy.lineSpriteRenderer && enemy.lineRenderer) {
-            enemy.lineSpriteRenderer.enabled = false;
-            enemy.lineRenderer.SetColorA(Color.red);
-            enemy.lineRenderer.SetColorB(Color.red);
+        if (parent.lineSpriteRenderer && parent.lineRenderer) {
+            parent.lineSpriteRenderer.enabled = false;
+            parent.lineRenderer.SetColorA(Color.red);
+            parent.lineRenderer.SetColorB(Color.red);
         }
     }
 
-    public virtual void FiringMethod() {
+    public override void FiringMethod() {
         if (GameStateManager.GetState() != GAMESTATE.GAMEOVER && GameStateManager.GetState() != GAMESTATE.MENU 
-            && enemy.enemyType != EnemyType.DEAD) {
+            && parent.enemyType != EnemyType.DEAD) {
             
             // If the enemy isn't charging a shot or in the middle of an attack and still sees the player—
-            if (!enemy.charging && !enemy.bursting && enemy.hitPlayer) {
+            if (!parent.charging && !parent.attacking && parent.seesPlayer) {
 
                 // If enemy needs to charge shot, then charge
-                if (enemy.lineRenderer != null) {
+                if (parent.lineRenderer != null) {
                     
                     // Starts drawing the line of fire in Update()
                     isChargedShot = true;
-                    enemy.charging = true;
+                    parent.charging = true;
                 } 
                 // Otherwise just fire
                 else {
@@ -128,22 +114,22 @@ public class EnemyBulletSpawner : MonoBehaviour
 
     // Initiate the charging of a shot
     public virtual IEnumerator FinishedCharging() {
-        enemy.bursting = true;
-        enemy.charging = false;
+        parent.attacking = true;
+        parent.charging = false;
 
         // Flash to signal firing
-        enemy.lineRenderer.SetColorA(Color.white);
-        enemy.lineRenderer.SetColorB(Color.white);
+        parent.lineRenderer.SetColorA(Color.white);
+        parent.lineRenderer.SetColorB(Color.white);
 
         yield return new WaitForSeconds(0.08f);
 
-        enemy.lineRenderer.SetColorA(Color.yellow);
-        enemy.lineRenderer.SetColorB(Color.yellow);
+        parent.lineRenderer.SetColorA(Color.yellow);
+        parent.lineRenderer.SetColorB(Color.yellow);
 
         yield return new WaitForSeconds(0.08f);
 
-        enemy.lineRenderer.SetColorA(Color.white);
-        enemy.lineRenderer.SetColorB(Color.white);
+        parent.lineRenderer.SetColorA(Color.white);
+        parent.lineRenderer.SetColorB(Color.white);
 
         yield return new WaitForSeconds(0.08f);
 
@@ -154,22 +140,8 @@ public class EnemyBulletSpawner : MonoBehaviour
         StartAttackAnim();
     }
 
-    // Starts the attack animation and bullet firing
-    public virtual void StartAttackAnim() {
-
-        if (enemy.enemyType != EnemyType.DEAD && GameStateManager.GetState() != GAMESTATE.GAMEOVER) {
-            enemy.canFire = false;
-
-            enemy.animator.SetBool("Attack", true);
-        }
-    }
-
-    // Called from Animation Event once attack animation is complete, fires actual attack
-    public virtual void SpawnAttack() {
-        StartCoroutine(Attack());
-    }
-
-    public virtual IEnumerator Attack() {
+    public override IEnumerator Attack() {
+        parent.attacking = true;
         
         // If the enemy doesn't need to charge, make sure the bullet aims towards the 
         // last known player position immediately before firing.
@@ -181,12 +153,12 @@ public class EnemyBulletSpawner : MonoBehaviour
         for (int i = 0; i < numberOfBurstShots; i++) {
 
             // Play firing sound
-            if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
+            if (!string.IsNullOrWhiteSpace(weapon.fireSound)) {
                 FireSound();
             }
 
             // Spawns bullet
-            GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
+            GameObject instantBullet = Instantiate(weapon.ammo, transform.position, Quaternion.identity);
             StartCoroutine(BulletDestroy(2, instantBullet));
 
             // Sets bullet rotation aimed at player
@@ -199,24 +171,14 @@ public class EnemyBulletSpawner : MonoBehaviour
         }
 
         // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
-        if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
-            enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
+        if (parent.rangedAttackCooldownMin != 0 && parent.rangedAttackCooldownMax != 0) {
+            parent.attackCooldown = Random.Range(parent.rangedAttackCooldownMin, parent.rangedAttackCooldownMax);
         }
 
         // Reset attacks
-        enemy.currentAttack = null;
-        enemy.bursting = false;
-        enemy.animator.SetBool("Attack", false);
+        parent.currentAttack = null;
+        parent.attacking = false;
+        parent.animator.SetBool("Attack", false);
         isChargedShot = false;
-    }
-
-    public virtual void FireSound() {
-        AudioManager.instance.PlaySoundByName(parent.fireSound, parent.spawnPos.transform);
-    }
-
-    // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time
-    public virtual IEnumerator BulletDestroy(float waitTime, GameObject obj) {
-        yield return new WaitForSeconds(waitTime);
-        Destroy(obj);
     }
 }

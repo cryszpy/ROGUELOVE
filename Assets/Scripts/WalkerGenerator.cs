@@ -434,8 +434,8 @@ public class WalkerGenerator : MonoBehaviour
         gridHandler[0, 0] = TileType.EMPTY;
 
         CreateWalls();
-        FillFloors();
         CreateBorders();
+        FillFloors();
         CreateObstacles();
         CreateBreakables();
     }
@@ -456,55 +456,6 @@ public class WalkerGenerator : MonoBehaviour
                     wallsTilemap.SetTile(new Vector3Int(x, y, 0), tiles.walls);
                     gridHandler[x, y] = TileType.WALLS;
                     //hasCreatedDecor = true;
-                    tileCount++;
-                }
-            }
-        }
-    }
-
-    private void FillFloors() {
-
-        // For the length of the grid (x)
-        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
-
-            // For the height of the grid (y)
-            for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
-
-                // Checks each x and y value of the grid to see if they are not floors
-                if (gridHandler[x, y] == TileType.WALLS) {
-
-                    floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.floor);
-                    tileListX.Add(x);
-                    tileListY.Add(y);
-                    tileCount++;
-                } else {
-                    
-                    // Check if tile is next to wall or void
-                    if (IsSpaciousGroundTile(x, y)) {
-                        groundTiles.Add(new Tuple<int, int>(x, y));
-                    }
-                }
-            }
-        }
-    }
-
-    private void FillBossLevel() {
-
-        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
-
-            for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
-
-                if (wallsTilemap.GetTile(new Vector3Int(x, y)) == tiles.walls) {
-                    gridHandler[x, y] = TileType.WALLS;
-                    tileCount++;
-                } else {
-                    gridHandler[x, y] = TileType.FLOOR;
-
-                    // Check if bordering walls or void
-                    if (IsSpaciousGroundTile(x, y)) {
-                        groundTiles.Add(new Tuple<int, int>(x, y));
-                    }
-
                     tileCount++;
                 }
             }
@@ -585,6 +536,55 @@ public class WalkerGenerator : MonoBehaviour
         borderTilemap.SetTile(new Vector3Int(gridHandler.GetLength(0), gridHandler.GetLength(1), 0), tiles.grass);
         gridHandler[gridHandler.GetLength(0) - 1, gridHandler.GetLength(1) - 1] = TileType.BORDER;
         gridHandler[gridHandler.GetLength(0) - 2, gridHandler.GetLength(1) - 2] = TileType.BORDER;
+    }
+
+    private void FillFloors() {
+
+        // For the length of the grid (x)
+        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
+
+            // For the height of the grid (y)
+            for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
+
+                // Checks each x and y value of the grid to see if they are not floors
+                if (gridHandler[x, y] == TileType.WALLS) {
+
+                    floorTilemap.SetTile(new Vector3Int(x, y, 0), tiles.floor);
+                    tileListX.Add(x);
+                    tileListY.Add(y);
+                    tileCount++;
+                } else {
+                    
+                    // Check if tile is next to wall or void
+                    if (IsSpaciousGroundTile(x, y)) {
+                        groundTiles.Add(new Tuple<int, int>(x, y));
+                    }
+                }
+            }
+        }
+    }
+
+    private void FillBossLevel() {
+
+        for (int x = 0; x < gridHandler.GetLength(0) - 1; x++) {
+
+            for (int y = 0; y < gridHandler.GetLength(1) - 1; y++) {
+
+                if (wallsTilemap.GetTile(new Vector3Int(x, y)) == tiles.walls) {
+                    gridHandler[x, y] = TileType.WALLS;
+                    tileCount++;
+                } else {
+                    gridHandler[x, y] = TileType.FLOOR;
+
+                    // Check if bordering walls or void
+                    if (IsSpaciousGroundTile(x, y)) {
+                        groundTiles.Add(new Tuple<int, int>(x, y));
+                    }
+
+                    tileCount++;
+                }
+            }
+        }
     }
 
     // CREATES OBSTACLES
@@ -676,65 +676,36 @@ public class WalkerGenerator : MonoBehaviour
                     bigChest = tiles.bigChest;
                 }
             }
-
-            bool validTileFound = false;
         
             // Creates a local copy of the list containing all ground tiles
             List<Tuple<int, int>> uncheckedTiles = new(groundTiles);
 
-            // Chooses a random tile out of the ground tiles list
-            Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
+            // Chooses a random tile out of the valid ground tiles list
+            Tuple<int, int> tile = GetGroundTileWithRadius(uncheckedTiles, player.transform.position, spawnRadiusX, spawnRadiusY);
 
-            // While a valid tile has yet to be found—
-            for (int i = 0; i < groundTiles.Count; i++) {
+            if (bigChest != null) {
+                if (bigChest.TryGetComponent<Chest>(out var script)) {
+                    GameObject spawned = (GameObject)script.Create(bigChest, new Vector2(tile.Item1 * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tile.Item2 * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity, this);
 
-                // If selected tile is too close too player—
-                if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
-                && tile.Item1 >= player.transform.position.x - spawnRadiusX
-                && tile.Item2 <= player.transform.position.y + spawnRadiusY 
-                && tile.Item2 >= player.transform.position.y - spawnRadiusY) {
+                    // Add spawned chest to list of chests for this level
+                    spawnedChests.Add(spawned);
 
-                    // Remove tile from possibilities list
-                    uncheckedTiles.Remove(tile);
-
-                    // Choose a new tile
-                    tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
-
+                    Debug.Log("Chest spawned at: " + tile.Item1 + ":" + tile.Item2);
                 } else {
-                    validTileFound = true;
-                    break;
+                    Debug.LogError("Could not get Chest component on this GameObject!");
                 }
-            }
-
-            if (validTileFound) {
-
-                if (bigChest != null) {
-                    if (bigChest.TryGetComponent<Chest>(out var script)) {
-                        GameObject spawned = (GameObject)script.Create(bigChest, new Vector2(tile.Item1 * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tile.Item2 * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity, this);
-
-                        // Add spawned chest to list of chests for this level
-                        spawnedChests.Add(spawned);
-
-                        Debug.Log("Chest spawned at: " + tile.Item1 + ":" + tile.Item2);
-                    } else {
-                        Debug.LogError("Could not get Chest component on this GameObject!");
-                    }
-                    
-                } else {
-                    if (tiles.chest.TryGetComponent<Chest>(out var script)) {
-                        GameObject spawned = (GameObject)script.Create(tiles.chest, new Vector2(tile.Item1 * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tile.Item2 * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity, this);
-
-                        // Add spawned chest to list of chests for this level
-                        spawnedChests.Add(spawned);
-
-                        Debug.Log("Chest spawned at: " + tile.Item1 + ":" + tile.Item2);
-                    } else {
-                        Debug.LogError("Could not get Chest component on this GameObject!");
-                    }
-                }
-
+                
             } else {
-                Debug.LogError("Could not find suitable tile to spawn chest!");
+                if (tiles.chest.TryGetComponent<Chest>(out var script)) {
+                    GameObject spawned = (GameObject)script.Create(tiles.chest, new Vector2(tile.Item1 * mapGrid.cellSize.x + (mapGrid.cellSize.x / 2), tile.Item2 * mapGrid.cellSize.y + (mapGrid.cellSize.y / 3)), Quaternion.identity, this);
+
+                    // Add spawned chest to list of chests for this level
+                    spawnedChests.Add(spawned);
+
+                    Debug.Log("Chest spawned at: " + tile.Item1 + ":" + tile.Item2);
+                } else {
+                    Debug.LogError("Could not get Chest component on this GameObject!");
+                }
             }
         }
     }
@@ -783,53 +754,25 @@ public class WalkerGenerator : MonoBehaviour
     // Spawns doorway to next level after level cleared
     protected void SpawnDoorway() {
         doorwaySpawned = false;
-        bool validTileFound = false;
         
         // Creates a local copy of the list containing all ground tiles
         List<Tuple<int, int>> uncheckedTiles = new(groundTiles);
 
-        // Chooses a random tile out of the ground tiles list
-        Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
+        // Chooses a random tile out of the valid ground tiles list
+        Tuple<int, int> tile = GetGroundTileWithRadius(uncheckedTiles, player.transform.position, spawnRadiusX, spawnRadiusY);
 
-        // While a valid tile has yet to be found—
-        for (int i = 0; i < groundTiles.Count; i++) {
+        Debug.Log("Valid tile found: " + "(" + tile.Item1 + ", " + tile.Item2 + ")");
 
-            // If selected tile is too close too player—
-            if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
-            && tile.Item1 >= player.transform.position.x - spawnRadiusX
-            && tile.Item2 <= player.transform.position.y + spawnRadiusY 
-            && tile.Item2 >= player.transform.position.y - spawnRadiusY) {
-
-                // Remove tile from possibilities list
-                uncheckedTiles.Remove(tile);
-
-                // Choose a new tile
-                tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
-
-            } else {
-                validTileFound = true;
-                break;
-            }
-        }
-
-        if (validTileFound) {
-
-            Debug.Log("Valid tile found: " + "(" + tile.Item1 + ", " + tile.Item2 + ")");
-
-            // Spawn doorway
-            if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
-                door.Create(tiles.doorwayObject, new Vector2((tile.Item1 * mapGrid.cellSize.x) + (mapGrid.cellSize.x / 2), (tile.Item2 * mapGrid.cellSize.y) + (mapGrid.cellSize.y / 2)), Quaternion.identity, cameraLookAt, this);
-                doorwaySpawned = true;
-            } else {
-                Debug.LogError("Could not find Doorway component of door while spawning!");
-            }
+        // Spawn doorway
+        if (tiles.doorwayObject.TryGetComponent<Doorway>(out var door)) {
+            door.Create(tiles.doorwayObject, new Vector2((tile.Item1 * mapGrid.cellSize.x) + (mapGrid.cellSize.x / 2), (tile.Item2 * mapGrid.cellSize.y) + (mapGrid.cellSize.y / 2)), Quaternion.identity, cameraLookAt, this);
+            doorwaySpawned = true;
+        } else {
+            Debug.LogError("Could not find Doorway component of door while spawning!");
         }
 
         if (!doorwaySpawned) {
             Debug.LogWarning("Could not find suitable tile to spawn doorway.");
-
-            // DIALOGUE DEBUG ONLY, remove after done
-            //doneWithLevel = true;
         }
     }
 
@@ -885,40 +828,13 @@ public class WalkerGenerator : MonoBehaviour
                         // If enemy spawn roll is a success, spawn enemy 
                         if (spawnValue <= spawnChance) {
 
-                            // Generates random number to pick Enemy spawnpoint
-                            int randX = GetRandomXTile();
-                            int randY = GetRandomYTile();
-
-                            // For as many floor tiles as there are in the tilemap:
-                            for (int i = 0; i < tileListX.Count; i++) {
-                                
-                                // If suitable floor tiles have been found (Ground tiles and no obstacles on those tiles)
-                                if (gridHandler[tileListX[randX], tileListY[randY]] == TileType.FLOOR) {
-
-                                    Vector3 genPos = floorTilemap.CellToWorld(new Vector3Int(tileListX[randX], tileListY[randY]));
-
-                                    if (genPos.x <= player.transform.position.x + spawnRadiusX 
-                                    && genPos.x >= player.transform.position.x - spawnRadiusX
-                                    && genPos.y <= player.transform.position.y + spawnRadiusY 
-                                    && genPos.y >= player.transform.position.y - spawnRadiusY) {
-                                        randX = GetRandomXTile();
-                                        randY = GetRandomYTile();
-                                    } else {
-
-                                        // Spawns Enemy
-                                        enemy.Create(minibosses[m], new Vector2(tileListX[randX] * mapGrid.cellSize.x, tileListY[randY] * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                        EnemyTotal++;
-                                        minibossSpawned = true;
-                                        break;
-                                    }
-
-                                } else {
-                                    
-                                    // Generates random number to pick Enemy spawnpoint
-                                    randX = GetRandomXTile();
-                                    randY = GetRandomYTile();
-                                }
-                            }
+                            // Chooses a random tile out of the valid ground tiles list
+                            Tuple<int, int> tile = GetGroundTileWithRadius(uncheckedTiles, player.transform.position, spawnRadiusX, spawnRadiusY);
+                            
+                            // Spawns Enemy
+                            enemy.Create(minibosses[m], new Vector2(tile.Item1 * mapGrid.cellSize.x, tile.Item2 * mapGrid.cellSize.y), Quaternion.identity, this);   
+                            EnemyTotal++;
+                            minibossSpawned = true;
                         } else {
                             Debug.Log(minibosses[m] + " failed the spawn roll! " + spawnChance);
                         }
@@ -1085,9 +1001,6 @@ public class WalkerGenerator : MonoBehaviour
                     // For the amount of every different type of rare enemy (e.g. for 3 Deforestation Guy, for 2 Nancy)
                     for (int s = 0; s < rareRange; s++) {
 
-                        // Chooses a random tile out of the ground tiles list
-                        Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
-
                         // Current level
                         int level = GameStateManager.GetLevel();
 
@@ -1107,21 +1020,11 @@ public class WalkerGenerator : MonoBehaviour
                         // If enemy spawn roll is a success, spawn enemy 
                         if (spawnValue <= spawnChance) {
 
-                            if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
-                            && tile.Item1 >= player.transform.position.x - spawnRadiusX
-                            && tile.Item2 <= player.transform.position.y + spawnRadiusY 
-                            && tile.Item2 >= player.transform.position.y - spawnRadiusY) {
+                            // Chooses a random tile out of the valid ground tiles list
+                            Tuple<int, int> tile = GetGroundTileWithRadius(uncheckedTiles, player.transform.position, spawnRadiusX, spawnRadiusY);
 
-                                // Remove tile from possibilities list
-                                uncheckedTiles.Remove(tile);
-
-                                // Choose a new tile
-                                tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
-                            } else {
-
-                                enemy.Create(rareEnemies[r], new Vector2(tile.Item1 * mapGrid.cellSize.x, tile.Item2 * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                EnemyTotal++;
-                            }
+                            enemy.Create(rareEnemies[r], new Vector2(tile.Item1 * mapGrid.cellSize.x, tile.Item2 * mapGrid.cellSize.y), Quaternion.identity, this);   
+                            EnemyTotal++;
                         } else {
                             Debug.Log(rareEnemies[r] + " failed the spawn roll! " + spawnChance);
                         }
@@ -1150,9 +1053,6 @@ public class WalkerGenerator : MonoBehaviour
                     // For the amount of every different type of common enemy (e.g. for 4 Wisplings, for 5 Slimes, for 1 Joseph)
                     for (int s = 0; s < commonRange; s++) {
 
-                        // Chooses a random tile out of the ground tiles list
-                        Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
-
                         // Current level
                         int level = GameStateManager.GetLevel();
 
@@ -1172,22 +1072,12 @@ public class WalkerGenerator : MonoBehaviour
                         // If enemy spawn roll is a success, spawn enemy 
                         if (spawnValue <= spawnChance) {
 
-                            if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
-                            && tile.Item1 >= player.transform.position.x - spawnRadiusX
-                            && tile.Item2 <= player.transform.position.y + spawnRadiusY 
-                            && tile.Item2 >= player.transform.position.y - spawnRadiusY) {
+                            // Chooses a random tile out of the valid ground tiles list
+                            Tuple<int, int> tile = GetGroundTileWithRadius(uncheckedTiles, player.transform.position, spawnRadiusX, spawnRadiusY);
 
-                                // Remove tile from possibilities list
-                                uncheckedTiles.Remove(tile);
-
-                                // Choose a new tile
-                                tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
-                            } else {
-                                
-                                // Spawns Enemy
-                                enemy.Create(commonEnemies[c], new Vector2(tile.Item1 * mapGrid.cellSize.x, tile.Item2 * mapGrid.cellSize.y), Quaternion.identity, this);   
-                                EnemyTotal++;
-                            }
+                            // Spawns Enemy
+                            enemy.Create(commonEnemies[c], new Vector2(tile.Item1 * mapGrid.cellSize.x, tile.Item2 * mapGrid.cellSize.y), Quaternion.identity, this);   
+                            EnemyTotal++;
                         } else {
                             Debug.Log(commonEnemies[c] + " failed the spawn roll! " + spawnChance);
                         }
@@ -1211,8 +1101,8 @@ public class WalkerGenerator : MonoBehaviour
                 // For every enemy that needs to be generated
                 for (int r = 0; r < commonRange; r++) {
 
-                    // Chooses a random tile out of the ground tiles list
-                    Tuple<int, int> tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
+                    // Chooses a random tile out of the valid ground tiles list
+                    Tuple<int, int> tile = GetGroundTileWithRadius(uncheckedTiles, player.transform.position, spawnRadiusX, spawnRadiusY);
 
                     // Generate random index to pick enemies from list
                     int commonIndex = UnityEngine.Random.Range(0, commonEnemies.Length);
@@ -1223,24 +1113,10 @@ public class WalkerGenerator : MonoBehaviour
                         if (enemy == null) {
                             enemy = commonEnemies[commonIndex].GetComponentInChildren<Enemy>();
                         }
-                        
-                        if (tile.Item1 <= player.transform.position.x + spawnRadiusX 
-                        && tile.Item1 >= player.transform.position.x - spawnRadiusX
-                        && tile.Item2 <= player.transform.position.y + spawnRadiusY 
-                        && tile.Item2 >= player.transform.position.y - spawnRadiusY) {
-
-                            // Remove tile from possibilities list
-                            uncheckedTiles.Remove(tile);
-
-                            // Choose a new tile
-                            tile = uncheckedTiles[UnityEngine.Random.Range(0, uncheckedTiles.Count)];
-                        } else {
-                            
-                            // Spawns Enemy
-                            enemy.Create(commonEnemies[commonIndex], new Vector2(tile.Item1 * mapGrid.cellSize.x, tile.Item2 * mapGrid.cellSize.y), Quaternion.identity, this);   
-                            EnemyTotal++;
-                            break;
-                        }
+                
+                        // Spawns Enemy
+                        enemy.Create(commonEnemies[commonIndex], new Vector2(tile.Item1 * mapGrid.cellSize.x, tile.Item2 * mapGrid.cellSize.y), Quaternion.identity, this);   
+                        EnemyTotal++;
 
                     } else {
                         Debug.Log("Could not find Enemy script component on this enemy!");
@@ -1306,10 +1182,6 @@ public class WalkerGenerator : MonoBehaviour
         return Array.TrueForAll(array, x => x == null);
     }
 
-    public int GetRandomGridXTile() {
-        return UnityEngine.Random.Range(0, gridHandler.GetLength(0) - 1);
-    }
-
     public int GetRandomGridYTile() {
         return UnityEngine.Random.Range(0, gridHandler.GetLength(1) - 1);
     }
@@ -1335,12 +1207,148 @@ public class WalkerGenerator : MonoBehaviour
             counter++;
         } 
         // Check if neighboring wall tile
-        else if (gridHandler[x-1, y] == TileType.WALLS || gridHandler[x+1, y] == TileType.WALLS
-        || gridHandler[x, y+1] == TileType.WALLS || gridHandler[x, y-1] == TileType.WALLS) {
+        else if ((gridHandler[x-1, y] == TileType.WALLS || gridHandler[x-1, y] == TileType.BORDER) 
+        || (gridHandler[x+1, y] == TileType.WALLS || gridHandler[x+1, y] == TileType.BORDER)
+        || (gridHandler[x, y+1] == TileType.WALLS || gridHandler[x, y+1] == TileType.BORDER)
+        || (gridHandler[x, y-1] == TileType.WALLS || gridHandler[x, y-1] == TileType.BORDER)) {
             counter++;
         }
 
         return counter == 0;
+    }
+
+    public Tuple<int, int> GetGroundTileWithRadius(List<Tuple<int, int>> tilesList, Vector3 targetPos = default, float spawnCheckX = 0, float spawnCheckY = 0) {
+
+        bool validTileFound = false;
+        Tuple<int, int> chosenTile = null;
+
+        // If caller did not provide a list, make a new one
+        switch (tilesList == null) {
+
+            case true:
+
+                // Creates a local copy of the list containing all ground tiles
+                tilesList = new(groundTiles);
+                break;
+
+            case false:
+                break;
+        }
+
+        // While a valid tile has yet to be found—
+        while (!validTileFound) {
+
+            if (tilesList.Count <= 0) {
+                Debug.LogError("Could not find valid ground tile outside of player spawn radius! (Ran out of tiles to check)");
+            }
+
+            // Choose new tile
+            chosenTile = tilesList[UnityEngine.Random.Range(0, tilesList.Count)];
+
+            // If caller specifies a target to avoid—
+            if (targetPos != null && targetPos != default) {
+
+                float tileWorldPosX = chosenTile.Item1 * mapGrid.cellSize.x;
+                float tileWorldPosY = chosenTile.Item2 * mapGrid.cellSize.y;
+
+                // Check if tile is in spawn radius of target or not
+                if (tileWorldPosX <= targetPos.x + spawnCheckX && tileWorldPosX >= targetPos.x - spawnCheckX
+                    && tileWorldPosY <= targetPos.y + spawnCheckY && tileWorldPosY >= targetPos.y - spawnCheckY) {
+                        tilesList.Remove(chosenTile);
+                    }
+                else {
+                    validTileFound = true;
+                    break;
+                }
+            } else {
+                validTileFound = true;
+                break;
+            }
+        }
+
+        if (chosenTile != null) {
+            return chosenTile;
+        } else {
+            Debug.LogError("Could not find valid ground tile outside of player spawn radius!");
+            return null;
+        }
+    }
+
+    public Tuple<int, int> GetNearestGroundTile(List<Tuple<int, int>> tilesList, Vector3 targetPos) {
+
+        bool validTileFound = false;
+        Tuple<int, int> chosenTile = null;
+
+        // If caller did not provide a list, make a new one
+        switch (tilesList == null) {
+
+            case true:
+
+                // Creates a local copy of the list containing all ground tiles
+                tilesList = new(groundTiles);
+                break;
+
+            case false:
+                break;
+        }
+
+        // While a valid tile has yet to be found—
+        while (!validTileFound) {
+
+            if (tilesList.Count <= 0) {
+                Debug.LogError("Could not find valid ground tile closest to target position! (Ran out of tiles to check)");
+            }
+
+            // Round to closest tile of target
+            chosenTile = new((int)(Mathf.RoundToInt(targetPos.x) / mapGrid.cellSize.x), (int)(Mathf.RoundToInt(targetPos.y) / mapGrid.cellSize.y));
+
+            // If the chosen tile is not a ground tile—
+            if (!CheckGroundTile(new(chosenTile.Item1 * mapGrid.cellSize.x, chosenTile.Item2 * mapGrid.cellSize.y))) {
+
+                List<Tuple<int, int>> neighboringTiles = new();
+
+                // CHECK TILE ABOVE
+                if (CheckGroundTile(new(chosenTile.Item1 * mapGrid.cellSize.x, (chosenTile.Item2 + 1) * mapGrid.cellSize.y))) {
+                    neighboringTiles.Add(new(chosenTile.Item1, chosenTile.Item2 + 1));
+                }
+
+                // CHECK TILE UNDER
+                if (CheckGroundTile(new(chosenTile.Item1 * mapGrid.cellSize.x, (chosenTile.Item2 - 1) * mapGrid.cellSize.y))) {
+                    neighboringTiles.Add(new(chosenTile.Item1, chosenTile.Item2 - 1));
+                }
+
+                // CHECK LEFT TILE
+                if (CheckGroundTile(new((chosenTile.Item1 - 1) * mapGrid.cellSize.x, chosenTile.Item2 * mapGrid.cellSize.y))) {
+                    neighboringTiles.Add(new(chosenTile.Item1 - 1, chosenTile.Item2));
+                }
+                
+                // CHECK RIGHT TILE
+                if (CheckGroundTile(new((chosenTile.Item1 + 1) * mapGrid.cellSize.x, chosenTile.Item2 * mapGrid.cellSize.y))) {
+                    neighboringTiles.Add(new(chosenTile.Item1 + 1, chosenTile.Item2));
+                }
+
+                if (neighboringTiles.Count > 0) {
+                    chosenTile = neighboringTiles[0];
+                    validTileFound = true;
+                    break;
+                } else {
+                    Debug.LogError("No neighboring tiles to closest position are valid!");
+                    break;
+                }
+
+            } else {
+                validTileFound = true;
+                break;
+            }
+        }
+
+        if (chosenTile != null) {
+            Debug.Log("Chosen nearest tile: " + chosenTile);
+            return chosenTile;
+        } else {
+            Debug.LogError("Could not find valid ground tile closest to target!");
+            return null;
+        }
     }
 
     // GENERATE PATHFINDING MAP
@@ -1438,15 +1446,15 @@ public class WalkerGenerator : MonoBehaviour
         gridHandler[0, 0] = TileType.EMPTY;
 
         if (bossLevel) {
-            FillBossLevel();
             CreateBorders();
+            FillBossLevel();
             CreateObstacles();
             CreateBreakables();
         } else {
             // Create walls around map
             CreateWalls();
-            FillFloors();
             CreateBorders();
+            FillFloors();
             CreateBreakables();
         }
     }

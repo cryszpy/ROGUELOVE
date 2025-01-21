@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class EnemyAttackProjectileRing : EnemyBulletSpawner
+public class EnemyRingAttack : EnemyRangedAttack
 {
 
     public float rotationSpeed;
@@ -19,6 +19,7 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
 
     // Firing logic
     public override IEnumerator Attack() {
+        parent.attacking = true;
 
         // If the enemy doesn't need to charge, make sure the bullet aims towards the 
         // last known player position immediately before firing.
@@ -38,12 +39,12 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
             for (int b = 0; b < numberOfBurstShots; b++) {
 
                 // Play firing sound
-                if (!string.IsNullOrWhiteSpace(parent.fireSound)) {
+                if (!string.IsNullOrWhiteSpace(weapon.fireSound)) {
                     FireSound();
                 }
 
                 // Spawns bullet
-                GameObject instantBullet = Instantiate(parent.ammo, transform.position, Quaternion.identity);
+                GameObject instantBullet = Instantiate(weapon.ammo, transform.position, Quaternion.identity);
                 StartCoroutine(BulletDestroy(2, instantBullet));
 
                 // Sets bullet rotation aimed at player
@@ -60,14 +61,14 @@ public class EnemyAttackProjectileRing : EnemyBulletSpawner
         }
 
         // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
-        if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
-            enemy.attackCooldown = Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
+        if (parent.rangedAttackCooldownMin != 0 && parent.rangedAttackCooldownMax != 0) {
+            parent.attackCooldown = Random.Range(parent.rangedAttackCooldownMin, parent.rangedAttackCooldownMax);
         }
     
         // Reset attacks
-        enemy.currentAttack = null;
-        enemy.bursting = false;
-        enemy.animator.SetBool("Attack", false);
+        parent.currentAttack = null;
+        parent.attacking = false;
+        parent.animator.SetBool("Attack", false);
         isChargedShot = false;
     }
 }
