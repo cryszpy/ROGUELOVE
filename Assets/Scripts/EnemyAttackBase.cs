@@ -51,6 +51,17 @@ public class EnemyAttackBase : MonoBehaviour
         AudioManager.instance.PlaySoundByName(weapon.fireSound, weapon.spawnPos.transform);
     }
 
+    public virtual GameObject SpawnBullet(GameObject ammo) {
+
+        // Spawn bullet
+        GameObject instantBullet = Instantiate(ammo, transform.position, Quaternion.identity);
+
+        // Destroy bullet after 2 seconds
+        StartCoroutine(BulletDestroy(2, instantBullet));
+
+        return instantBullet;
+    }
+
     // Destroy bullet if it doesn't hit an obstacle and keeps traveling after some time
     public virtual IEnumerator BulletDestroy(float waitTime, GameObject obj) {
         yield return new WaitForSeconds(waitTime);

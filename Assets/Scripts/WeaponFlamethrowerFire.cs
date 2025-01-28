@@ -33,36 +33,6 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
 
                 // Enables flamethrower detection radius
                 EnableVisualSpread(true);
-
-                // Damage enemies within radius
-                /* if (canFire && !bursting) {
-
-                    // If gun needs to charge, begin charging
-                    if (parent.chargeTime > 0) {
-                        chargeTimer += Time.fixedDeltaTime;
-
-                        // Once charging is finished, begin firing
-                        if (chargeTimer >= parent.chargeTime && collidedEnemies.Count > 0) {
-                            bursting = true;
-                            StartCoroutine(BurstFire());
-
-                            // If weapon doesn't have infinite ammo then use ammo
-                            if (!parent.infiniteAmmo) {
-                                UseAmmo();
-                            }
-                        }
-                    } 
-                    // Otherwise, fire
-                    else if (collidedEnemies.Count > 0) {
-                        bursting = true;
-                        StartCoroutine(BurstFire());
-
-                        // If weapon doesn't have infinite ammo then use ammo
-                        if (!parent.infiniteAmmo) {
-                            UseAmmo();
-                        }
-                    }
-                } */
             } else {
                 EnableVisualSpread(false);
             }

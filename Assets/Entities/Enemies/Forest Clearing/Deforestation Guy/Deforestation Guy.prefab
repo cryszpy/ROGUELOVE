@@ -411,7 +411,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: 2e57be75894714088842f71df58c7a6c, type: 3}
+  ammoList:
+  - ammo: {fileID: 5001664913613443686, guid: 2e57be75894714088842f71df58c7a6c, type: 3}
+    spawnChanceCutoff: 1
   spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 3180716694739313922}
   weaponPickup: {fileID: 0}

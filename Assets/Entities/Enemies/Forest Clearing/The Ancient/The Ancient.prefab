@@ -46,7 +46,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: ba472093a061d4cabb1fa9135f7a3450, type: 3}
+  ammoList:
+  - ammo: {fileID: 5001664913613443686, guid: ba472093a061d4cabb1fa9135f7a3450, type: 3}
+    spawnChanceCutoff: 0.5
+  - ammo: {fileID: 5001664913613443686, guid: 45dab33b1cc4447038d7f03edca48f90, type: 3}
+    spawnChanceCutoff: 1
   spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 0}
   weaponPickup: {fileID: 0}
@@ -515,7 +519,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: 1af2773b5dd964410a3511499463670b, type: 3}
+  ammoList:
+  - ammo: {fileID: 5001664913613443686, guid: 1af2773b5dd964410a3511499463670b, type: 3}
+    spawnChanceCutoff: 1
   spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 2918801732731569437}
   weaponPickup: {fileID: 0}
@@ -700,7 +706,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: 6df33a4b1e485439b899808c2fc4d681, type: 3}
+  ammoList:
+  - ammo: {fileID: 5001664913613443686, guid: 6df33a4b1e485439b899808c2fc4d681, type: 3}
+    spawnChanceCutoff: 1
   spriteRenderer: {fileID: 0}
   spawnPos: {fileID: 0}
   weaponPickup: {fileID: 0}

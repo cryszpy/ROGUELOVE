@@ -1,15 +1,26 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public enum WeaponType {
     MAGIC, TECHNOLOGY, SPECIAL
 }
 
+[System.Serializable]
+public struct AmmoStruct {
+
+    public GameObject ammo;
+
+    [Header("The float value that corresponds to the spawn chance for this bullet. (Is affected by other bullet chances, all bullets must add up to 1)")]
+    [Range(0, 1)]
+    public float spawnChanceCutoff;
+}
+
 public class Weapon : MonoBehaviour
 {
     [Header("SCRIPT REFERENCES")]
 
-    [Tooltip("The object reference for this weapon's projectile object.")]
-    public GameObject ammo;
+    [Tooltip("This weapon's ammo.")]
+    public List<AmmoStruct> ammoList;
 
     [Tooltip("Weapon sprite.")]
     public SpriteRenderer spriteRenderer;

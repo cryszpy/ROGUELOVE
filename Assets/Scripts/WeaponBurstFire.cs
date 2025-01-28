@@ -108,19 +108,44 @@ public class WeaponBurstFire : MonoBehaviour
             // Start camera shake
             TriggerCamShake();
 
-            // Spawn bullet and add player damage modifier
-            if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
-                GameObject instantBullet = bullet.Create(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity, parent, mainCam) as GameObject;
+            // If weapon has multiple possible ammo bullets—
+            if (parent.ammoList.Count > 1) {
 
-                // Play muzzle flash animation
-                if (parent.spawnPos.TryGetComponent<Animator>(out var animator)) {
-                    animator.SetTrigger("MuzzleFlash");
+                // Checks to make sure all ammo scripts are accessible
+                foreach (var ammoStruct in parent.ammoList) {
+                    if (!ammoStruct.ammo.TryGetComponent<BulletScript>(out var script)) {
+                        Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
+                    }
                 }
 
-                // Destroy bullet after 2 seconds
-                StartCoroutine(BulletDestroy(2, instantBullet));
-            } else {
-                Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
+                // Picks a random projectile to spawn
+                float rand = UnityEngine.Random.value;
+
+                GameObject chosenBullet = null;
+
+                // Loops through all possible ammo to compare spawn thresholds
+                foreach (var ammoStruct in parent.ammoList) {
+
+                    // If found chosen bullet, set it as the bullet to spawn and exit loop
+                    if (rand <= ammoStruct.spawnChanceCutoff) {
+                        chosenBullet = ammoStruct.ammo;
+                        break;
+                    }
+                }
+
+                if (chosenBullet == null) {
+                    Debug.LogError("Could not find suitable chosen bullet for this weapon!");
+                } else {
+
+                    // Spawn chosen bullet
+                    SpawnBullet(chosenBullet);
+                }
+            } 
+            // If weapon only has one type of ammo—
+            else if (parent.ammoList.Count == 1) {
+
+                // Use that bullet
+                SpawnBullet(parent.ammoList[0].ammo);
             }
 
             yield return new WaitForSeconds(timeBetweenBulletBurst);
@@ -128,6 +153,24 @@ public class WeaponBurstFire : MonoBehaviour
         
         parent.bursting = false;
         canFire = false;
+    }
+
+    public virtual void SpawnBullet(GameObject ammo) {
+
+        // Spawn bullet and add player damage modifier
+        if (ammo.TryGetComponent<BulletScript>(out var bullet)) {
+            GameObject instantBullet = bullet.Create(ammo, parent.spawnPos.transform.position, Quaternion.identity, parent, mainCam) as GameObject;
+
+            // Play muzzle flash animation
+            if (parent.spawnPos.TryGetComponent<Animator>(out var animator)) {
+                animator.SetTrigger("MuzzleFlash");
+            }
+
+            // Destroy bullet after 2 seconds
+            StartCoroutine(BulletDestroy(2, instantBullet));
+        } else {
+            Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
+        }
     }
 
     public virtual void FireSound() {

@@ -73,9 +73,51 @@ public class WeaponSingleShotFire : MonoBehaviour
             Debug.Log("CinemachineImpulseSource camShake is null! Reassigned.");
         }
 
+        // Empty GameObject for chosen bullet
+        GameObject chosenBullet = null;
+
+        // If weapon has multiple possible ammo bullets—
+        if (parent.ammoList.Count > 1) {
+
+            // Checks to make sure all ammo scripts are accessible
+            foreach (var ammoStruct in parent.ammoList) {
+                if (!ammoStruct.ammo.TryGetComponent<BulletScript>(out var script)) {
+                    Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
+                }
+            }
+
+            // Picks a random projectile to spawn
+            float rand = UnityEngine.Random.value;
+
+            // Loops through all possible ammo to compare spawn thresholds
+            foreach (var ammoStruct in parent.ammoList) {
+
+                // If found chosen bullet, set it as the bullet to spawn and exit loop
+                if (rand <= ammoStruct.spawnChanceCutoff) {
+                    chosenBullet = ammoStruct.ammo;
+                    break;
+                }
+            }
+
+            if (chosenBullet == null) {
+                Debug.LogError("Could not find suitable chosen bullet for this weapon!");
+            }
+        } 
+        // If weapon only has one type of ammo—
+        else if (parent.ammoList.Count == 1) {
+
+            chosenBullet = parent.ammoList[0].ammo;
+        }
+
+        // Spawns bullet
+        SpawnBullet(chosenBullet);
+    }
+
+    public virtual GameObject SpawnBullet(GameObject ammo) {
+
         // Spawn bullet and add player damage modifier
-        if (parent.ammo.TryGetComponent<BulletScript>(out var bullet)) {
-            GameObject instantBullet = bullet.Create(parent.ammo, parent.spawnPos.transform.position, Quaternion.identity, parent, mainCam) as GameObject;
+        if (ammo.TryGetComponent<BulletScript>(out var bullet)) {
+            GameObject instantBullet = bullet.Create(ammo, parent.spawnPos.transform.position, Quaternion.identity, parent, mainCam) as GameObject;
 
             // Play muzzle flash animation
             if (parent.spawnPos.TryGetComponent<Animator>(out var animator)) {
@@ -84,8 +126,11 @@ public class WeaponSingleShotFire : MonoBehaviour
 
             // Destroy bullet after 2 seconds
             StartCoroutine(BulletDestroy(2, instantBullet));
+
+            return instantBullet;
         } else {
             Debug.LogError("Could not find BulletScript script or extension of such on this Object.");
+            return null;
         }
     }
 

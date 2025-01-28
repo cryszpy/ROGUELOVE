@@ -43,12 +43,40 @@ public class EnemyRingAttack : EnemyRangedAttack
                     FireSound();
                 }
 
-                // Spawns bullet
-                GameObject instantBullet = Instantiate(weapon.ammo, transform.position, Quaternion.identity);
-                StartCoroutine(BulletDestroy(2, instantBullet));
+                // Empty GameObject for chosen bullet
+                GameObject chosenBullet = null;
+
+                // If weapon has multiple possible ammo bullets—
+                if (weapon.ammoList.Count > 1) {
+
+                    // Picks a random projectile to spawn
+                    float rand = UnityEngine.Random.value;
+
+                    // Loops through all possible ammo to compare spawn thresholds
+                    foreach (var ammoStruct in weapon.ammoList) {
+
+                        // If found chosen bullet, set it as the bullet to spawn and exit loop
+                        if (rand <= ammoStruct.spawnChanceCutoff) {
+                            chosenBullet = ammoStruct.ammo;
+                            break;
+                        }
+                    }
+
+                    if (chosenBullet == null) {
+                        Debug.LogError("Could not find suitable chosen bullet for this weapon!");
+                    }
+                } 
+                // If weapon only has one type of ammo—
+                else if (weapon.ammoList.Count == 1) {
+
+                    chosenBullet = weapon.ammoList[0].ammo;
+                }
+
+                // Use that bullet
+                GameObject spawnedBullet = SpawnBullet(chosenBullet);
 
                 // Sets bullet rotation aimed at player
-                if (instantBullet.TryGetComponent<EnemyBulletScript>(out var bullet)) {
+                if (spawnedBullet.TryGetComponent<EnemyBulletScript>(out var bullet)) {
                     bullet.transform.rotation = transform.rotation;
                 }
 

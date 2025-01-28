@@ -29,7 +29,7 @@ public class EnemyOrbitalAttack : EnemyRangedAttack
                 FireSound();
             }
 
-            Tuple<int, int> tile = null;
+            Tuple<int, int> tile;
 
             // Always make sure first shot of attack aims at player
             if (i == 0) {
@@ -38,9 +38,38 @@ public class EnemyOrbitalAttack : EnemyRangedAttack
                 tile = parent.map.GetGroundTileWithRadius(uncheckedTiles);
             }
 
+            // Empty GameObject for chosen bullet
+            GameObject chosenBullet = null;
+
+            // If weapon has multiple possible ammo bullets—
+            if (weapon.ammoList.Count > 1) {
+
+                // Picks a random projectile to spawn
+                float rand = UnityEngine.Random.value;
+
+                // Loops through all possible ammo to compare spawn thresholds
+                foreach (var ammoStruct in weapon.ammoList) {
+
+                    // If found chosen bullet, set it as the bullet to spawn and exit loop
+                    if (rand <= ammoStruct.spawnChanceCutoff) {
+                        chosenBullet = ammoStruct.ammo;
+                        break;
+                    }
+                }
+
+                if (chosenBullet == null) {
+                    Debug.LogError("Could not find suitable chosen bullet for this weapon!");
+                }
+            } 
+            // If weapon only has one type of ammo—
+            else if (weapon.ammoList.Count == 1) {
+
+                chosenBullet = weapon.ammoList[0].ammo;
+            }
+
             // Spawns attack
-            if (tile != null && weapon.ammo.TryGetComponent<EnemyOrbitalBullet>(out var script)) {
-                GameObject attack = script.Create(weapon.ammo, new(tile.Item1 * parent.map.mapGrid.cellSize.x, tile.Item2 * parent.map.mapGrid.cellSize.y), parent) as GameObject;
+            if (tile != null && chosenBullet.TryGetComponent<EnemyOrbitalBullet>(out var script)) {
+                GameObject attack = script.Create(chosenBullet, new(tile.Item1 * parent.map.mapGrid.cellSize.x, tile.Item2 * parent.map.mapGrid.cellSize.y), parent) as GameObject;
             } else {
                 Debug.LogError("Chosen tile is null and/or could not get EnemyOrbitalAttack script from parent ammo!");
                 break;
@@ -49,11 +78,6 @@ public class EnemyOrbitalAttack : EnemyRangedAttack
             // Waits for specified amount of time between bullets in burst
             yield return new WaitForSeconds(timeBetweenBulletBurst);
         }
-
-        // If the enemy doesn't have 0 ranged cooldown, then use min/max values to randomize the next cooldown
-        /* if (enemy.rangedAttackCooldownMin != 0 && enemy.rangedAttackCooldownMax != 0) {
-            enemy.attackCooldown = UnityEngine.Random.Range(enemy.rangedAttackCooldownMin, enemy.rangedAttackCooldownMax);
-        } */
 
         // Reset attacks
         parent.currentAttack = null;

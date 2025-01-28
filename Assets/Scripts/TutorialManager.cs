@@ -51,6 +51,7 @@ public class TutorialManager : MonoBehaviour
     public int enemiesKilled = 0;
 
     private void OnEnable() {
+        DisconnectEvents();
         GameStateManager.EOnDialogueEnd += ContinueTutorial;
     }
 
@@ -65,6 +66,7 @@ public class TutorialManager : MonoBehaviour
         GameStateManager.EOnWeaponSwitch -= ContinueTutorial;
         GameStateManager.EOnWeaponDrop -= ContinueTutorial;
         GameStateManager.EOnEnemyDeath -= CheckEnemyStatus;
+        GameStateManager.EOnDoorwaySpawn -= ContinueTutorial;
     }
 
     // Start is called once before the first execution of Update after the MonoBehaviour is created

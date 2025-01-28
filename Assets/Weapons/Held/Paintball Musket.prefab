@@ -183,7 +183,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 833f0eb9421004863a55b5037b6739c5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  ammo: {fileID: 5001664913613443686, guid: d0b210f8efba14b5f87761eaf267d142, type: 3}
+  ammoList:
+  - ammo: {fileID: 5001664913613443686, guid: d0b210f8efba14b5f87761eaf267d142, type: 3}
+    spawnChanceCutoff: 0.679
   spriteRenderer: {fileID: 8096842307378342048}
   spawnPos: {fileID: 767796559657468289}
   weaponPickup: {fileID: 8481469185648990204, guid: 351ee1ba98552449e928007381888579, type: 3}
@@ -201,6 +203,7 @@ MonoBehaviour:
   fireSound: paintballmusket_fire
   chargeSound: 
   bulletHitSound: paintballmusket_hit
+  bursting: 0
 --- !u!114 &8444947705294881318
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -258,47 +261,47 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 180ecf9b41d478f468eb3e9083753217, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_ImpulseDefinition:
-    m_ImpulseChannel: 1
-    m_ImpulseShape: 1
-    m_CustomImpulseShape:
+  ImpulseDefinition:
+    ImpulseChannel: 1
+    ImpulseShape: 1
+    CustomImpulseShape:
       serializedVersion: 2
       m_Curve: []
       m_PreInfinity: 2
       m_PostInfinity: 2
       m_RotationOrder: 4
-    m_ImpulseDuration: 0.1
-    m_ImpulseType: 0
-    m_DissipationRate: 0.25
-    m_RawSignal: {fileID: 0}
-    m_AmplitudeGain: 1
-    m_FrequencyGain: 1
-    m_RepeatMode: 0
-    m_Randomize: 1
-    m_TimeEnvelope:
-      m_AttackShape:
+    ImpulseDuration: 0.1
+    ImpulseType: 0
+    DissipationRate: 0.25
+    RawSignal: {fileID: 0}
+    AmplitudeGain: 1
+    FrequencyGain: 1
+    RepeatMode: 0
+    Randomize: 1
+    TimeEnvelope:
+      AttackShape:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      m_DecayShape:
+      DecayShape:
         serializedVersion: 2
         m_Curve: []
         m_PreInfinity: 2
         m_PostInfinity: 2
         m_RotationOrder: 4
-      m_AttackTime: 0
-      m_SustainTime: 0.2
-      m_DecayTime: 0.7
-      m_ScaleWithImpact: 1
-      m_HoldForever: 0
-    m_ImpactRadius: 100
-    m_DirectionMode: 0
-    m_DissipationMode: 2
-    m_DissipationDistance: 100
-    m_PropagationSpeed: 343
-  m_DefaultVelocity: {x: 0, y: -1, z: 0}
+      AttackTime: 0
+      SustainTime: 0.2
+      DecayTime: 0.7
+      ScaleWithImpact: 1
+      HoldForever: 0
+    ImpactRadius: 100
+    DirectionMode: 0
+    DissipationMode: 2
+    DissipationDistance: 100
+    PropagationSpeed: 343
+  DefaultVelocity: {x: 0, y: -1, z: 0}
 --- !u!1 &6924588348523518064
 GameObject:
   m_ObjectHideFlags: 0

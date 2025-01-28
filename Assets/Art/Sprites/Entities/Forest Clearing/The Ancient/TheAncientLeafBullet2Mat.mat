@@ -1,5 +1,18 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!114 &-4555806064312200609
+MonoBehaviour:
+  m_ObjectHideFlags: 11
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  version: 9
 --- !u!21 &2100000
 Material:
   serializedVersion: 8
@@ -7,8 +20,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: TheAncientMagicBeamGlow
-  m_Shader: {fileID: -6465566751694194690, guid: da247f0d8773e4154a437af6dea1e8a2, type: 3}
+  m_Name: TheAncientLeafBullet2Mat
+  m_Shader: {fileID: -6465566751694194690, guid: 38356d176235542a78f0d6df4594cece, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -24,11 +37,11 @@ Material:
     serializedVersion: 3
     m_TexEnvs:
     - _Emission:
-        m_Texture: {fileID: 2800000, guid: 6d6e7b3af2bad4a8799d29084031073c, type: 3}
+        m_Texture: {fileID: 2800000, guid: d570d82ebdbf041b89f29b80614ecb07, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 4f2e5b38c46af4115afbf16ba105b1cd, type: 3}
+        m_Texture: {fileID: 2800000, guid: 116b781d81a7b4aa88890827fa42b6f5, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -46,19 +59,6 @@ Material:
     m_Ints: []
     m_Floats: []
     m_Colors:
-    - _Color: {r: 2.120818, g: 2.6390147, b: 2.0290537, a: 0}
+    - _Color: {r: 24.251463, g: 5.0640264, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &4614520653550577182
-MonoBehaviour:
-  m_ObjectHideFlags: 11
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  version: 9
