@@ -56,4 +56,27 @@ public class CATMachineEnemy : ContactEnemy
     public virtual void EndBreakWall() {
         animator.SetBool("BreakWall", false);
     }
+
+    // Sprite direction facing
+    public override void DirectionFacing() {
+
+        if (!kbEd) {
+
+            if (rb.linearVelocity.x >= 0.001f) {
+
+                transform.localScale = new(1, 1, 1);
+                animator.SetBool("IsMoving", true);
+
+            } else if (rb.linearVelocity.x <= -0.001f) {
+
+                transform.localScale = new(-1, 1, 1);
+                animator.SetBool("IsMoving", true);
+
+            } else if (rb.linearVelocity.y <= -0.001 || rb.linearVelocity.y >= 0.001) {
+                animator.SetBool("IsMoving", true);
+            } else {
+                animator.SetBool("IsMoving", false);
+            }
+        }
+    }
 }
