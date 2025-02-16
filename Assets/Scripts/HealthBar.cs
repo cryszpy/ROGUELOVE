@@ -77,17 +77,9 @@ public class HealthBar : MonoBehaviour
             }
         }
 
-        //slider.maxValue = health;
-        //slider.value = health;
-        /* if (maxHealthText.TryGetComponent<TextMeshProUGUI>(out var letters)) {
-            letters.text = health.ToString();
-        } */
-
     }
 
     public void SetHealth (int health) {
-
-        //slider.value = health;
 
         // Clear the update list
         for (int i = 0; i < updateHealthList.Count; i++) {
@@ -105,11 +97,6 @@ public class HealthBar : MonoBehaviour
                 SwapHearts(i, updateHealthList[i]);
             }
         }
-
-        /* if (currentHealthText.TryGetComponent<TextMeshProUGUI>(out var letters)) {
-            letters.text = health.ToString();
-        } */
-
     }
 
     private void SwapHearts(int oldHeartIndex, int newHeart) {

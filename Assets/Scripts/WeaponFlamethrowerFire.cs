@@ -48,7 +48,7 @@ public class WeaponFlamethrowerFire : WeaponBurstFire
     public virtual void Update() {
 
         // If weapon does not have infinite ammo, use ammo while firing
-        if (usingAmmo && !parent.infiniteAmmo) {
+        if (usingAmmo) {
             ammoTimer += Time.deltaTime;
 
             if (ammoTimer > parent.fireRate * PlayerController.FireRateMultiplier) {

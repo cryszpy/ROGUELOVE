@@ -8,7 +8,7 @@ public class EnemyBreakWall : MonoBehaviour
     [SerializeField]
     protected Enemy parent;
 
-    private bool canCheck = true;
+    private bool canCheck = false;
 
     [SerializeField]
     private float checkTime;
@@ -19,9 +19,8 @@ public class EnemyBreakWall : MonoBehaviour
 
         if (!canCheck) {
             checkTimer += Time.fixedDeltaTime;
-            //Debug.Log("wanderTimer: " + wanderTimer);
+            
             if(checkTimer > checkTime) {
-                //Debug.Log("Done With WanderTimer");
                 canCheck = true;
                 checkTimer = 0;
             }
@@ -50,10 +49,6 @@ public class EnemyBreakWall : MonoBehaviour
 
             var cellPos = grid.WorldToCell(hitPosition);
             var cellVec = new Vector3(cellPos.x * parent.map.mapGrid.cellSize.x, cellPos.y * parent.map.mapGrid.cellSize.y);
-
-            //Debug.DrawLine(cellVec, parent.player.transform.position, Color.white, 3);
-            //Debug.Log(cellPos);
-            //Debug.Log("Cell:" + grid.WorldToCell(hitPosition));
 
             Vector3Int vec = new(cellPos.x, cellPos.y);
 

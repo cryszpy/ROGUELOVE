@@ -27,7 +27,7 @@ public class WeaponBurstFire : MonoBehaviour
 
     protected float chargeTimer;
 
-    void Start() {
+    public virtual void Start() {
         player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
         mainCam = GameObject.FindGameObjectWithTag("MainCamera").GetComponent<Camera>();
     }
@@ -51,10 +51,8 @@ public class WeaponBurstFire : MonoBehaviour
                         parent.bursting = true;
                         StartCoroutine(BurstFire());
 
-                        // If weapon doesn't have infinite ammo then use ammo
-                        if (!parent.infiniteAmmo) {
-                            UseAmmo();
-                        }
+                        // Use ammo
+                        UseAmmo();
                     }
                 } 
                 // Otherwise, fire
@@ -62,10 +60,8 @@ public class WeaponBurstFire : MonoBehaviour
                     parent.bursting = true;
                     StartCoroutine(BurstFire());
 
-                    // If weapon doesn't have infinite ammo then use ammo
-                    if (!parent.infiniteAmmo) {
-                        UseAmmo();
-                    }
+                    // Use ammo
+                    UseAmmo();
                 }
             }
 
@@ -179,14 +175,17 @@ public class WeaponBurstFire : MonoBehaviour
 
     public virtual void UseAmmo() {
 
-        // Prevents ammo from going negative
-        if (parent.currentAmmo - parent.ammoPerClick < 0) {
-            parent.currentAmmo = 0;
-        }
-        // Reduces current ammo by ammoPerClick amount
-        else {
-            parent.currentAmmo -= parent.ammoPerClick;
-            player.ammoBar.SetAmmo(parent.currentAmmo, parent);
+        if (!parent.infiniteAmmo) {
+
+            // Prevents ammo from going negative
+            if (parent.currentAmmo - parent.ammoPerClick < 0) {
+                parent.currentAmmo = 0;
+            }
+            // Reduces current ammo by ammoPerClick amount
+            else {
+                parent.currentAmmo -= parent.ammoPerClick;
+                player.ammoBar.SetAmmo(parent.currentAmmo, parent);
+            }
         }
 
         // Set static current ammo variables according to what slot this weapon is in
